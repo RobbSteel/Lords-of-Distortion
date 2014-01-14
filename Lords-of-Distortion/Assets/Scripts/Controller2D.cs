@@ -4,9 +4,10 @@ using System.Collections;
 public class Controller2D : MonoBehaviour {
 
 	public float maxSpeed = 10f;
-	bool facingRight = false;
+	public bool facingRight = false;
 
-	Animator anim;
+
+	public Animator anim;
 
 	bool grounded = false;
 	public Transform groundCheck;
@@ -14,11 +15,8 @@ public class Controller2D : MonoBehaviour {
 	public LayerMask whatIsGround;
 	public float jumpForce = 700f;
 
-	void FixedUpdate(){
+	private bool isOwner = false;
 
-		IsGrounded();
-		MovePlayer();
-	}
 
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
@@ -47,7 +45,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	//Flips player sprite accordingly to which side he is facing
-	void Flip(){
+	public void Flip(){
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
@@ -57,17 +55,45 @@ public class Controller2D : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
+		NetworkController remoteController = GetComponent<NetworkController>();
+		isOwner = remoteController.isOwner;
 	}
-	
+
+
+	void FixedUpdate(){
+		if(!isOwner)
+			return;
+		IsGrounded();
+		MovePlayer();
+	}
+
 	// Update is called once per frame
 	void Update () {
+		if(!isOwner)
+			return;
 		Jump();
 	}
 	
 	private void Jump(){
-		if(  grounded  && Input.GetButtonDown("Jump")){
+		if(grounded  && Input.GetButtonDown("Jump")){
 			anim.SetBool( "Ground" , false );
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
 	}
+
+	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
+
+		Vector3 syncPosition = Vector3.zero;
+		bool syncFacing = false;
+
+		if (stream.isWriting)
+		{
+			//if we have control over this entity, send out our positions to everyone else.
+			syncPosition = transform.position;
+			syncFacing = facingRight;
+			stream.Serialize(ref syncPosition);
+			stream.Serialize(ref syncFacing);
+		}
+	}
+
 }
