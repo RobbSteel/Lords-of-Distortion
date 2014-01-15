@@ -80,20 +80,4 @@ public class Controller2D : MonoBehaviour {
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
 	}
-
-	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
-
-		Vector3 syncPosition = Vector3.zero;
-		bool syncFacing = false;
-
-		if (stream.isWriting)
-		{
-			//if we have control over this entity, send out our positions to everyone else.
-			syncPosition = transform.position;
-			syncFacing = facingRight;
-			stream.Serialize(ref syncPosition);
-			stream.Serialize(ref syncFacing);
-		}
-	}
-
 }

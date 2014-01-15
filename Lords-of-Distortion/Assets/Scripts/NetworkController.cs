@@ -92,13 +92,14 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	float interval = float.PositiveInfinity;
+
+
 	void Update () {
 		if (isOwner)
 			return;
 
 		//udpate animations
 		localController.anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
-		localController.anim.SetFloat( "Speed", Mathf.Abs(rigidbody2D.velocity.y));
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
@@ -140,6 +141,10 @@ public class NetworkController : MonoBehaviour {
 				                                  currentSmooth/(interval));
 			//The local simulation time of this thing.
 			simTime = oldState.remoteTime +  currentSmooth;
+
+			//simulate animations.
+			float unit = Mathf.Abs(newState.position.x - oldState.position.x) > .01f ? 1.0f : 0.0f;
+			localController.anim.SetFloat( "Speed", unit);
 		}
 	}
 
@@ -148,7 +153,16 @@ public class NetworkController : MonoBehaviour {
 		Vector3 syncPosition = Vector3.zero;
 		bool syncFacing = false;
 
-		if(!stream.isWriting){
+		if (stream.isWriting)
+		{
+			//if we have control over this entity, send out our positions to everyone else.
+			syncPosition = transform.position;
+			syncFacing = localController.facingRight;
+			stream.Serialize(ref syncPosition);
+			stream.Serialize(ref syncFacing);
+		}
+
+		else {
 			//reject out of order/duplicate packets
 			if(states.Count >= 2){
 				double newestTime = states.ReadNewest().remoteTime;

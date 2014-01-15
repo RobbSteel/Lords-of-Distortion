@@ -26,12 +26,11 @@ GameObject:
   - 212: {fileID: 21200000}
   - 50: {fileID: 5000000}
   - 95: {fileID: 9500000}
-  - 114: {fileID: 11400000}
   - 61: {fileID: 6100000}
   - 58: {fileID: 5800000}
-  - 148: {fileID: 14800000}
-  - 148: {fileID: 14800002}
+  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 148: {fileID: 14800000}
   m_Layer: 8
   m_Name: char
   m_TagString: Player
@@ -125,6 +124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 5
+  facingRight: 0
+  anim: {fileID: 0}
   groundCheck: {fileID: 400000}
   whatIsGround:
     serializedVersion: 2
@@ -141,19 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65945ff2494ae8a4b8bb6da1c0d85cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOwner: 0
 --- !u!148 &14800000
-NetworkView:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_StateSynchronization: 2
-  m_Observed: {fileID: 11400000}
-  m_ViewID:
-    m_ID: 0
-    m_Type: 0
---- !u!148 &14800002
 NetworkView:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
