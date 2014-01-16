@@ -82,7 +82,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 294139137}
-  - 114: {fileID: 294139139}
   - 114: {fileID: 294139138}
   - 148: {fileID: 294139140}
   m_Layer: 0
@@ -116,19 +115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 400002, guid: a932be7970b4e024c85b08cd7e2e1ba5, type: 2}
   timeManager: {fileID: 400000, guid: cb5c59ecdb830b543b4a385ee95d0c80, type: 2}
---- !u!114 &294139139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 294139136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eaeed33fc91534f48bc3cbb5d7bba818, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  connectionIP: 127.0.0.1
-  connectionPort: 25001
 --- !u!148 &294139140
 NetworkView:
   m_ObjectHideFlags: 0
@@ -321,3 +307,56 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1 &1929176673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1929176675}
+  - 114: {fileID: 1929176674}
+  - 148: {fileID: 1929176676}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 866134395, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1929176674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929176673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaeed33fc91534f48bc3cbb5d7bba818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectionIP: 127.0.0.1
+  connectionPort: 25001
+--- !u!4 &1929176675
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929176673}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.79940987, y: -1.60715652, z: -.212330759}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!148 &1929176676
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929176673}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 1929176675}
+  m_ViewID:
+    m_ID: 2
+    m_Type: 1

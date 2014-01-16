@@ -46,14 +46,12 @@ public class LobbyInstanceManager : MonoBehaviour {
 		SpawnPlayer(Network.player);
 	}
 	void OnDisconnectedFromServer(){
-
 		/* Remember to fix this */
 		Network.RemoveRPCs(Network.player);
 		Network.DestroyPlayerObjects(Network.player);
 		Network.Destroy(myPlayer.gameObject);
 		//load default offline level
 		Application.LoadLevel(offlineLevel);
-
 	}
 
 	[RPC]

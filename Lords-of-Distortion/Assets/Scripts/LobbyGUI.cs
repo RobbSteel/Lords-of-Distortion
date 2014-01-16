@@ -10,7 +10,11 @@ public class LobbyGUI : MonoBehaviour {
 	bool wantConnection = false;
 	private HostData[] hostList;
 	private int lastLevelPrefix = 0;
-	
+
+	GameObject instanceManager;
+	void Start(){
+		instanceManager = GameObject.Find("FakeLobbySpawner");
+	}
 	void OnGUI()
 	{
 		if (Network.peerType == NetworkPeerType.Disconnected)
@@ -49,7 +53,7 @@ public class LobbyGUI : MonoBehaviour {
 			{
 				Network.RemoveRPCsInGroup(0);
 				Network.RemoveRPCsInGroup(1);
-				networkView.RPC( "LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
+				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
 			}
 		}
 	}
@@ -57,7 +61,7 @@ public class LobbyGUI : MonoBehaviour {
 	void Update(){
 		if (hostList != null && wantConnection){
 			Network.Connect(hostList[0]);
-			//Should be caerful here. Should really be changing this once connection is confirmed
+			//Should be careful here. Should really be changing this once connection is confirmed
 			wantConnection = false;
 		}
 	}
