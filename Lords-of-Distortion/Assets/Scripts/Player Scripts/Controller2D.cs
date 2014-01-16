@@ -43,7 +43,6 @@ public class Controller2D : MonoBehaviour {
 
 	//Flips player sprite accordingly to which side he is facing
 	public void Flip(){
-		LineRenderer renderer;
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
