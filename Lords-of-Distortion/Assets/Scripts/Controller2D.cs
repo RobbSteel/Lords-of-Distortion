@@ -54,7 +54,6 @@ public class Controller2D : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator>();
 		networkController = GetComponent<NetworkController>();
-		isOwner = networkController.isOwner;
 	}
 
 
@@ -67,7 +66,7 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!isOwner)
+		if(!networkController.isOwner)
 			return;
 		Jump();
 	}
