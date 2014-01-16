@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Controller2D : MonoBehaviour {
-
+	public bool DEBUG;
 	public float maxSpeed = 10f;
 	public bool facingRight = false;
 	public Animator anim;
@@ -57,7 +57,7 @@ public class Controller2D : MonoBehaviour {
 
 
 	void FixedUpdate(){
-		if(!networkController.isOwner)
+		if(!DEBUG && !networkController.isOwner)
 			return;
 		IsGrounded();
 		MovePlayer();
@@ -65,7 +65,7 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!networkController.isOwner)
+		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
 	}

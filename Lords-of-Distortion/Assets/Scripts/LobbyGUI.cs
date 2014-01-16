@@ -9,6 +9,7 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	private HostData[] hostList;
+	private int lastLevelPrefix = 0;
 	
 	void OnGUI()
 	{
@@ -43,6 +44,12 @@ public class LobbyGUI : MonoBehaviour {
 			{
 				Network.Disconnect(200);
 				wantConnection = false;
+			}
+			if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
+			{
+				Network.RemoveRPCsInGroup(0);
+				Network.RemoveRPCsInGroup(1);
+				networkView.RPC( "LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
 			}
 		}
 	}
