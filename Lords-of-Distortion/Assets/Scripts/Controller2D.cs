@@ -5,29 +5,26 @@ public class Controller2D : MonoBehaviour {
 
 	public float maxSpeed = 10f;
 	public bool facingRight = false;
-
-
 	public Animator anim;
 
-	bool grounded = false;
+	private bool grounded = false;
 	public Transform groundCheck;
-	float groundRadius = 0.2f;
-	public LayerMask whatIsGround;
+	private float groundRadius = 0.2f;
+	public LayerMask groundLayer;
 	public float jumpForce = 700f;
 
-	private bool isOwner = false;
+	NetworkController networkController;
 
 
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
-		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, whatIsGround );
+		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
 		anim.SetBool( "Ground", grounded );
 	}
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
 		anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
-		
 		//to make jumping and changing direction is disabled
 		//if(!grounded) return;
 		
@@ -46,6 +43,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Flips player sprite accordingly to which side he is facing
 	public void Flip(){
+		LineRenderer renderer;
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
@@ -55,13 +53,13 @@ public class Controller2D : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-		NetworkController remoteController = GetComponent<NetworkController>();
-		isOwner = remoteController.isOwner;
+		networkController = GetComponent<NetworkController>();
+		isOwner = networkController.isOwner;
 	}
 
 
 	void FixedUpdate(){
-		if(!isOwner)
+		if(!networkController.isOwner)
 			return;
 		IsGrounded();
 		MovePlayer();

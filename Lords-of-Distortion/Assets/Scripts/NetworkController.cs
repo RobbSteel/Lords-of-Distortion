@@ -4,22 +4,23 @@ using System.Collections.Generic;
 
 public class NetworkController : MonoBehaviour {
 
-	NetworkPlayer theOwner;
-	Controller2D localController;
+	public NetworkPlayer theOwner;
+	private Controller2D controller2D;
+
 	public bool isOwner = false;
 
-	float width;
+	private float width;
+
 	//A priority queue of events sorted by earliest time to highest.
 	private SortedList<float, Event> eventQueue;
 	
 	//A buffer of states. Not sure if a circular buffer is the best data structure at this point.
-	CircularBuffer<State> states;
-	
+	private CircularBuffer<State> states;
 
 	/* Synchronization Variables */                                                                                                                                                                                                                                      
 	private float currentSmooth = 0f;
 	private bool canInterpolate= false;
-	float simTime;
+	private float simTime;
 
 
 	/*
@@ -73,7 +74,7 @@ public class NetworkController : MonoBehaviour {
 	void Start () {
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		width = collider.size.x;
-		localController = GetComponent<Controller2D>();
+		controller2D = GetComponent<Controller2D>();
 	}
 
 	void FixedUpdate(){
@@ -99,7 +100,7 @@ public class NetworkController : MonoBehaviour {
 			return;
 
 		//udpate animations
-		localController.anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
+		controller2D.anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
@@ -126,8 +127,8 @@ public class NetworkController : MonoBehaviour {
 			//tells us how long to interpolate between these two states.
 			interval = newState.remoteTime - oldState.remoteTime;
 			
-			if(newState.facingRight != localController.facingRight)
-				localController.Flip();
+			if(newState.facingRight != controller2D.facingRight)
+				controller2D.Flip();
 			
 			Vector3 positionDifference = newState.position - oldState.position;
 			float distanceApart = positionDifference.magnitude;
@@ -144,7 +145,7 @@ public class NetworkController : MonoBehaviour {
 
 			//simulate animations.
 			float unit = Mathf.Abs(newState.position.x - oldState.position.x) > .01f ? 1.0f : 0.0f;
-			localController.anim.SetFloat( "Speed", unit);
+			controller2D.anim.SetFloat( "Speed", unit);
 		}
 	}
 
@@ -157,7 +158,7 @@ public class NetworkController : MonoBehaviour {
 		{
 			//if we have control over this entity, send out our positions to everyone else.
 			syncPosition = transform.position;
-			syncFacing = localController.facingRight;
+			syncFacing = controller2D.facingRight;
 			stream.Serialize(ref syncPosition);
 			stream.Serialize(ref syncFacing);
 		}
