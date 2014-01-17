@@ -31,6 +31,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400004}
   m_Layer: 8
   m_Name: char
   m_TagString: Player
@@ -144,6 +145,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOwner: 0
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  going: 0
+  movingtowards: 0
+  movingback: 0
+  hookinput: 0
+  mousePos: {x: 0, y: 0}
+  hookscript: {fileID: 0}
+  hook: {fileID: 100002, guid: 34d43783b1d7cc642becb510ff942b1c, type: 2}
+  hooktimer: 0
+  chainspawner: 1
+  pushpull: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

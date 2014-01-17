@@ -13,13 +13,16 @@ public class LobbyGUI : MonoBehaviour {
 	
 	void OnGUI()
 	{
+
+
+
 		if (Network.peerType == NetworkPeerType.Disconnected)
 		{
 			GUI.Label(new Rect(10, 10, 300, 20), "Status: Disconnected");
-			if (GUI.Button(new Rect(10, 30, 120, 20), "Client Connect"))
+			if (GUI.Button(new Rect(10, 30, 120, 20), "Refresh Hosts"))
 			{
 				MasterServer.RequestHostList(typeName);
-				wantConnection = true;
+				//wantConnection = true;
 				//Network.Connect(connectionIP, connectionPort);
 			}
 			if (GUI.Button(new Rect(10, 50, 120, 20), "Initialize Server"))
@@ -52,10 +55,22 @@ public class LobbyGUI : MonoBehaviour {
 				networkView.RPC( "LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
 			}
 		}
+
+		if (hostList != null)
+		{
+			print ("getting here");
+			for (int i = 0; i < hostList.Length; i++)
+			{
+				if (GUI.Button(new Rect(10,90+(40*i), 120, 20), hostList[i].gameName))
+					Network.Connect(hostList[i]);
+			}
+		}
 	}
 	
 	void Update(){
 		if (hostList != null && wantConnection){
+
+
 			Network.Connect(hostList[0]);
 			//Should be caerful here. Should really be changing this once connection is confirmed
 			wantConnection = false;
