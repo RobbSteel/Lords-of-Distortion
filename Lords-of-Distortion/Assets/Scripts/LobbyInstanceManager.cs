@@ -9,8 +9,13 @@ public class LobbyInstanceManager : MonoBehaviour {
 	int playerCounter;
 	String offlineLevel = "MainMenu";
 
+	List<PlayerOptions> playerOptions;
+	//Initially null until you are connected
+	PlayerOptions myPlayerOptions;
+
 	void Awake(){
 		DontDestroyOnLoad(this);
+		playerOptions = new List<PlayerOptions>();
 		networkView.group = SETUP;
 		playerCounter = -1;
 	}
@@ -28,23 +33,47 @@ public class LobbyInstanceManager : MonoBehaviour {
 		NetworkView theNetworkView = newPlayerTransform.networkView;
 		theNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, player);
 	}
-	
-	[RPC] 
-	void AddPlayer(){
-		playerCounter++;
+
+
+	[RPC]
+	void RequestLocalSpawn(NetworkMessageInfo info){
+		NetworkPlayer original = info.sender;
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered,  ++playerCounter, original);
 	}
-	
+
+	[RPC]
+	void ConfirmLocalSpawn(int playerNumber, NetworkPlayer original){
+		if(original == Network.player){
+			myPlayerOptions = new PlayerOptions();
+			playerCounter = playerNumber;
+			myPlayerOptions.playerNumber = playerNumber;
+			Debug.Log (playerCounter);
+			SpawnPlayer(Network.player);
+		}
+
+		else {
+			PlayerOptions other = new PlayerOptions();
+			//we can refer to players by number later on
+			other.playerNumber = playerNumber;
+			playerCounter = playerNumber; //unity guarantees that rpcs will be in order
+		}
+	}
+
 	void OnServerInitialized()
 	{
-		networkView.RPC("AddPlayer", RPCMode.AllBuffered);
+		myPlayerOptions = new PlayerOptions();
+		myPlayerOptions.playerNumber = ++playerCounter;
+		//should this be a dictionary?
+		playerOptions.Add (myPlayerOptions);
 		SpawnPlayer(Network.player);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered);
 	}
 	
 	void OnConnectedToServer()
 	{
-		networkView.RPC("AddPlayer", RPCMode.AllBuffered);
-		SpawnPlayer(Network.player);
+		networkView.RPC ("RequestLocalSpawn", RPCMode.Server);
 	}
+
 	void OnDisconnectedFromServer(){
 		/* Remember to fix this */
 		Network.RemoveRPCs(Network.player);

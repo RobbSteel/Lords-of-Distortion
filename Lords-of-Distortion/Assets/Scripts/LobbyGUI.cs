@@ -12,9 +12,11 @@ public class LobbyGUI : MonoBehaviour {
 	private int lastLevelPrefix = 0;
 
 	GameObject instanceManager;
+
 	void Start(){
 		instanceManager = GameObject.Find("FakeLobbySpawner");
 	}
+
 	void OnGUI()
 	{
 		if (Network.peerType == NetworkPeerType.Disconnected)
@@ -56,6 +58,11 @@ public class LobbyGUI : MonoBehaviour {
 				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
 			}
 		}
+
+		/*
+		 * Once you're connected you can change your user settings locally.
+		 * RPC chosen settings to server
+		 * */
 	}
 	
 	void Update(){
