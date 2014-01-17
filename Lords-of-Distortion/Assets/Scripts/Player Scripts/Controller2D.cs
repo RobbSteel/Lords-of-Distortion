@@ -76,4 +76,23 @@ public class Controller2D : MonoBehaviour {
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
 	}
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "GravityFieldTag")
+        {
+            Debug.Log(other.gameObject.tag);
+            Debug.Log("Hit gravity field");
+            rigidbody2D.gravityScale = -1;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "GravityFieldTag")
+        {
+            rigidbody2D.gravityScale = 1;
+        }
+    }
+
 }
