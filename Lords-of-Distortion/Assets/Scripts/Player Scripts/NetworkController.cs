@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NetworkController : MonoBehaviour {
+	public bool DEBUG;
+	public LobbyInstanceManager instanceManager;
 
 	public NetworkPlayer theOwner;
 	private Controller2D controller2D;
@@ -57,6 +59,7 @@ public class NetworkController : MonoBehaviour {
 	[RPC]
 	void SetPlayerID(NetworkPlayer player)
 	{
+		Debug.Log ("received owner id");
 		theOwner = player;
 		if(player == Network.player){ 
 			isOwner = true; //we can control the player locally
@@ -64,6 +67,30 @@ public class NetworkController : MonoBehaviour {
 		else{
 			rigidbody2D.isKinematic = true;
 			states = new CircularBuffer<State>(4);
+		}
+
+		//we should have created a local playeroptions by now
+		if(!DEBUG){
+			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
+			PlayerOptions playerOptions = null;
+			
+			instanceManager.playerOptions.TryGetValue(theOwner, out playerOptions);
+			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
+			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
+			switch(playerOptions.style){
+
+			case PlayerOptions.CharacterStyle.BLUE:
+				myRenderer.color = Color.blue;
+				break;
+				
+			case PlayerOptions.CharacterStyle.RED:
+				myRenderer.color = Color.red;
+				break;
+
+			case PlayerOptions.CharacterStyle.GREEN:
+				myRenderer.color = Color.green;
+				break;
+			}
 		}
 	}
 
@@ -165,7 +192,7 @@ public class NetworkController : MonoBehaviour {
 
 		else {
 			//reject out of order/duplicate packets
-			if(states.Count >= 2){
+			if(states != null && states.Count >= 2){
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
 					Debug.Log("lost previous packet");
