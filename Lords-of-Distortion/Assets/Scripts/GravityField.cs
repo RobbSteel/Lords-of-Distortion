@@ -26,7 +26,8 @@ public class GravityField : MonoBehaviour {
     {
         Debug.Log("Destroyed");
         GameObject user = GameObject.FindGameObjectWithTag("Player");
-        user.rigidbody2D.gravityScale = 1;
+        if (user != null)
+            user.rigidbody2D.gravityScale = 1;
     }
 
 }

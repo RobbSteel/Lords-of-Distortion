@@ -21,7 +21,7 @@ public class HookHit : MonoBehaviour {
 		lr = gameObject.AddComponent<LineRenderer>();
 		lr.SetWidth(.1f, .1f);
 		lr.material = rope;
-		lr.sortingLayerName = "player";
+		lr.sortingLayerName = "Player";
 		lr.sortingOrder = 1;
 	}
 
