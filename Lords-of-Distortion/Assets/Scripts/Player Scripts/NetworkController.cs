@@ -59,6 +59,7 @@ public class NetworkController : MonoBehaviour {
 	[RPC]
 	void SetPlayerID(NetworkPlayer player)
 	{
+		Debug.Log ("received owner id");
 		theOwner = player;
 		if(player == Network.player){ 
 			isOwner = true; //we can control the player locally
@@ -187,7 +188,7 @@ public class NetworkController : MonoBehaviour {
 
 		else {
 			//reject out of order/duplicate packets
-			if(states.Count >= 2){
+			if(states != null && states.Count >= 2){
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
 					Debug.Log("lost previous packet");

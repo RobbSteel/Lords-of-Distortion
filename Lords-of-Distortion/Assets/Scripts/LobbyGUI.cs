@@ -55,7 +55,7 @@ public class LobbyGUI : MonoBehaviour {
 			{
 				Network.RemoveRPCsInGroup(0);
 				Network.RemoveRPCsInGroup(1);
-				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "prototype", lastLevelPrefix + 1);
+				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "Arena", lastLevelPrefix + 1);
 			}
 		}
 

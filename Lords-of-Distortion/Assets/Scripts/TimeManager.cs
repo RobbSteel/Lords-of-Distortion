@@ -9,6 +9,7 @@ public class TimeManager : MonoBehaviour {
 	public float time;
 	
 	void Awake(){
+		DontDestroyOnLoad(this);
 		instance = this;
 		if(Network.isServer){
 			deltaTime = -(float)Network.time;
