@@ -9,13 +9,14 @@ public class LobbyInstanceManager : MonoBehaviour {
 	int playerCounter;
 	String offlineLevel = "MainMenu";
 
-	List<PlayerOptions> playerOptions;
+	//We want each player to have a list of his own options.
+	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
-		playerOptions = new List<PlayerOptions>();
+		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		networkView.group = SETUP;
 		playerCounter = -1;
 	}
@@ -23,50 +24,58 @@ public class LobbyInstanceManager : MonoBehaviour {
 	NetworkController myPlayer;
 	public Transform characterPrefab;
 	public Transform timeManager;
-	void SpawnPlayer(NetworkPlayer player)
+
+	void SpawnPlayer(NetworkPlayer player) 
 	{
 		Instantiate(timeManager, transform.position, Quaternion.identity);
-		string tempPlayerString = player.ToString();
-		int playerNumber = Convert.ToInt32(tempPlayerString);
+		//string tempPlayerString = player.ToString();
+		///int playerNumber = Convert.ToInt32(tempPlayerString);
 		Transform newPlayerTransform = (Transform)Network.Instantiate(characterPrefab, transform.position, Quaternion.identity, GAMEPLAY);
 		myPlayer = newPlayerTransform.GetComponent<NetworkController>();
-		NetworkView theNetworkView = newPlayerTransform.networkView;
-		theNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, player);
+		NetworkView charNetworkView = newPlayerTransform.networkView;
+		//we can only really send this after the player has been initialized. Start() in players
+		//controller is called late enough and it works, but be careful
+		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, player);
 	}
 
 
 	[RPC]
 	void RequestLocalSpawn(NetworkMessageInfo info){
 		NetworkPlayer original = info.sender;
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered,  ++playerCounter, original);
+		++playerCounter;
+		ConfirmLocalSpawn (playerCounter, original);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered,  playerCounter, original);
 	}
 
 	[RPC]
 	void ConfirmLocalSpawn(int playerNumber, NetworkPlayer original){
 		if(original == Network.player){
-			myPlayerOptions = new PlayerOptions();
+			PlayerOptions mine = new PlayerOptions();
 			playerCounter = playerNumber;
-			myPlayerOptions.playerNumber = playerNumber;
-			Debug.Log (playerCounter);
+			mine.PlayerNumber = playerNumber;
+			Debug.Log ("My spawn " + original +" " +  playerCounter);
+			playerOptions.Add(Network.player, mine);
+			//do this at the end, so that options are available to player
 			SpawnPlayer(Network.player);
 		}
 
 		else {
 			PlayerOptions other = new PlayerOptions();
 			//we can refer to players by number later on
-			other.playerNumber = playerNumber;
+			other.PlayerNumber = playerNumber;
 			playerCounter = playerNumber; //unity guarantees that rpcs will be in order
+			playerOptions.Add(original, other);
 		}
 	}
 
 	void OnServerInitialized()
 	{
+		//these next three lines do same thing as confirmlocalspawn
 		myPlayerOptions = new PlayerOptions();
-		myPlayerOptions.playerNumber = ++playerCounter;
-		//should this be a dictionary?
-		playerOptions.Add (myPlayerOptions);
+		myPlayerOptions.PlayerNumber = ++playerCounter;
+		playerOptions.Add (Network.player, myPlayerOptions);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, Network.player);
 		SpawnPlayer(Network.player);
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered);
 	}
 	
 	void OnConnectedToServer()
@@ -75,12 +84,16 @@ public class LobbyInstanceManager : MonoBehaviour {
 	}
 
 	void OnDisconnectedFromServer(){
-		/* Remember to fix this */
-		Network.RemoveRPCs(Network.player);
-		Network.DestroyPlayerObjects(Network.player);
-		Network.Destroy(myPlayer.gameObject);
-		//load default offline level
+		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
+	}
+
+	void OnPlayerDisconnected(NetworkPlayer player){
+		/* Remember to fix this */
+		Network.RemoveRPCs(player);
+		Network.DestroyPlayerObjects(player);
+		//Network.Destroy(myPlayer.gameObject);
+		//load default offline level
 	}
 
 	[RPC]

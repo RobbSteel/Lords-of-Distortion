@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NetworkController : MonoBehaviour {
+	public bool DEBUG;
+	public LobbyInstanceManager instanceManager;
 
 	public NetworkPlayer theOwner;
 	private Controller2D controller2D;
@@ -75,6 +77,26 @@ public class NetworkController : MonoBehaviour {
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		width = collider.size.x;
 		controller2D = GetComponent<Controller2D>();
+
+
+		if(!DEBUG){
+			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
+			PlayerOptions playerOptions = null;
+			
+			instanceManager.playerOptions.TryGetValue(theOwner, out playerOptions);
+			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
+			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
+			switch(playerOptions.style){
+			case PlayerOptions.CharacterStyle.BLUE:
+				myRenderer.color = Color.blue;
+				break;
+				
+			case PlayerOptions.CharacterStyle.RED:
+				myRenderer.color = Color.red;
+				break;
+			}
+		}
+
 	}
 
 	void FixedUpdate(){
