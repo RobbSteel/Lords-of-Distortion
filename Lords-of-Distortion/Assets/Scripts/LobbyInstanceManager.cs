@@ -130,8 +130,6 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	//this function should be called by the server arena manager.
 	public void SpawnPlayers(List<Vector3> spawnLocations){
-
-
 		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = playerOptions.Keys;
 		int i = 0;
 

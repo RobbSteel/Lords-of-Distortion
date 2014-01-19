@@ -68,6 +68,30 @@ public class NetworkController : MonoBehaviour {
 			rigidbody2D.isKinematic = true;
 			states = new CircularBuffer<State>(4);
 		}
+
+		//we should have created a local playeroptions by now
+		if(!DEBUG){
+			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
+			PlayerOptions playerOptions = null;
+			
+			instanceManager.playerOptions.TryGetValue(theOwner, out playerOptions);
+			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
+			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
+			switch(playerOptions.style){
+
+			case PlayerOptions.CharacterStyle.BLUE:
+				myRenderer.color = Color.blue;
+				break;
+				
+			case PlayerOptions.CharacterStyle.RED:
+				myRenderer.color = Color.red;
+				break;
+
+			case PlayerOptions.CharacterStyle.GREEN:
+				myRenderer.color = Color.green;
+				break;
+			}
+		}
 	}
 
 	void Awake() {
@@ -78,26 +102,6 @@ public class NetworkController : MonoBehaviour {
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		width = collider.size.x;
 		controller2D = GetComponent<Controller2D>();
-
-
-		if(!DEBUG){
-			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
-			PlayerOptions playerOptions = null;
-			
-			instanceManager.playerOptions.TryGetValue(theOwner, out playerOptions);
-			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
-			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
-			switch(playerOptions.style){
-			case PlayerOptions.CharacterStyle.BLUE:
-				myRenderer.color = Color.blue;
-				break;
-				
-			case PlayerOptions.CharacterStyle.RED:
-				myRenderer.color = Color.red;
-				break;
-			}
-		}
-
 	}
 
 	void FixedUpdate(){
