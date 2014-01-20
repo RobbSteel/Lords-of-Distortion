@@ -8,7 +8,7 @@ public class Hook : MonoBehaviour {
 	public bool movingback = false;
 	public bool hookinput = false;
 
-	public Vector2 mousePos = new Vector2(0,0);
+	public Vector3 mousePos = new Vector3(0,0, 0);
 	public HookHit hookscript;
 
 	private GameObject go;
@@ -23,22 +23,41 @@ public class Hook : MonoBehaviour {
 
 
 
-
+	NetworkController networkController;
 
 	void Start () {
-	
+		networkController = GetComponent<NetworkController>();
 	
 	}
 	
+	void ShootHookLocal(Vector3 target){
+		mousePos = target;
+		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
+		going = true;
+		hookscript = go.GetComponent<HookHit>();
+		hookscript.shooter = gameObject;
+		hooktimer = 5;
+		print (hookscript.shooter);
+		transform.rigidbody2D.gravityScale = 0;
+	}
+
+	[RPC]
+	void NotifyShootHook(Vector3 target){
+		networkView.RPC("ShootHookSimulate", RPCMode.Others, target);
+		ShootHookLocal(target);
+	}
+
+	[RPC]
+	void ShootHookSimulate(Vector3 target){
+		if(networkController.isOwner)
+			return;
+		ShootHookLocal(target);
+	}
 
 	void FixedUpdate () {
 	
 		float speed = 1.0f;
 		speed = speed / 4;
-
-
-
-
 
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(going == true){
@@ -60,18 +79,16 @@ public class Hook : MonoBehaviour {
 		//Get input from user and set cooldown to avoid repeated use.
 		if(hooktimer <= 0){
 
-			if (Input.GetMouseButtonDown(0)){
-				mousePos = Input.mousePosition;
-				mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-				go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
-				going = true;
-				hookscript = go.GetComponent<HookHit>();
-				hookscript.shooter = gameObject;
-				hooktimer = 5;
-				print (hookscript.shooter);
-				transform.rigidbody2D.gravityScale = 0;
+			if (Input.GetMouseButtonDown(0) && networkController.isOwner){
+				Vector3 mouseClick = Input.mousePosition;
+				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 
+				if(Network.isServer)
+					networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
 
+				else
+					networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
+				ShootHookLocal(mouseClick);
 			}
 
 		} else {
@@ -134,8 +151,8 @@ public class Hook : MonoBehaviour {
 	
 			
 			var player = hookscript.players;
-			player.transform.position = Vector2.MoveTowards(player.transform.position, transform.position, speed);
-			var distance = Vector2.Distance(player.transform.position, transform.position);
+			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
+			var distance = Vector3.Distance(player.transform.position, transform.position);
 			
 			if(distance < .5){
 				
@@ -155,9 +172,6 @@ public class Hook : MonoBehaviour {
 
 	//Player pulling himself to opponent
 	void goingtoplayer(float speed){
-
-
-			
 			var player = hookscript.players;
 			transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed);
 			
@@ -172,10 +186,6 @@ public class Hook : MonoBehaviour {
 				
 				transform.rigidbody2D.gravityScale = 1;
 		}
-			
-			
-
-
 
 	}
 
@@ -224,7 +234,4 @@ public class Hook : MonoBehaviour {
 			}
 	}
 
-
-
-	
 }
