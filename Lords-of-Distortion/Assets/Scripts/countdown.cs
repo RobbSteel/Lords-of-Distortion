@@ -11,7 +11,9 @@ public class countdown : MonoBehaviour {
     
     void Update()
     {
-        if (myTimer > 0)
+        if (myTimer <= 0)
+            myLabel.text = "0:00";
+        if (myTimer > 1)
         {
             myTimer -= Time.deltaTime;
             int minutes = Mathf.FloorToInt(myTimer / 60F);
