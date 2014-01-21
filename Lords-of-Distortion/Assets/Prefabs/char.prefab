@@ -26,12 +26,12 @@ GameObject:
   - 212: {fileID: 21200000}
   - 50: {fileID: 5000000}
   - 95: {fileID: 9500000}
-  - 61: {fileID: 6100000}
-  - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 148: {fileID: 14800000}
   - 114: {fileID: 11400004}
+  - 61: {fileID: 6100000}
+  - 114: {fileID: 11400006}
   m_Layer: 8
   m_Name: char
   m_TagString: Player
@@ -57,7 +57,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .250489116, y: -1.20371342, z: 0}
+  m_LocalPosition: {x: .046277076, y: -.14874886, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -77,17 +77,6 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
---- !u!58 &5800000
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Radius: .140000001
-  m_Center: {x: 0, y: -.150000006}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -97,8 +86,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Size: {x: .270000011, y: .519999981}
-  m_Center: {x: 0, y: .0599999987}
+  m_Size: {x: .219999999, y: .460000008}
+  m_Center: {x: 0, y: -.0599999987}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 2
@@ -124,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9522eec88882fb46ab1e0d27f0ef610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG: 0
+  DEBUG: 1
   maxSpeed: 5
   facingRight: 0
   anim: {fileID: 0}
@@ -133,6 +122,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   jumpForce: 550
+  stunned: 0
+  isAttacking: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,6 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65945ff2494ae8a4b8bb6da1c0d85cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG: 0
+  instanceManager: {fileID: 0}
   isOwner: 0
 --- !u!114 &11400004
 MonoBehaviour:
@@ -160,12 +153,30 @@ MonoBehaviour:
   movingtowards: 0
   movingback: 0
   hookinput: 0
-  mousePos: {x: 0, y: 0}
+  mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: 34d43783b1d7cc642becb510ff942b1c, type: 2}
   hooktimer: 0
   chainspawner: 1
   pushpull: 0
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dc7150dd0ac7949b26f0dfcba87a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStun: 100
+  currentStunMeter: 50
+  regenAmount: 10
+  regenCooldown: 5
+  regenTimer: 0
+  stunTimer: 2
+  stunWait: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
@@ -196,7 +207,7 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_SortingLayerID: 2858795347
   m_Sprite: {fileID: 21300018, guid: 73f621b9ca1cd44409d5e36bc9230331, type: 3}
