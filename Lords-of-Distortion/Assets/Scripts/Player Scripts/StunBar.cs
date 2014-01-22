@@ -1,0 +1,98 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class StunBar : MonoBehaviour {
+
+
+	public float maxStun = 100f;
+	public float currentStunMeter = 50f;
+	public float regenAmount = 10f;
+	public float regenCooldown = 5f;
+	public float regenTimer = 0f;
+	public float stunTimer;
+	public float stunWait;
+
+	private Controller2D playerControl;		// Reference to the PlayerControl script.
+	private GameObject UI;					// Reference UI GUI
+	private UISlider stunBarUI;				// Reference UI slider values
+
+	//setup references and create UI stunbar
+	void Awake(){
+		playerControl = GetComponent<Controller2D>();
+		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
+		stunBarUI = UI.GetComponent<UISlider>();
+	}
+
+
+	// Use this for initialization
+	void Start () {
+
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		RegenBar();
+		UpdateHealthBar();
+		CheckIfStunned();
+		//stunBarUI.transform.position = GameObject.Find( "Camera" ).camera.WorldToScreenPoint( transform.position );
+	}
+	
+	//allows other objects to appliy a specific amount of damage to player
+	public void TakeDamage( float dmgTaken ){
+		currentStunMeter += dmgTaken;
+	}
+
+	//checks if player is stun then applies timer and grants player actions once time has past
+	private void CheckIfStunned(){
+		if( playerControl.stunned == true ){
+			stunTimer += Time.deltaTime;
+
+			if( stunTimer >= stunWait ){
+				playerControl.stunned = false;
+				stunTimer = 0;
+				currentStunMeter = 0;
+			}
+
+		}
+	}
+
+	public void Stun(){
+		playerControl.stunned = true;
+		stunTimer = 0;
+	}
+	
+	public void Stun( float stunTime ){
+		playerControl.stunned = true;
+		stunTimer = 0;
+		stunWait = stunTime;
+	}
+
+	//Only runs if your stun bar is injured
+	//slowly regenerates your stun bar
+	void RegenBar(){
+		if( currentStunMeter > 0 ){
+			if( regenTimer > regenCooldown ){
+				regenTimer = 0;
+
+				if( currentStunMeter - regenAmount <= 0 ){
+					currentStunMeter = 0;
+				}else
+					currentStunMeter -= regenAmount;
+				}
+			else{
+				regenTimer += Time.deltaTime;
+			}
+		}
+	}
+
+	//Updates StunBar UI and tints color relative to danger
+	void UpdateHealthBar(){
+		stunBarUI.value = currentStunMeter/maxStun;
+		stunBarUI.foregroundWidget.color = Color.Lerp( Color.green , Color.red, currentStunMeter  );
+	}
+
+	void OnCollisionEnter2D( Collision2D col ){
+		
+	}
+
+} 

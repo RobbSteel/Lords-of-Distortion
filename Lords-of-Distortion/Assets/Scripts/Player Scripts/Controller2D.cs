@@ -12,9 +12,21 @@ public class Controller2D : MonoBehaviour {
 	private float groundRadius = 0.2f;
 	public LayerMask groundLayer;
 	public float jumpForce = 700f;
+	public bool stunned;
+	public bool isAttacking;
 
 	NetworkController networkController;
 
+	void Awake(){
+		stunned = false;
+		isAttacking = false;
+	}
+
+	// Use this for initialization
+	void Start () {
+		anim = GetComponent<Animator>();
+		networkController = GetComponent<NetworkController>();
+	}
 
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
@@ -24,20 +36,34 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
-		//to make jumping and changing direction is disabled
-		//if(!grounded) return;
-		
-		float move = Input.GetAxis ( "Horizontal" );
-		
-		anim.SetFloat("Speed", Mathf.Abs(move));
-		
-		rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
-		if( move > 0 && !facingRight ){
-			Flip();
+		if( !stunned ){
+			anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
+			
+			//to make jumping and changing direction is disabled
+			//if(!grounded) return;
+			
+			float move = Input.GetAxis ( "Horizontal" );
+			
+			anim.SetFloat("Speed", Mathf.Abs(move));
+			
+			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
+			if( move > 0 && !facingRight ){
+				Flip();
+			}
+			else if( move < 0 && facingRight ){
+				Flip();
+			}
 		}
-		else if( move < 0 && facingRight ){
-			Flip();
+	}
+
+	void MeleeAttack(){
+		if( !stunned ){
+			if (Input.GetButtonDown ("Fire3")) 
+				isAttacking = true;
+			if(Input.GetButtonUp("Fire3"))
+				isAttacking = false;
+			
+			anim.SetBool ("isAttacking", isAttacking);
 		}
 	}
 
@@ -48,13 +74,6 @@ public class Controller2D : MonoBehaviour {
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
-
-	// Use this for initialization
-	void Start () {
-		anim = GetComponent<Animator>();
-		networkController = GetComponent<NetworkController>();
-	}
-
 
 	void FixedUpdate(){
 		if(!DEBUG && !networkController.isOwner)
@@ -68,10 +87,11 @@ public class Controller2D : MonoBehaviour {
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
+		MeleeAttack();
 	}
 	
 	private void Jump(){
-		if(grounded  && Input.GetButtonDown("Jump")){
+		if( !stunned && grounded  && Input.GetButtonDown("Jump")){
 			anim.SetBool( "Ground" , false );
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
