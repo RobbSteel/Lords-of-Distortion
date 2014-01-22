@@ -36,7 +36,6 @@ public class StunBar : MonoBehaviour {
 		RegenBar();
 		UpdateHealthBar();
 		CheckIfStunned();
-		//stunBarUI.transform.localPosition = GameObject.Find( "Camera" ).camera.WorldToScreenPoint( transform.localPosition );
 		UpdateStunBarPosition();
 	}
 
