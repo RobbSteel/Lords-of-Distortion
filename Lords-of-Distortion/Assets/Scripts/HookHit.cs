@@ -60,12 +60,5 @@ public class HookHit : MonoBehaviour {
 			playerhooked = true;
 			print ("hello2");
 		}
-
-
-
 	}
-
-
-
-
 }

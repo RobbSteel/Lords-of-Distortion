@@ -8,7 +8,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	public bool finishedLoading = false;
 	const int GAMEPLAY = 0;
 	const int SETUP = 1;
-	int playerCounter;
+	private int playerCounter;
 	String offlineLevel = "MainMenu";
 
 	//We want each player to have a list of his own options.
@@ -43,12 +43,9 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	//This version is called by each when told to by the server.
 	[RPC]
-	void SpawnPlayer(Vector3 location){
+	private void SpawnPlayer(Vector3 location){
 		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
 		NetworkView charNetworkView = instance.networkView;
-		//if(Network.isServer)
-		//	instance.SendMessage("SetPlayerID", Network.player);
-
 		charNetworkView.RPC("SetPlayerID", RPCMode.All, Network.player);
 	}
 
@@ -70,8 +67,8 @@ public class LobbyInstanceManager : MonoBehaviour {
 			playerOptions.Add(Network.player, mine);
 			//do this at the end, so that options are available to player
 			SpawnPlayerInitial(Network.player);
-			
 		}
+
 		else {
 			PlayerOptions other = new PlayerOptions();
 			//we can refer to players by number later on
