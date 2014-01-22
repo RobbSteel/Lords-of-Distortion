@@ -25,6 +25,7 @@ public class TimeManager : MonoBehaviour {
 
 	[RPC]
 	void GetServerTime(NetworkMessageInfo info){
+		//send to each client that requests
 		networkView.RPC("SetDeltaTime", info.sender, time); 
 	} 
 	

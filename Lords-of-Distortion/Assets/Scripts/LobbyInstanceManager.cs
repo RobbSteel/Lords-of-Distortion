@@ -9,6 +9,8 @@ public class LobbyInstanceManager : MonoBehaviour {
 	const int GAMEPLAY = 0;
 	const int SETUP = 1;
 	private int playerCounter;
+	public TimeManager timeManager;
+
 	String offlineLevel = "MainMenu";
 
 	//We want each player to have a list of his own options.
@@ -25,29 +27,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	
 	//NetworkController myPlayer;
 	public Transform characterPrefab;
-	public Transform timeManager;
-
-
-	void SpawnPlayerInitial(NetworkPlayer player) 
-	{
-		Instantiate(timeManager, transform.position, Quaternion.identity);
-		//string tempPlayerString = player.ToString();
-		///int playerNumber = Convert.ToInt32(tempPlayerString);
-		Transform newPlayerTransform = (Transform)Network.Instantiate(characterPrefab, transform.position, Quaternion.identity, GAMEPLAY);
-		//myPlayer = newPlayerTransform.GetComponent<NetworkController>();
-		NetworkView charNetworkView = newPlayerTransform.networkView;
-		//we can only really send this after the player has been initialized. Start() in players
-		//controller is called late enough and it works, but be careful
-		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, player);
-	}
-
-	//This version is called by each when told to by the server.
-	[RPC]
-	private void SpawnPlayer(Vector3 location){
-		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
-		NetworkView charNetworkView = instance.networkView;
-		charNetworkView.RPC("SetPlayerID", RPCMode.All, Network.player);
-	}
+	public Transform timeManagerPrefab;
 
 	[RPC]
 	void RequestLocalSpawn(NetworkMessageInfo info){
@@ -55,6 +35,15 @@ public class LobbyInstanceManager : MonoBehaviour {
 		++playerCounter;
 		ConfirmLocalSpawn (playerCounter, original);
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered,  playerCounter, original);
+	}
+
+
+	//This is called by each client when told to by the server.
+	[RPC]
+	void SpawnPlayer(Vector3 location){
+		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
+		NetworkView charNetworkView = instance.networkView;
+		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
 	}
 
 	[RPC]
@@ -66,7 +55,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 			Debug.Log ("My spawn " + original +" " +  playerCounter);
 			playerOptions.Add(Network.player, mine);
 			//do this at the end, so that options are available to player
-			SpawnPlayerInitial(Network.player);
+			SpawnPlayer(transform.position);
 		}
 
 		else {
@@ -80,16 +69,21 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	void OnServerInitialized()
 	{
+		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
+		timeManager = instance.GetComponent<TimeManager>();
+
 		//these next three lines do same thing as confirmlocalspawn
 		myPlayerOptions = new PlayerOptions();
 		myPlayerOptions.PlayerNumber = ++playerCounter;
 		playerOptions.Add (Network.player, myPlayerOptions);
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, Network.player);
-		SpawnPlayerInitial(Network.player);
+		SpawnPlayer(transform.position);
 	}
 	
 	void OnConnectedToServer()
 	{
+		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
+		timeManager = instance.GetComponent<TimeManager>();
 		networkView.RPC ("RequestLocalSpawn", RPCMode.Server);
 		//we could also have a custom functions like "Ready" 
 	}
@@ -118,7 +112,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 		Network.SetSendingEnabled(GAMEPLAY, true);
 		finishedLoading = true;
 
-		/* Because we don't want to call network specific functions until we've set the level prefix
+		/*Because we don't want to call network specific functions until we've set the level prefix
 		 avoid using Start() in other gameobjects to do networking tasks. Instead call OnNetworkLoadedLevel*/
 		GameObject[] objects =  FindObjectsOfType(typeof(GameObject)) as GameObject[];
 		foreach(GameObject go in objects)
@@ -126,7 +120,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	}
 
 	//this function should be called by the server arena manager.
-	public void SpawnPlayers(List<Vector3> spawnLocations){
+	public double SpawnPlayers(List<Vector3> spawnLocations){
 		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = playerOptions.Keys;
 		int i = 0;
 
@@ -135,9 +129,14 @@ public class LobbyInstanceManager : MonoBehaviour {
 				//this means we the player is the server player
 				SpawnPlayer (spawnLocations[i]);
 			}
-			else
+			else {
+				//Because playeroptions have already been created, we don't do anything special when spawning
+				//spawning the arena players.
 				networkView.RPC ("SpawnPlayer", player, spawnLocations[i]);
+			}
 			i++;
 		}
+		//in 5 seconds begin the round.
+		return timeManager.time + 5.0;
 	}
 }
