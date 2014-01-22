@@ -11,6 +11,8 @@ public class StunBar : MonoBehaviour {
 	public float regenTimer = 0f;
 	public float stunTimer;
 	public float stunWait;
+	public float UIoffsetX;
+	public float UIoffsetY;
 
 	private Controller2D playerControl;		// Reference to the PlayerControl script.
 	private GameObject UI;					// Reference UI GUI
@@ -34,9 +36,26 @@ public class StunBar : MonoBehaviour {
 		RegenBar();
 		UpdateHealthBar();
 		CheckIfStunned();
-		//stunBarUI.transform.position = GameObject.Find( "Camera" ).camera.WorldToScreenPoint( transform.position );
+		//stunBarUI.transform.localPosition = GameObject.Find( "Camera" ).camera.WorldToScreenPoint( transform.localPosition );
+		UpdateStunBarPosition();
 	}
-	
+
+	//sets position of stunbar correctly on player
+	void UpdateStunBarPosition(){
+		Vector3 playersPos = transform.position;
+		Vector3 screenPos = GameObject.Find("Main Camera").camera.WorldToScreenPoint( playersPos );
+		float screenHeight = Screen.height;
+		float screenWidth = Screen.width;
+		screenPos.x -= (screenWidth / 2.0f);
+		screenPos.y -= (screenHeight / 2.0f);
+
+		screenPos.x += UIoffsetX;
+		screenPos.y += UIoffsetY;
+
+		stunBarUI.transform.localPosition = screenPos;
+
+	}
+
 	//allows other objects to appliy a specific amount of damage to player
 	public void TakeDamage( float dmgTaken ){
 		currentStunMeter += dmgTaken;
@@ -85,10 +104,17 @@ public class StunBar : MonoBehaviour {
 		}
 	}
 
+
+
 	//Updates StunBar UI and tints color relative to danger
 	void UpdateHealthBar(){
 		stunBarUI.value = currentStunMeter/maxStun;
 		stunBarUI.foregroundWidget.color = Color.Lerp( Color.green , Color.red, currentStunMeter  );
+	}
+
+	//Ondestroy delete Stunbar Ui
+	void OnDestroy(){
+		Destroy( UI );
 	}
 
 	void OnCollisionEnter2D( Collision2D col ){
