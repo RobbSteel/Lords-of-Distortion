@@ -105,11 +105,11 @@ public class Controller2D : MonoBehaviour {
 			Debug.Log("Hit gravity field");
 			rigidbody2D.gravityScale = -1;
 		}
-		if (other.gameObject.tag == "stickyTrapTag")
+
+		if (other.gameObject.tag == "Power")
 		{
-			Debug.Log(other.gameObject.tag);
-			Debug.Log("Hit sticky trap");
-			rigidbody2D.drag = 40;
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
 		}
 	}
 	
@@ -119,10 +119,23 @@ public class Controller2D : MonoBehaviour {
 		{
 			rigidbody2D.gravityScale = 1;
 		}
-		if (other.gameObject.tag == "stickyTrapTag")
+
+		if (other.gameObject.tag == "Power")
 		{
-			rigidbody2D.drag = 0;
+			Power power = other.gameObject.GetComponent<Power>();
+			power.OnLoseContact(gameObject, this);
 		}
 	}
 
+
+	void OnCollisionStay2D(Collision2D col ) {
+		if (col.gameObject.tag == "Power"){
+			Power power = col.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
+		}
+	}
+
+	public void Die(){
+		Debug.Log ("I died again");
+	}
 }

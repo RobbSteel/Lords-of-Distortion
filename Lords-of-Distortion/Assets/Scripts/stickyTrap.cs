@@ -1,13 +1,23 @@
 using UnityEngine;
 using System.Collections;
 
-public class stickyTrap : MonoBehaviour {
+public class stickyTrap : Power {
 	
 	// Update is called once per frame
 	void Update () {
 		stickyT();
 	}
-	
+
+	public override void PowerAction (GameObject player, Controller2D controller){
+		player.rigidbody2D.drag = 40;
+		Debug.Log("Hit sticky trap");
+	}
+
+	public override void OnLoseContact (GameObject player, Controller2D controller){
+		player.rigidbody2D.drag = 0;
+	}
+
+
 	public void stickyT()
 	{
 		
