@@ -137,6 +137,6 @@ public class LobbyInstanceManager : MonoBehaviour {
 			i++;
 		}
 		//in 5 seconds begin the round.
-		return timeManager.time + 5.0;
+		return timeManager.time + 5.0f;
 	}
 }
