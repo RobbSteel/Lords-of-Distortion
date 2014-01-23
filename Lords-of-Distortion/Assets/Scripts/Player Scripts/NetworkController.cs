@@ -96,12 +96,12 @@ public class NetworkController : MonoBehaviour {
 
 	void Awake() {
 		eventQueue = new SortedList<float, Event>();
+		controller2D = GetComponent<Controller2D>();
 	}
 
 	void Start () {
 		BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
 		width = collider.size.x;
-		controller2D = GetComponent<Controller2D>();
 	}
 
 	void FixedUpdate(){

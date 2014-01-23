@@ -64,7 +64,7 @@ public class LobbyGUI : MonoBehaviour {
 
 		if (hostList != null)
 		{
-			print ("getting here");
+			//print ("getting here");
 			for (int i = 0; i < hostList.Length; i++)
 			{
 				if (GUI.Button(new Rect(10,90+(40*i), 120, 20), hostList[i].gameName))

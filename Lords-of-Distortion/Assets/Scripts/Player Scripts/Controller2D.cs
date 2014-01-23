@@ -97,22 +97,32 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "GravityFieldTag")
-        {
-            Debug.Log(other.gameObject.tag);
-            Debug.Log("Hit gravity field");
-            rigidbody2D.gravityScale = -1;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "GravityFieldTag")
-        {
-            rigidbody2D.gravityScale = 1;
-        }
-    }
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			Debug.Log(other.gameObject.tag);
+			Debug.Log("Hit gravity field");
+			rigidbody2D.gravityScale = -1;
+		}
+		if (other.gameObject.tag == "stickyTrapTag")
+		{
+			Debug.Log(other.gameObject.tag);
+			Debug.Log("Hit sticky trap");
+			rigidbody2D.drag = 40;
+		}
+	}
+	
+	void OnTriggerExit2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			rigidbody2D.gravityScale = 1;
+		}
+		if (other.gameObject.tag == "stickyTrapTag")
+		{
+			rigidbody2D.drag = 0;
+		}
+	}
 
 }
