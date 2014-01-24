@@ -3,6 +3,9 @@ using System.Collections;
 
 public class GravityField : MonoBehaviour {
 
+    private GameObject gravField;
+    public float timer = 0;
+
 	// Update is called once per frame
 	void Update () {
         GravField();
@@ -10,16 +13,19 @@ public class GravityField : MonoBehaviour {
 
     public void GravField()
     {
-        
         if (Input.GetKeyDown(KeyCode.G) == true)
         {
             // Local Spawn
-            GameObject gravField = (GameObject)Instantiate(Resources.Load("gravityField"));
-            Destroy(gravField, 5f);
-            
+            //GameObject gravField = (GameObject)Instantiate(Resources.Load("gravityField"));
+
+            timer = Time.time;
+
             // Network Spawn - Not sure if this works, fails because "We are not connected"
-            //GameObject gravField = (GameObject)Network.Instantiate(Resources.Load("gravityField"), new Vector3(0, 0, 0), Quaternion.identity, -1);
+            gravField = (GameObject)Network.Instantiate(Resources.Load("gravityField"), new Vector3(0, 0, 0), Quaternion.identity, -1);
         }
+
+        if (Time.time - timer > 5)
+            Network.Destroy(gravField);
     }
 
     void OnDestroy()

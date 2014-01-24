@@ -13,6 +13,7 @@ GameObject:
   - 199: {fileID: 19900000}
   - 61: {fileID: 6100000}
   - 114: {fileID: 11400000}
+  - 148: {fileID: 14800000}
   m_Layer: 8
   m_Name: gravityField
   m_TagString: GravityFieldTag
@@ -53,6 +54,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3bd5348401380439129b62e9ac1c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
+--- !u!148 &14800000
+NetworkView:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 400000}
+  m_ViewID:
+    m_ID: 0
+    m_Type: 0
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
