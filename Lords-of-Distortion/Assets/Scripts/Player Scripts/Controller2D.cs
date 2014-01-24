@@ -112,6 +112,14 @@ public class Controller2D : MonoBehaviour {
 			power.PowerAction(gameObject, this);
 		}
 	}
+
+	void OnTriggerStay2D(Collider2D other){
+		if (other.gameObject.tag == "Power")
+		{
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
+		}
+	}
 	
 	void OnTriggerExit2D(Collider2D other)
 	{
