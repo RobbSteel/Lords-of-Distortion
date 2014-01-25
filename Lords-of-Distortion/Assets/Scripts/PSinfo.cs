@@ -5,6 +5,8 @@ public class PSinfo : MonoBehaviour {
 
 	public string playername;
 	public string servername;
+	public string choice;
+	public int servernumb;
 
 	// Use this for initialization
 	void Start () {

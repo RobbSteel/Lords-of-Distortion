@@ -10,13 +10,28 @@ public class LobbyGUI : MonoBehaviour {
 	bool wantConnection = false;
 	private HostData[] hostList;
 	private int lastLevelPrefix = 0;
-
+	public PSinfo infoscript;
 	GameObject instanceManager;
 
 	void Start(){
 		instanceManager = GameObject.Find("FakeLobbySpawner");
-	}
+		var information = GameObject.Find("PSInfo");
+		infoscript = information.GetComponent<PSinfo>();
+		hostList = MasterServer.PollHostList();
 
+		if(infoscript.choice == "Host"){
+			
+			Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
+			MasterServer.RegisterHost(typeName, infoscript.servername);
+			
+			
+		} else if(infoscript.choice == "Find"){
+			
+			Network.Connect(hostList[infoscript.servernumb]);
+			
+		}
+	}
+	/*
 	void OnGUI()
 	{
 
@@ -72,8 +87,14 @@ public class LobbyGUI : MonoBehaviour {
 			}
 		}
 	}
+	*/
 	
 	void Update(){
+
+
+
+
+		/*
 		if (hostList != null && wantConnection){
 
 
@@ -81,6 +102,12 @@ public class LobbyGUI : MonoBehaviour {
 			//Should be careful here. Should really be changing this once connection is confirmed
 			wantConnection = false;
 		}
+		*/
+
+
+
+
+
 	}
 	
 	void OnMasterServerEvent(MasterServerEvent msEvent)

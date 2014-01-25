@@ -31,7 +31,8 @@ void OnClick(){
 		} else {
 			infoscript.playername = playerscript.playerName;
 			infoscript.servername = playerscript.gameName;
-			Application.LoadLevel(0);
+			infoscript.choice = "Host";
+			Application.LoadLevel(1);
 			
 		}
 
