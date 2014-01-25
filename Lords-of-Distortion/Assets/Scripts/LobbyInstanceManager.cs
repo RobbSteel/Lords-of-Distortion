@@ -120,7 +120,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	}
 
 	//this function should be called by the server arena manager.
-	public double SpawnPlayers(List<Vector3> spawnLocations){
+	public float SpawnPlayers(List<Vector3> spawnLocations){
 		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = playerOptions.Keys;
 		int i = 0;
 
@@ -137,6 +137,6 @@ public class LobbyInstanceManager : MonoBehaviour {
 			i++;
 		}
 		//in 5 seconds begin the round.
-		return timeManager.time + 5.0;
+		return timeManager.time + 5.0f;
 	}
 }

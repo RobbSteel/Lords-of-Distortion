@@ -97,22 +97,53 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "GravityFieldTag")
-        {
-            Debug.Log(other.gameObject.tag);
-            Debug.Log("Hit gravity field");
-            rigidbody2D.gravityScale = -1;
-        }
-    }
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			Debug.Log(other.gameObject.tag);
+			Debug.Log("Hit gravity field");
+			rigidbody2D.gravityScale = -1;
+		}
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "GravityFieldTag")
-        {
-            rigidbody2D.gravityScale = 1;
-        }
-    }
+		if (other.gameObject.tag == "Power")
+		{
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
+		}
+	}
 
+	void OnTriggerStay2D(Collider2D other){
+		if (other.gameObject.tag == "Power")
+		{
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
+		}
+	}
+	
+	void OnTriggerExit2D(Collider2D other)
+	{
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			rigidbody2D.gravityScale = 1;
+		}
+
+		if (other.gameObject.tag == "Power")
+		{
+			Power power = other.gameObject.GetComponent<Power>();
+			power.OnLoseContact(gameObject, this);
+		}
+	}
+
+
+	void OnCollisionStay2D(Collision2D col ) {
+		if (col.gameObject.tag == "Power"){
+			Power power = col.gameObject.GetComponent<Power>();
+			power.PowerAction(gameObject, this);
+		}
+	}
+
+	public void Die(){
+		Debug.Log ("I died again");
+	}
 }

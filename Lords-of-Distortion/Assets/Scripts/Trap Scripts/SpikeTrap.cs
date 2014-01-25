@@ -1,21 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpikeTrap : MonoBehaviour {
-	
-	// Use this for initialization
-	void Start () {
-		
+public class SpikeTrap : Power {
+
+	public override void PowerAction(GameObject player, Controller2D controller){
+		controller.Die();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-	
-	void OnCollisionStay2D(Collision2D col ) {
-		if (col.gameObject.tag == "Player")
-			Destroy( col.gameObject );
-		Debug.Log( col.gameObject.name );
+	public override void OnLoseContact (GameObject player, Controller2D controller)
+	{
+		//Nothing for now.
 	}
 }
