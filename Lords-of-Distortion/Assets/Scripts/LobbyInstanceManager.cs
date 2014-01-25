@@ -69,6 +69,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 		}
 	}
 
+	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
 		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
@@ -148,6 +149,9 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	public void KillPlayer(GameObject playerObject){
 		networkView.RPC ("Died", RPCMode.OthersBuffered);
+		PlayerStats stats = null;
+		playerStats.TryGetValue(Network.player, out stats);
+		stats.deaths += 1;
 		//Because the player spawned himself, let him destroy himself as well.
 		//We may want to instead call a special RPC for an animation or something later on.
 		Network.Destroy(playerObject);
@@ -157,7 +161,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	void Died(NetworkMessageInfo info){
 		PlayerStats stats = null;
 		playerStats.TryGetValue(info.sender, out stats);
-		//stats.deaths += 1;
+		stats.deaths += 1;
 		Debug.Log ("Player " + info.sender + " died."); 
 	}
 }

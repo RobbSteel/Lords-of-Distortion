@@ -15,9 +15,9 @@ public class ArenaSpawnManager : MonoBehaviour {
 	void Awake(){
 		beginTime = float.PositiveInfinity;
 		spawnLocations = new List<Vector3>();
-		spawnLocations.Add(new Vector3(-3.16764f, -4.177613f, 0f));
-		spawnLocations.Add(new Vector3(3.35127f, -2.387209f, 0f));
-		spawnLocations.Add(new Vector3(0.5738465f, -2.387209f, 0f));
+		spawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
+		spawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
+		spawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
 		instanceManager = GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
 	}
