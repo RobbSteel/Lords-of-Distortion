@@ -55,9 +55,11 @@ public class StunBar : MonoBehaviour {
 
 	}
 
-	//allows other objects to appliy a specific amount of damage to player
+	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
 		currentStunMeter += dmgTaken;
+		if( currentStunMeter >= maxStun )
+			Stun();
 	}
 
 	//checks if player is stun then applies timer and grants player actions once time has past
@@ -88,17 +90,19 @@ public class StunBar : MonoBehaviour {
 	//Only runs if your stun bar is injured
 	//slowly regenerates your stun bar
 	void RegenBar(){
-		if( currentStunMeter > 0 ){
-			if( regenTimer > regenCooldown ){
-				regenTimer = 0;
+		if( !playerControl.stunned ){
+			if( currentStunMeter > 0 ){
+				if( regenTimer > regenCooldown ){
+					regenTimer = 0;
 
-				if( currentStunMeter - regenAmount <= 0 ){
-					currentStunMeter = 0;
-				}else
-					currentStunMeter -= regenAmount;
+					if( currentStunMeter - regenAmount <= 0 ){
+						currentStunMeter = 0;
+					}else
+						currentStunMeter -= regenAmount;
+					}
+				else{
+					regenTimer += Time.deltaTime;
 				}
-			else{
-				regenTimer += Time.deltaTime;
 			}
 		}
 	}
