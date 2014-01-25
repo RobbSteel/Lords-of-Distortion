@@ -14,12 +14,14 @@ public class Controller2D : MonoBehaviour {
 	public float jumpForce = 700f;
 	public bool stunned;
 	public bool isAttacking;
+	public bool canJump;
 
 	NetworkController networkController;
 
 	void Awake(){
 		stunned = false;
 		isAttacking = false;
+		canJump = true;
 	}
 
 	// Use this for initialization
@@ -91,7 +93,7 @@ public class Controller2D : MonoBehaviour {
 	}
 	
 	private void Jump(){
-		if( !stunned && grounded  && Input.GetButtonDown("Jump")){
+		if( !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
 			anim.SetBool( "Ground" , false );
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
