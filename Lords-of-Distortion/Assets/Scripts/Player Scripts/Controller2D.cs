@@ -7,6 +7,7 @@ public class Controller2D : MonoBehaviour {
 	public bool facingRight = false;
 	public Animator anim;
 
+	private bool dead = false;
 	private bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
@@ -99,6 +100,8 @@ public class Controller2D : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
+		if(dead)
+			return;
 		if (other.gameObject.tag == "GravityFieldTag")
 		{
 			Debug.Log(other.gameObject.tag);
@@ -115,6 +118,8 @@ public class Controller2D : MonoBehaviour {
 	
 	void OnTriggerExit2D(Collider2D other)
 	{
+		if(dead)
+			return;
 		if (other.gameObject.tag == "GravityFieldTag")
 		{
 			rigidbody2D.gravityScale = 1;
@@ -129,13 +134,21 @@ public class Controller2D : MonoBehaviour {
 
 
 	void OnCollisionStay2D(Collision2D col ) {
+		if(dead)
+			return;
 		if (col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
 			power.PowerAction(gameObject, this);
 		}
 	}
 
+
 	public void Die(){
-		Debug.Log ("I died again");
+		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
+		if(networkController.isOwner){
+			dead = true;
+			Debug.Log ("I died again");
+			networkController.instanceManager.KillPlayer(gameObject);
+		}
 	}
 }

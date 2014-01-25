@@ -41,7 +41,7 @@ public class ArenaSpawnManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(beginTime <= instanceManager.timeManager.time)
-			Debug.Log("Go!");
+		//if(beginTime <= instanceManager.timeManager.time)
+			//Debug.Log("Go!");
 	}
 }
