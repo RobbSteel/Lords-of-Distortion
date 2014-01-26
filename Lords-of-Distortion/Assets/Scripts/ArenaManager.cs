@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 public class ArenaManager : MonoBehaviour {
+	const float PLACEMENT_TIME = 15f; 
 	SessionManager sessionManager;
 	List<Vector3> spawnLocations;
 	float beginTime;
@@ -26,12 +27,14 @@ public class ArenaManager : MonoBehaviour {
 		//add our function as an event to player
 		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
 		 * http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
-		 * */
+		 */
 		Controller2D.onDeath += LostPlayer;
 	}
+
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
 	}
+
 	void LostPlayer(GameObject deadPlayer){
 		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
 		NotifyPlayerDied();
@@ -55,12 +58,24 @@ public class ArenaManager : MonoBehaviour {
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready"); 
 	}
+	/*
+	 * 1. Load Level Geometry
+	 * 2. Allow players to place powers. (Spawn instance of Placement UI)
+	 * 3. Notify players of how much time they have to place powers.
+	 * 4. When time is over, submit power RPCs to server. 
+	 * 5. Server tells all other players about spawn locations and times. (RPC methods should be as 
+	 * generic as possible, but we'll need different ones if certain powers have extra parameters).
+	 * 6. Have an event queue similar to the one in NetworkController.
+	 * 7. Players themselves determine if they're hit or not.
+	 * */
 
 	void OnNetworkLoadedLevel(){
+		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
+
 		if(Network.isServer){
 			livePlayers = sessionManager.SpawnPlayers(spawnLocations);
 			Debug.Log ("start timer");
-			beginTime =  sessionManager.timeManager.time + 5.0f;
+			beginTime =  sessionManager.timeManager.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 		}
 		//TODO: have something that checks if all players have finished loading.
@@ -68,7 +83,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//if(beginTime <= instanceManager.timeManager.time)
+		//if(instanceManager.timeManager.time >= beginTime)
 			//Debug.Log("Go!");
 	}
 }
