@@ -17,6 +17,9 @@ public class Controller2D : MonoBehaviour {
 	public bool isAttacking;
 	public bool canJump;
 
+	public delegate void DieAction(GameObject gO);
+	public static event DieAction onDeath; 
+
 	NetworkController networkController;
 
 	void Awake(){
@@ -155,10 +158,15 @@ public class Controller2D : MonoBehaviour {
 
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
-		if(networkController.isOwner){
+		if(networkController.isOwner && dead == false){
 			dead = true;
 			Debug.Log ("I died again");
-			networkController.instanceManager.KillPlayer(gameObject);
+
+			//Here we call whatever events are subscribed to us.
+			if(onDeath != null)
+				onDeath(gameObject);
+			//We don't need the next line any more
+			//networkController.instanceManager.KillPlayer(gameObject);
 		}
 	}
 }

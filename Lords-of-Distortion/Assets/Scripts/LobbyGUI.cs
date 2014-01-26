@@ -9,26 +9,37 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	private HostData[] hostList;
-	private int lastLevelPrefix = 0;
 	public PSinfo infoscript;
-	GameObject instanceManager;
+	public Transform sessionManagerPrefab;
+	SessionManager sessionManager;
+
+	void Awake(){
+		//Important
+		if(!SessionManager.instanceExists){
+			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
+			sessionManager = manager.GetComponent<SessionManager>();
+		}
+		else
+			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+
+	}
 
 	void Start(){
-		instanceManager = GameObject.Find("FakeLobbySpawner");
 		var information = GameObject.Find("PSInfo");
 		infoscript = information.GetComponent<PSinfo>();
 		hostList = MasterServer.PollHostList();
-
-		if(infoscript.choice == "Host"){
-			
-			Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
-			MasterServer.RegisterHost(typeName, infoscript.servername);
-			
-			
-		} else if(infoscript.choice == "Find"){
-			
-			Network.Connect(hostList[infoscript.servernumb]);
-			
+		if(Network.peerType == NetworkPeerType.Disconnected){
+			if(infoscript.choice == "Host"){
+				
+				Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
+				MasterServer.RegisterHost(typeName, infoscript.servername);
+				
+				
+			} else if(infoscript.choice == "Find"){
+				
+				Network.Connect(hostList[infoscript.servernumb]);
+				
+			}
 		}
 	}
 
@@ -45,7 +56,7 @@ public class LobbyGUI : MonoBehaviour {
 			{
 				Network.RemoveRPCsInGroup(0);
 				Network.RemoveRPCsInGroup(1);
-				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "Arena", lastLevelPrefix + 1);
+				sessionManager.LoadNextLevel();
 			}
 		}
 		/*

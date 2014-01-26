@@ -5,7 +5,9 @@ using System;
 
 public class SessionManager : MonoBehaviour {
 
-
+	private int levelPrefix; //for networking purposes
+	private int arenaIndex; //for loading level purposes.
+	private string[] arenas = new string[1]{"ArenaOne"}; //an array of arenas
 	public PSinfo gameInfo;
 
 	public bool finishedLoading = false;
@@ -16,17 +18,22 @@ public class SessionManager : MonoBehaviour {
 
 	String offlineLevel = "MainMenu";
 
+	public static bool instanceExists = false;
+
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
+		instanceExists = true;
 		var information = GameObject.Find("PSInfo");
 		gameInfo = information.GetComponent<PSinfo>();
 		networkView.group = SETUP;
 		playerCounter = -1;
+		levelPrefix = 0;
+		arenaIndex = -1;// lobby is -1
 	}
-	
+
 	//NetworkController myPlayer;
 	public Transform characterPrefab;
 	public Transform timeManagerPrefab;
@@ -50,7 +57,7 @@ public class SessionManager : MonoBehaviour {
 	}
 
 	/*
-	 * Create a local copy of PlayerOptions and PlayerStats for each player in the lobby
+	 * Create a local copy of PlayerOptions and PlayerStats for each player in this session
 	 */
 
 	[RPC]
@@ -99,6 +106,8 @@ public class SessionManager : MonoBehaviour {
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
+		Destroy (timeManager.gameObject);
+		Destroy (this.gameObject);
 	}
 
 	void OnPlayerDisconnected(NetworkPlayer player){
@@ -110,10 +119,10 @@ public class SessionManager : MonoBehaviour {
 	}
 
 	[RPC]
-	IEnumerator LoadLevel(String level, int levelPrefix){
+	IEnumerator LoadLevel(String level, int commonPrefix){
 		Network.SetSendingEnabled(GAMEPLAY, false);
 		Network.isMessageQueueRunning = false;
-		Network.SetLevelPrefix(levelPrefix);
+		Network.SetLevelPrefix(commonPrefix);
 		Application.LoadLevel(level);
 		yield return null;
 		yield return null;
@@ -128,8 +137,22 @@ public class SessionManager : MonoBehaviour {
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);	
 	}
 
+	public void LoadNextLevel(){
+		string level;
+		++arenaIndex;
+
+		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
+			level = "LobbyArena";
+			arenaIndex = -1;
+		}
+
+		else level = arenas[arenaIndex];
+
+		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
+	}
+
 	//this function should be called by the server arena manager.
-	public float SpawnPlayers(List<Vector3> spawnLocations){
+	public int SpawnPlayers(List<Vector3> spawnLocations){
 		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = gameInfo.playerOptions.Keys;
 		int i = 0;
 
@@ -146,9 +169,21 @@ public class SessionManager : MonoBehaviour {
 			i++;
 		}
 		//in 5 seconds begin the round.
-		return timeManager.time + 5.0f;
+		return players.Count;
 	}
 
+	//called when we re-enter this scene after a game is over.
+	void OnNetworkLoadedLevel(){
+		if(arenaIndex != -1)
+			return;
+
+		List<Vector3> tempLocations = new List<Vector3>();
+		tempLocations.Add(transform.position);
+		tempLocations.Add(transform.position);
+		tempLocations.Add(transform.position);
+		tempLocations.Add(transform.position);
+		SpawnPlayers(tempLocations);
+	}
 
 	public void KillPlayer(GameObject playerObject){
 		networkView.RPC ("Died", RPCMode.OthersBuffered);
@@ -164,5 +199,9 @@ public class SessionManager : MonoBehaviour {
 		PlayerStats stats = gameInfo.GetPlayerStats(info.sender);
 		stats.deaths += 1;
 		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
+	}
+
+	void OnDestroy(){
+		instanceExists = false;
 	}
 }

@@ -71,7 +71,7 @@ public class NetworkController : MonoBehaviour {
 
 		//we should have created a local playeroptions by now
 		if(!DEBUG){
-			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<SessionManager>();
+			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 			PlayerOptions playerOptions = instanceManager.gameInfo.GetPlayerOptions(theOwner);
 			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
 			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
