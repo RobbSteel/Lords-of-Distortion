@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class ArenaSpawnManager : MonoBehaviour {
-	LobbyInstanceManager instanceManager;
+public class ArenaManager : MonoBehaviour {
+	SessionManager instanceManager;
 	List<Vector3> spawnLocations;
 	float beginTime;
 
@@ -19,7 +19,7 @@ public class ArenaSpawnManager : MonoBehaviour {
 		spawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
 		spawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
-		instanceManager = GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
+		instanceManager = GameObject.Find ("FakeLobbySpawner").GetComponent<SessionManager>();
 	}
 
 	// Use this for initialization

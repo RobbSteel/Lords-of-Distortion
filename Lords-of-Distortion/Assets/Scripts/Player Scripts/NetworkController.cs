@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class NetworkController : MonoBehaviour {
 	public bool DEBUG;
-	public LobbyInstanceManager instanceManager;
+	public SessionManager instanceManager;
 
 	public NetworkPlayer theOwner;
 	private Controller2D controller2D;
@@ -71,7 +71,7 @@ public class NetworkController : MonoBehaviour {
 
 		//we should have created a local playeroptions by now
 		if(!DEBUG){
-			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<LobbyInstanceManager>();
+			instanceManager =  GameObject.Find ("FakeLobbySpawner").GetComponent<SessionManager>();
 			PlayerOptions playerOptions = instanceManager.gameInfo.GetPlayerOptions(theOwner);
 			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
 			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();

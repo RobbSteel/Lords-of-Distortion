@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 
-public class LobbyInstanceManager : MonoBehaviour {
+public class SessionManager : MonoBehaviour {
 
 
 	public PSinfo gameInfo;
@@ -16,17 +16,13 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	String offlineLevel = "MainMenu";
 
-
-
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
-
 		var information = GameObject.Find("PSInfo");
 		gameInfo = information.GetComponent<PSinfo>();
-
 		networkView.group = SETUP;
 		playerCounter = -1;
 	}
@@ -55,12 +51,11 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	/*
 	 * Create a local copy of PlayerOptions and PlayerStats for each player in the lobby
-	 * */
+	 */
 
 	[RPC]
 	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer original){
 		playerCounter = playerNumber; //unity guarantees that rpcs will be in order
-
 
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
