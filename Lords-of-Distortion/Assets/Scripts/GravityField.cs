@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GravityField : MonoBehaviour {
+public class GravityField : Power {
 
     private GameObject gravField;
     public float timer = 0;
@@ -10,6 +10,16 @@ public class GravityField : MonoBehaviour {
 	void Update () {
         GravField();
 	}
+
+    public override void PowerAction(GameObject player, Controller2D controller)
+    {
+        player.rigidbody2D.gravityScale = -1;
+    }
+
+    public override void OnLoseContact(GameObject player, Controller2D controller)
+    {
+        player.rigidbody2D.gravityScale = 1;
+    }
 
     public void GravField()
     {
@@ -35,5 +45,4 @@ public class GravityField : MonoBehaviour {
         if (user != null)
             user.rigidbody2D.gravityScale = 1;
     }
-
 }

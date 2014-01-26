@@ -99,13 +99,6 @@ public class Controller2D : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if (other.gameObject.tag == "GravityFieldTag")
-		{
-			Debug.Log(other.gameObject.tag);
-			Debug.Log("Hit gravity field");
-			rigidbody2D.gravityScale = -1;
-		}
-
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
