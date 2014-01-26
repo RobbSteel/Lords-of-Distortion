@@ -31,12 +31,24 @@ public class LobbyGUI : MonoBehaviour {
 			
 		}
 	}
-	/*
-	void OnGUI()
-	{
 
-
-
+	void OnGUI(){
+	if (Network.peerType == NetworkPeerType.Server)
+		{
+			GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Server");
+			if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
+			{
+				Network.Disconnect(200);
+				wantConnection = false;
+			}
+			if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
+			{
+				Network.RemoveRPCsInGroup(0);
+				Network.RemoveRPCsInGroup(1);
+				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "Arena", lastLevelPrefix + 1);
+			}
+		}
+		/*
 		if (Network.peerType == NetworkPeerType.Disconnected)
 		{
 			GUI.Label(new Rect(10, 10, 300, 20), "Status: Disconnected");
@@ -61,21 +73,7 @@ public class LobbyGUI : MonoBehaviour {
 				wantConnection = false;
 			}
 		}
-		else if (Network.peerType == NetworkPeerType.Server)
-		{
-			GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Server");
-			if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
-			{
-				Network.Disconnect(200);
-				wantConnection = false;
-			}
-			if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
-			{
-				Network.RemoveRPCsInGroup(0);
-				Network.RemoveRPCsInGroup(1);
-				instanceManager.networkView.RPC("LoadLevel", RPCMode.AllBuffered, "Arena", lastLevelPrefix + 1);
-			}
-		}
+
 
 		if (hostList != null)
 		{
@@ -86,27 +84,19 @@ public class LobbyGUI : MonoBehaviour {
 					Network.Connect(hostList[i]);
 			}
 		}
+		*/
 	}
-	*/
+
 	
 	void Update(){
-
-
-
-
 		/*
 		if (hostList != null && wantConnection){
-
 
 			Network.Connect(hostList[0]);
 			//Should be careful here. Should really be changing this once connection is confirmed
 			wantConnection = false;
 		}
 		*/
-
-
-
-
 
 	}
 	

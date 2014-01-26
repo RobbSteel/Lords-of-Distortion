@@ -22,9 +22,7 @@ public class FindGames : MonoBehaviour {
 
 			infoscript.playername = playerscript.playerName;
 			infoscript.servername = playerscript.gameName;
-			Application.LoadLevel(5);
-
+			Application.LoadLevel("FindingGames");
 		}
-
-}
+	}
 }

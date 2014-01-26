@@ -5,6 +5,9 @@ using System;
 
 public class LobbyInstanceManager : MonoBehaviour {
 
+
+	public PSinfo gameInfo;
+
 	public bool finishedLoading = false;
 	const int GAMEPLAY = 0;
 	const int SETUP = 1;
@@ -13,17 +16,17 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	String offlineLevel = "MainMenu";
 
-	//We want each player to have a list of his own options.
-	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;
-	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
+
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
-		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
-		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
+
+		var information = GameObject.Find("PSInfo");
+		gameInfo = information.GetComponent<PSinfo>();
+
 		networkView.group = SETUP;
 		playerCounter = -1;
 	}
@@ -32,12 +35,13 @@ public class LobbyInstanceManager : MonoBehaviour {
 	public Transform characterPrefab;
 	public Transform timeManagerPrefab;
 
+	//The client requests that the server do the following.
 	[RPC]
-	void RequestLocalSpawn(NetworkMessageInfo info){
+	void RequestLocalSpawn( string username, NetworkMessageInfo info){
 		NetworkPlayer original = info.sender;
 		++playerCounter;
-		ConfirmLocalSpawn (playerCounter, original);
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered,  playerCounter, original);
+		ConfirmLocalSpawn (playerCounter, username, original);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, username, original);
 	}
 
 
@@ -52,15 +56,18 @@ public class LobbyInstanceManager : MonoBehaviour {
 	/*
 	 * Create a local copy of PlayerOptions and PlayerStats for each player in the lobby
 	 * */
+
 	[RPC]
-	void ConfirmLocalSpawn(int playerNumber, NetworkPlayer original){
+	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer original){
 		playerCounter = playerNumber; //unity guarantees that rpcs will be in order
+
+
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
-		playerOptions.Add(original, options);
+		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
-		playerStats.Add(original, stats);
+		gameInfo.AddPlayer(original, options, stats);
 
 		if(original == Network.player){
 			Debug.Log ("My spawn " + original + " " +  playerCounter);
@@ -80,9 +87,9 @@ public class LobbyInstanceManager : MonoBehaviour {
 		//myPlayerOptions.PlayerNumber = ++playerCounter;
 		//playerOptions.Add (Network.player, myPlayerOptions);
 		++playerCounter;
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, Network.player);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, gameInfo.playername, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
-		ConfirmLocalSpawn (playerCounter, Network.player);
+		ConfirmLocalSpawn (playerCounter, gameInfo.playername, Network.player);
 		//SpawnPlayer(transform.position);
 	}
 	
@@ -90,7 +97,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 	{
 		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		timeManager = instance.GetComponent<TimeManager>();
-		networkView.RPC ("RequestLocalSpawn", RPCMode.Server);
+		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
 		//we could also have a custom functions like "Ready" 
 	}
 
@@ -103,6 +110,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 		/* Remember to fix this */
 		Network.RemoveRPCs(player);
 		Network.DestroyPlayerObjects(player);
+		gameInfo.RemovePlayer(player);
 		//Network.Destroy(myPlayer.gameObject);
 	}
 
@@ -127,7 +135,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	//this function should be called by the server arena manager.
 	public float SpawnPlayers(List<Vector3> spawnLocations){
-		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = playerOptions.Keys;
+		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = gameInfo.playerOptions.Keys;
 		int i = 0;
 
 		foreach(NetworkPlayer player in players){
@@ -149,8 +157,7 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	public void KillPlayer(GameObject playerObject){
 		networkView.RPC ("Died", RPCMode.OthersBuffered);
-		PlayerStats stats = null;
-		playerStats.TryGetValue(Network.player, out stats);
+		PlayerStats stats = gameInfo.GetPlayerStats(Network.player);
 		stats.deaths += 1;
 		//Because the player spawned himself, let him destroy himself as well.
 		//We may want to instead call a special RPC for an animation or something later on.
@@ -159,9 +166,8 @@ public class LobbyInstanceManager : MonoBehaviour {
 
 	[RPC]
 	void Died(NetworkMessageInfo info){
-		PlayerStats stats = null;
-		playerStats.TryGetValue(info.sender, out stats);
+		PlayerStats stats = gameInfo.GetPlayerStats(info.sender);
 		stats.deaths += 1;
-		Debug.Log ("Player " + info.sender + " died."); 
+		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
 	}
 }

@@ -15,14 +15,12 @@ public class Host : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
 		print (playerscript.gameName);
 		print (playerscript.playerName);
 
 	}
 
-void OnClick(){
+	void OnClick(){
 
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name" || playerscript.gameName == "" || playerscript.gameName == "Server Name"){
 			
@@ -32,14 +30,8 @@ void OnClick(){
 			infoscript.playername = playerscript.playerName;
 			infoscript.servername = playerscript.gameName;
 			infoscript.choice = "Host";
-			Application.LoadLevel(1);
+			Application.LoadLevel("LobbyArena");
 			
 		}
-
-		}
-
-
-
-
-	
+	}	
 }
