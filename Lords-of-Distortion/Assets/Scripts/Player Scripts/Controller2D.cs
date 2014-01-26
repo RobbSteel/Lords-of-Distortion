@@ -117,7 +117,7 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionEnter(gameObject, this);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionStay(gameObject, this);
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.OnLoseContact(gameObject, this);
+			power.PowerActionExit(gameObject, this);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class Controller2D : MonoBehaviour {
 			return;
 		if (col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionStay(gameObject, this);
 		}
 	}
 
