@@ -8,7 +8,9 @@ public class LordSpawnManager : MonoBehaviour{
 	void Start(){
 
 		UIEventListener.Get(GameObject.Find("FireballButton")).onClick += InitializePower;
-	
+		UIEventListener.Get(GameObject.Find("GravityFieldButton")).onClick += InitializePower;
+		UIEventListener.Get(GameObject.Find("SmokeBombButton")).onClick += InitializePower;
+		UIEventListener.Get(GameObject.Find("StickyTrapButton")).onClick += InitializePower;
 	}
 
 
@@ -16,12 +18,13 @@ public class LordSpawnManager : MonoBehaviour{
 		
 		//var UIButton 
 		//UIButton
-		
-		UILabel powerlabel = button.GetComponent<UILabel>();
+
+		UILabel powerlabel = button.GetComponentInChildren<UILabel>();
 		var powertype = powerlabel.text;
 		print (powertype);
 		PowerSpawn spawn = new PowerSpawn();
-		
+
+	if(!powerset){
 		
 		if(powertype == "Fireball"){
 			spawn.type = PowerSpawn.PowerType.FIREBALL;
@@ -29,6 +32,30 @@ public class LordSpawnManager : MonoBehaviour{
 			powerset = true;
 			
 		}
+
+		if(powertype == "Sticky Trap"){
+			spawn.type = PowerSpawn.PowerType.STICKY;
+			currpower = powerlist[(int)spawn.type];
+			powerset = true;
+			
+		}
+
+		if(powertype == "Gravity"){
+			spawn.type = PowerSpawn.PowerType.GRAVITY;
+			currpower = powerlist[(int)spawn.type];
+			powerset = true;
+			
+		}
+
+		if(powertype == "Smoke Bomb"){
+			spawn.type = PowerSpawn.PowerType.SMOKE;
+			currpower = powerlist[(int)spawn.type];
+			powerset = true;
+			
+		}
+	}
+
+
 	}
 
 	void Update(){
