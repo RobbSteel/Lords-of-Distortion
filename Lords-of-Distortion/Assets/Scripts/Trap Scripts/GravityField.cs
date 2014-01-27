@@ -27,9 +27,6 @@ public class GravityField : Power {
     {
         player.rigidbody2D.gravityScale = 1;
     }
-	public override void PowerActionStay(GameObject player, Controller2D controller){
-		}
-
   
 
     public void GravField()
