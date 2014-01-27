@@ -64,6 +64,7 @@ public class ArenaManager : MonoBehaviour {
 		spawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
 		spawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
+		allSpawns = new SortedList<float, PowerSpawn>();
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 	}
 
