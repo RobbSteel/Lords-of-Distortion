@@ -7,6 +7,7 @@ public class Controller2D : MonoBehaviour {
 	public bool facingRight = false;
 	public Animator anim;
 
+	private bool dead = false;
 	private bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
@@ -14,12 +15,17 @@ public class Controller2D : MonoBehaviour {
 	public float jumpForce = 700f;
 	public bool stunned;
 	public bool isAttacking;
+	public bool canJump;
+
+	public delegate void DieAction(GameObject gO);
+	public static event DieAction onDeath; 
 
 	NetworkController networkController;
 
 	void Awake(){
 		stunned = false;
 		isAttacking = false;
+		canJump = true;
 	}
 
 	// Use this for initialization
@@ -91,7 +97,7 @@ public class Controller2D : MonoBehaviour {
 	}
 	
 	private void Jump(){
-		if( !stunned && grounded  && Input.GetButtonDown("Jump")){
+		if( !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
 			anim.SetBool( "Ground" , false );
 			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
 		}
@@ -99,10 +105,19 @@ public class Controller2D : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
+		if(dead)
+			return;
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			Debug.Log(other.gameObject.tag);
+			Debug.Log("Hit gravity field");
+			rigidbody2D.gravityScale = -1;
+		}
+
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionEnter(gameObject, this);
 		}
 	}
 
@@ -110,12 +125,14 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionStay(gameObject, this);
 		}
 	}
 	
 	void OnTriggerExit2D(Collider2D other)
 	{
+		if(dead)
+			return;
 		if (other.gameObject.tag == "GravityFieldTag")
 		{
 			rigidbody2D.gravityScale = 1;
@@ -124,19 +141,32 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.OnLoseContact(gameObject, this);
+			power.PowerActionExit(gameObject, this);
 		}
 	}
 
 
 	void OnCollisionStay2D(Collision2D col ) {
+		if(dead)
+			return;
 		if (col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
-			power.PowerAction(gameObject, this);
+			power.PowerActionStay(gameObject, this);
 		}
 	}
 
+
 	public void Die(){
-		Debug.Log ("I died again");
+		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
+		if(networkController.isOwner && dead == false){
+			dead = true;
+			Debug.Log ("I died again");
+
+			//Here we call whatever events are subscribed to us.
+			if(onDeath != null)
+				onDeath(gameObject);
+			//We don't need the next line any more
+			//networkController.instanceManager.KillPlayer(gameObject);
+		}
 	}
 }

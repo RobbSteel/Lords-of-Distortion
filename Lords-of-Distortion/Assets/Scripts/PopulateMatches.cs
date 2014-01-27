@@ -16,18 +16,10 @@ public class PopulateMatches : MonoBehaviour {
 		infoscript = information.GetComponent<PSinfo>();
 		UILabel playerlabel = playertitle.GetComponentInChildren<UILabel>();
 		playerlabel.text = infoscript.playername;
-
-
-
-
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-
 		print(infoscript.playername);
-
 	}
 }
