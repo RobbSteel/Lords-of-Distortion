@@ -876,6 +876,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d4b76f6a83974db9d47b9d3c97472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Powers:
+  - {fileID: 400000, guid: b49dd82d161806c4f82a92e01cf2d8d4, type: 2}
+  - {fileID: 400000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
 --- !u!148 &1038793231
 NetworkView:
   m_ObjectHideFlags: 0
@@ -1558,6 +1561,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400000, guid: 1cf086565db8363468564a6d7a5b892e, type: 2}
+      propertyPath: Powers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1cf086565db8363468564a6d7a5b892e, type: 2}
       propertyPath: m_LocalPosition.x
       value: -3.0912528

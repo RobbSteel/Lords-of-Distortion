@@ -15,7 +15,7 @@ public class PowerSpawn{
 	public Vector3 position;
 	public Vector3 direction;
 
-	PowerSpawn(){
+	public PowerSpawn(){
 		type = PowerType.UNDEFINED;
 	}
 }

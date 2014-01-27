@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 
 public class ArenaManager : MonoBehaviour {
+	public Transform[] Powers;
+
 	const float PLACEMENT_TIME = 15f; 
 	SessionManager sessionManager;
 	List<Vector3> spawnLocations;
+
+	SortedList<float, PowerSpawn> allSpawns;
+
 	float beginTime;
 	int livePlayers;
 
@@ -23,10 +28,21 @@ public class ArenaManager : MonoBehaviour {
 		}
 	}
 
+	/*Clients request this fucntion on the server for every power. After that the server tells every
+	 other player*/
+	[RPC]
+	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
+		PowerSpawn requested =  new PowerSpawn();
+		requested.type = (PowerSpawn.PowerType)typeIndex;
+		requested.position = position;
+		requested.spawnTime = time;
+		allSpawns.Add(time, requested);
+	}
+
 	void OnEnable(){
 		//add our function as an event to player
 		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
-		 * http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
+		 *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
 		 */
 		Controller2D.onDeath += LostPlayer;
 	}
@@ -83,7 +99,19 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//if(instanceManager.timeManager.time >= beginTime)
-			//Debug.Log("Go!");
+		if(sessionManager.timeManager.time >= beginTime){
+			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
+		}
+		//Spawn one power per frame, locally.
+		if(allSpawns.Count != 0){
+			float currentTime = sessionManager.timeManager.time;
+
+			if(currentTime >= allSpawns.Keys[0]){
+				PowerSpawn spawn = allSpawns.Values[0];
+				allSpawns.RemoveAt(0);
+				//convert power type to an int, which is an index to the array of power prefabs.
+				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
+			}
+		}
 	}
 }
