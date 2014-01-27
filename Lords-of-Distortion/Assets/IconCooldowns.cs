@@ -17,22 +17,15 @@ public class IconCooldowns : MonoBehaviour {
     {
         if (character == null)
         {
-            Debug.Log("Looking for Player");
             character = GameObject.FindGameObjectWithTag("Player");
         }
-        else
-            Debug.Log("Found Player");
-
+        
         if (Input.GetMouseButton(0))
         {
-            Debug.Log("Left Mouse Clicked");
             if (character != null)
             {
-                Debug.Log("Setting Hook Timer");
                 timer = character.GetComponent<Hook>().hooktimer;
             }
-
-            Debug.Log("HookTimer from CD: " + timer);
         }
         else
             timer -= Time.deltaTime;
