@@ -29,6 +29,7 @@ public class Melee : MonoBehaviour {
 	}
 	private void startMelee(){
 		anim.SetTrigger ("Melee");
+		audio.Play ();
 		meleeTimer =  coolDownTimer;
 	}
 }
