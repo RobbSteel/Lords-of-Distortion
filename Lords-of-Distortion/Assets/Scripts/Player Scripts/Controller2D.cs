@@ -6,6 +6,7 @@ public class Controller2D : MonoBehaviour {
 	public float maxSpeed = 10f;
 	public bool facingRight = false;
 	public Animator anim;
+	public bool jump = false;
 
 	private bool dead = false;
 	private bool grounded = false;
@@ -14,7 +15,6 @@ public class Controller2D : MonoBehaviour {
 	public LayerMask groundLayer;
 	public float jumpForce = 700f;
 	public bool stunned;
-	public bool isAttacking;
 	public bool canJump;
 
 	public delegate void DieAction(GameObject gO);
@@ -24,8 +24,39 @@ public class Controller2D : MonoBehaviour {
 
 	void Awake(){
 		stunned = false;
-		isAttacking = false;
 		canJump = true;
+	}
+
+	// Update is called once per frame
+	void Update () {
+		if(!DEBUG && !networkController.isOwner)
+			return;
+		Jump();
+	}
+
+	void FixedUpdate(){
+		if(!DEBUG && !networkController.isOwner)
+			return;
+		IsGrounded();
+		MovePlayer();
+
+		// If player jumps
+		if (jump) {
+			// set the Jump animator trigger parameter
+			anim.SetTrigger("Jump");
+
+			//Add a vertical force to player
+			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+
+			// player can't jump again until jump conditions from Update are satisfied
+			jump = false;
+		}
+	}
+
+	private void Jump(){
+		if( !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
+			jump = true;
+		}
 	}
 
 	// Use this for initialization
@@ -43,7 +74,7 @@ public class Controller2D : MonoBehaviour {
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
 		if( !stunned ){
-			anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
+			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled
 			//if(!grounded) return;
@@ -62,45 +93,12 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-	void MeleeAttack(){
-		if( !stunned ){
-			if (Input.GetButtonDown ("Fire3")) 
-				isAttacking = true;
-			if(Input.GetButtonUp("Fire3"))
-				isAttacking = false;
-			
-			anim.SetBool ("isAttacking", isAttacking);
-		}
-	}
-
 	//Flips player sprite accordingly to which side he is facing
 	public void Flip(){
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
-	}
-
-	void FixedUpdate(){
-		if(!DEBUG && !networkController.isOwner)
-			return;
-		IsGrounded();
-		MovePlayer();
-	}
-
-	// Update is called once per frame
-	void Update () {
-		if(!DEBUG && !networkController.isOwner)
-			return;
-		Jump();
-		MeleeAttack();
-	}
-	
-	private void Jump(){
-		if( !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
-			anim.SetBool( "Ground" , false );
-			rigidbody2D.AddForce( new Vector2( 0, jumpForce ) );
-		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other)

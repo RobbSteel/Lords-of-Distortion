@@ -29,7 +29,7 @@ public class stickyTrap : Power {
 	public void stickyT()
 	{
 		
-		if (Input.GetKeyDown(KeyCode.T) == true)
+		if (Input.GetKeyDown(KeyCode.T))
 		{
 			// Local Spawn
 			GameObject stickyt = (GameObject)Instantiate(Resources.Load("stickyTrap"));
@@ -41,12 +41,13 @@ public class stickyTrap : Power {
 	void OnDestroy()
 	{
 		Debug.Log("Destroyed");
-		GameObject user = GameObject.FindGameObjectWithTag("Player");
-		if (user != null){
-			user.rigidbody2D.drag = 0;
+		//GameObject user = GameObject.FindGameObjectWithTag("Player");
+		if (affected != null){
+			affected.rigidbody2D.drag = 0;
 		}
 		if(affected != null)
 			affected.canJump = true;
+			//affected.jump = true;
 	}
 	
 }

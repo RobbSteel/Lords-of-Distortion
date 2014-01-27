@@ -11,15 +11,17 @@ public class GravityField : Power {
         GravField();
 	}
 
-    public override void PowerAction(GameObject player, Controller2D controller)
+    public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
         player.rigidbody2D.gravityScale = -1;
     }
 
-    public override void OnLoseContact(GameObject player, Controller2D controller)
+    public override void PowerActionExit(GameObject player, Controller2D controller)
     {
         player.rigidbody2D.gravityScale = 1;
     }
+	public override void PowerActionStay(GameObject player, Controller2D controller){
+		}
 
     public void GravField()
     {
