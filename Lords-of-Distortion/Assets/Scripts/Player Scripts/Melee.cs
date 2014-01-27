@@ -5,23 +5,30 @@ public class Melee : MonoBehaviour {
 	
 	private Controller2D controller;		// Reference to the PlayerControl script.
 	private Animator anim;					// Reference to the Animator component.
-	
+
+	public float meleeTimer = 0;
+	public float coolDownTimer = 0.5f;
+
 	void Awake()
 	{
 		// Setting up the references.
 		anim = transform.root.gameObject.GetComponent<Animator>();
 		controller = transform.root.GetComponent<Controller2D>();
 	}
-	
-	
-	void Update ()
+
+	void FixedUpdate ()
 	{
-		// If the fire button is pressed...
-		if(Input.GetButtonDown("Fire3"))
-		{
-			// ... set the animator Melee trigger parameter
-			//animation["meleeAttack"].wrapMode = WrapMode.Once;
-			anim.SetTrigger("Melee");
+		if (meleeTimer <= 0) {
+			// If the fire button is pressed...
+			if (Input.GetButtonDown ("Fire3")) {
+				startMelee ();
+			}
 		}
+		else
+			meleeTimer -= Time.deltaTime;
+	}
+	private void startMelee(){
+		anim.SetTrigger ("Melee");
+		meleeTimer =  coolDownTimer;
 	}
 }
