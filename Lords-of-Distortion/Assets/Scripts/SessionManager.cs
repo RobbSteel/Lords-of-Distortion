@@ -31,7 +31,7 @@ public class SessionManager : MonoBehaviour {
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
-		arenaIndex = 1;// lobby is -1
+		arenaIndex = -1;// lobby is -1
 	}
 
 	//NetworkController myPlayer;
