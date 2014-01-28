@@ -12,7 +12,7 @@ public class PSinfo : MonoBehaviour {
 	//We want each player to have a list of his own options.
 	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
-
+	public List<NetworkPlayer> players;
 
 	void Awake () {
 		DontDestroyOnLoad(this);
@@ -21,11 +21,13 @@ public class PSinfo : MonoBehaviour {
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){
+		players.Add(player);
 		playerOptions.Add(player, options);
 		playerStats.Add(player, stats);
 	}
 
 	public void RemovePlayer(NetworkPlayer player){
+		players.Remove(player);
 		playerOptions.Remove(player);
 		playerStats.Remove(player);
 	}
