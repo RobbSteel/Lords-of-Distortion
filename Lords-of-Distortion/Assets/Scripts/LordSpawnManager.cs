@@ -65,13 +65,22 @@ public class LordSpawnManager : MonoBehaviour{
 		var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 		mousePos.z = 0;
 
-		Instantiate (currpower, mousePos, Quaternion.identity);
+		var newpower = Instantiate (currpower, mousePos, Quaternion.identity);
+		powerspawned.Add (newpower);
 		powerset = false;
 		}
 	}
 
 
+	void DestroyPowers(){
 
+		for(int i = 0; i < powerspawned.Length; i++){
+
+			Destroy(powerspawned[i]);
+
+		}
+
+	}
 
 
 
@@ -83,7 +92,7 @@ public class LordSpawnManager : MonoBehaviour{
 	public Transform[] powerlist; 
 	public bool powerset = false;
 	public ArrayList powerinfo;
-
+	public ArrayList powerspawned;
 
 
 }
