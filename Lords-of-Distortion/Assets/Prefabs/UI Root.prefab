@@ -191,6 +191,7 @@ GameObject:
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400010}
   - 54: {fileID: 5400000}
+  - 114: {fileID: 11400108}
   m_Layer: 9
   m_Name: UI Root
   m_TagString: Untagged
@@ -290,6 +291,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400042}
   - 114: {fileID: 11400044}
+  - 114: {fileID: 11400104}
   m_Layer: 9
   m_Name: FireballButton
   m_TagString: Untagged
@@ -308,6 +310,7 @@ GameObject:
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400046}
   - 114: {fileID: 11400048}
+  - 114: {fileID: 11400100}
   m_Layer: 9
   m_Name: GravityFieldButton
   m_TagString: Untagged
@@ -358,6 +361,7 @@ GameObject:
   - 65: {fileID: 6500004}
   - 114: {fileID: 11400054}
   - 114: {fileID: 11400056}
+  - 114: {fileID: 11400102}
   m_Layer: 9
   m_Name: StickyTrapButton
   m_TagString: Untagged
@@ -376,6 +380,7 @@ GameObject:
   - 65: {fileID: 6500006}
   - 114: {fileID: 11400058}
   - 114: {fileID: 11400060}
+  - 114: {fileID: 11400106}
   m_Layer: 9
   m_Name: SmokeBombButton
   m_TagString: Untagged
@@ -755,7 +760,7 @@ Transform:
   m_GameObject: {fileID: 100022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00573065924, y: .00573065924, z: .00573065924}
+  m_LocalScale: {x: .00497512426, y: .00497512426, z: .00497512426}
   m_Children:
   - {fileID: 400010}
   - {fileID: 400026}
@@ -3154,6 +3159,76 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &11400100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02de135cd6e2c343a0c1fa857a1d369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToInstantiate: {fileID: 100000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+--- !u!114 &11400102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02de135cd6e2c343a0c1fa857a1d369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToInstantiate: {fileID: 100000, guid: 507c489ce13a9b046a23f03aa86b3ad9, type: 2}
+--- !u!114 &11400104
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02de135cd6e2c343a0c1fa857a1d369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToInstantiate: {fileID: 100000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+--- !u!114 &11400106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02de135cd6e2c343a0c1fa857a1d369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToInstantiate: {fileID: 100000, guid: 342487b7cfaa12e468f55d54c1d8758d, type: 2}
+--- !u!114 &11400108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d785ba1fe0f0e8844bf04465a2d28a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnTime: 0
+  position: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  currpower: {fileID: 0}
+  mousePos: {x: 0, y: 0, z: 0}
+  powerlist:
+  - {fileID: 400000, guid: 507c489ce13a9b046a23f03aa86b3ad9, type: 2}
+  - {fileID: 400000, guid: 342487b7cfaa12e468f55d54c1d8758d, type: 2}
+  - {fileID: 400000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+  - {fileID: 400000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+  powerset: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
