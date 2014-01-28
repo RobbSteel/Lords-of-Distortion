@@ -74,7 +74,7 @@ public class LordSpawnManager : MonoBehaviour{
 
 	void DestroyPowers(){
 
-		for(int i = 0; i < powerspawned.Length; i++){
+		for(int i = 0; i < powerspawned.Count; i++){
 
 			Destroy(powerspawned[i]);
 
