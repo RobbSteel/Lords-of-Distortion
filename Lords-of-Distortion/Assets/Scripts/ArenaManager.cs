@@ -53,7 +53,7 @@ public class ArenaManager : MonoBehaviour {
 
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
 			print ("Spam every player with every powerinfo");
-			foreach(PowerSpawn power in allSpawns){
+			foreach(PowerSpawn power in allSpawns.Values){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 (int)power.type, power.position, power.spawnTime);
 			}
