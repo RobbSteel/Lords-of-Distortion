@@ -10,7 +10,8 @@ public class ArenaManager : MonoBehaviour {
 
 	SortedList<float, PowerSpawn> allSpawns;
 	List<PowerSpawn> mySpawns;
-	
+	List<NetworkPlayer> playersReady;
+
 	float beginTime;
 	int livePlayers;
 	public GameObject lordScreenUI;
@@ -43,6 +44,22 @@ public class ArenaManager : MonoBehaviour {
 		requested.position = position;
 		requested.spawnTime = time;
 		allSpawns.Add(time, requested);
+	}
+
+	//Called on the server.
+	[RPC]
+	void SentAllMyPowers(NetworkMessageInfo info){
+		playersReady.Add(info.sender);
+
+		if(playersReady.Count == sessionManager.gameInfo.players.Count){
+			print ("Spam every player with every powerinfo");
+			foreach(PowerSpawn power in allSpawns){
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
+				                 (int)power.type, power.position, power.spawnTime);
+			}
+			powersFinalized = true;
+			networkView.RPC("FinishedSettingPowers", RPCMode.Others);
+		}
 	}
 
 	[RPC]
@@ -80,6 +97,7 @@ public class ArenaManager : MonoBehaviour {
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
 		allSpawns = new SortedList<float, PowerSpawn>();
 		mySpawns = new List<PowerSpawn>();
+		playersReady = new List<NetworkPlayer>();
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 	}
 
@@ -132,7 +150,7 @@ public class ArenaManager : MonoBehaviour {
 		if(allSpawns.Count != 0){
 			float currentTime = sessionManager.timeManager.time;
 
-			if(currentTime >= allSpawns.Keys[0]){
+			if(currentTime >= currentTime + allSpawns.Keys[0]){
 				PowerSpawn spawn = allSpawns.Values[0];
 				allSpawns.RemoveAt(0);
 				//convert power type to an int, which is an index to the array of power prefabs.
