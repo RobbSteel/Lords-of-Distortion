@@ -9,11 +9,14 @@ public class ArenaManager : MonoBehaviour {
 	List<Vector3> spawnLocations;
 
 	SortedList<float, PowerSpawn> allSpawns;
-
+	List<PowerSpawn> mySpawns;
+	
 	float beginTime;
 	int livePlayers;
 	public GameObject lordScreenUI;
 	private bool played;
+	bool sentMyPowers = false;
+	bool powersFinalized = false;
 
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -32,6 +35,7 @@ public class ArenaManager : MonoBehaviour {
 
 	/*Clients request this fucntion on the server for every power. After that the server tells every
 	 other player*/
+
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
 		PowerSpawn requested =  new PowerSpawn();
@@ -39,6 +43,11 @@ public class ArenaManager : MonoBehaviour {
 		requested.position = position;
 		requested.spawnTime = time;
 		allSpawns.Add(time, requested);
+	}
+
+	[RPC]
+	void FinishedSettingPowers(){
+		powersFinalized = true;
 	}
 
 	void OnEnable(){
@@ -70,6 +79,7 @@ public class ArenaManager : MonoBehaviour {
 		spawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
 		allSpawns = new SortedList<float, PowerSpawn>();
+		mySpawns = new List<PowerSpawn>();
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 	}
 
@@ -105,10 +115,19 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(sessionManager.timeManager.time >= beginTime){
+		if(sentMyPowers == false && sessionManager.timeManager.time >= beginTime){
 			PlayMenuTween();
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
+			foreach(PowerSpawn power in  mySpawns){
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, 
+				                 (int)power.type, power.position, power.spawnTime);
+			}
+			sentMyPowers = true;
 		}
+
+		//the rest of the code doesn't run until powers are finalized.
+		if(!powersFinalized)
+			return;
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
 			float currentTime = sessionManager.timeManager.time;

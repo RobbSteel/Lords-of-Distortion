@@ -153,9 +153,8 @@ public class SessionManager : MonoBehaviour {
 
 	//this function should be called by the server arena manager.
 	public int SpawnPlayers(List<Vector3> spawnLocations){
-		Dictionary<NetworkPlayer, PlayerOptions>.KeyCollection players = gameInfo.playerOptions.Keys;
 		int i = 0;
-
+		List<NetworkPlayer> players = gameInfo.players;
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player
