@@ -35,6 +35,7 @@ public class Hook : MonoBehaviour {
 		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
 		going = true;
 		hookscript = go.GetComponent<HookHit>();
+		hookscript.networkController = networkController;
 		hookscript.shooter = gameObject;
 		hooktimer = 5;
 		print (hookscript.shooter);

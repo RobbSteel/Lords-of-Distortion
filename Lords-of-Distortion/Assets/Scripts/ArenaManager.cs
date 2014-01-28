@@ -9,9 +9,15 @@ public class ArenaManager : MonoBehaviour {
 	List<Vector3> spawnLocations;
 
 	SortedList<float, PowerSpawn> allSpawns;
+	List<PowerSpawn> mySpawns;
+	List<NetworkPlayer> playersReady;
 
 	float beginTime;
 	int livePlayers;
+	public GameObject lordScreenUI;
+	private bool played;
+	bool sentMyPowers = false;
+	bool powersFinalized = false;
 
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -30,6 +36,7 @@ public class ArenaManager : MonoBehaviour {
 
 	/*Clients request this fucntion on the server for every power. After that the server tells every
 	 other player*/
+
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
 		PowerSpawn requested =  new PowerSpawn();
@@ -37,6 +44,27 @@ public class ArenaManager : MonoBehaviour {
 		requested.position = position;
 		requested.spawnTime = time;
 		allSpawns.Add(time, requested);
+	}
+
+	//Called on the server.
+	[RPC]
+	void SentAllMyPowers(NetworkMessageInfo info){
+		playersReady.Add(info.sender);
+
+		if(playersReady.Count == sessionManager.gameInfo.players.Count){
+			print ("Spam every player with every powerinfo");
+			foreach(PowerSpawn power in allSpawns.Values){
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
+				                 (int)power.type, power.position, power.spawnTime);
+			}
+			powersFinalized = true;
+			networkView.RPC("FinishedSettingPowers", RPCMode.Others);
+		}
+	}
+
+	[RPC]
+	void FinishedSettingPowers(){
+		powersFinalized = true;
 	}
 
 	void OnEnable(){
@@ -58,13 +86,18 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
+		played = false;
 		beginTime = float.PositiveInfinity;
+		lordScreenUI = GameObject.Find( "LordsScreen" );
+		lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = false;
 		spawnLocations = new List<Vector3>();
 		spawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
 		spawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
 		spawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		spawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
 		allSpawns = new SortedList<float, PowerSpawn>();
+		mySpawns = new List<PowerSpawn>();
+		playersReady = new List<NetworkPlayer>();
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 	}
 
@@ -100,19 +133,37 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(sessionManager.timeManager.time >= beginTime){
+		if(sentMyPowers == false && sessionManager.timeManager.time >= beginTime){
+			PlayMenuTween();
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
+			foreach(PowerSpawn power in  mySpawns){
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, 
+				                 (int)power.type, power.position, power.spawnTime);
+			}
+			sentMyPowers = true;
 		}
+
+		//the rest of the code doesn't run until powers are finalized.
+		if(!powersFinalized)
+			return;
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
 			float currentTime = sessionManager.timeManager.time;
 
-			if(currentTime >= allSpawns.Keys[0]){
+			if(currentTime >= currentTime + allSpawns.Keys[0]){
 				PowerSpawn spawn = allSpawns.Values[0];
 				allSpawns.RemoveAt(0);
 				//convert power type to an int, which is an index to the array of power prefabs.
 				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
 			}
+		}
+	}
+
+	void PlayMenuTween(){
+		if( !played ){
+			played = true;
+			lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = true;
+			
 		}
 	}
 }
