@@ -12,6 +12,7 @@ public class LordSpawnManager : MonoBehaviour{
 		UIEventListener.Get(GameObject.Find("GravityFieldButton")).onClick += InitializePower;
 		UIEventListener.Get(GameObject.Find("SmokeBombButton")).onClick += InitializePower;
 		UIEventListener.Get(GameObject.Find("StickyTrapButton")).onClick += InitializePower;
+		UIEventListener.Get(GameObject.Find("FinishButton")).onClick += SendPowers;
 		powerspawned = new List<GameObject>();
 	
 	}
@@ -61,7 +62,27 @@ public class LordSpawnManager : MonoBehaviour{
 
 	}
 
+	void SendPowers(GameObject button){
+
+
+		for(int i = 0; i < powerspawned.Count; i++){
+
+					var tempobj = powerspawned[i];
+					locations.Add (tempobj.transform.position);
+					powertype.Add (tempobj.name);
+		
+			}
+
+
+
+	}
+
 	void Update(){
+	
+	 sendgravity =float.Parse(gravitytime.GetComponent<UIInput>().value);
+	 sendfire = float.Parse(firetime.GetComponent<UIInput>().value);
+	 sendsticky = float.Parse(stickytime.GetComponent<UIInput>().value);
+	 sendsmoke = float.Parse(smoketime.GetComponent<UIInput>().value);
 
 		if(Input.GetMouseButtonDown(0) && powerset){
 
@@ -69,6 +90,7 @@ public class LordSpawnManager : MonoBehaviour{
 		mousePos.z = 0;
 
 		var newpower = (GameObject)Instantiate (currpower, mousePos, Quaternion.identity);
+		
 		powerspawned.Add(newpower);
 		powerset = false;
 		}
@@ -97,5 +119,19 @@ public class LordSpawnManager : MonoBehaviour{
 	public ArrayList powerinfo;
 	public List<GameObject> powerspawned;
 
+	public List<float> spawnTimes;
+	public List<Vector3> locations;
+	public List<Vector3> directions;
+	public List<string> powertype;
+
+	public UIInput gravitytime;
+	public UIInput firetime;
+	public UIInput stickytime;
+	public UIInput smoketime;
+
+	public float sendfire;
+	public float sendsticky;
+	public float sendgravity;
+	public float sendsmoke;
 
 }
