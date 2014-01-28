@@ -39,7 +39,7 @@ public class Hook : MonoBehaviour {
 		hookscript.shooter = gameObject;
 		hooktimer = 5;
 		print (hookscript.shooter);
-		transform.rigidbody2D.gravityScale = 0;
+
 	}
 
 	[RPC]
@@ -200,7 +200,7 @@ public class Hook : MonoBehaviour {
 
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
-
+		transform.rigidbody2D.gravityScale = 0;
 		var distance = Vector2.Distance(transform.position, go.transform.position);
 
 
