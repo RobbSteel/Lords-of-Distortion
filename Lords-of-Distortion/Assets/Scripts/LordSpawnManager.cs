@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class LordSpawnManager : MonoBehaviour{
@@ -11,6 +12,8 @@ public class LordSpawnManager : MonoBehaviour{
 		UIEventListener.Get(GameObject.Find("GravityFieldButton")).onClick += InitializePower;
 		UIEventListener.Get(GameObject.Find("SmokeBombButton")).onClick += InitializePower;
 		UIEventListener.Get(GameObject.Find("StickyTrapButton")).onClick += InitializePower;
+		powerspawned = new List<GameObject>();
+	
 	}
 
 
@@ -65,13 +68,22 @@ public class LordSpawnManager : MonoBehaviour{
 		var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 		mousePos.z = 0;
 
-		Instantiate (currpower, mousePos, Quaternion.identity);
+		var newpower = (GameObject)Instantiate (currpower, mousePos, Quaternion.identity);
+		powerspawned.Add(newpower);
 		powerset = false;
 		}
 	}
 
 
+	void DestroyPowers(){
 
+		for(int i = 0; i < powerspawned.Count; i++){
+
+			Destroy(powerspawned[i]);
+
+		}
+
+	}
 
 
 
@@ -83,7 +95,7 @@ public class LordSpawnManager : MonoBehaviour{
 	public Transform[] powerlist; 
 	public bool powerset = false;
 	public ArrayList powerinfo;
-
+	public List<GameObject> powerspawned;
 
 
 }

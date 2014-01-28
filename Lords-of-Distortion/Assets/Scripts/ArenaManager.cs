@@ -13,6 +13,8 @@ public class ArenaManager : MonoBehaviour {
 	
 	float beginTime;
 	int livePlayers;
+	public GameObject lordScreenUI;
+	private bool played;
 	bool sentMyPowers = false;
 	bool powersFinalized = false;
 
@@ -67,7 +69,10 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
+		played = false;
 		beginTime = float.PositiveInfinity;
+		lordScreenUI = GameObject.Find( "LordsScreen" );
+		lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = false;
 		spawnLocations = new List<Vector3>();
 		spawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
 		spawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
@@ -111,6 +116,7 @@ public class ArenaManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(sentMyPowers == false && sessionManager.timeManager.time >= beginTime){
+			PlayMenuTween();
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
 			foreach(PowerSpawn power in  mySpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, 
@@ -132,6 +138,14 @@ public class ArenaManager : MonoBehaviour {
 				//convert power type to an int, which is an index to the array of power prefabs.
 				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
 			}
+		}
+	}
+
+	void PlayMenuTween(){
+		if( !played ){
+			played = true;
+			lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = true;
+			
 		}
 	}
 }
