@@ -12,13 +12,6 @@ public class Host : MonoBehaviour {
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		print (playerscript.gameName);
-		print (playerscript.playerName);
-
-	}
 
 	void OnClick(){
 

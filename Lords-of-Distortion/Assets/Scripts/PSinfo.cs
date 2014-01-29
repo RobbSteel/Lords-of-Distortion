@@ -18,6 +18,7 @@ public class PSinfo : MonoBehaviour {
 		DontDestroyOnLoad(this);
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
+		players= new List<NetworkPlayer>();
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){

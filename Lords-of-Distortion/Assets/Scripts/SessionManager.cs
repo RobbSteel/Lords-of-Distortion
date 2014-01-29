@@ -155,6 +155,7 @@ public class SessionManager : MonoBehaviour {
 	public int SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
 		List<NetworkPlayer> players = gameInfo.players;
+		print ("There are " + gameInfo.players.Count);
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player
@@ -175,13 +176,14 @@ public class SessionManager : MonoBehaviour {
 	void OnNetworkLoadedLevel(){
 		if(arenaIndex != -1)
 			return;
-
-		List<Vector3> tempLocations = new List<Vector3>();
-		tempLocations.Add(transform.position);
-		tempLocations.Add(transform.position);
-		tempLocations.Add(transform.position);
-		tempLocations.Add(transform.position);
-		SpawnPlayers(tempLocations);
+		if(Network.isServer){
+			List<Vector3> tempLocations = new List<Vector3>();
+			tempLocations.Add(transform.position);
+			tempLocations.Add(transform.position);
+			tempLocations.Add(transform.position);
+			tempLocations.Add(transform.position);
+			SpawnPlayers(tempLocations);
+		}
 	}
 
 	public void KillPlayer(GameObject playerObject){

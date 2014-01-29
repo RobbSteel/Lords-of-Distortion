@@ -101,6 +101,7 @@ public class Controller2D : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
+	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		if(dead)
@@ -119,6 +120,7 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
+	//while player is within the powers collider apply's powers on player 
 	void OnTriggerStay2D(Collider2D other){
 		if (other.gameObject.tag == "Power")
 		{
@@ -126,7 +128,8 @@ public class Controller2D : MonoBehaviour {
 			power.PowerActionStay(gameObject, this);
 		}
 	}
-	
+
+	//when player exits the collider it apply's powers after effects on player
 	void OnTriggerExit2D(Collider2D other)
 	{
 		if(dead)
@@ -143,7 +146,7 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-
+	//while player is colliding with the powers collider apply's powers on player 
 	void OnCollisionStay2D(Collision2D col ) {
 		if(dead)
 			return;

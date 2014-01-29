@@ -12,7 +12,7 @@ public class HookHit : MonoBehaviour {
 	public GameObject players;
 	public LineRenderer lr;
 	public Material rope;
-
+	public NetworkController networkController;
 
 	void Awake(){
 
@@ -45,20 +45,21 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
-
 		if(col.gameObject.tag != "Player"){
-			print (col.gameObject.tag);
+
+			print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
 			hooked = true;
-			print ("hello");
+
 		}
 
 		if(col.gameObject.tag == "Player" && col.gameObject != shooter){
-			print (col.gameObject.tag);
-			players = col.gameObject;
-			rigidbody2D.velocity = Vector2.zero;
-			playerhooked = true;
-			print ("hello2");
+			if(col.gameObject.GetComponent<NetworkController>().theOwner == Network.player){
+				players = col.gameObject;
+				rigidbody2D.velocity = Vector2.zero;
+				playerhooked = true;
+				print ("I'm hit!");
+			}
 		}
 	}
 }
