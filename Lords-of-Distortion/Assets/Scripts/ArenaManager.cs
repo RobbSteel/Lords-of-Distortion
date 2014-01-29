@@ -14,7 +14,7 @@ public class ArenaManager : MonoBehaviour {
 
 	float beginTime;
 	int? livePlayers;
-	public GameObject lordScreenUI;
+	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
@@ -195,11 +195,13 @@ public class ArenaManager : MonoBehaviour {
 		}
 	}
 
+	//plays lords spawn menu tween and deactives the menu
 	void PlayMenuTween(){
 		if( !played ){
 			played = true;
 			lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = true;
-			
+			lordScreenUI.SetActive( false );
+			Debug.Log("played tween");
 		}
 	}
 }

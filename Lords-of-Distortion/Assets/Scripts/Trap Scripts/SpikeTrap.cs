@@ -8,24 +8,26 @@ public class SpikeTrap : Power {
 	public float delay;
 
 	private TweenPosition spikeTween;
-	private Vector3	setCorrectPosition;
+	private Vector3	startPosition;
 	private GameObject childTweenPoint;
 
 
+
 	void Awake(){
+		//grabs child refences that is the refernce for the To Position
 		childTweenPoint = transform.FindChild("TweenPosition").gameObject;
-		setCorrectPosition = transform.position;
+		startPosition = transform.position;
 		spikeTween = this.GetComponent<TweenPosition>();
 		spikeTween.duration = durationOfTween;
 		spikeTween.delay = delay;
-		spikeTween.from = setCorrectPosition;
+		spikeTween.from = startPosition;
 		SetUpTweenPosition();
 
 	}
 
-
+	//Sets up spikes tweening from its tween position to its starting position
 	private void SetUpTweenPosition(){
-		spikeTween.from = setCorrectPosition;
+		spikeTween.from = startPosition;
 		spikeTween.to = childTweenPoint.transform.position;
 	}
 
@@ -34,7 +36,7 @@ public class SpikeTrap : Power {
 	private void MovingSpike(){
 				if( spikeTween.enabled == false && movingSpike ){
 					spikeTween.enabled = true;
-					spikeTween.Toggle();
+					spikeTween.Toggle();//reverse animation
 				}
 	}
 
