@@ -19,6 +19,7 @@ public class ArenaManager : MonoBehaviour {
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
 
+
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -101,11 +102,8 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
-		played = false;
 		beginTime = float.PositiveInfinity;
-		lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
-		lordScreenUI = GameObject.Find( "LordsScreen" );
-		lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = false;
+		SetUpLordScreenTween();
 		playerSpawnLocations = new List<Vector3>();
 		playerSpawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
 		playerSpawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
@@ -195,12 +193,21 @@ public class ArenaManager : MonoBehaviour {
 		}
 	}
 
+
+	private void SetUpLordScreenTween(){
+		played = false;
+		lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
+		lordScreenUI = GameObject.Find( "LordsScreen" );
+		lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = false;
+	}
+
 	//plays lords spawn menu tween and deactives the menu
-	void PlayMenuTween(){
+	private void PlayMenuTween(){
 		if( !played ){
 			played = true;
-			lordScreenUI.gameObject.GetComponent<TweenAlpha>().enabled = true;
-			lordScreenUI.SetActive( false );
+
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = true;
+	
 			Debug.Log("played tween");
 		}
 	}
