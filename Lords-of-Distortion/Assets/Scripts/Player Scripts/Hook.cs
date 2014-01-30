@@ -140,8 +140,9 @@ public class Hook : MonoBehaviour {
 				goingtoplayer(speed);
 			}
 		} else if(pushpull == 0){
-				Destroy(go);
-				hookinput = false;
+			hookscript.affectedPlayerC2D.FreeFromSnare();
+			Destroy(go);
+			hookinput = false;
 		}
 	}
 
@@ -163,11 +164,6 @@ public class Hook : MonoBehaviour {
 				
 				transform.rigidbody2D.gravityScale = 1;
 		}
-			
-			
-			
-
-
 
 	}
 
@@ -227,7 +223,7 @@ public class Hook : MonoBehaviour {
 				go.transform.position = Vector2.MoveTowards(go.transform.position, transform.position, speed);
 			
 			} else {
-				Destroy(go);
+			Destroy(go);
 			transform.rigidbody2D.gravityScale = 1;
 			
 				movingback = false;
