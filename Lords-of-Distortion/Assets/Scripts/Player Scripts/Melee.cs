@@ -8,15 +8,16 @@ public class Melee : MonoBehaviour {
 
 	public float meleeTimer = 0;
 	public float coolDownTimer = 0.5f;
-	public Rigidbody2D meleeHit;			// Prefab of the meleeHit
 
 	void Awake()
 	{
 		// Setting up the references.
 		anim = transform.root.gameObject.GetComponent<Animator>();
 		controller = transform.root.GetComponent<Controller2D>();
-	}
+		this.GetComponent<BoxCollider2D>().enabled = false;
 
+	}
+	
 	void Update ()
 	{
 		if (meleeTimer <= 0) {
@@ -30,21 +31,39 @@ public class Melee : MonoBehaviour {
 	}
 
 	private void startMelee(){
+		// Enable Box Collider 2D
+		this.GetComponent<BoxCollider2D>().enabled = true;
+
 		anim.SetTrigger ("Melee");
 		audio.Play ();
-		// If the player is facing right...
-		if(controller.facingRight)
-		{
-			// ... instantiate melee hit facing right 
-			Rigidbody2D meleeInstance = Instantiate(meleeHit, transform.position, Quaternion.identity) as Rigidbody2D;
-		}
-		else
-		{
-			// Otherwise instantiate melee hit facing left 
-			Rigidbody2D meleeInstance = Instantiate(meleeHit, transform.position, Quaternion.identity) as Rigidbody2D;
-		}
-		// Reset meleeTimer
+
 		meleeTimer =  coolDownTimer;
+	}
+	void OnTriggerEnter2D (Collider2D col) 
+	{
+		// If it hits an enemy...
+		if(col.tag == "Enemy"){
+			
+			// ... find the Enemy script and call the Hurt function.
+			col.gameObject.GetComponent<Enemy>().Hurt();
+			
+			//Destroy(gameObject);
+			Debug.Log ("Enemy hit");
+		}
+		// If melee atack hits a player...
+		else if(col.gameObject.tag == "Player"){
+			
+			// ... find the StunBar script and call the TakeDamage function.
+			col.gameObject.GetComponent<StunBar>().TakeDamage(10f);
+		
+			Debug.Log ("Player hit");
+		}
+		// ...else melee hits nothing
+		else
+			Debug.Log ("Hit nothing");
+		// Disable BoxCollider2D
+		this.GetComponent<BoxCollider2D>().enabled = false;
+
 	}
 
 }
