@@ -64,7 +64,7 @@ public class HookHit : MonoBehaviour {
 
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position);
 				//do what the remote rpc would do, but locally:
-				playerhooked = true;
+				playerhooked = true; 
 				targetPosition = transform.position;
 				print ("I'm hit!");
 			}

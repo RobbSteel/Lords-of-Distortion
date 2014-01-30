@@ -104,7 +104,7 @@ public class Hook : MonoBehaviour {
 			hookgoing(speed);
 		}
 
-		if(hookinput == true){
+		if(hookinput == true ){
 			HookChoice(speed);
 		}
 		
@@ -122,16 +122,19 @@ public class Hook : MonoBehaviour {
 //Gives players the option to hook players to them or pull themselves to the hooked player.
 	void HookChoice(float speed){
 
+		//well there's yer problem
+		if(networkController.isOwner){
 		
-		if(Input.GetMouseButtonDown(0) && pushpull == 0){
+			if(Input.GetMouseButtonDown(0) && pushpull == 0){
+				
+				pushpull = 1;
+				
+			}
 			
-			pushpull = 1;
-			
-		}
-		
-		if(Input.GetMouseButtonDown(1) && pushpull == 0){
-			
-			pushpull = 2;
+			if(Input.GetMouseButtonDown(1) && pushpull == 0){
+				
+				pushpull = 2;
+			}
 		}
 		
 		if(decisiontimer > 0){
@@ -173,8 +176,8 @@ public class Hook : MonoBehaviour {
 	void HitPlayer(Vector3 playerLocation){
 		go.transform.position = playerLocation;
 		targetLocation = playerLocation;
-		hookscript.playerhooked = true;
 		hookscript.targetPosition = playerLocation;
+		hookscript.playerhooked = true;
 	}
 
 	Vector3 targetLocation;
