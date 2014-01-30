@@ -1987,9 +1987,10 @@ MonoBehaviour:
   Powers:
   - {fileID: 400000, guid: b49dd82d161806c4f82a92e01cf2d8d4, type: 2}
   - {fileID: 400000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
-  - {fileID: 0}
+  - {fileID: 400000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
   - {fileID: 400000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
   lordScreenUI: {fileID: 0}
+  yield: {fileID: 2800000, guid: bdba4e8cd5f8acd4496c266f81ab519e, type: 3}
 --- !u!148 &1038793231
 NetworkView:
   m_ObjectHideFlags: 0
@@ -2048,15 +2049,15 @@ Prefab:
       objectReference: {fileID: 2093208203}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00416666688
+      value: .00579710165
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00416666688
+      value: .00579710165
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00416666688
+      value: .00579710165
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
@@ -2221,7 +2222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a02de135cd6e2c343a0c1fa857a1d369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToInstantiate: {fileID: 100000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+  objectToInstantiate: {fileID: 100000, guid: d879233396d7515468606479c853f7ce, type: 2}
 --- !u!1 &1267466260
 GameObject:
   m_ObjectHideFlags: 0
@@ -3804,7 +3805,7 @@ Transform:
   m_GameObject: {fileID: 2027975383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
+  m_LocalScale: {x: .00579710165, y: .00579710165, z: .00579710165}
   m_Children:
   - {fileID: 1407413348}
   - {fileID: 2093208201}
@@ -3902,7 +3903,7 @@ MonoBehaviour:
   powerlist:
   - {fileID: 400000, guid: 507c489ce13a9b046a23f03aa86b3ad9, type: 2}
   - {fileID: 400000, guid: 342487b7cfaa12e468f55d54c1d8758d, type: 2}
-  - {fileID: 400000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
+  - {fileID: 400000, guid: d879233396d7515468606479c853f7ce, type: 2}
   - {fileID: 400000, guid: e82f3b3a70cddad4fba819ee1c3602cb, type: 2}
   readyToSend: 0
   powerset: 0
@@ -3912,6 +3913,7 @@ MonoBehaviour:
   firetime: {fileID: 1445285045}
   stickytime: {fileID: 227842444}
   smoketime: {fileID: 1621219037}
+  fireballScript: {fileID: 0}
 --- !u!1 &2093208200
 GameObject:
   m_ObjectHideFlags: 0
