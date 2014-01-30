@@ -18,6 +18,7 @@ public class Hook : MonoBehaviour {
 	public float hooktimer = 0;
 	public float chainspawner = 1;
 	public float pushpull = 0;
+	public float decisiontimer = 0;
 
 
 
@@ -70,7 +71,7 @@ public class Hook : MonoBehaviour {
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
-
+				decisiontimer = 2;
 				hookinput = true;
 				going = false;
 
@@ -98,42 +99,13 @@ public class Hook : MonoBehaviour {
 
 
 		if(going == true){
-
 			hookgoing(speed);
 		}
 
 		if(hookinput == true){
-
-
-
-			if(Input.GetMouseButtonDown(0) && pushpull == 0){
-
-				pushpull = 1;
-
-			}
-
-			if(Input.GetMouseButtonDown(1) && pushpull == 0){
-
-				pushpull = 2;
-			}
-
-			if(pushpull == 1){
-
-				pullingplayer(speed);
-
-
-			} else if(pushpull == 2){
-
-				goingtoplayer(speed);
-
-
-			}
-
-		
+			HookChoice(speed);
 		}
-
-
-
+		
 		if(movingtowards == true){
 			movingtohook(speed);
 		}
@@ -144,6 +116,34 @@ public class Hook : MonoBehaviour {
 		}
 }
 
+
+//Gives players the option to hook players to them or pull themselves to the hooked player.
+	void HookChoice(float speed){
+
+		
+		if(Input.GetMouseButtonDown(0) && pushpull == 0){
+			
+			pushpull = 1;
+			
+		}
+		
+		if(Input.GetMouseButtonDown(1) && pushpull == 0){
+			
+			pushpull = 2;
+		}
+		
+		if(decisiontimer > 0){
+			decisiontimer -= Time.deltaTime;
+			if(pushpull == 1){
+				pullingplayer(speed);
+			} else if(pushpull == 2){
+				goingtoplayer(speed);
+			}
+		} else if(pushpull == 0){
+				Destroy(go);
+				hookinput = false;
+		}
+	}
 
 
 	//Player pulling opponent to himself
