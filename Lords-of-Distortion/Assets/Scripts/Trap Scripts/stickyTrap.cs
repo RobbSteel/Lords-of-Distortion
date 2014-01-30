@@ -40,7 +40,7 @@ public class stickyTrap : Power {
 	
 	void OnDestroy()
 	{
-		Debug.Log("Destroyed");
+//		Debug.Log("Destroyed");
 		//GameObject user = GameObject.FindGameObjectWithTag("Player");
 		if (affected != null){
 			affected.rigidbody2D.drag = 0;

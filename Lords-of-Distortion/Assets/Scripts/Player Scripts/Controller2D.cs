@@ -2,11 +2,14 @@
 using System.Collections;
 
 public class Controller2D : MonoBehaviour {
+	[HideInInspector]
+	public bool facingRight = false;
+	[HideInInspector]
+	public bool jump = false;
+
 	public bool DEBUG;
 	public float maxSpeed = 10f;
-	public bool facingRight = false;
 	public Animator anim;
-	public bool jump = false;
 
 	private bool dead = false;
 	private bool grounded = false;

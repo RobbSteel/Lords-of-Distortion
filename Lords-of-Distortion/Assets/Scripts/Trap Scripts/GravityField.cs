@@ -61,7 +61,7 @@ public class GravityField : Power {
 
     void OnDestroy()
     {
-        Debug.Log("Destroyed");
+        //Debug.Log("Destroyed");
         GameObject user = GameObject.FindGameObjectWithTag("Player");
         if (user != null)
             user.rigidbody2D.gravityScale = 1;
