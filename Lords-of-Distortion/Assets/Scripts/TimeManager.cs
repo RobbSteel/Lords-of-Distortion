@@ -9,14 +9,23 @@ public class TimeManager : MonoBehaviour {
 	public float time;
 	
 	void Awake(){
-		DontDestroyOnLoad(this);
 		instance = this;
+		DontDestroyOnLoad(this);
+	}
+
+	public void SyncTimes(){
 		if(Network.isServer){
 			deltaTime = -(float)Network.time;
 		}
 		else{
-			networkView.RPC("GetServerTime",RPCMode.Server);
+			print ("Get server time");
+			networkView.RPC("GetServerTime", RPCMode.Server);
 		}
+
+	}
+
+	void Start(){
+
 	}
 
 	void Update () {
