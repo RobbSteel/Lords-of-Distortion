@@ -25,6 +25,8 @@ public class Controller2D : MonoBehaviour {
 
 	NetworkController networkController;
 
+	//private StunBar stunScript;
+
 	void Awake(){
 		stunned = false;
 		canJump = true;
@@ -104,6 +106,11 @@ public class Controller2D : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
+	/* stunbar
+	public void isStunned(){
+		stunScript.TakeDamage (10f);
+	}
+*/
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{

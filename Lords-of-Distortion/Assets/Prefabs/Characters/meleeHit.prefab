@@ -9,8 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 50: {fileID: 5000000}
-  - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
+  - 61: {fileID: 6100000}
   m_Layer: 0
   m_Name: meleeHit
   m_TagString: Melee
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.852708519, y: .0309198853, z: 0}
+  m_LocalPosition: {x: -.324315429, y: -.458858907, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,8 +44,8 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
---- !u!58 &5800000
-CircleCollider2D:
+--- !u!61 &6100000
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -53,8 +53,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Radius: .340000004
-  m_Center: {x: .119999997, y: 0}
+  m_Size: {x: .200000003, y: .446019411}
+  m_Center: {x: .100000001, y: -.0324173607}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
