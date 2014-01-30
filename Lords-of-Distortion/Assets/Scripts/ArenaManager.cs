@@ -139,7 +139,7 @@ public class ArenaManager : MonoBehaviour {
 		if(Network.isServer){
 
 			Debug.Log ("start timer");
-			beginTime =  sessionManager.timeManager.time + PLACEMENT_TIME;
+			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 		}
 		//TODO: have something that checks if all players have finished loading.
@@ -147,9 +147,10 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(sentMyPowers == false && sessionManager.timeManager.time >= beginTime){
-			print("Time's up");
+		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
+			print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
 			PlayMenuTween();
+			lordsSpawnManager.enabled = false;
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
 			if(!lordsSpawnManager.readyToSend)
 				lordsSpawnManager.FinalizePowers(this.gameObject);
@@ -182,7 +183,7 @@ public class ArenaManager : MonoBehaviour {
 
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
-			float currentTime = sessionManager.timeManager.time;
+			float currentTime = TimeManager.instance.time;
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.Keys[0]));
 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
@@ -214,10 +215,17 @@ public class ArenaManager : MonoBehaviour {
 	private void PlayMenuTween(){
 		if( !played ){
 			played = true;
-
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().eventReceiver = this.gameObject;
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().callWhenFinished = "DeactivateLordScreen";
 			lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = true;
-	
+
 			Debug.Log("played tween");
 		}
+
+	}
+
+	void DeactivateLordScreen(){
+		//lordScreenUI.SetActive( false );
+		Debug.Log( "deactivate LS" );
 	}
 }

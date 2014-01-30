@@ -93,7 +93,6 @@ public class LordSpawnManager : MonoBehaviour{
 		if(Input.GetMouseButtonDown(0) && powerset){
 			var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 			mousePos.z = 0;
-
 			var newpower = (Transform)Instantiate (powerlist[(int)currPowerType], mousePos, Quaternion.identity);
             Debug.Log("NewPower: " + newpower);
             /*if (newpower.name == "fireball(Clone)")

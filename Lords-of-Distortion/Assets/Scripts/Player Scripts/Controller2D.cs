@@ -2,11 +2,14 @@
 using System.Collections;
 
 public class Controller2D : MonoBehaviour {
+	[HideInInspector]
+	public bool facingRight = false;
+	[HideInInspector]
+	public bool jump = false;
+
 	public bool DEBUG;
 	public float maxSpeed = 10f;
-	public bool facingRight = false;
 	public Animator anim;
-	public bool jump = false;
 
 	private bool dead = false;
 	private bool grounded = false;
@@ -20,7 +23,11 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
+	public GameObject DeathSpirit;
+
 	NetworkController networkController;
+
+	//private StunBar stunScript;
 
 	void Awake(){
 		stunned = false;
@@ -156,10 +163,29 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		if(dead)
+			return;
+		if (other.gameObject.tag == "GravityFieldTag")
+		{
+			Debug.Log(other.gameObject.tag);
+			Debug.Log("Hit gravity field");
+			rigidbody2D.gravityScale = -1;
+		}
+		
+		if (other.gameObject.tag == "Power")
+		{
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerActionEnter(gameObject, this);
+		}
+	}
+
 
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
 		if(networkController.isOwner && dead == false){
+			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
 			Debug.Log ("I died again");
 

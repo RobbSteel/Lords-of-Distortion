@@ -14,7 +14,7 @@ public class SessionManager : MonoBehaviour {
 	const int GAMEPLAY = 0;
 	const int SETUP = 1;
 	private int playerCounter;
-	public TimeManager timeManager;
+	//public TimeManager timeManager;
 
 	String offlineLevel = "MainMenu";
 
@@ -22,6 +22,7 @@ public class SessionManager : MonoBehaviour {
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
+	public TimeManager timemanager;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
@@ -36,7 +37,7 @@ public class SessionManager : MonoBehaviour {
 
 	//NetworkController myPlayer;
 	public Transform characterPrefab;
-	public Transform timeManagerPrefab;
+	public GameObject timeManagerPrefab;
 
 	//The client requests that the server do the following.
 	[RPC]
@@ -51,6 +52,9 @@ public class SessionManager : MonoBehaviour {
 	//This is called by each client when told to by the server.
 	[RPC]
 	void SpawnPlayer(Vector3 location){
+		//var timeInstance = (GameObject)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
+		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager.SyncTimes();
 		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
 		NetworkView charNetworkView = instance.networkView;
 		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
@@ -81,9 +85,7 @@ public class SessionManager : MonoBehaviour {
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
-		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		timeManager = instance.GetComponent<TimeManager>();
-
+		//timeManager = instance.GetComponent<TimeManager>();
 		//these next three lines do same thing as confirmlocalspawn
 		//myPlayerOptions = new PlayerOptions();
 		//myPlayerOptions.PlayerNumber = ++playerCounter;
@@ -97,8 +99,8 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnConnectedToServer()
 	{
-		Transform instance = (Transform)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		timeManager = instance.GetComponent<TimeManager>();
+		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
+		//timeManager = instance.GetComponent<TimeManager>();
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
 		//we could also have a custom functions like "Ready" 
 	}
@@ -106,7 +108,7 @@ public class SessionManager : MonoBehaviour {
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
-		Destroy (timeManager.gameObject);
+		Destroy (TimeManager.instance.gameObject);
 		Destroy (this.gameObject);
 	}
 

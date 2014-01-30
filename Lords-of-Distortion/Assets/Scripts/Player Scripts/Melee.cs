@@ -8,6 +8,7 @@ public class Melee : MonoBehaviour {
 
 	public float meleeTimer = 0;
 	public float coolDownTimer = 0.5f;
+	public Rigidbody2D meleeHit;			// Prefab of the meleeHit
 
 	void Awake()
 	{
@@ -16,20 +17,34 @@ public class Melee : MonoBehaviour {
 		controller = transform.root.GetComponent<Controller2D>();
 	}
 
-	void FixedUpdate ()
+	void Update ()
 	{
 		if (meleeTimer <= 0) {
 			// If the fire button is pressed...
-			if (Input.GetButtonDown ("Fire3")) {
+			if (Input.GetButtonDown ("Fire3") && !controller.stunned) {
 				startMelee ();
 			}
 		}
 		else
 			meleeTimer -= Time.deltaTime;
 	}
+
 	private void startMelee(){
 		anim.SetTrigger ("Melee");
 		audio.Play ();
+		// If the player is facing right...
+		if(controller.facingRight)
+		{
+			// ... instantiate melee hit facing right 
+			Rigidbody2D meleeInstance = Instantiate(meleeHit, transform.position, Quaternion.identity) as Rigidbody2D;
+		}
+		else
+		{
+			// Otherwise instantiate melee hit facing left 
+			Rigidbody2D meleeInstance = Instantiate(meleeHit, transform.position, Quaternion.identity) as Rigidbody2D;
+		}
+		// Reset meleeTimer
 		meleeTimer =  coolDownTimer;
 	}
+
 }
