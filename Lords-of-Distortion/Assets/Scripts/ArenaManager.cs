@@ -205,10 +205,17 @@ public class ArenaManager : MonoBehaviour {
 	private void PlayMenuTween(){
 		if( !played ){
 			played = true;
-
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().eventReceiver = this.gameObject;
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().callWhenFinished = "DeactivateLordScreen";
 			lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = true;
-	
+
 			Debug.Log("played tween");
 		}
+
+	}
+
+	void DeactivateLordScreen(){
+		lordScreenUI.SetActive( false );
+		Debug.Log( "deactivate LS" );
 	}
 }
