@@ -18,7 +18,7 @@ public class Controller2D : MonoBehaviour {
 	public LayerMask groundLayer;
 	public float jumpForce = 700f;
 	public bool stunned;
-	private bool snared = false;
+	public bool snared = false;
 	public bool canJump;
 
 	public delegate void DieAction(GameObject gO);

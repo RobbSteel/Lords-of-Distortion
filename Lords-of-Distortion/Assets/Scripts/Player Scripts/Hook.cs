@@ -25,9 +25,11 @@ public class Hook : MonoBehaviour {
 
 
 	NetworkController networkController;
+	Controller2D  controller2D;
 
 	void Start () {
 		networkController = GetComponent<NetworkController>();
+		controller2D = GetComponent<Controller2D>();
 	
 	}
 	
@@ -80,8 +82,8 @@ public class Hook : MonoBehaviour {
 
 		//Get input from user and set cooldown to avoid repeated use.
 		if(hooktimer <= 0){
-
-			if (Input.GetMouseButtonDown(0) && networkController.isOwner){
+			//TODO: Move this to a public function that can be called from controler2d
+			if (Input.GetMouseButtonDown(0) && networkController.isOwner && !controller2D.snared){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 
@@ -167,10 +169,19 @@ public class Hook : MonoBehaviour {
 
 	}
 
+	[RPC]
+	void HitPlayer(Vector3 playerLocation){
+		go.transform.position = playerLocation;
+		targetLocation = playerLocation;
+		hookscript.playerhooked = true;
+		hookscript.targetPosition = playerLocation;
+	}
+
+	Vector3 targetLocation;
 	//Player pulling himself to opponent
 	void goingtoplayer(float speed){
-			var player = hookscript.players;
-			transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed);
+		var player = hookscript.players;
+		transform.position = Vector2.MoveTowards(transform.position, targetLocation, speed);
 			
 			
 			var distance = Vector2.Distance(go.transform.position, transform.position);

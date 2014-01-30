@@ -14,7 +14,7 @@ public class HookHit : MonoBehaviour {
 	public Material rope;
 	public NetworkController networkController;
 	public Controller2D affectedPlayerC2D;
-
+	public Vector3 targetPosition;
 	void Awake(){
 
 		destroyed = false;
@@ -31,7 +31,7 @@ public class HookHit : MonoBehaviour {
 	
 		if(playerhooked == true){
 		
-			transform.position = Vector2.MoveTowards(transform.position, players.transform.position, 10);
+			transform.position = Vector3.MoveTowards(transform.position, targetPosition, 10);
 		}
 
 		if(timer > 0){
@@ -61,7 +61,11 @@ public class HookHit : MonoBehaviour {
 				players = col.gameObject;
 				affectedPlayerC2D.Snare();
 				rigidbody2D.velocity = Vector2.zero;
+
+				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position);
+				//do what the remote rpc would do, but locally:
 				playerhooked = true;
+				targetPosition = transform.position;
 				print ("I'm hit!");
 			}
 		}
