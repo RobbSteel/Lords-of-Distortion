@@ -187,10 +187,10 @@ public class ArenaManager : MonoBehaviour {
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.Keys[0]));
 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            if (currentTime + 0.5f >= beginTime + allSpawns.Keys[0])
+            if (currentTime + 1.0f >= beginTime + allSpawns.Keys[0])
             { 
                 GameObject yield = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.Values[0].position, Quaternion.identity);
-                Destroy(yield, 0.5f);
+                Destroy(yield, 1.0f);
             }
 
             if(currentTime >= beginTime + allSpawns.Keys[0]){
