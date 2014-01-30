@@ -33,7 +33,7 @@ public class ArenaManager : MonoBehaviour {
 		livePlayers--;
 		if(livePlayers == 0 && Network.isServer){
 			print ("No more players");
-			sessionManager.LoadNextLevel();
+			//sessionManager.LoadNextLevel(); Temporarily commented out
 		}
 	}
 

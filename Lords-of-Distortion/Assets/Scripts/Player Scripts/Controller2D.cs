@@ -24,6 +24,7 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
+
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
@@ -199,6 +200,10 @@ public class Controller2D : MonoBehaviour {
 		if(networkController.isOwner && dead == false){
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
+			var deadlord = GameObject.Find("DeadLordsScreen");
+			var deadlordscript = deadlord.GetComponent<DeadLord>();
+			deadlordscript.isDead = true;
+			print (deadlordscript.isDead);
 			Debug.Log ("I died again");
 
 			//Here we call whatever events are subscribed to us.
