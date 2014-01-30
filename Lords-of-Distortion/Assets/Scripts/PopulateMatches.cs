@@ -20,6 +20,6 @@ public class PopulateMatches : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(infoscript.playername);
+		//print(infoscript.playername);
 	}
 }

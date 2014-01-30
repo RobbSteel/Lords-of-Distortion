@@ -138,7 +138,7 @@ public class ArenaManager : MonoBehaviour {
 		if(Network.isServer){
 
 			Debug.Log ("start timer");
-			beginTime =  sessionManager.timeManager.time + PLACEMENT_TIME;
+			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 		}
 		//TODO: have something that checks if all players have finished loading.
@@ -146,9 +146,10 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(sentMyPowers == false && sessionManager.timeManager.time >= beginTime){
-			print("Time's up");
+		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
+			print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
 			PlayMenuTween();
+			lordsSpawnManager.enabled = false;
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
 			if(!lordsSpawnManager.readyToSend)
 				lordsSpawnManager.FinalizePowers(this.gameObject);
@@ -181,7 +182,7 @@ public class ArenaManager : MonoBehaviour {
 
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
-			float currentTime = sessionManager.timeManager.time;
+			float currentTime = TimeManager.instance.time;
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.Keys[0]));
 			if(currentTime >= beginTime + allSpawns.Keys[0]){
 				PowerSpawn spawn = allSpawns.Values[0];
@@ -215,7 +216,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void DeactivateLordScreen(){
-		lordScreenUI.SetActive( false );
+		//lordScreenUI.SetActive( false );
 		Debug.Log( "deactivate LS" );
 	}
 }
