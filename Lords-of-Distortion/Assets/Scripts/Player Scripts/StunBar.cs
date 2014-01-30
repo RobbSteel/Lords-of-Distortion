@@ -57,9 +57,11 @@ public class StunBar : MonoBehaviour {
 
 	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
-		currentStunMeter += dmgTaken;
-		if( currentStunMeter >= maxStun )
-			Stun();
+		if (!playerControl.stunned) {
+			currentStunMeter += dmgTaken;
+			if (currentStunMeter >= maxStun)
+				Stun ();
+		}
 	}
 
 	//checks if player is stun then applies timer and grants player actions once time has past
@@ -78,6 +80,7 @@ public class StunBar : MonoBehaviour {
 
 	public void Stun(){
 		playerControl.stunned = true;
+		audio.Play ();
 		stunTimer = 0;
 	}
 	
