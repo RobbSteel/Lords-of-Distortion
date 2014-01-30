@@ -53,8 +53,6 @@ public class SessionManager : MonoBehaviour {
 	[RPC]
 	void SpawnPlayer(Vector3 location){
 		//var timeInstance = (GameObject)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
-		timemanager.SyncTimes();
 		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
 		NetworkView charNetworkView = instance.networkView;
 		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
@@ -85,11 +83,8 @@ public class SessionManager : MonoBehaviour {
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
-		//timeManager = instance.GetComponent<TimeManager>();
-		//these next three lines do same thing as confirmlocalspawn
-		//myPlayerOptions = new PlayerOptions();
-		//myPlayerOptions.PlayerNumber = ++playerCounter;
-		//playerOptions.Add (Network.player, myPlayerOptions);
+		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager.SyncTimes();
 		++playerCounter;
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, gameInfo.playername, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
@@ -99,6 +94,8 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnConnectedToServer()
 	{
+		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager.SyncTimes();
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);

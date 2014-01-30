@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Priority_Queue;
 
-public class PowerSpawn{
+public class PowerSpawn : PriorityQueueNode {
 
 	public enum PowerType{
 		STICKY = 0,

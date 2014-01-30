@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Priority_Queue;
 
 public class ArenaManager : MonoBehaviour {
 	public Transform[] Powers;
@@ -7,9 +8,8 @@ public class ArenaManager : MonoBehaviour {
 	const float PLACEMENT_TIME = 15f; 
 	SessionManager sessionManager;
 	List<Vector3> playerSpawnLocations;
-
-	SortedList<float, PowerSpawn> allSpawns;
 	
+	HeapPriorityQueue<PowerSpawn> allSpawns;
 	List<NetworkPlayer> playersReady;
 
 	float beginTime;
@@ -46,14 +46,14 @@ public class ArenaManager : MonoBehaviour {
 		requested.type = (PowerSpawn.PowerType)typeIndex;
 		requested.position = position;
 		requested.spawnTime = time;
-		allSpawns.Add(time, requested);
+		allSpawns.Enqueue(requested, time);
 	}
 
 	private void CheckIfAllSynchronized(){
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
 			print ("Spam every player with every powerinfo");
 			
-			foreach(PowerSpawn power in allSpawns.Values){
+			foreach(PowerSpawn power in allSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 (int)power.type, power.position, power.spawnTime);
 			}
@@ -110,8 +110,8 @@ public class ArenaManager : MonoBehaviour {
 		playerSpawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
 		playerSpawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
 		playerSpawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
-		allSpawns = new SortedList<float, PowerSpawn>();
 		playersReady = new List<NetworkPlayer>();
+		allSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 	}
 
@@ -184,18 +184,21 @@ public class ArenaManager : MonoBehaviour {
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
 			float currentTime = TimeManager.instance.time;
-			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.Keys[0]));
+			print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.First.Priority));
 
+			/*
+			 * Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
+			 * 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            if (currentTime + 1.0f >= beginTime + allSpawns.Keys[0])
+            if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority)
             { 
-                GameObject yield = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.Values[0].position, Quaternion.identity);
+                GameObject yield = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
                 Destroy(yield, 1.0f);
             }
+            */
 
-            if(currentTime >= beginTime + allSpawns.Keys[0]){
-				PowerSpawn spawn = allSpawns.Values[0];
-                allSpawns.RemoveAt(0);
+            if(currentTime >= beginTime + allSpawns.First.Priority){
+				PowerSpawn spawn = allSpawns.Dequeue();
             	//convert power type to an int, which is an index to the array of power prefabs.
 				print ("Spawning a " + spawn.type);
 				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
