@@ -94,9 +94,23 @@ public class LordSpawnManager : MonoBehaviour{
 			var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 			mousePos.z = 0;
 			var newpower = (Transform)Instantiate (powerlist[(int)currPowerType], mousePos, Quaternion.identity);
-			
-			placedObjects.Add(currPowerType, newpower.gameObject);
-			powerset = false;
+            Debug.Log("NewPower: " + newpower);
+            /*if (newpower.name == "fireball(Clone)")
+            {
+                    
+                    var fireDirection = fireballScript.direction;
+
+                    Debug.Log("Fire Direction asdfasdfasdfasdfasdf: " + fireDirection);
+                    powerset = false;
+                    placedObjects.Add(currPowerType, newpower.gameObject);
+                
+            }*/
+            //else
+            //{
+                Debug.Log("ELSE");
+			    placedObjects.Add(currPowerType, newpower.gameObject);
+			    powerset = false;
+            //}
 		}
 	}
 
@@ -127,5 +141,7 @@ public class LordSpawnManager : MonoBehaviour{
 	public UIInput firetime;
 	public UIInput stickytime;
 	public UIInput smoketime;
+
+    public FireBall fireballScript;
 
 }
