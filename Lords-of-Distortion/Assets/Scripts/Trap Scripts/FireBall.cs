@@ -24,7 +24,7 @@ public class FireBall : Power
             mousePos.z = 10.0f; //The distance from the camera to the player object
 
             direction = Camera.main.ScreenToWorldPoint(mousePos);
-            Debug.Log("Fireball : " + direction);
+            //Debug.Log("Fireball : " + direction);
             mouseClicks++;
             //transform.Translate(speed, 0, 0);
         }

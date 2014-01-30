@@ -19,6 +19,7 @@ public class ArenaManager : MonoBehaviour {
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
 
+    public Texture2D yield;
 
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
@@ -183,10 +184,18 @@ public class ArenaManager : MonoBehaviour {
 		if(allSpawns.Count != 0){
 			float currentTime = sessionManager.timeManager.time;
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.Keys[0]));
-			if(currentTime >= beginTime + allSpawns.Keys[0]){
+
+            //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
+            if (currentTime + 0.5f >= beginTime + allSpawns.Keys[0])
+            { 
+                GameObject yield = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.Values[0].position, Quaternion.identity);
+                Destroy(yield, 0.5f);
+            }
+
+            if(currentTime >= beginTime + allSpawns.Keys[0]){
 				PowerSpawn spawn = allSpawns.Values[0];
-				allSpawns.RemoveAt(0);
-				//convert power type to an int, which is an index to the array of power prefabs.
+                allSpawns.RemoveAt(0);
+            	//convert power type to an int, which is an index to the array of power prefabs.
 				print ("Spawning a " + spawn.type);
 				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
 			}
