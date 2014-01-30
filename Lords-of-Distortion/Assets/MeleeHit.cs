@@ -18,10 +18,10 @@ public class MeleeHit : MonoBehaviour {
 			Destroy(gameObject);
 			Debug.Log ("Enemy hit, Melee hit destroyed");
 		}
-		// If it hits an enemy...
+		// If it hits a player...
 		else if(col.gameObject.tag == "Player"){
 			
-			// ... find the Enemy script and call the Hurt function.
+			// ... find the StunBar script and call the TakeDamage function.
 			col.gameObject.GetComponent<StunBar>().TakeDamage(10f);
 			
 			Destroy(gameObject);
