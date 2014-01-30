@@ -18,6 +18,7 @@ public class Controller2D : MonoBehaviour {
 	public LayerMask groundLayer;
 	public float jumpForce = 700f;
 	public bool stunned;
+	private bool snared = false;
 	public bool canJump;
 
 	public delegate void DieAction(GameObject gO);
@@ -27,7 +28,17 @@ public class Controller2D : MonoBehaviour {
 
 	NetworkController networkController;
 
+	public void Snare(){
+		snared = true;
+
+
+	}
 	//private StunBar stunScript;
+
+	public void FreeFromSnare(){
+		snared = false;
+	}
+
 
 	void Awake(){
 		stunned = false;
@@ -36,10 +47,11 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!DEBUG && !networkController.isOwner)
+		if(!DEBUG && !networkController.isOwner && !snared)
 			return;
 		Jump();
 	}
+	
 
 	void FixedUpdate(){
 		if(!DEBUG && !networkController.isOwner)
@@ -61,7 +73,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	private void Jump(){
-		if( !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
+		if(!snared &&  !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
 			jump = true;
 		}
 	}
@@ -80,7 +92,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		if( !stunned ){
+		if( !stunned && !snared ){
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled

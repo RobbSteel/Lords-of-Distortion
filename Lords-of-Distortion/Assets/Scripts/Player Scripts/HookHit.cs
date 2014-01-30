@@ -13,6 +13,7 @@ public class HookHit : MonoBehaviour {
 	public LineRenderer lr;
 	public Material rope;
 	public NetworkController networkController;
+	public Controller2D affectedPlayerC2D;
 
 	void Awake(){
 
@@ -53,9 +54,12 @@ public class HookHit : MonoBehaviour {
 
 		}
 
-		if(col.gameObject.tag == "Player" && col.gameObject != shooter){
-			if(col.gameObject.GetComponent<NetworkController>().theOwner == Network.player){
+		if(col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
+			NetworkController  affectedPlayerNC = col.gameObject.GetComponent<NetworkController>();
+			affectedPlayerC2D = col.gameObject.GetComponent<Controller2D>();
+			if(affectedPlayerNC.theOwner == Network.player){
 				players = col.gameObject;
+				affectedPlayerC2D.Snare();
 				rigidbody2D.velocity = Vector2.zero;
 				playerhooked = true;
 				print ("I'm hit!");
