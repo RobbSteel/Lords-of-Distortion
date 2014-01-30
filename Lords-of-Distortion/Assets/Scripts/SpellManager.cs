@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class SpellManager : MonoBehaviour {
-	
+
+    private GameObject fireball;
 	// Use this for initialization
 	void Start () {
 		
@@ -10,9 +11,11 @@ public class SpellManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if (Input.GetMouseButtonDown(0)) {
-			Instantiate (Resources.Load ("FireBall"));	
+        Debug.Log("Update for SpellManager");
+		if (Input.GetMouseButtonDown(0)) 
+        {
+            Debug.Log("Instantiating Fireball");
+			fireball = (GameObject)Instantiate(Resources.Load("fireball"));	
 			
 		}
 	}

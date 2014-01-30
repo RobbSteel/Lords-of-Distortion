@@ -95,9 +95,23 @@ public class LordSpawnManager : MonoBehaviour{
 			mousePos.z = 0;
 
 			var newpower = (Transform)Instantiate (powerlist[(int)currPowerType], mousePos, Quaternion.identity);
-			
-			placedObjects.Add(currPowerType, newpower.gameObject);
-			powerset = false;
+            Debug.Log("NewPower: " + newpower);
+            /*if (newpower.name == "fireball(Clone)")
+            {
+                    
+                    var fireDirection = fireballScript.direction;
+
+                    Debug.Log("Fire Direction asdfasdfasdfasdfasdf: " + fireDirection);
+                    powerset = false;
+                    placedObjects.Add(currPowerType, newpower.gameObject);
+                
+            }*/
+            //else
+            //{
+                Debug.Log("ELSE");
+			    placedObjects.Add(currPowerType, newpower.gameObject);
+			    powerset = false;
+            //}
 		}
 	}
 
@@ -128,5 +142,7 @@ public class LordSpawnManager : MonoBehaviour{
 	public UIInput firetime;
 	public UIInput stickytime;
 	public UIInput smoketime;
+
+    public FireBall fireballScript;
 
 }
