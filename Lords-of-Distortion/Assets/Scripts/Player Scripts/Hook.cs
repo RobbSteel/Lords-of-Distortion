@@ -128,12 +128,14 @@ public class Hook : MonoBehaviour {
 			if(Input.GetMouseButtonDown(0) && pushpull == 0){
 				
 				pushpull = 1;
+				networkView.RPC ("PullPlayer", hitPlayer);
 				
 			}
 			
 			if(Input.GetMouseButtonDown(1) && pushpull == 0){
 				
 				pushpull = 2;
+
 			}
 		}
 		
@@ -151,33 +153,48 @@ public class Hook : MonoBehaviour {
 		}
 	}
 
+	/*
+	 * METHOD 1: When player A chooses to pull player in, send RPC to the hook on player B that sets choice to 2.
+	 * METHOD 2: On client A, disable interpolation of player B and control him directly.
+	 */
+	
+	[RPC]
+	void PullPlayer(){
+		pushpull = 1;
+	}
+
 
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
-
-	
-			
+		//On client A, the hooker, this field is null. On client B, the hooked, this is true.
+		if(hookscript.players != null){
 			var player = hookscript.players;
 			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
-			var distance = Vector3.Distance(player.transform.position, transform.position);
-			
-			if(distance < .5){
-				
-				Destroy(go);
-				hookinput = false;
-				pushpull = 0;
-				
-				transform.rigidbody2D.gravityScale = 1;
-		}
 
+		}
+		var distance = Vector3.Distance(targetLocation, transform.position);
+		//This needs to be put somehwere else, but for now it'll do.
+		if(distance < .5){
+			if(hookscript.players != null){
+				hookscript.affectedPlayerC2D.FreeFromSnare();
+			}
+			transform.rigidbody2D.gravityScale = 1;
+
+			Destroy(go);
+			hookinput = false;
+			pushpull = 0;
+		}
 	}
 
+	NetworkPlayer hitPlayer;
 	[RPC]
-	void HitPlayer(Vector3 playerLocation){
+	void HitPlayer(Vector3 playerLocation, NetworkMessageInfo info){
 		go.transform.position = playerLocation;
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;
 		hookscript.playerhooked = true;
+		hitPlayer = info.sender;
+		
 	}
 
 	Vector3 targetLocation;

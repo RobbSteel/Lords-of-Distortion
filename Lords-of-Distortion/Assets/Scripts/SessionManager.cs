@@ -107,6 +107,7 @@ public class SessionManager : MonoBehaviour {
 		Application.LoadLevel(offlineLevel);
 		Destroy (TimeManager.instance.gameObject);
 		Destroy (this.gameObject);
+		Destroy (gameInfo.gameObject);
 	}
 
 	void OnPlayerDisconnected(NetworkPlayer player){
