@@ -176,6 +176,10 @@ public class NetworkController : MonoBehaviour {
 		}
 	}
 
+	void OnDestroy(){
+		//remove self from dictionary since gameobject will be invalid.
+		instanceManager.gameInfo.playerObjects.Remove(theOwner);
+	}
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
 
 		Vector3 syncPosition = Vector3.zero;
@@ -221,4 +225,5 @@ public class NetworkController : MonoBehaviour {
 			states.Add(state); //if we advanced buffer manually, then count < maxsize
 		}
 	}
+
 }
