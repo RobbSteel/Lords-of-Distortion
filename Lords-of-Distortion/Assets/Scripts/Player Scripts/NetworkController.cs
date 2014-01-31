@@ -73,7 +73,8 @@ public class NetworkController : MonoBehaviour {
 		if(!DEBUG){
 			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 			PlayerOptions playerOptions = instanceManager.gameInfo.GetPlayerOptions(theOwner);
-			Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
+			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
+			instanceManager.gameInfo.AddPlayerGameObject(theOwner, gameObject);
 			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
 			switch(playerOptions.style){
 

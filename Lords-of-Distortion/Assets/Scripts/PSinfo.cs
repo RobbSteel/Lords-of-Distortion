@@ -13,18 +13,30 @@ public class PSinfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
 	public List<NetworkPlayer> players;
+	public Dictionary<NetworkPlayer, GameObject> playerObjects;
 
 	void Awake () {
 		DontDestroyOnLoad(this);
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
 		players= new List<NetworkPlayer>();
+		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){
 		players.Add(player);
 		playerOptions.Add(player, options);
 		playerStats.Add(player, stats);
+	}
+
+	public void AddPlayerGameObject(NetworkPlayer player, GameObject gO){
+		playerObjects.Add(player, gO);
+	}
+
+	public GameObject GetPlayerGameObject(NetworkPlayer player){
+		GameObject gO = null;
+		playerObjects.TryGetValue(player, out gO);
+		return gO;
 	}
 
 	public void RemovePlayer(NetworkPlayer player){

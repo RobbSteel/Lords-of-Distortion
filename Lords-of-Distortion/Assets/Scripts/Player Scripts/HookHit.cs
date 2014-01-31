@@ -63,6 +63,7 @@ public class HookHit : MonoBehaviour {
 				rigidbody2D.velocity = Vector2.zero;
 
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position);
+				//TODO: call hitplayer locally instead of doing the following:
 				//do what the remote rpc would do, but locally:
 				playerhooked = true; 
 				targetPosition = transform.position;

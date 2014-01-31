@@ -135,6 +135,7 @@ public class Hook : MonoBehaviour {
 			if(Input.GetMouseButtonDown(1) && pushpull == 0){
 				
 				pushpull = 2;
+				networkView.RPC("GoToPlayer", hitPlayer);
 
 			}
 		}
@@ -154,32 +155,35 @@ public class Hook : MonoBehaviour {
 	}
 
 	/*
-	 * METHOD 1: When player A chooses to pull player in, send RPC to the hook on player B that sets choice to 2.
-	 * METHOD 2: On client A, disable interpolation of player B and control him directly.
+	 * When player A chooses to pull player in, send RPC to the hook on player B that sets choice to 1.
 	 */
-	
 	[RPC]
 	void PullPlayer(){
 		pushpull = 1;
 	}
 
+	[RPC]
+	void GoToPlayer(){
+		pushpull = 2;
+	}
+
 
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
-		//On client A, the hooker, this field is null. On client B, the hooked, this is true.
-		if(hookscript.players != null){
-			var player = hookscript.players;
+		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
+		var player = hookscript.players;
+		if(!networkController.isOwner){
 			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
 
 		}
-		var distance = Vector3.Distance(targetLocation, transform.position);
+		//target location needs to be update to be the position of the player that's hooked.
+		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
 		if(distance < .5){
-			if(hookscript.players != null){
+			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
 			transform.rigidbody2D.gravityScale = 1;
-
 			Destroy(go);
 			hookinput = false;
 			pushpull = 0;
@@ -190,31 +194,28 @@ public class Hook : MonoBehaviour {
 	[RPC]
 	void HitPlayer(Vector3 playerLocation, NetworkMessageInfo info){
 		go.transform.position = playerLocation;
+		hookscript.players = networkController.instanceManager.gameInfo.GetPlayerGameObject(info.sender);
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;
 		hookscript.playerhooked = true;
 		hitPlayer = info.sender;
-		
 	}
 
 	Vector3 targetLocation;
 	//Player pulling himself to opponent
 	void goingtoplayer(float speed){
 		var player = hookscript.players;
-		transform.position = Vector2.MoveTowards(transform.position, targetLocation, speed);
-			
-			
-			var distance = Vector2.Distance(go.transform.position, transform.position);
-			
-			if(distance < .5){
-				
-				Destroy (go);
-				hookinput = false;
-				pushpull = 0;
-				
-				transform.rigidbody2D.gravityScale = 1;
+		transform.position = Vector2.MoveTowards(transform.position, hookscript.targetPosition, speed);
+		var distance = Vector2.Distance(go.transform.position, transform.position);
+		if(distance < .5){
+			if(!networkController.isOwner){
+				hookscript.affectedPlayerC2D.FreeFromSnare();
+			}
+			Destroy (go);
+			hookinput = false;
+			pushpull = 0;
+			transform.rigidbody2D.gravityScale = 1;
 		}
-
 	}
 
 
@@ -230,18 +231,14 @@ public class Hook : MonoBehaviour {
 		transform.rigidbody2D.gravityScale = 0;
 		var distance = Vector2.Distance(transform.position, go.transform.position);
 
-
-			
-			if(distance > .5){
-				transform.position = Vector2.MoveTowards(transform.position, go.transform.position, speed);
-			} else {
-				Destroy(go);
+		if(distance > .5){
+			transform.position = Vector2.MoveTowards(transform.position, go.transform.position, speed);
+		} else {
+			Destroy(go);
 			transform.rigidbody2D.gravityScale = 1;
-
-
-				movingtowards = false;
-				print(distance);
-			}
+			movingtowards = false;
+			print(distance);
+		}
 	}
 
 	//Moves the hook back to the player and deletes links as the hook comes into contact with them.
