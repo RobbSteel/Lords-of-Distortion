@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class DeadLord : MonoBehaviour {
@@ -6,7 +7,9 @@ public class DeadLord : MonoBehaviour {
 
 	private bool once = false;
 	public bool isDead = false;
-
+	private bool powerset = false;
+	private GameObject currpower;
+	public GameObject[] poweroptions;
 	// Use this for initialization
 	void Start () {
 	
@@ -30,7 +33,12 @@ public class DeadLord : MonoBehaviour {
 			} else {
 
 
-
+				if(Input.GetMouseButtonDown(0) && powerset){
+				var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
+				mousePos.z = 0;
+				Network.Instantiate(currpower, mousePos, transform.rotation, 0);
+				powerset = false;
+				}
 
 			}
 		}
@@ -42,8 +50,27 @@ public class DeadLord : MonoBehaviour {
 	void SpawnDeadPowers(GameObject button){
 
 
+		UILabel powerlabel = button.GetComponentInChildren<UILabel>();
+		var powertype = powerlabel.text;
 
+		if(powertype == "Fireball"){
+			currpower = (GameObject)poweroptions[0];
+		}
+		
+		if(powertype == "Sticky Trap"){
+			currpower = (GameObject)poweroptions[1];
+		}
+		
+		if(powertype == "Gravity"){
+			currpower = (GameObject)poweroptions[2];
+		}
+		
+		if(powertype == "Smoke Bomb"){
+			currpower = (GameObject)poweroptions[3];
+			
+		}
 
+		powerset = true;
 	}
 
 
