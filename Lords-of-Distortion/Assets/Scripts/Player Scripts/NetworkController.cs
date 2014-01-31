@@ -76,7 +76,6 @@ public class NetworkController : MonoBehaviour {
 			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
 			if(instanceManager.gameInfo.GetPlayerGameObject(theOwner) == null)
 				instanceManager.gameInfo.AddPlayerGameObject(theOwner, gameObject);
-
 			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
 			switch(playerOptions.style){
 

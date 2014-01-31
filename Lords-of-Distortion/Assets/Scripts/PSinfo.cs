@@ -30,13 +30,16 @@ public class PSinfo : MonoBehaviour {
 	}
 
 	public void AddPlayerGameObject(NetworkPlayer player, GameObject gO){
-		playerObjects.Add(player, gO);
+		if(!playerObjects.ContainsKey(player)){
+			playerObjects.Add(player, gO);
+		}
 	}
 
 	public GameObject GetPlayerGameObject(NetworkPlayer player){
 		GameObject gO = null;
-		playerObjects.TryGetValue(player, out gO);
-		return gO;
+		if(playerObjects.TryGetValue(player, out gO))
+			return gO;
+		else return null;
 	}
 
 	public void RemovePlayer(NetworkPlayer player){
