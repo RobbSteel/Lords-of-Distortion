@@ -21,6 +21,7 @@ public class ArenaManager : MonoBehaviour {
 	bool powersSynchronized = false;
 
 	private GameObject timer;
+    private PowerSpawn prevYield;
 
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
@@ -192,12 +193,13 @@ public class ArenaManager : MonoBehaviour {
 			//Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
 			 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            /*if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority)
-            { 
+            if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority && prevYield != allSpawns.First)
+            {
+                prevYield = allSpawns.First;
                 GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
                 Destroy(yield_sign, 1.0f);
             }
-            */
+            
 
             if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allSpawns.Dequeue();
