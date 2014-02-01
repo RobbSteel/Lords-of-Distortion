@@ -138,8 +138,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -302,8 +302,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -553,7 +553,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 17.0666676
   mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
-  mSpriteName: grey-area
+  mSpriteName: bar_texture
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -858,6 +858,7 @@ GameObject:
   - 4: {fileID: 232454369}
   - 114: {fileID: 232454371}
   - 114: {fileID: 232454370}
+  - 148: {fileID: 232454372}
   m_Layer: 9
   m_Name: timer
   m_TagString: Untagged
@@ -892,6 +893,8 @@ MonoBehaviour:
   myTimer: 180
   powerPlaceTimer: 0
   fightCountdown: 0
+  postmatchtimer: 0
+  arenaManager: {fileID: 0}
 --- !u!114 &232454371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -953,6 +956,19 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!148 &232454372
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 14800000, guid: 57d4fcd6117deab449770e844c9b1b5c,
+    type: 2}
+  m_PrefabInternal: {fileID: 638164570}
+  m_GameObject: {fileID: 232454368}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 232454369}
+  m_ViewID:
+    m_ID: 2
+    m_Type: 1
 --- !u!1 &234889911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1266,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: da4de70dce6450b42854dc4e7cd535cb, type: 3}
+  mTexture: {fileID: 2800000, guid: 344508af4614c7d408f582d0f4a64d1d, type: 3}
   mMat: {fileID: 0}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &365452434
@@ -1323,7 +1339,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: da4de70dce6450b42854dc4e7cd535cb, type: 3}
+  mTexture: {fileID: 2800000, guid: 653e64ed87982f245a75bd35932869a8, type: 3}
   mMat: {fileID: 0}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &411718962
@@ -1581,6 +1597,14 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: .00498753134
       objectReference: {fileID: 0}
+    - target: {fileID: 14800000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
+      propertyPath: m_ViewID.m_ID
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 14800000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
+      propertyPath: m_ViewID.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
   m_RootGameObject: {fileID: 2027975383}
@@ -1718,7 +1742,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 0}
-  mSpriteName: 
+  mSpriteName: bar_texture
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -2215,8 +2239,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -2291,8 +2315,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -2367,8 +2391,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -2379,6 +2403,56 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
+--- !u!1 &799730467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 799730469}
+  - 212: {fileID: 799730468}
+  m_Layer: 0
+  m_Name: Character_spite_sheet_large_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &799730468
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 799730467}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_Sprite: {fileID: 21300000, guid: f10f0a66e5e80c542b9c70412d386fa8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!4 &799730469
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 799730467}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.0519552231, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &841130788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3067,7 +3141,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: da4de70dce6450b42854dc4e7cd535cb, type: 3}
+  mTexture: {fileID: 2800000, guid: 26aadee1e5ff73146aba70fa34364f11, type: 3}
   mMat: {fileID: 0}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &1038793228
@@ -3117,6 +3191,7 @@ MonoBehaviour:
   - {fileID: 400000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
   - {fileID: 400000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
   - {fileID: 400000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
+  finishgame: 0
   lordScreenUI: {fileID: 0}
 --- !u!148 &1038793231
 NetworkView:
@@ -3261,8 +3336,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -3378,7 +3453,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 17.0666676
   mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
-  mSpriteName: grey-area
+  mSpriteName: bar_texture
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -3725,7 +3800,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 17.0666676
   mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
-  mSpriteName: grey-area
+  mSpriteName: bar_texture
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -4973,8 +5048,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -5145,8 +5220,8 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: da4de70dce6450b42854dc4e7cd535cb, type: 3}
-  mMat: {fileID: 0}
+  mTexture: {fileID: 2800000, guid: b4546af8be1b89f439662ef449380dda, type: 3}
+  mMat: {fileID: 2100000, guid: 9260009ac6bb00549850fcd23d9512ed, type: 2}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &1959532013
 GameObject:
@@ -5421,8 +5496,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -5741,7 +5816,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1
   mAtlas: {fileID: 0}
-  mSpriteName: 
+  mSpriteName: bar_texture
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -5857,8 +5932,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 4.44444466
-  mAtlas: {fileID: 11400000, guid: 2f2473f73b9ca724f9080d6d76009ea2, type: 2}
-  mSpriteName: Button
+  mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
+  mSpriteName: title_icons
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
