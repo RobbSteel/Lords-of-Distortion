@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerOptions{
 	public enum CharacterStyle
 	{
-		BLUE = 0, RED, GREEN, YELLOW, DEFAULT
+		DEFAULT = 0, RED, GREEN, YELLOW, BLUE
 	}
 
 	public CharacterStyle style;
