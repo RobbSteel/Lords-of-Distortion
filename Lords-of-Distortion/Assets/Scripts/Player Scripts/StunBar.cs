@@ -55,13 +55,26 @@ public class StunBar : MonoBehaviour {
 
 	}
 
-	//allows other objects to appliy a specific amount of damage
-	public void TakeDamage( float dmgTaken ){
+	[RPC]
+	void NotifyDamageTaken(float dmgTaken){
+		ApplyDamage(dmgTaken);
+	}
+
+	private void ApplyDamage(float dmgTaken){
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun)
-				Stun ();
+				Stun (); //this will only matter if called on the client which controls the player to be stunned
 		}
+	}
+
+
+	//allows other objects to appliy a specific amount of damage
+	public void TakeDamage( float dmgTaken ){
+		//Don't worry about lag compensation for now and just notify all other of the stun bar being raised.
+		//TODO: Have stun bar values more synchronized, because bar may decay differently on other clients.
+		networkView.RPC("NotifyDamageTaken", RPCMode.Others, dmgTaken);
+		ApplyDamage(dmgTaken);
 	}
 
 	//checks if player is stun then applies timer and grants player actions once time has past
@@ -71,15 +84,17 @@ public class StunBar : MonoBehaviour {
 
 			if( stunTimer >= stunWait ){
 				playerControl.stunned = false;
+				playerControl.anim.SetBool("stunned", false);
+
 				stunTimer = 0;
 				currentStunMeter = 0;
 			}
-
 		}
 	}
 
 	public void Stun(){
 		playerControl.stunned = true;
+		playerControl.anim.SetBool("stunned", true);
 		audio.Play ();
 		stunTimer = 0;
 	}
