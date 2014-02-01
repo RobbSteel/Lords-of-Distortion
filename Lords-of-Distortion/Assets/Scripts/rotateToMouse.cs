@@ -50,7 +50,7 @@ public class rotateToMouse : MonoBehaviour
 				aiming = false;
 				speed = .1f;
                 Debug.Log("No Longer Aiming Fireball");
-                fireball = (GameObject)Instantiate(Resources.Load("fireball"));	
+                fireball = (GameObject)Instantiate(Resources.Load("Inkball"));	
 			}
 	}
 
