@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Controller2D : MonoBehaviour {
 	[HideInInspector]
-	public bool facingRight = false;
+	public bool facingRight;
 	[HideInInspector]
 	public bool jump = false;
 
@@ -44,6 +44,7 @@ public class Controller2D : MonoBehaviour {
 	void Awake(){
 		stunned = false;
 		canJump = true;
+		facingRight = true;
 	}
 
 	// Update is called once per frame
@@ -98,16 +99,17 @@ public class Controller2D : MonoBehaviour {
 			
 			//to make jumping and changing direction is disabled
 			//if(!grounded) return;
+
 			
 			float move = Input.GetAxis ( "Horizontal" );
-			
+
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
-			if( move > 0 && !facingRight ){
+			if( move < 0 && facingRight ){
 				Flip();
 			}
-			else if( move < 0 && facingRight ){
+			else if( move > 0 && !facingRight ){
 				Flip();
 			}
 		}
