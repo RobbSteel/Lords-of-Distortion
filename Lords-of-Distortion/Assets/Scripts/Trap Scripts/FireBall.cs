@@ -61,7 +61,7 @@ public class FireBall : Power
 
     public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-	    Destroy (player);
+        controller.Die();
 	}
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)
