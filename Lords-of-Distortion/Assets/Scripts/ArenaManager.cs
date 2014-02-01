@@ -19,8 +19,6 @@ public class ArenaManager : MonoBehaviour {
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
 
-    public Texture2D yield;
-
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -186,14 +184,14 @@ public class ArenaManager : MonoBehaviour {
 			float currentTime = TimeManager.instance.time;
 			print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.First.Priority));
 
-			/*
-			 * Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
-			 * 
+			
+			//Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
+			 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority)
+            /*if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority)
             { 
-                GameObject yield = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
-                Destroy(yield, 1.0f);
+                GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
+                Destroy(yield_sign, 1.0f);
             }
             */
 
