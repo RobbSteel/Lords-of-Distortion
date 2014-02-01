@@ -10,6 +10,8 @@ public class DeadLord : MonoBehaviour {
 	private bool powerset = false;
 	private GameObject currpower;
 	public GameObject[] poweroptions;
+    public UISprite redBtn;
+    private float timer = 0;
 	// Use this for initialization
 	void Start () {
 	
@@ -26,21 +28,32 @@ public class DeadLord : MonoBehaviour {
 		//print (isDead);
 		if(isDead){
 
-			if(!once){
+			if(!once)
+            {
 				print("Back to Lord Screen");
 				GetComponent<TweenPosition>().enabled = true;
 				once = true;
-			} else {
-
-
+			} 
+            else 
+            {
 				if(Input.GetMouseButtonDown(0) && powerset){
-				var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-				mousePos.z = 0;
-				Network.Instantiate(currpower, mousePos, transform.rotation, 0);
-				powerset = false;
-				}
+			    	var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
+			    	mousePos.z = 0;
+			    	
+				    powerset = false;
+                    if (timer < 0)
+                    { 
+                        timer = 3;
+                        Network.Instantiate(currpower, mousePos, transform.rotation, 0);
+                    }
+                }
+                else
+                {
+                    timer -= Time.deltaTime;
+                }
 
 			}
+            redBtn.fillAmount = timer / 3;
 		}
 	}
 
