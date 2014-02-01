@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Melee : MonoBehaviour {
 	
-	private Controller2D controller;		// Reference to the PlayerControl script.
+	private Controller2D controller;// Reference to the PlayerControl script.
+	private NetworkController networkController;
 	private Animator anim;					// Reference to the Animator component.
 
 	public float meleeTimer = 0;
@@ -14,6 +15,7 @@ public class Melee : MonoBehaviour {
 		// Setting up the references.
 		anim = transform.root.gameObject.GetComponent<Animator>();
 		controller = transform.root.GetComponent<Controller2D>();
+		networkController = transform.root.GetComponent<NetworkController>();
 		this.GetComponent<BoxCollider2D>().enabled = false;
 
 	}
@@ -22,7 +24,7 @@ public class Melee : MonoBehaviour {
 	{
 		if (meleeTimer <= 0) {
 			// If the fire button is pressed...
-			if (Input.GetButtonDown ("Fire3") && !controller.stunned) {
+			if (Input.GetButtonDown ("Fire3") && !controller.stunned && networkController.isOwner) {
 				startMelee ();
 			}
 		}
