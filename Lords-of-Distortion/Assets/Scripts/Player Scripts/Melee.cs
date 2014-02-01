@@ -32,10 +32,18 @@ public class Melee : MonoBehaviour {
 			meleeTimer -= Time.deltaTime;
 	}
 
+	//Play animation on all clients.
+	[RPC]
+	void NotifyVisualMelee(){
+		anim.SetTrigger ("Melee");
+		audio.Play ();
+	}
+
 	private void startMelee(){
+
+		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
 		// Enable Box Collider 2D
 		this.GetComponent<BoxCollider2D>().enabled = true;
-
 		anim.SetTrigger ("Melee");
 		audio.Play ();
 
