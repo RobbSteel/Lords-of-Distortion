@@ -27,7 +27,7 @@ public class Melee : MonoBehaviour {
 	{
 		if (meleeTimer <= 0) {
 			// If the fire button is pressed...
-			if (Input.GetButtonDown ("Fire3") && !controller.stunned ){//&& networkController.isOwner) {
+			if (Input.GetButtonDown ("Fire3") && !controller.stunned && networkController.isOwner) {
 				startMelee ();
 			}
 		}
