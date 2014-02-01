@@ -7,8 +7,11 @@ public class Melee : MonoBehaviour {
 	private NetworkController networkController;
 	private Animator anim;					// Reference to the Animator component.
 
+	[HideInInspector]
 	public float meleeTimer = 0;
+
 	public float coolDownTimer = 0.5f;
+	public float damageDealt = 15f;
 
 	void Awake()
 	{
@@ -64,7 +67,7 @@ public class Melee : MonoBehaviour {
 		else if(col.gameObject.tag == "Player"){
 			
 			// ... find the StunBar script and call the TakeDamage function.
-			col.gameObject.GetComponent<StunBar>().TakeDamage(10f);
+			col.gameObject.GetComponent<StunBar>().TakeDamage(damageDealt);
 		
 			Debug.Log ("Player hit");
 		}

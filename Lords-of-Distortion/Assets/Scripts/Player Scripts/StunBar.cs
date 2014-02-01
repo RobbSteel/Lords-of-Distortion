@@ -6,7 +6,7 @@ public class StunBar : MonoBehaviour {
 
 	public float maxStun = 100f;
 	public float currentStunMeter = 50f;
-	public float regenAmount = 10f;
+	public float regenAmount = 15f;
 	public float regenCooldown = 5f;
 	public float regenTimer = 0f;
 	public float stunTimer;
