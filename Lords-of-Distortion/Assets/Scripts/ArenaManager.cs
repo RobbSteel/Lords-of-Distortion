@@ -112,10 +112,10 @@ public class ArenaManager : MonoBehaviour {
 		SetUpLordScreenTween();
 		SetUpTimer();
 		playerSpawnLocations = new List<Vector3>();
-		playerSpawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
-		playerSpawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
-		playerSpawnLocations.Add(new Vector3(0.5738465f, -1.387209f, 0f));
-		playerSpawnLocations.Add (new Vector3(-3.315388f, -0.4170055f, 0f));
+		playerSpawnLocations.Add(new Vector3(-9f, -1.5f, 0f));
+		playerSpawnLocations.Add(new Vector3(9f, -1.5f, 0f));
+		playerSpawnLocations.Add(new Vector3(-9f, 4.3f, 0f));
+		playerSpawnLocations.Add (new Vector3(9f, 4.3f, 0f));
 		playersReady = new List<NetworkPlayer>();
 		allSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
