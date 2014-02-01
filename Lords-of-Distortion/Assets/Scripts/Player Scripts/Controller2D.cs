@@ -28,6 +28,7 @@ public class Controller2D : MonoBehaviour {
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
+	Hook myHook;
 
 	public void Snare(){
 		snared = true;
@@ -45,6 +46,7 @@ public class Controller2D : MonoBehaviour {
 		stunned = false;
 		canJump = true;
 		facingRight = true;
+		myHook = GetComponent<Hook>();
 	}
 
 	// Update is called once per frame
@@ -214,5 +216,9 @@ public class Controller2D : MonoBehaviour {
 			//We don't need the next line any more
 			//networkController.instanceManager.KillPlayer(gameObject);
 		}
+	}
+
+	void OnDisable(){
+		myHook.DestroyHookPossible();
 	}
 }

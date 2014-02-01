@@ -169,22 +169,28 @@ public class Hook : MonoBehaviour {
 		DestroyHook(); //actually destroy the hook now that you have permission
 	}
 
-	void DestroyHook(){
+	private void DestroyHook(){
 		transform.rigidbody2D.gravityScale = 1;
-		Destroy(go);
 		hookinput = false;
 		pushpull = 0;
 		movingtowards = false;
 		movingback = false;
-		if(hookscript.affectedPlayerC2D != null){
-			hookscript.affectedPlayerC2D.FreeFromSnare();
-			hookscript.affectedPlayerC2D = null;
+		going = false;
+		if(hookscript != null){
+			if(hookscript.affectedPlayerC2D != null){
+				hookscript.affectedPlayerC2D.FreeFromSnare();
+				hookscript.affectedPlayerC2D = null;
+			}
+			hookscript.playerhooked = false;
 		}
-		hookscript.playerhooked = false;
+		if(go != null){
+			Destroy(go);
+		}
+
 	}
 
 
-	void DestroyHookPossible(){
+	public void DestroyHookPossible(){
 		if(networkController.isOwner){
 			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 			DestroyHook();
