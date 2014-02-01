@@ -935,6 +935,7 @@ GameObject:
   - 4: {fileID: 232454369}
   - 114: {fileID: 232454371}
   - 114: {fileID: 232454370}
+  - 148: {fileID: 232454372}
   m_Layer: 9
   m_Name: timer
   m_TagString: Untagged
@@ -969,6 +970,8 @@ MonoBehaviour:
   myTimer: 180
   powerPlaceTimer: 0
   fightCountdown: 0
+  postmatchtimer: 0
+  arenaManager: {fileID: 1038793230}
 --- !u!114 &232454371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,6 +1033,18 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!148 &232454372
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 232454368}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 232454369}
+  m_ViewID:
+    m_ID: 2
+    m_Type: 1
 --- !u!1 &286898403
 GameObject:
   m_ObjectHideFlags: 0
@@ -3500,15 +3515,15 @@ Prefab:
       objectReference: {fileID: 2093208203}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00625000009
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00625000009
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00625000009
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 11400086, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: mColor.g
@@ -3522,6 +3537,10 @@ Prefab:
       propertyPath: readyToSend
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
+      propertyPath: arenaManager
+      value: 
+      objectReference: {fileID: 1038793230}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
   m_RootGameObject: {fileID: 2027975383}
@@ -6371,7 +6390,7 @@ Transform:
   m_GameObject: {fileID: 2027975383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00625000009, y: .00625000009, z: .00625000009}
+  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 1407413348}
   - {fileID: 1068770406}

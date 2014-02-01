@@ -577,13 +577,14 @@ GameObject:
   - 4: {fileID: 400068}
   - 114: {fileID: 11400092}
   - 54: {fileID: 5400002}
+  - 114: {fileID: 11400096}
   m_Layer: 9
   m_Name: LordsScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100070
 GameObject:
   m_ObjectHideFlags: 1
@@ -680,7 +681,7 @@ Transform:
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00584795326, y: .00584795326, z: .00584795326}
+  m_LocalScale: {x: .00498753134, y: .00498753134, z: .00498753134}
   m_Children:
   - {fileID: 400016}
   - {fileID: 400068}
@@ -1006,7 +1007,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -606.099976, z: 0}
+  m_LocalPosition: {x: 0, y: -606.099976, z: 210.026077}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400026}
@@ -1283,7 +1284,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 17.0666676
   mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
-  mSpriteName: grey-area
+  mSpriteName: bar_texture
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -3052,6 +3053,44 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
+--- !u!114 &11400096
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  method: 0
+  style: 0
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  ignoreTimeScale: 1
+  delay: 10
+  duration: 3
+  steeperCurves: 0
+  tweenGroup: 0
+  onFinished: []
+  eventReceiver: {fileID: 0}
+  callWhenFinished: 
+  from: {x: 0, y: -606.099976, z: 0}
+  to: {x: 1280, y: -606.099976, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
