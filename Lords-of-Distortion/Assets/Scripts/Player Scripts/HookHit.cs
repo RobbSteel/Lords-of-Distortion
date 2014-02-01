@@ -31,7 +31,7 @@ public class HookHit : MonoBehaviour {
 	
 		if(playerhooked == true){
 		
-			transform.position = Vector3.MoveTowards(transform.position, targetPosition, 10);
+			transform.position = Vector3.MoveTowards(transform.position, players.transform.position, 10);
 		}
 
 		if(timer > 0){

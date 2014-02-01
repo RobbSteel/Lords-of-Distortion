@@ -167,14 +167,24 @@ public class Hook : MonoBehaviour {
 		pushpull = 2;
 	}
 
+	void DestroyHook(){
+		transform.rigidbody2D.gravityScale = 1;
+		Destroy(go);
+		hookinput = false;
+		pushpull = 0;
+	}
 
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
 		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
 		var player = hookscript.players;
+		///player died
+		if(player == null){
+			DestroyHook();
+			return;
+		}
 		if(!networkController.isOwner){
 			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
-
 		}
 		//target location needs to be update to be the position of the player that's hooked.
 		var distance = Vector3.Distance(player.transform.position, transform.position);
@@ -195,10 +205,16 @@ public class Hook : MonoBehaviour {
 	void HitPlayer(Vector3 playerLocation, NetworkMessageInfo info){
 		go.transform.position = playerLocation;
 		hookscript.players = networkController.instanceManager.gameInfo.GetPlayerGameObject(info.sender);
+		hookscript.affectedPlayerC2D = hookscript.players.GetComponent<Controller2D>();
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;
 		hookscript.playerhooked = true;
 		hitPlayer = info.sender;
+	}
+
+	public void HitPlayerLocal(Vector3 playerLocation){
+		go.transform.position = playerLocation;
+		targetLocation = playerLocation;
 	}
 
 	Vector3 targetLocation;
