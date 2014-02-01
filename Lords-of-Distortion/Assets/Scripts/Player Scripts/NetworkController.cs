@@ -190,7 +190,9 @@ public class NetworkController : MonoBehaviour {
 			//if we have control over this entity, send out our positions to everyone else.
 			syncPosition = transform.position;
 			syncFacing = controller2D.facingRight;
-			stream.Serialize(ref syncPosition);
+
+			stream.Serialize(ref syncPosition.x);
+			stream.Serialize(ref syncPosition.y);
 			stream.Serialize(ref syncFacing);
 		}
 
@@ -216,8 +218,12 @@ public class NetworkController : MonoBehaviour {
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
 			}
-			
-			stream.Serialize(ref syncPosition);
+
+			float xPosition = 0f;
+			float yPosition = 0f;
+			stream.Serialize(ref xPosition);
+			stream.Serialize(ref yPosition);
+			syncPosition = new Vector3(xPosition, yPosition, 0f);
 			stream.Serialize(ref syncFacing);
 			State state = new State(syncPosition, syncFacing);
 			state.remoteTime = (float)info.timestamp;

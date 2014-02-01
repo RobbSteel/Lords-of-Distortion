@@ -112,7 +112,6 @@ public class Hook : MonoBehaviour {
 			movingtohook(speed);
 		}
 
-
 		if(movingback == true){
 			hookmovingback(speed);
 		}
@@ -193,10 +192,7 @@ public class Hook : MonoBehaviour {
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
-			transform.rigidbody2D.gravityScale = 1;
-			Destroy(go);
-			hookinput = false;
-			pushpull = 0;
+			DestroyHook();
 		}
 	}
 
@@ -227,10 +223,7 @@ public class Hook : MonoBehaviour {
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
-			Destroy (go);
-			hookinput = false;
-			pushpull = 0;
-			transform.rigidbody2D.gravityScale = 1;
+			DestroyHook();
 		}
 	}
 
@@ -261,8 +254,6 @@ public class Hook : MonoBehaviour {
 	void hookmovingback(float speed){
 
 		var distance = Vector2.Distance(transform.position, go.transform.position);
-
-
 			if(distance > .5){
 				go.transform.position = Vector2.MoveTowards(go.transform.position, transform.position, speed);
 			
@@ -272,7 +263,12 @@ public class Hook : MonoBehaviour {
 			
 				movingback = false;
 				print(distance);
-			}
+		}
+	}
+
+	void OnDestroy(){
+		if(go != null)
+		Destroy (go);
 	}
 
 }
