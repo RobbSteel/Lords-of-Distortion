@@ -218,7 +218,7 @@ public class NetworkController : MonoBehaviour {
 				}
 			}
 			
-			if(canInterpolate == false && states.Count >= 3){
+			if(canInterpolate == false && states != null && states.Count >= 3){
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
 			}
