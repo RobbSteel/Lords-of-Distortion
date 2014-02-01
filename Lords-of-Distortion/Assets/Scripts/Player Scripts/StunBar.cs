@@ -131,7 +131,7 @@ public class StunBar : MonoBehaviour {
 	//Updates StunBar UI and tints color relative to danger
 	void UpdateHealthBar(){
 		stunBarUI.value = currentStunMeter/maxStun;
-		stunBarUI.foregroundWidget.color = Color.Lerp( Color.green , Color.red, currentStunMeter  );
+		stunBarUI.foregroundWidget.color = Color.Lerp( Color.yellow , Color.red, stunBarUI.value  );
 	}
 
 	//Ondestroy delete Stunbar Ui
