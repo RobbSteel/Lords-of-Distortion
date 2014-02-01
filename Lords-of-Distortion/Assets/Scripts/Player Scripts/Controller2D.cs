@@ -126,13 +126,7 @@ public class Controller2D : MonoBehaviour {
 	{
 		if(dead)
 			return;
-		if (other.gameObject.tag == "GravityFieldTag")
-		{
-			Debug.Log(other.gameObject.tag);
-			Debug.Log("Hit gravity field");
-			rigidbody2D.gravityScale = -1;
-		}
-
+		
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
@@ -141,7 +135,11 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	//while player is within the powers collider apply's powers on player 
-	void OnTriggerStay2D(Collider2D other){
+	void OnTriggerStay2D(Collider2D other)
+    {
+        if (dead)
+            return;
+
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
@@ -154,11 +152,7 @@ public class Controller2D : MonoBehaviour {
 	{
 		if(dead)
 			return;
-		if (other.gameObject.tag == "GravityFieldTag")
-		{
-			rigidbody2D.gravityScale = 1;
-		}
-
+		
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
@@ -170,7 +164,8 @@ public class Controller2D : MonoBehaviour {
 	void OnCollisionStay2D(Collision2D col ) {
 		if(dead)
 			return;
-		if (col.gameObject.tag == "Power"){
+		
+        if (col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
 			power.PowerActionStay(gameObject, this);
 		}
@@ -180,12 +175,6 @@ public class Controller2D : MonoBehaviour {
 	{
 		if(dead)
 			return;
-		if (other.gameObject.tag == "GravityFieldTag")
-		{
-			Debug.Log(other.gameObject.tag);
-			Debug.Log("Hit gravity field");
-			rigidbody2D.gravityScale = -1;
-		}
 		
 		if (other.gameObject.tag == "Power")
 		{
@@ -194,6 +183,17 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (dead)
+            return;
+		
+        if (other.gameObject.tag == "Power")
+        {
+            Power power = other.gameObject.GetComponent<Power>();
+            power.PowerActionExit(gameObject, this);
+        }
+    }
 
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
