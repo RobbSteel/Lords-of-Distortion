@@ -6,6 +6,7 @@ public class ArenaManager : MonoBehaviour {
 	public Transform[] Powers;
 
 	const float PLACEMENT_TIME = 15f; 
+	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	SessionManager sessionManager;
 	List<Vector3> playerSpawnLocations;
 	
@@ -20,6 +21,8 @@ public class ArenaManager : MonoBehaviour {
 	bool powersSynchronized = false;
 
     public Texture2D yield;
+
+	private GameObject timer;
 
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
@@ -105,6 +108,7 @@ public class ArenaManager : MonoBehaviour {
 	void Awake(){
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
+		SetUpTimer();
 		playerSpawnLocations = new List<Vector3>();
 		playerSpawnLocations.Add(new Vector3(-3.16764f, -3.177613f, 0f));
 		playerSpawnLocations.Add(new Vector3(3.35127f, -1.387209f, 0f));
@@ -206,6 +210,12 @@ public class ArenaManager : MonoBehaviour {
 		}
 	}
 
+	private void SetUpTimer(){
+		timer = GameObject.Find("timer");
+		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
+		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
+
+	}
 
 	private void SetUpLordScreenTween(){
 		played = false;
