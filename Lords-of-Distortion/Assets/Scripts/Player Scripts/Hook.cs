@@ -257,7 +257,7 @@ public class Hook : MonoBehaviour {
 		transform.rigidbody2D.gravityScale = 0;
 		var distance = Vector2.Distance(transform.position, go.transform.position);
 
-		if(distance > .5){
+		if(distance > 1){
 			transform.position = Vector2.MoveTowards(transform.position, go.transform.position, speed);
 		} else {
 			DestroyHookPossible();
@@ -269,7 +269,7 @@ public class Hook : MonoBehaviour {
 	void hookmovingback(float speed){
 
 		var distance = Vector2.Distance(transform.position, go.transform.position);
-			if(distance > .5){
+			if(distance > 1){
 				go.transform.position = Vector2.MoveTowards(go.transform.position, transform.position, speed);
 			
 			} else {

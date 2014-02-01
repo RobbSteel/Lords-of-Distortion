@@ -7,7 +7,7 @@ public class SessionManager : MonoBehaviour {
 
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[1]{"ArenaOne"}; //an array of arenas
+	private string[] arenas = new string[1]{"StageOne"}; //an array of arenas
 	public PSinfo gameInfo;
 
 	public bool finishedLoading = false;
