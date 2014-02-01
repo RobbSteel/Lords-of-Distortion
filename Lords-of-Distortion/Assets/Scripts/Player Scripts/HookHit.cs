@@ -40,8 +40,12 @@ public class HookHit : MonoBehaviour {
 		
 			destroyed = true;
 		}
+
 		lr.SetPosition(0, transform.position);
-		lr.SetPosition(1, shooter.transform.position);
+		if(shooter == null)
+			Destroy (this.gameObject);
+		else
+			lr.SetPosition(1, shooter.transform.position);
 	}
 
 	//On collision stops the hook from moving and tells the player to come to the hook

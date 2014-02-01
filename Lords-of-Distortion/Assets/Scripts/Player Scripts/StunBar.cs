@@ -17,12 +17,13 @@ public class StunBar : MonoBehaviour {
 	private Controller2D playerControl;		// Reference to the PlayerControl script.
 	private GameObject UI;					// Reference UI GUI
 	private UISlider stunBarUI;				// Reference UI slider values
-
+	private Camera levelCamera;
 	//setup references and create UI stunbar
 	void Awake(){
 		playerControl = GetComponent<Controller2D>();
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
+		levelCamera = GameObject.Find("Main Camera").camera;
 	}
 
 
@@ -42,7 +43,7 @@ public class StunBar : MonoBehaviour {
 	//sets position of stunbar correctly on player
 	void UpdateStunBarPosition(){
 		Vector3 playersPos = transform.position;
-		Vector3 screenPos = GameObject.Find("Main Camera").camera.WorldToScreenPoint( playersPos );
+		Vector3 screenPos = levelCamera.WorldToScreenPoint( playersPos );
 		float screenHeight = Screen.height;
 		float screenWidth = Screen.width;
 		screenPos.x -= (screenWidth / 2.0f);
