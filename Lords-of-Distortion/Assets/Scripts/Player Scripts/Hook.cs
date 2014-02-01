@@ -147,9 +147,7 @@ public class Hook : MonoBehaviour {
 				goingtoplayer(speed);
 			}
 		} else if(pushpull == 0){
-			hookscript.affectedPlayerC2D.FreeFromSnare();
-			Destroy(go);
-			hookinput = false;
+			DestroyHookPossible();
 		}
 	}
 
@@ -166,33 +164,52 @@ public class Hook : MonoBehaviour {
 		pushpull = 2;
 	}
 
+	[RPC]
+	void NotifyDestroyHook(){
+		DestroyHook(); //actually destroy the hook now that you have permission
+	}
+
 	void DestroyHook(){
 		transform.rigidbody2D.gravityScale = 1;
 		Destroy(go);
 		hookinput = false;
 		pushpull = 0;
+		movingtowards = false;
+		movingback = false;
+		if(hookscript.affectedPlayerC2D != null){
+			hookscript.affectedPlayerC2D.FreeFromSnare();
+			hookscript.affectedPlayerC2D = null;
+		}
+	}
+
+
+	void DestroyHookPossible(){
+		if(networkController.isOwner){
+			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
+			DestroyHook();
+		}
 	}
 
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
-		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
+
 		var player = hookscript.players;
 		///player died
 		if(player == null){
-			DestroyHook();
+			DestroyHookPossible();
 			return;
 		}
+		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
 		if(!networkController.isOwner){
 			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
 		}
-		//target location needs to be update to be the position of the player that's hooked.
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
 		if(distance < .5){
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
-			DestroyHook();
+			DestroyHookPossible();
 		}
 	}
 
@@ -223,7 +240,7 @@ public class Hook : MonoBehaviour {
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
-			DestroyHook();
+			DestroyHookPossible();
 		}
 	}
 
@@ -243,10 +260,8 @@ public class Hook : MonoBehaviour {
 		if(distance > .5){
 			transform.position = Vector2.MoveTowards(transform.position, go.transform.position, speed);
 		} else {
-			Destroy(go);
-			transform.rigidbody2D.gravityScale = 1;
-			movingtowards = false;
-			print(distance);
+			DestroyHookPossible();
+			//print(distance);
 		}
 	}
 
@@ -258,17 +273,14 @@ public class Hook : MonoBehaviour {
 				go.transform.position = Vector2.MoveTowards(go.transform.position, transform.position, speed);
 			
 			} else {
-			Destroy(go);
-			transform.rigidbody2D.gravityScale = 1;
-			
-				movingback = false;
-				print(distance);
+			DestroyHookPossible();
+			//print(distance);
 		}
 	}
 
 	void OnDestroy(){
 		if(go != null)
-		Destroy (go);
+			Destroy (go);
 	}
 
 }

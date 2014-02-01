@@ -54,6 +54,10 @@ public class NetworkController : MonoBehaviour {
 		}
 	}
 
+	//just learned about this, might be useful later on
+	void OnNetworkInstantiate(NetworkMessageInfo info){
+
+	}
 
 	//Sets the network ID to this instantiation of the player.
 	[RPC]
