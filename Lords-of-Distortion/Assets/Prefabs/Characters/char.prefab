@@ -65,7 +65,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.959999979, y: -.14874886, z: 0}
+  m_LocalPosition: {x: -3.5, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -78,7 +78,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.157855511, y: .00544823706, z: 0}
+  m_LocalPosition: {x: .400000006, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -89,7 +89,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.335636735, z: 0}
+  m_LocalPosition: {x: -.0274567604, y: -.578973472, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -117,8 +117,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Size: {x: .219999999, y: .460000008}
-  m_Center: {x: .00999999978, y: -.0599999987}
+  m_Size: {x: .365999997, y: 1.11711705}
+  m_Center: {x: -.0024446249, y: .00592589378}
 --- !u!61 &6100002
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -128,8 +128,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .150000006, y: .5}
-  m_Center: {x: -.0700000003, y: 0}
+  m_Size: {x: .276176304, y: .662578285}
+  m_Center: {x: -.0355339982, y: .109546103}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -279,7 +279,7 @@ MonoBehaviour:
   stunTimer: 0
   stunWait: 2
   UIoffsetX: -30
-  UIoffsetY: 35
+  UIoffsetY: 55
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jump: 0
-  DEBUG: 0
+  DEBUG: 1
   maxSpeed: 5
   anim: {fileID: 0}
   groundCheck: {fileID: 400004}
@@ -387,7 +387,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_SortingLayerID: 2858795347
-  m_Sprite: {fileID: 21300018, guid: 73f621b9ca1cd44409d5e36bc9230331, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f10f0a66e5e80c542b9c70412d386fa8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:

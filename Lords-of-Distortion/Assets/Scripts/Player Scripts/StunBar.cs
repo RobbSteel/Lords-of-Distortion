@@ -71,15 +71,17 @@ public class StunBar : MonoBehaviour {
 
 			if( stunTimer >= stunWait ){
 				playerControl.stunned = false;
+				playerControl.anim.SetBool("stunned", false);
+
 				stunTimer = 0;
 				currentStunMeter = 0;
 			}
-
 		}
 	}
 
 	public void Stun(){
 		playerControl.stunned = true;
+		playerControl.anim.SetBool("stunned", true);
 		audio.Play ();
 		stunTimer = 0;
 	}
