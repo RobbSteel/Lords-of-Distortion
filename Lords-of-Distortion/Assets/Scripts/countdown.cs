@@ -8,12 +8,22 @@ public class countdown : MonoBehaviour {
 	public float myTimer;
 	public float powerPlaceTimer;
 	public float fightCountdown;
+	public float postmatchtimer;
 	
 	private int CurrentTimer;
-	private ArenaManager arenaManager;
+	public ArenaManager arenaManager;
 	private Vector3 defaultTimerPosition;
 	// Update is called once per frame
-	
+
+	SessionManager sessionManager;
+
+	void Awake(){
+		
+		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		
+		
+	}
+
 	void Start(){
 		myTimer = powerPlaceTimer;
 		CurrentTimer = 0;
@@ -36,6 +46,7 @@ public class countdown : MonoBehaviour {
 		PlacementTimer();
 		FightCountDownTimer();
 		MatchStartTimer();
+		MatchEndTimer();
 		
 	}
 	
@@ -63,9 +74,42 @@ public class countdown : MonoBehaviour {
 	void MatchStartTimer(){
 		if( CurrentTimer == 2 ){
 			myTimer += Time.deltaTime;
+
+			if(arenaManager.finishgame == true){
+				print ("got here hello");
+				resetTimer (5);
+			}
+
 		}
 	}
-	
+
+
+	void MatchEndTimer(){
+		
+		if(CurrentTimer == 3){
+			print ("We got to 3");
+			myTimer -= Time.deltaTime;
+			
+			if(myTimer <= 0){
+				print ("time out");
+				if(Network.isServer){
+					print ("we are the server");
+					networkView.RPC ("EndGame", RPCMode.All);
+				}
+			}
+			
+		}
+		
+	}
+
+
+	[RPC]
+	void EndGame(){
+		
+		print ("finalized");
+		sessionManager.LoadNextLevel();
+	}
+
 	void TimerUI(){
 		int minutes = Mathf.FloorToInt(myTimer / 60F);
 		int seconds = Mathf.FloorToInt(myTimer - minutes * 60);
