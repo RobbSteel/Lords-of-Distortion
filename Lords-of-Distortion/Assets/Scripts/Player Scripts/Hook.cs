@@ -180,6 +180,7 @@ public class Hook : MonoBehaviour {
 			hookscript.affectedPlayerC2D.FreeFromSnare();
 			hookscript.affectedPlayerC2D = null;
 		}
+		hookscript.playerhooked = false;
 	}
 
 
