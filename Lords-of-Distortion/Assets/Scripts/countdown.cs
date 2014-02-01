@@ -9,7 +9,7 @@ public class countdown : MonoBehaviour {
 	public float powerPlaceTimer;
 	public float fightCountdown;
 	public float postmatchtimer;
-	
+	private bool once = false;
 	private int CurrentTimer;
 	public ArenaManager arenaManager;
 	private Vector3 defaultTimerPosition;
@@ -92,9 +92,10 @@ public class countdown : MonoBehaviour {
 			
 			if(myTimer <= 0){
 				print ("time out");
-				if(Network.isServer){
+				if(Network.isServer && !once){
 					print ("we are the server");
-					networkView.RPC ("EndGame", RPCMode.All);
+					once = true;
+					sessionManager.LoadNextLevel();
 				}
 			}
 			
@@ -103,12 +104,8 @@ public class countdown : MonoBehaviour {
 	}
 
 
-	[RPC]
-	void EndGame(){
-		
-		print ("finalized");
-		sessionManager.LoadNextLevel();
-	}
+
+
 
 	void TimerUI(){
 		int minutes = Mathf.FloorToInt(myTimer / 60F);
