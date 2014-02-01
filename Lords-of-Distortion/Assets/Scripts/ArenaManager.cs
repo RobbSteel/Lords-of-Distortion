@@ -199,7 +199,7 @@ public class ArenaManager : MonoBehaviour {
             }
             */
 
-            if(currentTime >= beginTime + allSpawns.First.Priority){
+            if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allSpawns.Dequeue();
             	//convert power type to an int, which is an index to the array of power prefabs.
 				print ("Spawning a " + spawn.type);
