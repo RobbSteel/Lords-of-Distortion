@@ -7,8 +7,10 @@ public class ArenaManager : MonoBehaviour {
 
 	const float PLACEMENT_TIME = 15f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
+	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
 	List<Vector3> playerSpawnLocations;
+	public bool finishgame = false;
 	
 	HeapPriorityQueue<PowerSpawn> allSpawns;
 	List<NetworkPlayer> playersReady;
@@ -21,7 +23,6 @@ public class ArenaManager : MonoBehaviour {
 	bool powersSynchronized = false;
 
 	private GameObject timer;
-    private PowerSpawn prevYield;
 
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
@@ -35,6 +36,7 @@ public class ArenaManager : MonoBehaviour {
 		livePlayers--;
 		if(livePlayers == 0 && Network.isServer){
 			print ("No more players");
+			finishgame = true;
 			//sessionManager.LoadNextLevel(); Temporarily commented out
 		}
 	}
@@ -193,13 +195,12 @@ public class ArenaManager : MonoBehaviour {
 			//Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
 			 
             //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority && prevYield != allSpawns.First)
-            {
-                prevYield = allSpawns.First;
+            /*if (currentTime + 1.0f >= beginTime + allSpawns.First.Priority)
+            { 
                 GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
                 Destroy(yield_sign, 1.0f);
             }
-            
+            */
 
             if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allSpawns.Dequeue();
@@ -214,7 +215,7 @@ public class ArenaManager : MonoBehaviour {
 		timer = GameObject.Find("timer");
 		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
 		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
-
+		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
 	}
 
 	private void SetUpLordScreenTween(){
