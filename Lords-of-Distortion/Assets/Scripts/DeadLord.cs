@@ -12,7 +12,10 @@ public class DeadLord : MonoBehaviour {
 	public GameObject[] poweroptions;
     public UISprite redBtn;
     private float timer = 0;
-	// Use this for initialization
+
+
+
+//Initialize ability to recieve button input from dead lord UI
 	void Start () {
 	
 		UIEventListener.Get(GameObject.Find("DeadFireball")).onClick += SpawnDeadPowers;
@@ -20,14 +23,17 @@ public class DeadLord : MonoBehaviour {
 		UIEventListener.Get(GameObject.Find("DeadSmoke")).onClick += SpawnDeadPowers;
 		UIEventListener.Get(GameObject.Find("DeadSticky")).onClick += SpawnDeadPowers;
 
+		//Starts at false, Controller2D will alter this upon death
 		isDead = false;
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
-		//print (isDead);
+
+		//Will occur if the player has died
 		if(isDead){
 
+			//Tweens the Lord Screen once
 			if(!once)
             {
 				print("Back to Lord Screen");
@@ -36,12 +42,17 @@ public class DeadLord : MonoBehaviour {
 			} 
             else 
             {
+
+				/*If a power button has been clicked, the player clicks, and
+				the timer isn't on cooldown, then spawn a power immediately at the 
+				location*/
 				if(Input.GetMouseButtonDown(0) && powerset){
 			    	var mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 			    	mousePos.z = 0;
-			    	
-				    powerset = false;
-                    if (timer < 0)
+			    	powerset = false;
+                    
+					//Cooldown timer check
+					if (timer < 0)
                     { 
                         timer = 3;
                         Network.Instantiate(currpower, mousePos, transform.rotation, 0);
@@ -58,7 +69,8 @@ public class DeadLord : MonoBehaviour {
 	}
 
 
-
+	/*Gets the type of power from the button pressed and sets it as the current one
+	to be spawned*/
 
 	void SpawnDeadPowers(GameObject button){
 

@@ -202,12 +202,15 @@ public class Controller2D : MonoBehaviour {
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
 		if(networkController.isOwner && dead == false){
+			//Spawns the spirit upon player death
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
+
+			//Upon Death, tell the DeadLord Script that the player is dead by setting
+			//the boolean to true
 			var deadlord = GameObject.Find("DeadLordsScreen");
 			var deadlordscript = deadlord.GetComponent<DeadLord>();
 			deadlordscript.isDead = true;
-			print (deadlordscript.isDead);
 			Debug.Log ("I died again");
 
 			//Here we call whatever events are subscribed to us.
