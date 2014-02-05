@@ -37,8 +37,10 @@ public class ArenaManager : MonoBehaviour {
 		livePlayers--;
 		if(livePlayers == 0 && Network.isServer){
 			print ("No more players");
+
+			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
 			finishgame = true;
-			//sessionManager.LoadNextLevel(); Temporarily commented out
+
 		}
 	}
 
