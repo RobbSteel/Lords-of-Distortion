@@ -10,14 +10,20 @@ public class PlacementUI : MonoBehaviour {
 
 	private List<UIButton> buttons = new List<UIButton>();
 	Dictionary<PowerType, InventoryPower> draftedPowers;
-	PowerPrefabs prefabs;
+	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
+	List<PowerSpawn> selectedTraps;
+	List<PowerSpawn> selectedTriggers;
+
+	PowerPrefabs prefabs;
 
 	enum PlacementState{
 		Default,
 		MovingPower,
 		ChangingDirection,
 	}
+
+
 	PlacementState state = PlacementState.Default;
 
 
@@ -37,7 +43,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	void Start(){
-		/*Turn available powers into UI elements buttons for now.*/
+		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
 			GameObject entry = NGUITools.AddChild(Grid.gameObject, PowerEntry);
@@ -50,12 +56,17 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	void Update(){
+
 		if(Input.GetMouseButtonDown(0)){
 			switch(state){
 
 			case PlacementState.MovingPower:
 				//Put down power.
 				PlacePower();
+				break;
+
+			case PlacementState.ChangingDirection:
+				ChooseDirection();
 				break;
 			}
 		}
@@ -96,6 +107,43 @@ public class PlacementUI : MonoBehaviour {
 
 	private void PlacePower(){
 		Destroy(activePower.GetComponent<MouseFollow>());
+		PowerSpawn spawn = null;
+
+		/*Either generate a new PowerSpawn or modify an existing one.*/
+		if(placedPowers.ContainsKey(activePower)){
+			placedPowers.TryGetValue(activePower, out spawn);
+		}
+		else {
+			spawn = new PowerSpawn();
+			spawn.type = activePowerType;
+			placedPowers.Add(activePower, spawn);
+		}
+		spawn.position = activePower.transform.position;
+
+		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
+			state = PlacementState.ChangingDirection;
+			//TODO: Instantiate rotation prefab and sprite rotation script.
+			print ("Select Direction");
+		}
+		else {
+			state = PlacementState.Default;
+			GridEnabled(true);
+		}
+	}
+
+	private void ChooseDirection(){
+		PowerSpawn spawn = null;
+		placedPowers.TryGetValue(activePower, out spawn);
+
+		Vector3 mousePosition = Camera.main.ScreenToWorldPoint
+			(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.0f));
+
+		Vector3 direction = Vector3.Normalize(mousePosition - spawn.position);
+		direction.z = 0f;
+		spawn.direction = direction;
+		//print (direction);
+
+		//Return buttons to normal
 		state = PlacementState.Default;
 		GridEnabled(true);
 	}
