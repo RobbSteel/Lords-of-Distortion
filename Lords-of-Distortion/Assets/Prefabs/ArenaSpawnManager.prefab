@@ -10,6 +10,8 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: ArenaSpawnManager
   m_TagString: Untagged
@@ -39,7 +41,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.0912528, y: 0, z: -10}
+  m_LocalPosition: {x: .538864017, y: .444426537, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -71,7 +73,37 @@ MonoBehaviour:
   - {fileID: 400000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
   - {fileID: 400000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
   - {fileID: 400000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
+  finishgame: 0
   lordScreenUI: {fileID: 0}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b553db432fa70094e91e8bda56724e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PowerEntry: {fileID: 100002, guid: 81f3c670bbfd10046a78909246adbde5, type: 2}
+  Grid: {fileID: 0}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c012494aa02dbc43a2e3b4f1cb60a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  list:
+  - {fileID: 100000, guid: b49dd82d161806c4f82a92e01cf2d8d4, type: 2}
+  - {fileID: 100000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
+  - {fileID: 100000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
+  - {fileID: 100000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

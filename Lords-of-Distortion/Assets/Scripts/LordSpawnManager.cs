@@ -14,8 +14,8 @@ public class LordSpawnManager : MonoBehaviour{
 		UIEventListener.Get(GameObject.Find("StickyTrapButton")).onClick += InitializePower;
 		UIEventListener.Get(GameObject.Find("FinishButton")).onClick += FinalizePowers;
 
-		placedObjects = new Dictionary<PowerSpawn.PowerType, GameObject>();
-		powerSpawns = new Dictionary<PowerSpawn.PowerType, PowerSpawn>();
+		placedObjects = new Dictionary<PowerType, GameObject>();
+		powerSpawns = new Dictionary<PowerType, PowerSpawn>();
 	}
 
 
@@ -32,20 +32,20 @@ public class LordSpawnManager : MonoBehaviour{
 	if(!powerset){
 		PowerSpawn spawn = new PowerSpawn();
 		if(powertype == "Fireball"){
-			spawn.type = PowerSpawn.PowerType.FIREBALL;
+			spawn.type = PowerType.FIREBALL;
 			
 		}
 
 		if(powertype == "Sticky Trap"){
-			spawn.type = PowerSpawn.PowerType.STICKY;
+			spawn.type = PowerType.STICKY;
 		}
 
 		if(powertype == "Gravity"){
-			spawn.type = PowerSpawn.PowerType.GRAVITY;
+			spawn.type = PowerType.GRAVITY;
 		}
 
 		if(powertype == "Smoke Bomb"){
-			spawn.type = PowerSpawn.PowerType.SMOKE;
+			spawn.type = PowerType.SMOKE;
 			
 		}
 			currPowerType = spawn.type;
@@ -61,7 +61,7 @@ public class LordSpawnManager : MonoBehaviour{
 	public void FinalizePowers(GameObject button){
 
 		foreach(var pair in placedObjects){
-			PowerSpawn.PowerType type = pair.Key;
+			PowerType type = pair.Key;
 			PowerSpawn spawn = null;
 			powerSpawns.TryGetValue(type, out spawn);
 
@@ -71,16 +71,16 @@ public class LordSpawnManager : MonoBehaviour{
 			//so that no matter what power was in that button , the id would be used to determine what time
 			//to use for which slot.
 			switch (type) {
-			case PowerSpawn.PowerType.FIREBALL:
+			case PowerType.FIREBALL:
 				spawn.spawnTime = float.Parse(firetime.GetComponent<UIInput>().value);
 				break;
-			case PowerSpawn.PowerType.GRAVITY:
+			case PowerType.GRAVITY:
 				spawn.spawnTime = float.Parse(gravitytime.GetComponent<UIInput>().value);
 				break;
-			case PowerSpawn.PowerType.SMOKE:
+			case PowerType.SMOKE:
 				spawn.spawnTime = float.Parse(smoketime.GetComponent<UIInput>().value);
 				break;
-			case PowerSpawn.PowerType.STICKY:
+			case PowerType.STICKY:
 				spawn.spawnTime = float.Parse(stickytime.GetComponent<UIInput>().value);
 				break;
 			}
@@ -132,9 +132,9 @@ public class LordSpawnManager : MonoBehaviour{
 	public bool readyToSend = false;
 	public bool powerset = false;
 	public ArrayList powerinfo;
-	public Dictionary<PowerSpawn.PowerType, GameObject> placedObjects;
-	public Dictionary<PowerSpawn.PowerType, PowerSpawn> powerSpawns;
-	public PowerSpawn.PowerType currPowerType;
+	public Dictionary<PowerType, GameObject> placedObjects;
+	public Dictionary<PowerType, PowerSpawn> powerSpawns;
+	public PowerType currPowerType;
 	public List<Vector3> directions;
 
 	public UIInput gravitytime;

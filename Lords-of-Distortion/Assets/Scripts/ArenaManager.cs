@@ -48,7 +48,7 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
 		PowerSpawn requested =  new PowerSpawn();
-		requested.type = (PowerSpawn.PowerType)typeIndex;
+		requested.type = (PowerType)typeIndex;
 		requested.position = position;
 		requested.spawnTime = time;
 		allSpawns.Enqueue(requested, time);
