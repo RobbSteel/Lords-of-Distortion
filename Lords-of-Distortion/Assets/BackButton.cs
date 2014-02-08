@@ -15,6 +15,9 @@ public class BackButton : MonoBehaviour {
 
     void OnClick()
     {
-        Application.LoadLevel("MainMenu");
+		var information = GameObject.Find("PSInfo");
+		Destroy(information);
+		Application.LoadLevel("MainMenu");
+
     }
 }

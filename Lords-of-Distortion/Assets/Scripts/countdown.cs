@@ -83,17 +83,15 @@ public class countdown : MonoBehaviour {
 		}
 	}
 
-
+	//Counts down 5 seconds after final player death and then loads the next level.
 	void MatchEndTimer(){
 		
 		if(CurrentTimer == 3){
-			print ("We got to 3");
 			myTimer -= Time.deltaTime;
-			
+
 			if(myTimer <= 0){
-				print ("time out");
+
 				if(Network.isServer && !once){
-					print ("we are the server");
 					once = true;
 					sessionManager.LoadNextLevel();
 				}

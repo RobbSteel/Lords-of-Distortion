@@ -29,9 +29,11 @@ public class LobbyGUI : MonoBehaviour {
 		infoscript = information.GetComponent<PSinfo>();
 		hostList = MasterServer.PollHostList();
 		if(Network.peerType == NetworkPeerType.Disconnected){
+
+			//Check if a player is hosting or joining and execute the appropriate action
 			if(infoscript.choice == "Host"){
 				
-				Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
+				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
 				MasterServer.RegisterHost(typeName, infoscript.servername);
 				
 				
