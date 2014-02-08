@@ -128,7 +128,7 @@ public class Controller2D : MonoBehaviour {
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if(dead)
+		if(networkController.isOwner && dead)
 			return;
 		
 		if (other.gameObject.tag == "Power")
@@ -201,7 +201,7 @@ public class Controller2D : MonoBehaviour {
 
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
-		if(networkController.isOwner && dead == false){
+		if(dead == false){
 			//Spawns the spirit upon player death
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
