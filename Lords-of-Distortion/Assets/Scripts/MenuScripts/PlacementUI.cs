@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class PlacementUI : MonoBehaviour {
 	//The prefab for the UI elements in grid.
 	public GameObject PowerEntry;
+	public GameObject TriggerSlot;
+
 	//Holds the entries for powers.
 	public UIGrid Grid;
 
@@ -12,8 +14,8 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-	List<PowerSpawn> selectedTraps;
-	List<PowerSpawn> selectedTriggers;
+	List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
+	List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
 
 	PowerPrefabs prefabs;
 
@@ -55,6 +57,12 @@ public class PlacementUI : MonoBehaviour {
 		Grid.Reposition();
 	}
 
+	void Finalize(){
+		foreach(PowerSpawn spawn in selectedTriggers){
+			Instantiate(TriggerSlot, Vector3.zero, Quaternion.identity);
+		}
+	}
+
 	void Update(){
 
 		if(Input.GetMouseButtonDown(0)){
@@ -70,6 +78,16 @@ public class PlacementUI : MonoBehaviour {
 				break;
 			}
 		}
+
+
+		/*Temporary code for testing casting of power*/
+		if(Input.GetKeyDown(KeyCode.Alpha1)){
+			int index = 0;
+			PowerSpawn spawn = selectedTriggers[index];
+			//Instantiate (prefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
+			Finalize();
+		}
+
 	}
 
 	/*The button that was pressed is passed in as a GameObject*/
@@ -117,6 +135,8 @@ public class PlacementUI : MonoBehaviour {
 			spawn = new PowerSpawn();
 			spawn.type = activePowerType;
 			placedPowers.Add(activePower, spawn);
+			//TODO: Check if power is triggered or a trap.
+			selectedTriggers.Add(spawn);
 		}
 		spawn.position = activePower.transform.position;
 
