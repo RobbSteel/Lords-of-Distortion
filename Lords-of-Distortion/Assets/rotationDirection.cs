@@ -16,7 +16,8 @@ public class rotationDirection : MonoBehaviour {
     private LineRenderer lineRenderer;
 
 	// Use this for initialization
-	void Awake () {
+	void Awake () 
+    {
         /*lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.SetWidth(.1f, .1f);
         lineRenderer.material = mat;
@@ -25,8 +26,14 @@ public class rotationDirection : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-
+	void Update ()
+    {
+        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
+        Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
+        lookPos = lookPos - transform.position;
+        float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        
         /*if(Input.GetMouseButtonUp(0) && clicks == 0)
         {
             firstClick = Input.mousePosition;
@@ -53,19 +60,6 @@ public class rotationDirection : MonoBehaviour {
             lrCreated = false;
             clicks = 0;
         }*/
-        /*
-        var mousePos = Input.mousePosition;
-        mousePos.z = 10.0f; //The distance from the camera to the player object
-        Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
-        lookPos = lookPos - transform.position;
-        float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);*/
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
-        Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
-        lookPos = lookPos - transform.position;
-        float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        /*Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);*/
+        
 	}
 }
