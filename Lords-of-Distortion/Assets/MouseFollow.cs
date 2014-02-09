@@ -8,7 +8,7 @@ public class MouseFollow : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-	    //camera = Camera.main;
+	    camera = Camera.main;
 	}
 
 	//TODO: Instead of re-centering object, retain offset from mouse.

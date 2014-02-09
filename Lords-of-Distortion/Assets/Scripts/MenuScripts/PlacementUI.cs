@@ -7,6 +7,8 @@ public class PlacementUI : MonoBehaviour {
 	public GameObject PowerEntry;
 	public GameObject PowerSlot;
 
+	public GameObject dottedLine;
+
 	//Holds the entries for powers.
 	public UIGrid InventoryGrid;
 	public UIGrid TriggerGrid;
@@ -41,7 +43,7 @@ public class PlacementUI : MonoBehaviour {
 	/*Variables used for keeping track of what we're placing*/
 	PowerType activePowerType;
 	GameObject activePower;
-
+	GameObject dottedLineInstance;
 
 	void Awake(){
 		draftedPowers = new Dictionary<PowerType, InventoryPower>();
@@ -196,8 +198,8 @@ public class PlacementUI : MonoBehaviour {
 		//Either go back to default state or require setting a direction.
 		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
 			state = PlacementState.ChangingDirection;
-			//TODO: Instantiate rotation prefab and sprite rotation script.
-			print ("Select Direction");
+			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
+			//print ("Select Direction");
 		}
 		else {
 			state = PlacementState.Default;
@@ -218,6 +220,7 @@ public class PlacementUI : MonoBehaviour {
 		direction.z = 0f;
 		spawn.direction = direction;
 		//print (direction);
+		Destroy(dottedLineInstance);
 
 		//Return buttons to normal
 		state = PlacementState.Default;
