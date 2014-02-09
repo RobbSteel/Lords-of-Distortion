@@ -25,7 +25,8 @@ public class rotationDirection : MonoBehaviour {
         float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
  
-        //Creates the dotted line at first click
+        //Creates the dotted line at first click. This would happen when you
+        // already have the fireball/ink following your mouse and click to choose its placement.
         if(Input.GetMouseButtonUp(0) && !rotationEnabled)
         {
             firstClick = Input.mousePosition;
@@ -35,7 +36,7 @@ public class rotationDirection : MonoBehaviour {
             rotationEnabled = true;
         }
  
-        //Destroys the dotted line at second click.
+        //Destroys the dotted line at second click. This would happen when you set the rotation. 
         else if(Input.GetMouseButtonUp(0) && rotationEnabled)
         {
             Destroy(GameObject.Find("DottedLine(Clone)"));

@@ -29,6 +29,8 @@ public class PlacementUI : MonoBehaviour {
 
 	PowerPrefabs prefabs;
 
+    private Camera cam;
+
 	enum PlacementState{
 		Default,
 		MovingPower,
@@ -61,6 +63,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	void Start(){
+        cam = Camera.main;
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
@@ -170,6 +173,7 @@ public class PlacementUI : MonoBehaviour {
 	private void FollowMouse(){
 		state = PlacementState.MovingPower;
 		activePower.AddComponent<MouseFollow>();
+        activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
 		GridEnabled(false);
 	}

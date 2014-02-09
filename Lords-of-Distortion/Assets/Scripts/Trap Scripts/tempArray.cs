@@ -31,7 +31,7 @@ public class tempArray : MonoBehaviour {
         test = (UISprite) GameObject.Find("PowerSlot").GetComponent("UISprite");
         test.spriteName = ink.name;
         //Something like this will change the label text.
-        testLabel = (UILabel)GameObject.Find("PowerButton").GetComponent("UILabel");
+        testLabel = (UILabel)GameObject.Find("TriggerKey").GetComponent("UILabel");
         testLabel.text = "Q";
 	}
 	
