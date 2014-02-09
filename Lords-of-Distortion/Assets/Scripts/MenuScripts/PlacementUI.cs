@@ -32,6 +32,7 @@ public class PlacementUI : MonoBehaviour {
 	PowerPrefabs prefabs;
 
     private Camera cam;
+    ButtonInfo activeInfo;
 
 	enum PlacementState{
 		Default,
@@ -66,6 +67,11 @@ public class PlacementUI : MonoBehaviour {
 
 	void Start(){
         cam = Camera.main;
+        GameObject pb = GameObject.Find("PowerBoard");
+        UIEventListener.Get(pb).onClick  += PowerCircleClick;
+        //ButtonInfo pbInfo = pb.GetComponent<ButtonInfo>();
+        //pbInfo.Initialize();
+      
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
@@ -127,31 +133,32 @@ public class PlacementUI : MonoBehaviour {
 			//Instantiate (prefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
 			Finalize();
 		}
+
 	}
 
 
 	/*The button that was pressed is passed in as a GameObject*/
 	public void PowerButtonClick(GameObject sender){
-        ButtonInfo info = sender.GetComponent<ButtonInfo>();
-        activePowerType = info.associatedPower.type;
-
-        activePower = Instantiate(prefabs.list[(int)activePowerType],
-                                   info.transform.position, Quaternion.identity) as GameObject;
-        Destroy(activePower.GetComponent<Power>());
-        //GameObject powerBoard = GameObject.Find("PowerBoard");
-        //powerBoard.GetComponent<SpriteRenderer>().sprite = (Sprite) (activePower.name + "Icon");
-	}
+        activeInfo = sender.GetComponent<ButtonInfo>();
+        Sprite sprite = null;
+        SpriteRenderer sprr = GameObject.Find("PowerBoard").GetComponent<SpriteRenderer>();
+        if (icons.TryGetValue(activeInfo.associatedPower.type, out sprite))
+        {
+            sprr.sprite = sprite;
+        }
+   	}
 
     /* PowerCircleClick - Code was previously in PowerButtonClick*/
     /* If the circle is filled with a power, and the circle is clicked, generate visual */
     public void PowerCircleClick(GameObject sender)
     {
-        ButtonInfo info = sender.GetComponent<ButtonInfo>();
-        print(info.associatedPower.name);
         //Checks if we still have any left before doing anything.
-        if (info.associatedPower.quantity > 0)
+        
+        print(activeInfo.associatedPower.name);
+        //Checks if we still have any left before doing anything.
+        if (activeInfo.associatedPower.quantity > 0)
         {
-            SpawnPowerVisual(info);
+            SpawnPowerVisual(activeInfo);
             FollowMouse();
         }
         //sender.GetComponent<UIButton>().isEnabled = false;
