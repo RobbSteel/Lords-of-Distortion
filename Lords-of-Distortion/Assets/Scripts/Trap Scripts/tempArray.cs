@@ -14,8 +14,10 @@ public class tempArray : MonoBehaviour {
     public Sprite wind;
     private UISprite test;
     private UILabel testLabel;
+
     // Use this for initialization
-	void Start () {
+	void Start () 
+    {
         icons = new Dictionary<PowerType, Sprite>();
         icons.Add(PowerType.STICKY, glue);
         icons.Add(PowerType.SMOKE, smoke);

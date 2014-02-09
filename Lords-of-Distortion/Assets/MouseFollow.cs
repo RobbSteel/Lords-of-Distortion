@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class MouseFollow : MonoBehaviour {
-    private Camera camera;
+    public Camera camera;
    
 
 	// Use this for initialization
 	void Start ()
     {
-	    camera = Camera.main;
+	    //camera = Camera.main;
 	}
 
 	// Update is called once per frame

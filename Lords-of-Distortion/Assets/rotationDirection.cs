@@ -3,63 +3,44 @@ using System.Collections;
 
 public class rotationDirection : MonoBehaviour {
 
-    public Material mat;
+    private bool rotationEnabled = false;
 
-    private int clicks = 0;
-    private int lrLength = 2;
-
-    private bool lrCreated = false;
-
+    private Camera cam;
     private Vector3 firstClick;
     private Vector3 aimTowards;
-
-    private LineRenderer lineRenderer;
-
+    
 	// Use this for initialization
-	void Awake () 
+	void Start () 
     {
-        /*lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.SetWidth(.1f, .1f);
-        lineRenderer.material = mat;
-        lineRenderer.sortingLayerName = "Player";
-        lineRenderer.sortingOrder = 1;*/
+        cam = GameObject.Find("MouseCamera").camera;
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
+        //Deals with rotation for line
         Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
-        Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector3 lookPos = cam.ScreenToWorldPoint(mousePos);
         lookPos = lookPos - transform.position;
         float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        
-        /*if(Input.GetMouseButtonUp(0) && clicks == 0)
+ 
+        //Creates the dotted line at first click
+        if(Input.GetMouseButtonUp(0) && !rotationEnabled)
         {
             firstClick = Input.mousePosition;
             firstClick.z = 10.0f;
-            clicks++;
+            GameObject dottedLine = (GameObject)Instantiate(Resources.Load("DottedLine"));
+            dottedLine.transform.position = cam.ScreenToWorldPoint(mousePos);
+            rotationEnabled = true;
         }
-        if(clicks == 1)
+ 
+        //Destroys the dotted line at second click.
+        else if(Input.GetMouseButtonUp(0) && rotationEnabled)
         {
-            if(!lrCreated)
-            { 
-                lineRenderer.SetPosition(0, firstClick);
-                lrCreated = true;
-            }
-            if(lrCreated)
-            { 
-                Vector3 mousePos = Input.mousePosition;
-                mousePos.z = 10.0f;
-                lineRenderer.SetPosition(1, Camera.main.ScreenToWorldPoint(mousePos));
-            }
+            Destroy(GameObject.Find("DottedLine(Clone)"));
+            rotationEnabled = false;
         }
-        if(Input.GetMouseButtonUp(0) && clicks == 1)
-        {
-            LineRenderer.Destroy(lineRenderer);
-            lrCreated = false;
-            clicks = 0;
-        }*/
         
 	}
 }
