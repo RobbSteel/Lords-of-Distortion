@@ -33,15 +33,33 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	[RPC]
-	void NotifyPlayerDied(){
+	void NotifyPlayerDied(NetworkMessageInfo info){
 		livePlayers--;
-		if(livePlayers == 0 && Network.isServer){
-			print ("No more players");
+		if(Network.isServer){
 
-			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
-			finishgame = true;
-
+			PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(info.sender);
+			deadPlayerStats.score = CalculateScore();
+			//Tell everyone this player's scores.
+			networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, info.sender);
+			if(livePlayers == 0){
+				print ("No more players");
+				//Sets a bool that will be checked by the timer script "Countdown" for game finishing
+				finishgame = true;
+			}
 		}
+	}
+		
+	
+	[RPC] 
+	void SynchronizeScores(int score, NetworkPlayer playerToScore){
+		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(playerToScore);
+		deadPlayerStats.score = score;
+	}
+
+	void LostPlayer(GameObject deadPlayer){
+		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
+		livePlayers--;
+		sessionManager.KillPlayer(deadPlayer);
 	}
 
 	/*Clients request this fucntion on the server for every power. After that the server tells every
@@ -103,11 +121,6 @@ public class ArenaManager : MonoBehaviour {
 		Controller2D.onDeath -= LostPlayer;
 	}
 
-	void LostPlayer(GameObject deadPlayer){
-		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
-		NotifyPlayerDied();
-		sessionManager.KillPlayer(deadPlayer);
-	}
 
 	void Awake(){
 		beginTime = float.PositiveInfinity;
@@ -241,6 +254,32 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 	}
+	//Calculates score based on the number of players remaining when you die, saves it in PSinfo
+	public int CalculateScore(){
+		
+		int score = 0;
+		
+		if(livePlayers == 0){
+			
+			score += 10;
+			
+		} else if(livePlayers == 1){
+			
+			score += 8;
+			
+		} else if(livePlayers == 2){
+			
+			score += 6;
+			
+		} else if(livePlayers == 3){
+			
+			score += 4;
+		}
+
+		return score;
+	}
+
+
 
 	void DeactivateLordScreen(){
 		//lordScreenUI.SetActive( false );

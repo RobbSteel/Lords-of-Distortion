@@ -200,31 +200,6 @@ public class Controller2D : MonoBehaviour {
         }
     }
 
-	//Calculates score based on the number of players remaining when you die, saves it in PSinfo
-	public void CalculateScore(){
-		
-		
-		var playersleft = GameObject.FindGameObjectsWithTag("Player");
-		
-		if(playersleft.Length == 1){
-			
-			infoscript.score += 10;
-			
-		} else if(playersleft.Length == 2){
-			
-			infoscript.score += 8;
-			
-		} else if(playersleft.Length == 3){
-			
-			infoscript.score += 6;
-			
-		} else if(playersleft.Length == 4){
-			
-			infoscript.score += 4;
-		}
-		
-		
-	}
 
 
 	public void Die(){
@@ -233,8 +208,6 @@ public class Controller2D : MonoBehaviour {
 			//Spawns the spirit upon player death
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
-
-			CalculateScore();
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*/
