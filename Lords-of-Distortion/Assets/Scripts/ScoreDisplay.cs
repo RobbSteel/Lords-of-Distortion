@@ -77,6 +77,8 @@ public class ScoreDisplay : MonoBehaviour {
 
 	[RPC]
 	void DisplayScores(){
+		if(networkView.isMine)
+			return;
 		print ("MERRRP");
 		ShowScoresLocally();
 
