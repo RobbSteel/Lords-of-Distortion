@@ -58,7 +58,7 @@ public class LobbyGUI : MonoBehaviour {
 			{
 				Network.RemoveRPCsInGroup(0);
 				Network.RemoveRPCsInGroup(1);
-				sessionManager.LoadNextLevel();
+				sessionManager.LoadNextLevel(false);
 			}
 		}
 		/*

@@ -137,17 +137,22 @@ public class SessionManager : MonoBehaviour {
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);	
 	}
 
-	public void LoadNextLevel(){
+	//load level now takes a bool argument to indicate whether the score scene should be loaded.
+	public void LoadNextLevel(bool scorescreen){
 		string level;
 		++arenaIndex;
+		if(scorescreen){
+				level = "PointsScreen";
+		} else {
 
 		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 			level = "LobbyArena";
 			arenaIndex = -1;
+	
+		} else {
+			level = arenas[arenaIndex];
 		}
-
-		else level = arenas[arenaIndex];
-
+	}
 		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
 	}
 

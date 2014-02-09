@@ -93,7 +93,7 @@ public class countdown : MonoBehaviour {
 
 				if(Network.isServer && !once){
 					once = true;
-					sessionManager.LoadNextLevel();
+					sessionManager.LoadNextLevel(true);
 				}
 			}
 			
