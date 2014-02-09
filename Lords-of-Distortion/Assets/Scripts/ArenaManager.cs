@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Priority_Queue;
 
 public class ArenaManager : MonoBehaviour {
-	public Transform[] Powers;
+	PowerPrefabs powerPrefabs;
 
 	const float PLACEMENT_TIME = 15f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
@@ -121,6 +121,7 @@ public class ArenaManager : MonoBehaviour {
 		playersReady = new List<NetworkPlayer>();
 		allSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		powerPrefabs = GetComponent<PowerPrefabs>();
 	}
 
 	// Use this for initialization
@@ -210,7 +211,7 @@ public class ArenaManager : MonoBehaviour {
 				PowerSpawn spawn = allSpawns.Dequeue();
             	//convert power type to an int, which is an index to the array of power prefabs.
 				print ("Spawning a " + spawn.type);
-				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
+				Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
 			}
 		}
 	}

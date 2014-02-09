@@ -11,6 +11,7 @@ public class MouseFollow : MonoBehaviour {
 	    camera = Camera.main;
 	}
 
+	//TODO: Instead of re-centering object, retain offset from mouse.
 	// Update is called once per frame
 	void Update ()
     {
