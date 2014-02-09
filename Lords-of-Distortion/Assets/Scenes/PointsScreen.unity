@@ -86,7 +86,6 @@ GameObject:
   - 92: {fileID: 30498029}
   - 124: {fileID: 30498028}
   - 81: {fileID: 30498027}
-  - 114: {fileID: 30498032}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -155,20 +154,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!114 &30498032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 30498026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43cc375a6daf3a74095b9a0d09572198, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ScoreLabel: {fileID: 100002, guid: 075a02053827de14fac6d1bf54f2c04e, type: 2}
-  PlayerLabel: {fileID: 100002, guid: 815014eca346da9479b9236d494bec9a, type: 2}
-  timeleft: 10
 --- !u!1 &383739530
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +246,60 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
   m_OcclusionCulling: 1
+--- !u!1 &943059243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 943059246}
+  - 148: {fileID: 943059245}
+  - 114: {fileID: 943059244}
+  m_Layer: 0
+  m_Name: PointsCalculator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &943059244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 943059243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cc375a6daf3a74095b9a0d09572198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScoreLabel: {fileID: 100002, guid: 075a02053827de14fac6d1bf54f2c04e, type: 2}
+  PlayerLabel: {fileID: 100002, guid: 815014eca346da9479b9236d494bec9a, type: 2}
+  timeleft: 5
+--- !u!148 &943059245
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 943059243}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 943059246}
+  m_ViewID:
+    m_ID: 2
+    m_Type: 1
+--- !u!4 &943059246
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 943059243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1585381394
 GameObject:
   m_ObjectHideFlags: 0
