@@ -130,16 +130,30 @@ public class PlacementUI : MonoBehaviour {
 
 	/*The button that was pressed is passed in as a GameObject*/
 	public void PowerButtonClick(GameObject sender){
-		ButtonInfo info = sender.GetComponent<ButtonInfo>();
-		print(info.associatedPower.name);
-		//Checks if we still have any left before doing anything.
-		if(info.associatedPower.quantity > 0){
-			SpawnPowerVisual(info);
-			FollowMouse();
-		}
-		//sender.GetComponent<UIButton>().isEnabled = false;
+        ButtonInfo info = sender.GetComponent<ButtonInfo>();
+        activePowerType = info.associatedPower.type;
+
+        activePower = Instantiate(prefabs.list[(int)activePowerType],
+                                   info.transform.position, Quaternion.identity) as GameObject;
+        Destroy(activePower.GetComponent<Power>());
+        //GameObject powerBoard = GameObject.Find("PowerBoard");
+        //powerBoard.GetComponent<SpriteRenderer>().sprite = (Sprite) (activePower.name + "Icon");
 	}
 
+    /* PowerCircleClick - Code was previously in PowerButtonClick*/
+    /* If the circle is filled with a power, and the circle is clicked, generate visual */
+    public void PowerCircleClick(GameObject sender)
+    {
+        ButtonInfo info = sender.GetComponent<ButtonInfo>();
+        print(info.associatedPower.name);
+        //Checks if we still have any left before doing anything.
+        if (info.associatedPower.quantity > 0)
+        {
+            SpawnPowerVisual(info);
+            FollowMouse();
+        }
+        //sender.GetComponent<UIButton>().isEnabled = false;
+    }
 
 	//Do a raycast to determine if we've clicked on a power on screen.
 	private bool SelectExistingPower(){
