@@ -33,7 +33,6 @@ public class LordSpawnManager : MonoBehaviour{
 		PowerSpawn spawn = new PowerSpawn();
 		if(powertype == "Fireball"){
 			spawn.type = PowerSpawn.PowerType.FIREBALL;
-			
 		}
 
 		if(powertype == "Sticky Trap"){
