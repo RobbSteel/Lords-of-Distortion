@@ -224,6 +224,7 @@ public class PlacementUI : MonoBehaviour {
 		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
 			state = PlacementState.ChangingDirection;
 			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
+            activePower.AddComponent<powerRotate>();
 			//print ("Select Direction");
 		}
 		else {
@@ -246,6 +247,7 @@ public class PlacementUI : MonoBehaviour {
 		spawn.direction = direction;
 		//print (direction);
 		Destroy(dottedLineInstance);
+        Destroy(activePower.GetComponent<powerRotate>());
 
 		//Return buttons to normal
 		state = PlacementState.Default;
