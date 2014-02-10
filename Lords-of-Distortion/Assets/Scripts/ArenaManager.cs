@@ -26,8 +26,15 @@ public class ArenaManager : MonoBehaviour {
 	
 	private GameObject timer;
 	private PowerSpawn prevYield;
-	
+
+	/*
+     * Commenting out LordSpawnManager and other relating parts
+     * as we are not using it anymore 
+     */
 	LordSpawnManager lordsSpawnManager;
+
+    PlacementUI placementUI;
+
 	[RPC]
 	void NotifyBeginTime(float time){
 		Debug.Log ("start timer");
@@ -183,13 +190,19 @@ public class ArenaManager : MonoBehaviour {
 		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
 			print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
 			PlayMenuTween();
-			lordsSpawnManager.enabled = false;
+
+			/* Commented out to swap with PlacementUI */
+            
+            //lordsSpawnManager.enabled = false;
 			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
-			if(!lordsSpawnManager.readyToSend)
-				lordsSpawnManager.FinalizePowers(this.gameObject);
-			lordsSpawnManager.DestroyPowers();
-			foreach(PowerSpawn power in  lordsSpawnManager.powerSpawns.Values){
-				if(Network.isServer){
+			
+            //if(!lordsSpawnManager.readyToSend)
+			//	lordsSpawnManager.FinalizePowers(this.gameObject);
+			
+            //lordsSpawnManager.DestroyPowers();
+			
+            foreach(PowerSpawn power in  lordsSpawnManager.powerSpawns.Values){
+                if(Network.isServer){
 					AddPowerSpawnLocally((int)power.type, power.position, power.spawnTime);
 				}
 				else {
@@ -197,9 +210,11 @@ public class ArenaManager : MonoBehaviour {
 					                 (int)power.type, power.position, power.spawnTime);
 				}
 			}
+
 			if(Network.isServer){
 				SentAllMyPowers();
 			}
+
 			else
 				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
 			
@@ -249,8 +264,9 @@ public class ArenaManager : MonoBehaviour {
 	
 	private void SetUpLordScreenTween(){
 		played = false;
-		lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
-		lordScreenUI = GameObject.Find( "LordsScreen" );
+		//lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
+        placementUI = GameObject.Find("ArenaOne").GetComponent<PlacementUI>();
+        lordScreenUI = GameObject.Find("PlacementRoot");
 		lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = false;
 	}
 	
