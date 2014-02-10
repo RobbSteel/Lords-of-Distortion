@@ -9,8 +9,9 @@ public class countdown : MonoBehaviour {
 	public float powerPlaceTimer;
 	public float fightCountdown;
 	public float postmatchtimer;
+	public float matchTime = 30f;
 	private bool once = false;
-	private int CurrentTimer;
+	public int CurrentTimer;
 	public ArenaManager arenaManager;
 	private Vector3 defaultTimerPosition;
 	// Update is called once per frame
@@ -65,7 +66,9 @@ public class countdown : MonoBehaviour {
 			myTimer -= Time.deltaTime;
 			
 			if( myTimer <= 0 ){
+
 				resetTimer( 1 );
+
 				this.transform.localPosition = defaultTimerPosition;
 			}
 		}
@@ -116,6 +119,11 @@ public class countdown : MonoBehaviour {
 	void resetTimer( float startTime ){
 		myTimer = startTime;
 		CurrentTimer++;
+	}
+
+	public float GetTimer()
+	{
+		return myTimer;
 	}
 	
 	
