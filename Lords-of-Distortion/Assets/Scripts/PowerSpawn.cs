@@ -16,7 +16,7 @@ public class PowerSpawn : PriorityQueueNode {
 	public PowerType type;
 	public float spawnTime;
 	public Vector3 position;
-	public Vector3 direction;
+	public Vector3 direction = Vector3.zero;
 	public NetworkPlayer owner;
 
 

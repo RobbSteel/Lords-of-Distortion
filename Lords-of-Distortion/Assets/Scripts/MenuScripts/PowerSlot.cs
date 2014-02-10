@@ -3,12 +3,18 @@ using System.Collections;
 
 public class PowerSlot : MonoBehaviour {
 
+	public PowerSpawn linkedSpawn;
+
+	public delegate void KeyPress(PowerSpawn spawnInfo);
+	public static event KeyPress powerKey;
+
 	UILabel keyLabel;
 	UISprite powerIcon;
 	string keyText;
 
-	public void Initialize(string key, Sprite sprite){
+	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
 		keyText = key;
+		this.linkedSpawn = linkedSpawn;
 		keyLabel = transform.Find("TriggerKey").GetComponent<UILabel>();
 		keyLabel.text = key;
 		powerIcon = GetComponent<UISprite>();
@@ -16,16 +22,11 @@ public class PowerSlot : MonoBehaviour {
 	}
 
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 	// Check for key press and call event .
 	void Update () {
 		if(Input.GetKeyDown(keyText)){
 			print("Pressed " + keyText + ", try to spawn that power");
+			powerKey(linkedSpawn);
 		}
 	}
-
 }

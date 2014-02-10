@@ -3,21 +3,19 @@ using System.Collections;
 
 public class FireBall : Power
 {
-    bool aiming;
-	public float speed = 0.1f;
-    private GameObject fireball;
-    public int mouseClicks = 0;
-    public Vector3 direction = new Vector3(0,0,0);
-
-	void Start ()
-	{
-        aiming = false;
-	}
-    
+	public float speed; 
 
 	// Update is called once per frame
     void Update ()
 	{
+		//Speed should not be dependant on framerate
+		transform.Translate(direction * speed * Time.deltaTime);
+		//transform.up = direction;
+		//float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+		//transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		//transform.up = direction;
+
+		/*
         if (!aiming)// && mouseClicks == 2)
         { 
             var mousePos = Input.mousePosition;

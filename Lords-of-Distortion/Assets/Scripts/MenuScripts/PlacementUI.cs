@@ -26,8 +26,8 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-	List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
-	List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
+	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
 
 	PowerPrefabs prefabs;
 
@@ -86,15 +86,13 @@ public class PlacementUI : MonoBehaviour {
 
 
 	//Called when we want to tween away our GUI.
-	void Finalize(){
-		GameObject UIRoot = GameObject.Find ("UI Root");
-
+	public void Finalize(){
 		int i = 0;
 		foreach(PowerSpawn spawn in selectedTriggers){
 			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
 			Sprite sprite = null;
 			icons.TryGetValue(spawn.type, out sprite);
-			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite);
+			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
 			i++;
 		}
 		TriggerGrid.Reposition();
@@ -152,7 +150,6 @@ public class PlacementUI : MonoBehaviour {
     /* If the circle is filled with a power, and the circle is clicked, generate visual */
     public void PowerCircleClick(GameObject sender)
     {
-        //Checks if we still have any left before doing anything.
         
         print(activeInfo.associatedPower.name);
         //Checks if we still have any left before doing anything.
@@ -225,7 +222,6 @@ public class PlacementUI : MonoBehaviour {
 			state = PlacementState.ChangingDirection;
 			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
             activePower.AddComponent<powerRotate>();
-			//print ("Select Direction");
 		}
 		else {
 			state = PlacementState.Default;
@@ -240,9 +236,10 @@ public class PlacementUI : MonoBehaviour {
 		placedPowers.TryGetValue(activePower, out spawn);
 
 		Vector3 mousePosition = Camera.main.ScreenToWorldPoint
-			(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.0f));
+			(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
 
 		Vector3 direction = Vector3.Normalize(mousePosition - spawn.position);
+//		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
 		direction.z = 0f;
 		spawn.direction = direction;
 		//print (direction);
@@ -258,6 +255,12 @@ public class PlacementUI : MonoBehaviour {
 	private void GridEnabled(bool state){
 		foreach(UIButton button in buttons){
 			button.isEnabled = state;
+		}
+	}
+
+	public void DestroyPowers(){
+		foreach(var pair in placedPowers){
+			Destroy(pair.Key);
 		}
 	}
 }

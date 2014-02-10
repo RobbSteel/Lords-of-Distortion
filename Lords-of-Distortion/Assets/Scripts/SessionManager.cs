@@ -11,7 +11,7 @@ public class SessionManager : MonoBehaviour {
 	public PSinfo gameInfo;
 
 	public bool finishedLoading = false;
-	const int GAMEPLAY = 0;
+	public const int GAMEPLAY = 0;
 	const int SETUP = 1;
 	private int playerCounter;
 	//public TimeManager timeManager;

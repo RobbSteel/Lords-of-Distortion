@@ -210,10 +210,11 @@ public class Controller2D : MonoBehaviour {
 			dead = true;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
-			the boolean to true*/
+			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
 			var deadlordscript = deadlord.GetComponent<DeadLord>();
 			deadlordscript.isDead = true;
+			*/
 			Debug.Log ("I died again");
 
 			//Here we call whatever events are subscribed to us.
