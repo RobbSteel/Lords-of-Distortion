@@ -23,26 +23,29 @@ public class ScoreDisplay : MonoBehaviour {
 
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		infoscript = sessionManager.gameInfo;
-		
+		var listed = infoscript.players;
+		print(listed);
+		print(listed.Count);
+		print(infoscript.GetPlayerStats(listed[0]).score);
+
+		for(int i = 0; i < listed.Count; i++){
+
+			var score = infoscript.GetPlayerStats(listed[i]).score;
+			var playername = infoscript.GetPlayerOptions(listed[i]).username;
+			var playernumber = i + 1;
+			ShowScoresLocally(score, playername, playernumber);
+		}
+
 		
 		//Goes into server loop if hosting and else loop if not at the moment
 		
 		
-		
-		if(Network.isServer){
-			print("well then");
-			networkView.RPC("DisplayScores", RPCMode.Others);
-		} else {
-			
-			networkView.RPC ("NotifyDisplayScores", RPCMode.Server);
-			ShowScoresLocally();
-		}
 
 	}
 
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(){
+	void ShowScoresLocally(int score, string playername, int playernumber){
 		print ("gettting local");
 			var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
 			var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
@@ -51,16 +54,16 @@ public class ScoreDisplay : MonoBehaviour {
 			playerlabel.transform.parent = GameObject.Find("UI Root").transform;
 			scorelabel.transform.localScale = new Vector3(1, 1, 1);
 			playerlabel.transform.localScale = new Vector3(1, 1, 1);
-			scorelabel.transform.localPosition = new Vector2(-100, 0+(200*infoscript.playernumb));
-			playerlabel.transform.localPosition = new Vector2(100, 0+(200*infoscript.playernumb));
+			scorelabel.transform.localPosition = new Vector2(-100, 100+(-100*playernumber));
+			playerlabel.transform.localPosition = new Vector2(100, 100+(-100*playernumber));
 			
 			print (infoscript.playernumb);
 
 			
 			var scoretext = scorelabel.GetComponent<UILabel>();
 			var playertext = playerlabel.GetComponent<UILabel>();
-			scoretext.text = ((infoscript.score).ToString()) + " points";
-			playertext.text = infoscript.playername;
+			scoretext.text = score.ToString() + " points";
+			playertext.text = playername;
 
 	
 
@@ -68,22 +71,6 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 
-	[RPC]
-	void NotifyDisplayScores(){
-
-		networkView.RPC("DisplayScores", RPCMode.Others);
-		ShowScoresLocally();
-	}
-
-	[RPC]
-	void DisplayScores(){
-		if(networkView.isMine)
-			return;
-		print ("MERRRP");
-		ShowScoresLocally();
-
-
-	}
 	
 
 	// Update is called once per frame
