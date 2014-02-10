@@ -9,17 +9,25 @@ public class StunBar : MonoBehaviour {
 	public float regenAmount = 15f;
 	public float regenCooldown = 5f;
 	public float regenTimer = 0f;
-	public float stunTimer;
+	//public float stunTimer;
 	public float stunWait;
 	public float UIoffsetX;
 	public float UIoffsetY;
+	public float recoverRate;
 
 	private Controller2D playerControl;		// Reference to the PlayerControl script.
 	private GameObject UI;					// Reference UI GUI
 	private UISlider stunBarUI;				// Reference UI slider values
 	private Camera levelCamera;
+	private bool horizontalPressedUp;
+	private bool horizontalPressedDown;
+	private int horizontalMoveCheck;		//tracks horizontal current key
 	//setup references and create UI stunbar
+
 	void Awake(){
+		recoverRate = 10f;
+		horizontalPressedUp = false;
+		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
@@ -38,6 +46,40 @@ public class StunBar : MonoBehaviour {
 		UpdateHealthBar();
 		CheckIfStunned();
 		UpdateStunBarPosition();
+	}
+
+	//this function acts as unitys input keydown and up for "Horizontal" input
+	//**unity does not have this functionality yet needed to do this way 
+	//**because if we change movement for keys it wont apply correctly 
+	void StunRecover(){
+		horizontalMoveCheck = (int)Input.GetAxisRaw("Horizontal");
+		if( horizontalMoveCheck < 0 ){
+			if(!horizontalPressedDown){
+				currentStunMeter -= recoverRate;
+				horizontalPressedDown = true;
+			}
+			if( horizontalPressedUp ){
+				horizontalPressedUp = false;
+			}
+		}
+		else if( horizontalMoveCheck > 0 ){
+			if( !horizontalPressedDown){
+				currentStunMeter -= recoverRate;
+				horizontalPressedDown = true;
+			}
+			if( horizontalPressedUp ){
+				horizontalPressedUp = false;
+			}
+		}
+		else if( horizontalMoveCheck == 0 ){
+			if( horizontalPressedUp ){
+				horizontalPressedUp = false;
+			}
+			if( horizontalPressedDown ){
+				horizontalPressedDown = false;
+			}
+		}
+
 	}
 
 	//sets position of stunbar correctly on player
@@ -78,16 +120,13 @@ public class StunBar : MonoBehaviour {
 		ApplyDamage(dmgTaken);
 	}
 
-	//checks if player is stun then applies timer and grants player actions once time has past
+	//checks if player is stun and then applies stunRecover
 	private void CheckIfStunned(){
 		if( playerControl.stunned == true ){
-			stunTimer += Time.deltaTime;
-
-			if( stunTimer >= stunWait ){
+			StunRecover();
+			if( currentStunMeter <= 0 ){
 				playerControl.stunned = false;
 				playerControl.anim.SetBool("stunned", false);
-
-				stunTimer = 0;
 				currentStunMeter = 0;
 			}
 		}
@@ -97,13 +136,12 @@ public class StunBar : MonoBehaviour {
 		playerControl.stunned = true;
 		playerControl.anim.SetBool("stunned", true);
 		audio.Play ();
-		stunTimer = 0;
 	}
 	
-	public void Stun( float stunTime ){
+	public void Stun( float newRecoverRate ){
 		playerControl.stunned = true;
-		stunTimer = 0;
-		stunWait = stunTime;
+		currentStunMeter = maxStun;
+		recoverRate = newRecoverRate;
 	}
 
 	//Only runs if your stun bar is injured
@@ -137,10 +175,6 @@ public class StunBar : MonoBehaviour {
 	//Ondestroy delete Stunbar Ui
 	void OnDestroy(){
 		Destroy( UI );
-	}
-
-	void OnCollisionEnter2D( Collision2D col ){
-		
 	}
 
 } 

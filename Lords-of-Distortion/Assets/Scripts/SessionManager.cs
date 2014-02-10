@@ -69,6 +69,7 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
+		gameInfo.playernumb = playerNumber;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		gameInfo.AddPlayer(original, options, stats);
@@ -137,17 +138,22 @@ public class SessionManager : MonoBehaviour {
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);	
 	}
 
-	public void LoadNextLevel(){
+	//load level now takes a bool to indicate whether the score scene should be loaded.
+	public void LoadNextLevel(bool scorescreen){
 		string level;
 		++arenaIndex;
+		if(scorescreen){
+				level = "PointsScreen";
+		} else {
 
 		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 			level = "LobbyArena";
 			arenaIndex = -1;
+	
+		} else {
+			level = arenas[arenaIndex];
 		}
-
-		else level = arenas[arenaIndex];
-
+	}
 		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
 	}
 

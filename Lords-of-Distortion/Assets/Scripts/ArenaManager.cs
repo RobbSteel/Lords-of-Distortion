@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿
+
+using UnityEngine;
 using System.Collections.Generic;
 using Priority_Queue;
 
@@ -14,39 +16,66 @@ public class ArenaManager : MonoBehaviour {
 	
 	HeapPriorityQueue<PowerSpawn> allSpawns;
 	List<NetworkPlayer> playersReady;
-
+	
 	float beginTime;
 	int? livePlayers;
 	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
-
+	
 	private GameObject timer;
-    private PowerSpawn prevYield;
-
+	private PowerSpawn prevYield;
+	
 	LordSpawnManager lordsSpawnManager;
 	[RPC]
 	void NotifyBeginTime(float time){
 		Debug.Log ("start timer");
 		beginTime = time;
 	}
-
-	[RPC]
-	void NotifyPlayerDied(){
-		livePlayers--;
-		if(livePlayers == 0 && Network.isServer){
+	
+	
+	void ServerDeathHandler(NetworkPlayer player){
+		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(player);
+		deadPlayerStats.score = CalculateScore();
+		//Tell everyone this player's scores.
+		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
+		if(livePlayers == 0){
 			print ("No more players");
-
 			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
 			finishgame = true;
-
 		}
 	}
-
+	
+	//Called only on the server.
+	[RPC]
+	void NotifyPlayerDied(NetworkMessageInfo info){
+		livePlayers--;
+		if(Network.isServer){
+			ServerDeathHandler(info.sender);
+		}
+	}
+	
+	
+	[RPC]
+	void SynchronizeScores(int score, NetworkPlayer playerToScore){
+		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(playerToScore);
+		deadPlayerStats.score = score;
+	}
+	
+	//Called locally on every client including server when the player you control dies.
+	void LostPlayer(GameObject deadPlayer){
+		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
+		livePlayers--;
+		if(Network.isServer){
+			ServerDeathHandler(Network.player);
+		}
+		sessionManager.KillPlayer(deadPlayer);
+	}
+	
 	/*Clients request this fucntion on the server for every power. After that the server tells every
-	 other player*/
-
+             other player*/
+	
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
 		PowerSpawn requested =  new PowerSpawn();
@@ -55,7 +84,7 @@ public class ArenaManager : MonoBehaviour {
 		requested.spawnTime = time;
 		allSpawns.Enqueue(requested, time);
 	}
-
+	
 	private void CheckIfAllSynchronized(){
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
 			print ("Spam every player with every powerinfo");
@@ -68,7 +97,7 @@ public class ArenaManager : MonoBehaviour {
 			networkView.RPC("FinishedSettingPowers", RPCMode.Others);
 		}
 	}
-
+	
 	//Called on the server.
 	[RPC]
 	void SentAllMyPowers(NetworkMessageInfo info){
@@ -76,7 +105,7 @@ public class ArenaManager : MonoBehaviour {
 		CheckIfAllSynchronized();
 		print ("Server received power spawn from " + sessionManager.gameInfo.GetPlayerOptions(info.sender).username);
 	}
-
+	
 	void SentAllMyPowers(){
 		if(!Network.isServer){
 			Debug.Log ("Don't call this function on the client");
@@ -85,30 +114,25 @@ public class ArenaManager : MonoBehaviour {
 		playersReady.Add(Network.player);
 		CheckIfAllSynchronized();
 	}
-
+	
 	[RPC]
 	void FinishedSettingPowers(){
 		powersSynchronized = true;
 	}
-
+	
 	void OnEnable(){
 		//add our function as an event to player
 		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
-		 *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
-		 */
+                     *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
+                     */
 		Controller2D.onDeath += LostPlayer;
 	}
-
+	
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
 	}
-
-	void LostPlayer(GameObject deadPlayer){
-		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
-		NotifyPlayerDied();
-		sessionManager.KillPlayer(deadPlayer);
-	}
-
+	
+	
 	void Awake(){
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
@@ -123,30 +147,30 @@ public class ArenaManager : MonoBehaviour {
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		powerPrefabs = GetComponent<PowerPrefabs>();
 	}
-
+	
 	// Use this for initialization
 	void Start () {
 		//this wont print because finishedloading is only true once all the start functions are called
 		//in every object of the scnene.
 		if(sessionManager.finishedLoading)
-			Debug.Log("ready"); 
+			Debug.Log("ready");
 	}
 	/*
-	 * 1. Load Level Geometry
-	 * 2. Allow players to place powers. (Spawn instance of Placement UI)
-	 * 3. Notify players of how much time they have to place powers.
-	 * 4. When time is over, submit power RPCs to server. 
-	 * 5. Server tells all other players about spawn locations and times. (RPC methods should be as 
-	 * generic as possible, but we'll need different ones if certain powers have extra parameters).
-	 * 6. Have an event queue similar to the one in NetworkController.
-	 * 7. Players themselves determine if they're hit or not.
-	 * */
-
+             * 1. Load Level Geometry
+             * 2. Allow players to place powers. (Spawn instance of Placement UI)
+             * 3. Notify players of how much time they have to place powers.
+             * 4. When time is over, submit power RPCs to server.
+             * 5. Server tells all other players about spawn locations and times. (RPC methods should be as
+             * generic as possible, but we'll need different ones if certain powers have extra parameters).
+             * 6. Have an event queue similar to the one in NetworkController.
+             * 7. Players themselves determine if they're hit or not.
+             * */
+	
 	void OnNetworkLoadedLevel(){
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
-
+		
 		if(Network.isServer){
-
+			
 			Debug.Log ("start timer");
 			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
@@ -169,7 +193,7 @@ public class ArenaManager : MonoBehaviour {
 					AddPowerSpawnLocally((int)power.type, power.position, power.spawnTime);
 				}
 				else {
-					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, 
+					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
 					                 (int)power.type, power.position, power.spawnTime);
 				}
 			}
@@ -178,58 +202,58 @@ public class ArenaManager : MonoBehaviour {
 			}
 			else
 				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
-
+			
 			sentMyPowers = true;
 		}
-
+		
 		//the rest of the code doesn't run until powers are finalized.
 		if(!powersSynchronized)
 			return;
-
+		
 		if(livePlayers == null && Network.isServer){
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnLocations);
 		}
-
+		
 		//Spawn one power per frame, locally.
 		if(allSpawns.Count != 0){
 			float currentTime = TimeManager.instance.time;
 			print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.First.Priority));
-
+			
 			
 			//Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
-			 
-            //Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-            if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME + allSpawns.First.Priority && prevYield != allSpawns.First)
-            {
-                prevYield = allSpawns.First;
-                GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
-                Destroy(yield_sign, 1.0f);
-            }
-            
-
-            if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
+			
+			//Display yield sign .5 seconds before power spawns, and destroy it when power spawns
+			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME + allSpawns.First.Priority && prevYield != allSpawns.First)
+			{
+				prevYield = allSpawns.First;
+				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
+				Destroy(yield_sign, 1.0f);
+			}
+			
+			
+			if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allSpawns.Dequeue();
-            	//convert power type to an int, which is an index to the array of power prefabs.
+				//convert power type to an int, which is an index to the array of power prefabs.
 				print ("Spawning a " + spawn.type);
 				Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
 			}
 		}
 	}
-
+	
 	private void SetUpTimer(){
 		timer = GameObject.Find("timer");
 		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
 		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
 		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
 	}
-
+	
 	private void SetUpLordScreenTween(){
 		played = false;
 		lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
 		lordScreenUI = GameObject.Find( "LordsScreen" );
 		lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = false;
 	}
-
+	
 	//plays lords spawn menu tween and deactives the menu
 	private void PlayMenuTween(){
 		if( !played ){
@@ -237,14 +261,41 @@ public class ArenaManager : MonoBehaviour {
 			lordScreenUI.gameObject.GetComponent<TweenPosition>().eventReceiver = this.gameObject;
 			lordScreenUI.gameObject.GetComponent<TweenPosition>().callWhenFinished = "DeactivateLordScreen";
 			lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = true;
-
+			
 			Debug.Log("played tween");
 		}
-
+		
 	}
-
+	//Calculates score based on the number of players remaining when you die, saves it in PSinfo
+	public int CalculateScore(){
+		
+		int score = 0;
+		
+		if(livePlayers == 0){
+			
+			score += 10;
+			
+		} else if(livePlayers == 1){
+			
+			score += 8;
+			
+		} else if(livePlayers == 2){
+			
+			score += 6;
+			
+		} else if(livePlayers == 3){
+			
+			score += 4;
+		}
+		
+		return score;
+	}
+	
+	
+	
 	void DeactivateLordScreen(){
 		//lordScreenUI.SetActive( false );
 		Debug.Log( "deactivate LS" );
 	}
 }
+

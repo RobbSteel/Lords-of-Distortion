@@ -8,6 +8,9 @@ public class PSinfo : MonoBehaviour {
 	public string servername;
 	public string choice;
 	public int servernumb;
+	public int score = 0;
+	public int playernumb;
+
 
 	//We want each player to have a list of his own options.
 	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;

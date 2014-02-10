@@ -24,7 +24,7 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
-
+	public PSinfo infoscript;
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
@@ -47,6 +47,8 @@ public class Controller2D : MonoBehaviour {
 		canJump = true;
 		facingRight = true;
 		myHook = GetComponent<Hook>();
+		var psinfo = GameObject.Find("PSInfo");
+		infoscript = psinfo.GetComponent<PSinfo>();
 	}
 
 	// Update is called once per frame
@@ -104,7 +106,6 @@ public class Controller2D : MonoBehaviour {
 
 			
 			float move = Input.GetAxis ( "Horizontal" );
-
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
@@ -198,6 +199,8 @@ public class Controller2D : MonoBehaviour {
             power.PowerActionExit(gameObject, this);
         }
     }
+
+
 
 	public void Die(){
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
