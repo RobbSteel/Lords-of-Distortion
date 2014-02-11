@@ -78,6 +78,12 @@ public class ArenaManager : MonoBehaviour {
 			ServerDeathHandler(Network.player);
 		}
 		sessionManager.KillPlayer(deadPlayer);
+
+		//brign up the dead player placement screen.
+		placementUI.SwitchToLive();
+		placementUI.enabled = true;
+		PlayMenuTween(false);
+
 	}
 	
 	/*Clients request this fucntion on the server for every power. After that the server tells every
@@ -126,22 +132,8 @@ public class ArenaManager : MonoBehaviour {
 	void FinishedSettingPowers(){
 		powersSynchronized = true;
 	}
-	
-	void OnEnable(){
-		//add our function as an event to player
-		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
-         *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
-		Controller2D.onDeath += LostPlayer;
-		PowerSlot.powerKey += SpawnTriggerPower;
 
-	}
-	
-	void OnDisable(){
-		Controller2D.onDeath -= LostPlayer;
-		PowerSlot.powerKey -= SpawnTriggerPower;
-	}
-	
-	
+
 	void Awake(){
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
@@ -165,15 +157,32 @@ public class ArenaManager : MonoBehaviour {
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready");
 	}
+
+
+	void OnEnable(){
+		//add our function as an event to player
+		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
+         *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
+		Controller2D.onDeath += LostPlayer;
+		PowerSlot.powerKey += SpawnTriggerPower;
+		placementUI.spawnNow += SpawnTriggerPower;
+	}
+
+	
+	void OnDisable(){
+		Controller2D.onDeath -= LostPlayer;
+		PowerSlot.powerKey -= SpawnTriggerPower;
+		placementUI.spawnNow -= SpawnTriggerPower;
+	}
 	/*
-             * 1. Load Level Geometry
-             * 2. Allow players to place powers. (Spawn instance of Placement UI)
-             * 3. Notify players of how much time they have to place powers.
-             * 4. When time is over, submit power RPCs to server.
-             * 5. Server tells all other players about spawn locations and times. (RPC methods should be as
-             * generic as possible, but we'll need different ones if certain powers have extra parameters).
-             * 6. Have an event queue similar to the one in NetworkController.
-             * 7. Players themselves determine if they're hit or not.* 
+       * 1. Load Level Geometry
+       * 2. Allow players to place powers. (Spawn instance of Placement UI)
+       * 3. Notify players of how much time they have to place powers.
+       * 4. When time is over, submit power RPCs to server.
+       * 5. Server tells all other players about spawn locations and times. (RPC methods should be as
+       * generic as possible, but we'll need different ones if certain powers have extra parameters).
+       * 6. Have an event queue similar to the one in NetworkController.
+       * 7. Players themselves determine if they're hit or not.* 
 	 */
 	
 	void OnNetworkLoadedLevel(){
@@ -234,7 +243,7 @@ public class ArenaManager : MonoBehaviour {
 	void Update () {
 		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
 			//print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
-			PlayMenuTween();
+			PlayMenuTween(true);
 			
             //if(!lordsSpawnManager.readyToSend)
 			//	lordsSpawnManager.FinalizePowers(this.gameObject);
@@ -289,10 +298,11 @@ public class ArenaManager : MonoBehaviour {
 	}
 	
 	//plays lords spawn menu tween and deactives the menu
-	private void PlayMenuTween(){
-		lordScreenUI.gameObject.GetComponent<TweenPosition>().eventReceiver = this.gameObject;
-		lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayForward();
-			
+	private void PlayMenuTween(bool forward){
+		if(forward)
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayForward();
+		else
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayReverse();
 		Debug.Log("played tween");
 	}
 

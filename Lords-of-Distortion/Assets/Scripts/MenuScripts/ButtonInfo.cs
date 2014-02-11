@@ -6,20 +6,23 @@ public class ButtonInfo : MonoBehaviour {
 	public InventoryPower associatedPower;
 	UILabel nameLabel;
 	UILabel quantityLabel;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	public void Initialize(InventoryPower power){
+	bool infinitePowers;
+
+	public void Initialize(InventoryPower power, bool infinity){
 		associatedPower = power;
 		nameLabel = transform.Find("PowerName").GetComponent<UILabel>();
 		quantityLabel = transform.Find("PowerQuantity").GetComponent<UILabel>();
 		nameLabel.text = associatedPower.name;
-		quantityLabel.text = associatedPower.quantity.ToString();
+		infinitePowers = infinity;
+		UpdateQuantity();
 	}
 
 	public void UpdateQuantity(){
-		quantityLabel.text = associatedPower.quantity.ToString();
+		if(!infinitePowers){
+			quantityLabel.text = associatedPower.quantity.ToString();
+		}
+		else
+			quantityLabel.text = "∞";
 	}
 
 }

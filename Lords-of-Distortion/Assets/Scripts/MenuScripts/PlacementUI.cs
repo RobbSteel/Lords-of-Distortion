@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlacementUI : MonoBehaviour {
+
+	public delegate void SpawnAction(PowerSpawn spawnInfo);
+	public event SpawnAction spawnNow;
+
+
 	//The prefab for the UI elements in grid.
 	public GameObject PowerEntry;
 	public GameObject PowerSlot;
@@ -41,6 +46,9 @@ public class PlacementUI : MonoBehaviour {
 		ChangingDirection,
 	}
 
+	//http://www.youtube.com/watch?v=eUFY8Zw0Bag
+	public bool live = false;
+
 
 	PlacementState state = PlacementState.Default;
 
@@ -67,26 +75,39 @@ public class PlacementUI : MonoBehaviour {
 		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Fireball"));
 	}
 
+
 	void Start(){
         cam = Camera.main;
         GameObject pb = GameObject.Find("PowerBoard");
         UIEventListener.Get(pb).onClick  += PowerCircleClick;
         //ButtonInfo pbInfo = pb.GetComponent<ButtonInfo>();
         //pbInfo.Initialize();
-      
+     
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
+
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
 			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerEntry);
 			buttons.Add(entry.GetComponent<UIButton>());
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
 			ButtonInfo info = entry.GetComponent<ButtonInfo>();
-			info.Initialize(inventoryPower.Value);
+			info.Initialize(inventoryPower.Value, live);
 		}
 		InventoryGrid.Reposition();
 	}
 
-
+	public void SwitchToLive(){
+		live = true;
+		int i = 0;
+		foreach(var inventoryPower in draftedPowers){
+			//Unlimited powers.
+			inventoryPower.Value.quantity = int.MaxValue;
+			UIButton button = buttons[i];
+			ButtonInfo info = button.GetComponent<ButtonInfo>();
+			info.Initialize(inventoryPower.Value, true);
+			i++;
+		}
+	}
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
 		int i = 0;
@@ -109,7 +130,7 @@ public class PlacementUI : MonoBehaviour {
 			switch(state){
 			//Checks if we've clicked on a power that was already placed..
 			case PlacementState.Default:
-				if(SelectExistingPower()){
+				if(!live && SelectExistingPower()){ //make sure not to allow player to move powers when dead.
 					FollowMouse();
 				}
 				break;
@@ -125,15 +146,6 @@ public class PlacementUI : MonoBehaviour {
 				break;
 			}
 		}
-
-		/*Temporary code for testing Finalizing powers*/
-		if(Input.GetKeyDown(KeyCode.Alpha1)){
-			int index = 0;
-			PowerSpawn spawn = selectedTriggers[index];
-			//Instantiate (prefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
-			Finalize();
-		}
-
 	}
 
 
@@ -226,13 +238,19 @@ public class PlacementUI : MonoBehaviour {
             activePower.AddComponent<powerRotate>();
 		}
 		else {
+
+			if(live){
+				Destroy(activePower);
+				spawnNow(spawn);
+			}
+
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
 	}
 
-	//Calculates a direction vector from the current power to the mouse. Stores
-	//it in existing PowerSpawn object.
+	///<summary>Calculates a direction vector from the current power to the mouse. Stores
+	///it in existing PowerSpawn object.</summary>
 	private void ChooseDirection(){
 		PowerSpawn spawn = null;
 		placedPowers.TryGetValue(activePower, out spawn);
@@ -241,12 +259,16 @@ public class PlacementUI : MonoBehaviour {
 			(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
 
 		Vector3 direction = Vector3.Normalize(mousePosition - spawn.position);
-//		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
 		direction.z = 0f;
 		spawn.direction = direction;
-		//print (direction);
 		Destroy(dottedLineInstance);
         Destroy(activePower.GetComponent<powerRotate>());
+
+
+		if(live){
+			Destroy(activePower);
+			spawnNow(spawn);
+		}
 
 		//Return buttons to normal
 		state = PlacementState.Default;
@@ -262,6 +284,9 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	public void DestroyPowers(){
+		if(dottedLineInstance != null){
+			Destroy(dottedLineInstance);
+		}
 		foreach(var pair in placedPowers){
 			Destroy(pair.Key);
 		}
