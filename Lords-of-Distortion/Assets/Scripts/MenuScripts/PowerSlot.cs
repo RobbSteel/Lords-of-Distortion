@@ -27,6 +27,10 @@ public class PowerSlot : MonoBehaviour {
 		if(Input.GetKeyDown(keyText)){
 			print("Pressed " + keyText + ", try to spawn that power");
 			powerKey(linkedSpawn);
+			Vector3 offscreen = transform.position;
+			offscreen.y -= 400f;
+			TweenPosition.Begin(this.gameObject, 1f, offscreen);
+			this.enabled = false;
 		}
 	}
 }
