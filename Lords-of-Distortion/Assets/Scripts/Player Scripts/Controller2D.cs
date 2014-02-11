@@ -20,6 +20,7 @@ public class Controller2D : MonoBehaviour {
 	public bool stunned;
 	public bool snared = false;
 	public bool canJump;
+	public bool hasbomb;
 
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
@@ -46,6 +47,7 @@ public class Controller2D : MonoBehaviour {
 		stunned = false;
 		canJump = true;
 		facingRight = true;
+		hasbomb = false;
 		myHook = GetComponent<Hook>();
 		var psinfo = GameObject.Find("PSInfo");
 		infoscript = psinfo.GetComponent<PSinfo>();
