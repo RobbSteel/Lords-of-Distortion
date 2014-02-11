@@ -33,6 +33,7 @@ public class PlacementUI : MonoBehaviour {
 
     private Camera cam;
     ButtonInfo activeInfo;
+    UIButton pwrBoardScript;
 
 	enum PlacementState{
 		Default,
@@ -49,6 +50,7 @@ public class PlacementUI : MonoBehaviour {
 	GameObject dottedLineInstance;
 
 	void Awake(){
+        pwrBoardScript = GameObject.Find("PowerBoard").GetComponent<UIButton>();
 		draftedPowers = new Dictionary<PowerType, InventoryPower>();
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
@@ -253,9 +255,10 @@ public class PlacementUI : MonoBehaviour {
 
 	//Enables or disables the entire grid of buttons.
 	private void GridEnabled(bool state){
-		foreach(UIButton button in buttons){
+        pwrBoardScript.isEnabled = state;
+        foreach(UIButton button in buttons){
 			button.isEnabled = state;
-		}
+		}        
 	}
 
 	public void DestroyPowers(){
