@@ -35,7 +35,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	void ServerDeathHandler(NetworkPlayer player){
 		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(player);
-		deadPlayerStats.score = CalculateScore();
+		deadPlayerStats.score += CalculateScore();
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
 		if(livePlayers == 0){

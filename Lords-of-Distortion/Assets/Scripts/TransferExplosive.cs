@@ -10,17 +10,18 @@ public class TransferExplosive : Power {
 	public bool firststick = true;
 	
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
-		
+
 		print ("Entered bomb");
 		
 		//Check for the first collision of the bomb
 		if(stickready && firststick){
-			
+			Destroy (collider2D);
+			collider2D.enabled = true;
 			playerstuck = player;
 			stickready = false;
 			firststick = false;
 			transform.rigidbody2D.velocity = Vector2.zero;
-			collider2D.isTrigger = true;
+
 			controller.hasbomb = true;
 			
 			//Check for any future transitions of the bomb
@@ -36,12 +37,14 @@ public class TransferExplosive : Power {
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller)
 	{
-		print ("give it up");
+		print ("staying");
 		
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller)
 	{
+
+		print("exited");
 		//controller.hasbomb = false;
 	}
 	
@@ -70,7 +73,7 @@ public class TransferExplosive : Power {
 			//If a player is stuck, follow them
 			if(playerstuck != null){
 				
-				transform.position = Vector2.MoveTowards(transform.position, playerstuck.transform.position, 5);
+				transform.position =  playerstuck.transform.position;
 				
 			}
 			
