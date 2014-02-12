@@ -99,6 +99,7 @@ public class PlacementUI : MonoBehaviour {
 	public void SwitchToLive(){
 		live = true;
 		int i = 0;
+		GridEnabled(true);
 		foreach(var inventoryPower in draftedPowers){
 			//Unlimited powers.
 			inventoryPower.Value.quantity = int.MaxValue;
@@ -110,6 +111,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
+		state = PlacementState.Default;
 		int i = 0;
 		foreach(PowerSpawn spawn in selectedTriggers){
 			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
