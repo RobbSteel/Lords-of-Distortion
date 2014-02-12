@@ -19,6 +19,8 @@ public class SessionManager : MonoBehaviour {
 	String offlineLevel = "MainMenu";
 
 	public static bool instanceExists = false;
+	public static SessionManager instance;
+
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
@@ -27,6 +29,7 @@ public class SessionManager : MonoBehaviour {
 	void Awake(){
 		DontDestroyOnLoad(this);
 		instanceExists = true;
+		instance = this;
 		var information = GameObject.Find("PSInfo");
 		gameInfo = information.GetComponent<PSinfo>();
 		networkView.group = SETUP;

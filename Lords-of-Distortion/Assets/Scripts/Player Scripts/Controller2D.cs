@@ -131,7 +131,7 @@ public class Controller2D : MonoBehaviour {
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if(networkController.isOwner && dead)
+		if(dead || !networkController.isOwner)
 			return;
 		
 		if (other.gameObject.tag == "Power")
@@ -180,7 +180,9 @@ public class Controller2D : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		if(dead)
+		//This should have been done earlier. Power effects shouldn't matter
+		//if they hit a copy of a player you don't control.
+		if(dead || !networkController.isOwner)
 			return;
 		
 		if (other.gameObject.tag == "Power")

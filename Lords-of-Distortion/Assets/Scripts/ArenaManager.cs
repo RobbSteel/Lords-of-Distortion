@@ -167,10 +167,12 @@ public class ArenaManager : MonoBehaviour {
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
 		
 		if(Network.isServer){
-			
 			Debug.Log ("start timer");
 			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
+			//TEMP spawn bomb
+			Network.Instantiate(Resources.Load("TransferExplosive"), Vector3.zero, Quaternion.identity, 0);
+
 		}
 		//TODO: have something that checks if all players have finished loading.
 	}
