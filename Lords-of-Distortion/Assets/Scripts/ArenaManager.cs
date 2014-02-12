@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using Priority_Queue;
 
 public class ArenaManager : MonoBehaviour {
-	public Transform[] Powers;
-	
-	const float PLACEMENT_TIME = 15f;
+	PowerPrefabs powerPrefabs;
+
+	const float PLACEMENT_TIME = 15f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
 	List<Vector3> playerSpawnLocations;
 	public bool finishgame = false;
 	
-	HeapPriorityQueue<PowerSpawn> allSpawns;
+	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
 	List<NetworkPlayer> playersReady;
 	
 	float beginTime;
@@ -24,8 +24,15 @@ public class ArenaManager : MonoBehaviour {
 	
 	private GameObject timer;
 	private PowerSpawn prevYield;
-	
+
+	/*
+     * Commenting out LordSpawnManager and other relating parts
+     * as we are not using it anymore 
+     */
 	LordSpawnManager lordsSpawnManager;
+
+    PlacementUI placementUI;
+
 	[RPC]
 	void NotifyBeginTime(float time){
 		Debug.Log ("start timer");
@@ -69,6 +76,12 @@ public class ArenaManager : MonoBehaviour {
 			ServerDeathHandler(Network.player);
 		}
 		sessionManager.KillPlayer(deadPlayer);
+
+		//brign up the dead player placement screen.
+		placementUI.SwitchToLive();
+		placementUI.enabled = true;
+		PlayMenuTween(false);
+
 	}
 	
 	/*Clients request this fucntion on the server for every power. After that the server tells every
@@ -77,17 +90,17 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
 		PowerSpawn requested =  new PowerSpawn();
-		requested.type = (PowerSpawn.PowerType)typeIndex;
+		requested.type = (PowerType)typeIndex;
 		requested.position = position;
 		requested.spawnTime = time;
-		allSpawns.Enqueue(requested, time);
+		allTimedSpawns.Enqueue(requested, time);
 	}
 	
 	private void CheckIfAllSynchronized(){
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
 			print ("Spam every player with every powerinfo");
 			
-			foreach(PowerSpawn power in allSpawns){
+			foreach(PowerSpawn power in allTimedSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 (int)power.type, power.position, power.spawnTime);
 			}
@@ -117,20 +130,8 @@ public class ArenaManager : MonoBehaviour {
 	void FinishedSettingPowers(){
 		powersSynchronized = true;
 	}
-	
-	void OnEnable(){
-		//add our function as an event to player
-		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
-                     *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events
-                     */
-		Controller2D.onDeath += LostPlayer;
-	}
-	
-	void OnDisable(){
-		Controller2D.onDeath -= LostPlayer;
-	}
-	
-	
+
+
 	void Awake(){
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
@@ -141,8 +142,10 @@ public class ArenaManager : MonoBehaviour {
 		playerSpawnLocations.Add(new Vector3(-9f, 4.3f, 0f));
 		playerSpawnLocations.Add (new Vector3(9f, 4.3f, 0f));
 		playersReady = new List<NetworkPlayer>();
-		allSpawns = new HeapPriorityQueue<PowerSpawn>(30);
+		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		placementUI = GetComponent<PlacementUI>();
+		powerPrefabs = GetComponent<PowerPrefabs>();
 	}
 	
 	// Use this for initialization
@@ -152,16 +155,33 @@ public class ArenaManager : MonoBehaviour {
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready");
 	}
+
+
+	void OnEnable(){
+		//add our function as an event to player
+		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
+         *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
+		Controller2D.onDeath += LostPlayer;
+		PowerSlot.powerKey += SpawnTriggerPower;
+		placementUI.spawnNow += SpawnTriggerPower;
+	}
+
+	
+	void OnDisable(){
+		Controller2D.onDeath -= LostPlayer;
+		PowerSlot.powerKey -= SpawnTriggerPower;
+		placementUI.spawnNow -= SpawnTriggerPower;
+	}
 	/*
-             * 1. Load Level Geometry
-             * 2. Allow players to place powers. (Spawn instance of Placement UI)
-             * 3. Notify players of how much time they have to place powers.
-             * 4. When time is over, submit power RPCs to server.
-             * 5. Server tells all other players about spawn locations and times. (RPC methods should be as
-             * generic as possible, but we'll need different ones if certain powers have extra parameters).
-             * 6. Have an event queue similar to the one in NetworkController.
-             * 7. Players themselves determine if they're hit or not.
-             * */
+       * 1. Load Level Geometry
+       * 2. Allow players to place powers. (Spawn instance of Placement UI)
+       * 3. Notify players of how much time they have to place powers.
+       * 4. When time is over, submit power RPCs to server.
+       * 5. Server tells all other players about spawn locations and times. (RPC methods should be as
+       * generic as possible, but we'll need different ones if certain powers have extra parameters).
+       * 6. Have an event queue similar to the one in NetworkController.
+       * 7. Players themselves determine if they're hit or not.* 
+	 */
 	
 	void OnNetworkLoadedLevel(){
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
@@ -176,19 +196,68 @@ public class ArenaManager : MonoBehaviour {
 		}
 		//TODO: have something that checks if all players have finished loading.
 	}
-	
-	// Update is called once per frame
+
+	private void SpawnTimedTraps(){
+		if(allTimedSpawns.Count != 0){
+			float currentTime = TimeManager.instance.time;
+			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority));
+			
+			//Display yield sign .5 seconds before power spawns, and destroy it when power spawns
+			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME + allTimedSpawns.First.Priority && prevYield != allTimedSpawns.First)
+			{
+				prevYield = allTimedSpawns.First;
+				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allTimedSpawns.First.position, Quaternion.identity);
+				Destroy(yield_sign, 1.0f);
+			}
+
+			if(currentTime >= beginTime + allTimedSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
+				PowerSpawn spawn = allTimedSpawns.Dequeue();
+				//convert power type to an int, which is an index to the array of power prefabs.
+				Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
+			}
+		}
+	}
+
+	//Rough version.
+	private void SpawnTriggerPower(PowerSpawn spawn){
+		if(placementUI.selectedTriggers.Contains(spawn)){
+            //Spawn and destroy yield sign. 
+            GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), spawn.position, Quaternion.identity);
+            Destroy(yield_sign, 1.0f);
+
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
+			SpawnPowerLocally(spawn);
+			//Remove from your inventory
+			placementUI.selectedTriggers.Remove(spawn);
+		}
+	}
+
+	[RPC]
+	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction){
+		GameObject power =  Instantiate (powerPrefabs.list[type], position, Quaternion.identity) as GameObject;
+		power.GetComponent<Power>().direction = direction;
+	}
+
+	void SpawnPowerLocally(PowerSpawn spawn){
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
+		power.GetComponent<Power>().direction = spawn.direction;
+	}
+
 	void Update () {
 		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
-			print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
-			PlayMenuTween();
-			lordsSpawnManager.enabled = false;
-			//Finalize powers, after 3 or more seconds start match (so we have time to receive other players powers)
-			if(!lordsSpawnManager.readyToSend)
-				lordsSpawnManager.FinalizePowers(this.gameObject);
-			lordsSpawnManager.DestroyPowers();
-			foreach(PowerSpawn power in  lordsSpawnManager.powerSpawns.Values){
-				if(Network.isServer){
+			//print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
+			PlayMenuTween(true);
+			
+            //if(!lordsSpawnManager.readyToSend)
+			//	lordsSpawnManager.FinalizePowers(this.gameObject);
+
+			placementUI.Finalize();
+            placementUI.DestroyPowers();
+			placementUI.enabled = false;
+			
+			//Synchronize traps to server.
+            foreach(PowerSpawn power in  placementUI.selectedTraps){
+                if(Network.isServer){
 					AddPowerSpawnLocally((int)power.type, power.position, power.spawnTime);
 				}
 				else {
@@ -196,13 +265,15 @@ public class ArenaManager : MonoBehaviour {
 					                 (int)power.type, power.position, power.spawnTime);
 				}
 			}
-			if(Network.isServer){
+
+			if(Network.isServer)
 				SentAllMyPowers();
-			}
 			else
 				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
 			
 			sentMyPowers = true;
+
+			
 		}
 		
 		//the rest of the code doesn't run until powers are finalized.
@@ -213,30 +284,9 @@ public class ArenaManager : MonoBehaviour {
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnLocations);
 		}
 		
-		//Spawn one power per frame, locally.
-		if(allSpawns.Count != 0){
-			float currentTime = TimeManager.instance.time;
-			print ("Current time " + currentTime + ", next trap time " + (beginTime +  allSpawns.First.Priority));
-			
-			
-			//Is this spawning multiple times for 1 power? ALso yield is a reserved keyword.
-			
-			//Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME + allSpawns.First.Priority && prevYield != allSpawns.First)
-			{
-				prevYield = allSpawns.First;
-				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allSpawns.First.position, Quaternion.identity);
-				Destroy(yield_sign, 1.0f);
-			}
-			
-			
-			if(currentTime >= beginTime + allSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
-				PowerSpawn spawn = allSpawns.Dequeue();
-				//convert power type to an int, which is an index to the array of power prefabs.
-				print ("Spawning a " + spawn.type);
-				Instantiate (Powers[(int)spawn.type], spawn.position, Quaternion.identity);
-			}
-		}
+		//Spawn one timed trap per frame, locally.
+		SpawnTimedTraps();
+
 	}
 	
 	private void SetUpTimer(){
@@ -247,24 +297,18 @@ public class ArenaManager : MonoBehaviour {
 	}
 	
 	private void SetUpLordScreenTween(){
-		played = false;
-		lordsSpawnManager = GameObject.Find ("UI Root").GetComponent<LordSpawnManager>();
-		lordScreenUI = GameObject.Find( "LordsScreen" );
-		lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = false;
+        lordScreenUI = GameObject.Find("PlacementRoot").transform.Find("Container").gameObject;
 	}
 	
 	//plays lords spawn menu tween and deactives the menu
-	private void PlayMenuTween(){
-		if( !played ){
-			played = true;
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().eventReceiver = this.gameObject;
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().callWhenFinished = "DeactivateLordScreen";
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().enabled = true;
-			
-			Debug.Log("played tween");
-		}
-		
+	private void PlayMenuTween(bool forward){
+		if(forward)
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayForward();
+		else
+			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayReverse();
+		Debug.Log("played tween");
 	}
+
 	//Calculates score based on the number of players remaining when you die, saves it in PSinfo
 	public int CalculateScore(){
 		
@@ -289,11 +333,5 @@ public class ArenaManager : MonoBehaviour {
 		
 		return score;
 	}
-	
-	
-	
-	void DeactivateLordScreen(){
-		//lordScreenUI.SetActive( false );
-		Debug.Log( "deactivate LS" );
-	}
+
 }

@@ -120,7 +120,8 @@ public class UIButtonColor : UIWidgetContainer
 
 			if (ren != null)
 			{
-				mColor = ren.material.color;
+                mColor = Application.isPlaying ? ren.material.color : ren.sharedMaterial.color;
+				//mColor = ren.material.color;
 			}
 			else
 			{
