@@ -221,6 +221,9 @@ public class ArenaManager : MonoBehaviour {
 	//Rough version.
 	private void SpawnTriggerPower(PowerSpawn spawn){
 		if(placementUI.selectedTriggers.Contains(spawn)){
+            //Spawn and destroy yield sign. 
+            GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), spawn.position, Quaternion.identity);
+            Destroy(yield_sign, 1.0f);
 
 			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
 			SpawnPowerLocally(spawn);
