@@ -8,6 +8,7 @@ public enum PowerType{
 	SMOKE, //chalk dust?
 	FIREBALL,
 	GRAVITY,
+	EXPLOSIVE,
 	UNDEFINED
 }
 

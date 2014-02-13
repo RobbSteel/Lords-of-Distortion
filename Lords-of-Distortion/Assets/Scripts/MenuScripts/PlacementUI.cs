@@ -26,6 +26,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite smokeSprite;
 	public Sprite inkSprite;
 	public Sprite windSprite;
+	public Sprite transferSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	Dictionary<PowerType, InventoryPower> draftedPowers;
@@ -68,11 +69,13 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.SMOKE, smokeSprite);
 		icons.Add(PowerType.FIREBALL, inkSprite);
 		icons.Add(PowerType.GRAVITY, windSprite);
+		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 
 		/*Hard code some powers for now*/
 		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Smoke Bomb"));
 		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 2, "Gravity Field"));
 		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Fireball"));
+		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Sticky Bomb"));
 	}
 
 
@@ -203,6 +206,7 @@ public class PlacementUI : MonoBehaviour {
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
 		                           info.transform.position, Quaternion.identity) as GameObject;
 		Destroy (activePower.GetComponent<Power>());
+		Destroy (activePower.rigidbody2D);
 	}
 
 	//Adds a mouseFollower to the current power.
