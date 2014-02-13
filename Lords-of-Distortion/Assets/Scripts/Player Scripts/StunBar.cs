@@ -24,6 +24,8 @@ public class StunBar : MonoBehaviour {
 	private int horizontalMoveCheck;		//tracks horizontal current key
 	//setup references and create UI stunbar
 
+	int hitCount = 0;
+
 	void Awake(){
 		recoverRate = 10f;
 		horizontalPressedUp = false;
@@ -41,13 +43,6 @@ public class StunBar : MonoBehaviour {
 	}
 
 
-	// Update is called once per frame
-	void Update () {
-		RegenBar();
-		UpdateHealthBar();
-		CheckIfStunned();
-		UpdateStunBarPosition();
-	}
 
 	//this function acts as unitys input keydown and up for "Horizontal" input
 	//**unity does not have this functionality yet needed to do this way 
@@ -83,6 +78,12 @@ public class StunBar : MonoBehaviour {
 
 	}
 
+	//Updates StunBar UI and tints color relative to danger
+	void UpdateHealthBar(){
+		stunBarUI.value = currentStunMeter/maxStun;
+		stunBarUI.foregroundWidget.color = Color.Lerp( Color.yellow , Color.red, stunBarUI.value  );
+	}
+
 	//sets position of stunbar correctly on player
 	void UpdateStunBarPosition(){
 		Vector3 playersPos = transform.position;
@@ -99,6 +100,15 @@ public class StunBar : MonoBehaviour {
 
 	}
 
+	
+	// Update is called once per frame
+	void Update () {
+		RegenBar();
+		UpdateHealthBar();
+		CheckIfStunned();
+		UpdateStunBarPosition();
+	}
+
 	[RPC]
 	void NotifyDamageTaken(float dmgTaken){
 		ApplyDamage(dmgTaken);
@@ -112,31 +122,47 @@ public class StunBar : MonoBehaviour {
 		}
 	}
 
-	bool knockback = false;
-	float flip = 1f;
+	bool knockBackPending = false;
+
 	Vector2 sideForce;
+
 	void FixedUpdate(){
-		if(knockback){
-			//player should be in air by now.
+		//push the character sideways
+		if(knockBackPending){
+			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
-			knockback = false;
+			knockBackPending = false;
 			rigidbody2D.AddForce(sideForce);
-			Vector2 newVelocity = rigidbody2D.velocity;
-			newVelocity.x = 30f * flip;
-			//rigidbody2D.velocity = newVelocity;
 		}
 	}
 
 	Vector2 upForce = new Vector2(0f, 300f);
-	[RPC]
-	void ApplyKnockback(bool fromLeftSide){
-		flip = 1f;
-		if(fromLeftSide != true)
-			flip = -1f;
-		sideForce = new Vector2(6000f * flip, 100f);
+	//Push the character up on this step
+	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
-		knockback = true;
-		///Time.fixedDeltaTime
+
+		sideForce = new Vector2(5000f * flip, 100f);
+		knockBackPending = true;
+	}
+
+
+	[RPC]
+	void NotifyHit(bool fromLeftSide){
+		//ignore hits if the player is already knocked back
+		if(playerControl.knockedBack){
+			return;
+		}
+
+		hitCount++;
+		if(hitCount >= 3){
+			hitCount= 0;
+			float flip = 1f;
+			if(!fromLeftSide)
+				flip = -1f;
+
+			BeginKnockBack(flip);
+		}
+
 	}
 
 	//allows other objects to appliy a specific amount of damage
@@ -148,7 +174,10 @@ public class StunBar : MonoBehaviour {
 	}
 
 	public void AddHit( bool fromLeftSide){
-		networkView.RPC ("ApplyKnockback", GetComponent<NetworkController>().theOwner, fromLeftSide);
+
+
+		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
+
 	}
 
 	//checks if player is stun and then applies stunRecover
@@ -197,11 +226,7 @@ public class StunBar : MonoBehaviour {
 
 
 
-	//Updates StunBar UI and tints color relative to danger
-	void UpdateHealthBar(){
-		stunBarUI.value = currentStunMeter/maxStun;
-		stunBarUI.foregroundWidget.color = Color.Lerp( Color.yellow , Color.red, stunBarUI.value  );
-	}
+
 
 	//Ondestroy delete Stunbar Ui
 	void OnDestroy(){

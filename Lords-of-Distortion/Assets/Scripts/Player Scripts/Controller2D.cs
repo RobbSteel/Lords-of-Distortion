@@ -31,7 +31,7 @@ public class Controller2D : MonoBehaviour {
 	NetworkController networkController;
 	Hook myHook;
 
-	bool knockedBack = false;
+	public bool knockedBack = false;
 	
 	public void KnockBack(){
 		knockedBack = true;
