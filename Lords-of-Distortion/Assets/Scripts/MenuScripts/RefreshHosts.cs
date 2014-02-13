@@ -83,7 +83,9 @@ void OnClick(){
 
 	// Used for constant refresh of the host list
 	void Update(){
-		if(refreshtime > 0){
+
+
+		if(refreshtime < 0){
 
 		MasterServer.RequestHostList(typeName);
 		

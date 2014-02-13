@@ -14,6 +14,7 @@ public class JoinServer : MonoBehaviour {
 	}
 
 	void OnClick(){
+
 		print (hostList);
 		infoscript.choice = "Find";
 		infoscript.servernumb = servernumber;
