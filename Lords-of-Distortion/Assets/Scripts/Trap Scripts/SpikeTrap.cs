@@ -16,12 +16,12 @@ public class SpikeTrap : Power {
 	void Awake(){
 		//grabs child refences that is the refernce for the To Position
 //		childTweenPoint = transform.FindChild("TweenPosition").gameObject;
-		startPosition = transform.position;
-		spikeTween = this.GetComponent<TweenPosition>();
-		spikeTween.duration = durationOfTween;
-		spikeTween.delay = delay;
-		spikeTween.from = startPosition;
-		SetUpTweenPosition();
+		//startPosition = transform.position;
+		//spikeTween = this.GetComponent<TweenPosition>();
+		//spikeTween.duration = durationOfTween;
+		//spikeTween.delay = delay;
+		//spikeTween.from = startPosition;
+		//SetUpTweenPosition();
 
 	}
 
@@ -41,7 +41,7 @@ public class SpikeTrap : Power {
 	}
 
 	void Update(){
-		MovingSpike();
+		//MovingSpike();
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
