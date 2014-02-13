@@ -9,6 +9,10 @@ public class TimeManager : MonoBehaviour {
 	public float time;
 	
 	void Awake(){
+		if(instance != null){
+			Destroy(this);
+			return;
+		}
 		instance = this;
 		DontDestroyOnLoad(this);
 	}
