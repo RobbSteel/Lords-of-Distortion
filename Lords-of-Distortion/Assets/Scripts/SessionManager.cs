@@ -144,11 +144,11 @@ public class SessionManager : MonoBehaviour {
 	//load level now takes a bool to indicate whether the score scene should be loaded.
 	public void LoadNextLevel(bool scorescreen){
 		string level;
-		++arenaIndex;
+
 		if(scorescreen){
 				level = "PointsScreen";
 		} else {
-
+	    ++arenaIndex;
 		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 			level = "LobbyArena";
 			arenaIndex = -1;
