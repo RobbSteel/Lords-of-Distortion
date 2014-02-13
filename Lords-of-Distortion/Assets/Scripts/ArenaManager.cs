@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using Priority_Queue;
 
 public class ArenaManager : MonoBehaviour {
@@ -222,15 +223,23 @@ public class ArenaManager : MonoBehaviour {
 	private void SpawnTriggerPower(PowerSpawn spawn){
 		if(placementUI.selectedTriggers.Contains(spawn)){
             //Spawn and destroy yield sign. 
-            GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), spawn.position, Quaternion.identity);
-            Destroy(yield_sign, 1.0f);
-
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
-			SpawnPowerLocally(spawn);
-			//Remove from your inventory
-			placementUI.selectedTriggers.Remove(spawn);
+            //GameObject alert_symbol = (GameObject)Resources.Load("alert-sign");
+            //Network.Instantiate(alert_symbol, spawn.position, Quaternion.identity, 0);
+        
+            //StartCoroutine(spawnYield(spawn));
+            //Network.Destroy(alert_symbol);
+            networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
+            SpawnPowerLocally(spawn);
+            //Remove from your inventory
+            placementUI.selectedTriggers.Remove(spawn);
 		}
 	}
+
+    IEnumerator spawnYield(PowerSpawn spawn)
+    {
+        yield return new WaitForSeconds(1);
+        
+    }
 
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction){
