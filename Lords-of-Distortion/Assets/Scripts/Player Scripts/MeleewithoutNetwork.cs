@@ -55,17 +55,9 @@ public class MeleewithoutNetwork : MonoBehaviour {
 	}
 	void OnTriggerEnter2D (Collider2D col) 
 	{
-		// If it hits an enemy...
-		if(col.tag == "Enemy"){
-			
-			// ... find the Enemy script and call the Hurt function.
-			col.gameObject.GetComponent<Enemy>().Hurt();
-			
-			//Destroy(gameObject);
-			Debug.Log ("Enemy hit");
-		}
+
 		// If melee atack hits a player...
-		else if(col.gameObject.tag == "Player"){
+		 if(col.gameObject.tag == "Player"){
 			
 			// ... find the StunBar script and call the TakeDamage function.
 			col.gameObject.GetComponent<StunBar>().TakeDamage(damageDealt);
