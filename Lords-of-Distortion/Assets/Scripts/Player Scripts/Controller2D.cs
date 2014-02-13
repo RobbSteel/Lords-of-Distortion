@@ -31,18 +31,21 @@ public class Controller2D : MonoBehaviour {
 	NetworkController networkController;
 	Hook myHook;
 
+	bool knockedBack = false;
+	
+	public void KnockBack(){
+		knockedBack = true;
+		snared = true;
+	}
+
 	public void Snare(){
 		snared = true;
-
-
 	}
 	//private StunBar stunScript;
 
 	public void FreeFromSnare(){
 		snared = false;
 	}
-
-
 
 	void Awake(){
 		stunned = false;
@@ -56,7 +59,7 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!DEBUG && !networkController.isOwner && !snared)
+		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
 	}
@@ -67,6 +70,12 @@ public class Controller2D : MonoBehaviour {
 			return;
 		IsGrounded();
 		MovePlayer();
+
+		//remove knockback snare when you touch ground.
+		if(grounded && knockedBack){
+			knockedBack = false;
+			snared = false;
+		}
 
 		// If player jumps
 		if (jump) {
@@ -106,11 +115,9 @@ public class Controller2D : MonoBehaviour {
 			
 			//to make jumping and changing direction is disabled
 			//if(!grounded) return;
-
-			
 			float move = Input.GetAxis ( "Horizontal" );
 			anim.SetFloat("Speed", Mathf.Abs(move));
-			
+			//Problem: THis sets velocity to zero.
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
 			if( move < 0 && facingRight ){
 				Flip();

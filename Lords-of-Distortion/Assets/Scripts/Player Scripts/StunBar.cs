@@ -39,7 +39,8 @@ public class StunBar : MonoBehaviour {
 	void Start () {
 
 	}
-	
+
+
 	// Update is called once per frame
 	void Update () {
 		RegenBar();
@@ -111,6 +112,32 @@ public class StunBar : MonoBehaviour {
 		}
 	}
 
+	bool knockback = false;
+	float flip = 1f;
+	Vector2 sideForce;
+	void FixedUpdate(){
+		if(knockback){
+			//player should be in air by now.
+			playerControl.KnockBack();
+			knockback = false;
+			rigidbody2D.AddForce(sideForce);
+			Vector2 newVelocity = rigidbody2D.velocity;
+			newVelocity.x = 30f * flip;
+			//rigidbody2D.velocity = newVelocity;
+		}
+	}
+
+	Vector2 upForce = new Vector2(0f, 300f);
+	[RPC]
+	void ApplyKnockback(bool fromLeftSide){
+		flip = 1f;
+		if(fromLeftSide != true)
+			flip = -1f;
+		sideForce = new Vector2(6000f * flip, 100f);
+		rigidbody2D.AddForce(upForce);
+		knockback = true;
+		///Time.fixedDeltaTime
+	}
 
 	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
@@ -118,6 +145,10 @@ public class StunBar : MonoBehaviour {
 		//TODO: Have stun bar values more synchronized, because bar may decay differently on other clients.
 		networkView.RPC("NotifyDamageTaken", RPCMode.Others, dmgTaken);
 		ApplyDamage(dmgTaken);
+	}
+
+	public void AddHit( bool fromLeftSide){
+		networkView.RPC ("ApplyKnockback", GetComponent<NetworkController>().theOwner, fromLeftSide);
 	}
 
 	//checks if player is stun and then applies stunRecover
