@@ -189,6 +189,8 @@ public class PlacementUI : MonoBehaviour {
 				activePower = hit.transform.gameObject;
 				PowerSpawn spawn= null;
 				placedPowers.TryGetValue(activePower, out spawn);
+				if(activePower == null)
+					return false;
 				activePowerType = spawn.type;
 				return true;
 			}
