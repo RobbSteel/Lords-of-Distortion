@@ -218,10 +218,7 @@ public class NetworkController : MonoBehaviour {
 				}
 			}
 			
-			if(canInterpolate == false && states != null && states.Count >= 3){
-				rigidbody2D.isKinematic = true;
-				canInterpolate = true;
-			}
+	
 
 			float xPosition = 0f;
 			float yPosition = 0f;
@@ -233,6 +230,11 @@ public class NetworkController : MonoBehaviour {
 			state.remoteTime = (float)info.timestamp;
 			state.localTime = (float)Network.time;
 			states.Add(state); //if we advanced buffer manually, then count < maxsize
+
+			if(canInterpolate == false && states != null && states.Count >= 3){
+				rigidbody2D.isKinematic = true;
+				canInterpolate = true;
+			}
 		}
 	}
 
