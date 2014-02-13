@@ -243,6 +243,7 @@ public class ArenaManager : MonoBehaviour {
 
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction){
+		//TODO: add networkgroup thing to bomb because it requires rpc calls.
 		GameObject power =  Instantiate (powerPrefabs.list[type], position, Quaternion.identity) as GameObject;
 		power.GetComponent<Power>().direction = direction;
 	}

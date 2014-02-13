@@ -72,7 +72,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 	
-
+	bool sentLevelLoadRPC = false;
 	// Update is called once per frame
 	void Update () {
 	
@@ -82,13 +82,10 @@ public class ScoreDisplay : MonoBehaviour {
 
 			timeleft -= Time.deltaTime;
 
-		} else {
-
-
+		} else if(!sentLevelLoadRPC){
 			sessionManager.LoadNextLevel(false);
-
+			sentLevelLoadRPC = true;
+			}
 		}
-		}
-
 	}
 }
