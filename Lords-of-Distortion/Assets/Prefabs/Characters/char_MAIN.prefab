@@ -8,10 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 82: {fileID: 8200000}
   - 61: {fileID: 6100000}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400010}
   m_Layer: 10
   m_Name: melee
   m_TagString: Melee
@@ -38,6 +38,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 82: {fileID: 8200002}
   - 58: {fileID: 5800000}
+  - 114: {fileID: 11400000}
   m_Layer: 8
   m_Name: char_MAIN
   m_TagString: Player
@@ -278,12 +279,13 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
+  m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b29afb5793691f40b8cce90dd5c9549, type: 3}
+  m_Script: {fileID: 11500000, guid: 89de928a67a893b4d9080782e27ba388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meleeObject: {fileID: 100000}
   meleeTimer: 0
   coolDownTimer: .5
   damageDealt: 15
@@ -371,6 +373,17 @@ MonoBehaviour:
   hasbomb: 0
   infoscript: {fileID: 0}
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1e7115a974dd478aa5adb1ef40b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

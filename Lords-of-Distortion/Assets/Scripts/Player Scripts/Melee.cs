@@ -7,7 +7,10 @@ public class Melee : MonoBehaviour {
 	private NetworkController networkController;
 	private Animator anim;		// Reference to the Animator component.
 	private Hook myhook;
+	public GameObject meleeObject;
 	[HideInInspector]
+
+
 	public float meleeTimer = 0;
 
 	public float coolDownTimer = 0.5f;
@@ -16,19 +19,20 @@ public class Melee : MonoBehaviour {
 	void Awake()
 	{
 		// Setting up the references.
-		anim = transform.root.gameObject.GetComponent<Animator>();
-		controller = transform.root.GetComponent<Controller2D>();
-		myhook = transform.root.GetComponent<Hook>();
-		networkController = transform.root.GetComponent<NetworkController>();
-		this.GetComponent<BoxCollider2D>().enabled = false;
+		anim = GetComponent<Animator>();
+		controller = GetComponent<Controller2D>();
+		myhook = GetComponent<Hook>();
+		networkController = GetComponent<NetworkController>();
+		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
 
 	}
 	
 	void Update ()
 	{
+		//this.GetComponent<BoxCollider2D>().enabled = false;
 		if (meleeTimer <= 0 && !myhook.hookthrown) {
 			// If the fire button is pressed...
-			print("maggot");
+			//print("maggot");
 			if (Input.GetButtonDown ("Fire3") && !controller.stunned && networkController.isOwner) {
 				startMelee ();
 			}
@@ -48,29 +52,22 @@ public class Melee : MonoBehaviour {
 
 		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
 		// Enable Box Collider 2D
-		this.GetComponent<BoxCollider2D>().enabled = true;
+		meleeObject.GetComponent<BoxCollider2D>().enabled = true;
 		anim.SetTrigger ("Melee");
 		audio.Play ();
 
 		meleeTimer =  coolDownTimer;
 	}
-	void OnTriggerEnter2D (Collider2D col) 
-	{
-	
-		// If melee atack hits a player...
-		if(col.gameObject.tag == "Player"){
-			
-			// ... find the StunBar script and call the TakeDamage function.
-			col.gameObject.GetComponent<StunBar>().TakeDamage(damageDealt);
-		
-			Debug.Log ("Player hit");
-		}
-		// ...else melee hits nothing
-		else
-			Debug.Log ("Hit nothing");
-		// Disable BoxCollider2D
-		this.GetComponent<BoxCollider2D>().enabled = false;
 
+	//Called by animator when the animation is done. Previously the collider was sticking around.
+	public void StopMelee(){
+		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
 	}
 
+	public void HandleCollsion(GameObject playerObject){
+		// ... find the StunBar script and call the TakeDamage function.
+		//playerObject.GetComponent<StunBar>().TakeDamage(damageDealt);
+		playerObject.GetComponent<StunBar>().AddHit(controller.facingRight);
+	}
+	
 }
