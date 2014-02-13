@@ -3,15 +3,18 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 	
-	IEnumerator Do() {
-		//Debug.Log("Do now");
-		yield return null;
-		//Debug.Log("Do 2 seconds later");
+	IEnumerator YieldSign() {
+		print ("spawn yield symbol");
+		yield return new WaitForSeconds(2);
+		PowerSpawn();
+	}
 
+	void  PowerSpawn(){
+		print ("spawn power");
 	}
 
 	void Start() {
-		Do();
-		//Debug.Log("This is printed immediately");
+		StartCoroutine(YieldSign());
+		print ("disable button");
 	}
 }

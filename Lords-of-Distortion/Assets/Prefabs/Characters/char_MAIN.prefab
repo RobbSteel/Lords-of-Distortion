@@ -303,10 +303,10 @@ MonoBehaviour:
   regenAmount: 10
   regenCooldown: 5
   regenTimer: 0
-  stunTimer: 0
   stunWait: 2
   UIoffsetX: -30
   UIoffsetY: 55
+  recoverRate: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -321,14 +321,15 @@ MonoBehaviour:
   going: 0
   movingtowards: 0
   movingback: 0
-  hookinput: 0
+  hookpull: 0
+  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: 34d43783b1d7cc642becb510ff942b1c, type: 2}
   hooktimer: 0
   chainspawner: 1
   pushpull: 0
-  decisiontimer: 0
+  hittimer: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -356,7 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jump: 0
-  DEBUG: 1
+  DEBUG: 0
   maxSpeed: 5
   anim: {fileID: 0}
   groundCheck: {fileID: 400004}
@@ -367,6 +368,8 @@ MonoBehaviour:
   stunned: 0
   snared: 0
   canJump: 0
+  hasbomb: 0
+  infoscript: {fileID: 0}
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
 --- !u!148 &14800000
 NetworkView:

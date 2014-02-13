@@ -25,7 +25,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	private GameObject timer;
 	private PowerSpawn prevYield;
-
+	public GameObject alertSymbol;
 	/*
      * Commenting out LordSpawnManager and other relating parts
      * as we are not using it anymore 
@@ -219,38 +219,42 @@ public class ArenaManager : MonoBehaviour {
 		}
 	}
 
-	//Rough version.
+	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn){
 		if(placementUI.selectedTriggers.Contains(spawn)){
-            //Spawn and destroy yield sign. 
-            //GameObject alert_symbol = (GameObject)Resources.Load("alert-sign");
-            //Network.Instantiate(alert_symbol, spawn.position, Quaternion.identity, 0);
-        
-            //StartCoroutine(spawnYield(spawn));
-            //Network.Destroy(alert_symbol);
             networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
             SpawnPowerLocally(spawn);
-            //Remove from your inventory
+            //Remove from your inventory and TODO: disable button here
             placementUI.selectedTriggers.Remove(spawn);
 		}
 	}
 
-    IEnumerator spawnYield(PowerSpawn spawn)
+	//http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html
+	//http://docs.unity3d.com/Documentation/ScriptReference/Coroutine.html
+	//Spawn a warning sign, wait 1.5 seconds, then spawn power. All of these are done locally on every client.
+    IEnumerator YieldThenPower(PowerSpawn spawn)
     {
-        yield return new WaitForSeconds(1);
-        
+		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, spawn.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.7f);
+		Destroy(instantiatedSymbol);
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
+		power.GetComponent<Power>().direction = spawn.direction;
     }
 
+	//this function converts parameters into a powerspawn object
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction){
 		//TODO: add networkgroup thing to bomb because it requires rpc calls.
-		GameObject power =  Instantiate (powerPrefabs.list[type], position, Quaternion.identity) as GameObject;
-		power.GetComponent<Power>().direction = direction;
+		PowerSpawn requestedSpawn = new PowerSpawn();
+		requestedSpawn.type = (PowerType)type;
+		requestedSpawn.position = position;
+		requestedSpawn.direction = direction;
+		SpawnPowerLocally(requestedSpawn);
 	}
 
+	//The function that actually starts the coroutine for spawning powers.
 	void SpawnPowerLocally(PowerSpawn spawn){
-		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
-		power.GetComponent<Power>().direction = spawn.direction;
+		StartCoroutine(YieldThenPower(spawn));
 	}
 
 	void Update () {
