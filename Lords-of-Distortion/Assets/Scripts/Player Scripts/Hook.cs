@@ -6,7 +6,7 @@ public class Hook : MonoBehaviour {
 	public  bool going = false;
 	public bool movingtowards = false;
 	public bool movingback = false;
-	public bool hookinput = false;
+	public bool hookpull = false;
 
 	public Vector3 mousePos = new Vector3(0,0, 0);
 	public HookHit hookscript;
@@ -18,7 +18,7 @@ public class Hook : MonoBehaviour {
 	public float hooktimer = 0;
 	public float chainspawner = 1;
 	public float pushpull = 0;
-	public float decisiontimer = 0;
+	public float hittimer = 0;
 
 
 
@@ -73,9 +73,12 @@ public class Hook : MonoBehaviour {
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
-				decisiontimer = 2;
-				hookinput = true;
+				hittimer = 2;
+				hookpull = true;
 				going = false;
+				pushpull = 1;
+				networkView.RPC ("PullPlayer", hitPlayer);
+
 
 			}
 		}
@@ -104,10 +107,24 @@ public class Hook : MonoBehaviour {
 			hookgoing(speed);
 		}
 
-		if(hookinput == true ){
-			HookChoice(speed);
+
+		//Pull the player to us but destroy the hook after a fixed amount of time.
+		if(hookpull == true){
+		
+			if(hittimer > 0){
+
+			pullingplayer(speed);
+			
+			} else {
+
+			DestroyHookPossible();
+			
+			}
+
+			hittimer -= Time.deltaTime; 
 		}
 		
+		else 
 		if(movingtowards == true){
 			movingtohook(speed);
 		}
@@ -119,37 +136,12 @@ public class Hook : MonoBehaviour {
 
 
 //Gives players the option to hook players to them or pull themselves to the hooked player.
-	void HookChoice(float speed){
 
-		//well there's yer problem
-		if(networkController.isOwner){
-		
-			if(Input.GetMouseButtonDown(0) && pushpull == 0){
 				
-				pushpull = 1;
-				networkView.RPC ("PullPlayer", hitPlayer);
 				
-			}
+	
 			
-			if(Input.GetMouseButtonDown(1) && pushpull == 0){
-				
-				pushpull = 2;
-				networkView.RPC("GoToPlayer", hitPlayer);
-
-			}
-		}
-		
-		if(decisiontimer > 0){
-			decisiontimer -= Time.deltaTime;
-			if(pushpull == 1){
-				pullingplayer(speed);
-			} else if(pushpull == 2){
-				goingtoplayer(speed);
-			}
-		} else if(pushpull == 0){
-			DestroyHookPossible();
-		}
-	}
+	
 
 	/*
 	 * When player A chooses to pull player in, send RPC to the hook on player B that sets choice to 1.
@@ -171,7 +163,7 @@ public class Hook : MonoBehaviour {
 
 	private void DestroyHook(){
 		transform.rigidbody2D.gravityScale = 1;
-		hookinput = false;
+		hookpull = false;
 		pushpull = 0;
 		movingtowards = false;
 		movingback = false;
