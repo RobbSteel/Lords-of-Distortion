@@ -16,7 +16,7 @@ public class ArenaManager : MonoBehaviour {
 	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
 	List<NetworkPlayer> playersReady;
 	
-	float beginTime;
+	public float beginTime;
 	int? livePlayers;
 	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
@@ -221,7 +221,10 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn){
-		if(placementUI.selectedTriggers.Contains(spawn)){
+        float currentTime = TimeManager.instance.time;
+        Debug.Log(beginTime + FIGHT_COUNT_DOWN_TIME);
+        if (placementUI.selectedTriggers.Contains(spawn) && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME)
+        {
             networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
             SpawnPowerLocally(spawn);
             //Remove from your inventory and TODO: disable button here
@@ -347,5 +350,10 @@ public class ArenaManager : MonoBehaviour {
 		
 		return score;
 	}
+
+    public float getBeginTime()
+    {
+        return beginTime;
+    }
 
 }
