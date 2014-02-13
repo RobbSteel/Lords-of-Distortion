@@ -6,7 +6,7 @@ public class MeleewithoutNetwork : MonoBehaviour {
 	private Controller2D controller;// Reference to the PlayerControl script.
 	private NetworkController networkController;
 	private Animator anim;					// Reference to the Animator component.
-
+	private Hook myhook;
 	[HideInInspector]
 	public float meleeTimer = 0;
 
@@ -20,12 +20,13 @@ public class MeleewithoutNetwork : MonoBehaviour {
 		controller = transform.root.GetComponent<Controller2D>();
 		networkController = transform.root.GetComponent<NetworkController>();
 		this.GetComponent<BoxCollider2D>().enabled = false;
-
+		myhook = transform.root.GetComponent<Hook>();
 	}
 	
 	void Update ()
 	{
-		if (meleeTimer <= 0) {
+		if (meleeTimer <= 0 && !myhook.hookthrown) {
+	
 			// If the fire button is pressed...
 			if (Input.GetButtonDown ("Fire3") && !controller.stunned) {
 				startMelee ();

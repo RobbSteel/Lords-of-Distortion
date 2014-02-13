@@ -43,6 +43,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 
+
 	void Awake(){
 		stunned = false;
 		canJump = true;
@@ -81,7 +82,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	private void Jump(){
-		if(!snared &&  !stunned && grounded  && Input.GetButtonDown("Jump") && canJump){
+		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
 			jump = true;
 		}
 	}
@@ -100,7 +101,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		if( !stunned && !snared ){
+		if( !stunned && !snared && !myHook.hookthrown){
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled

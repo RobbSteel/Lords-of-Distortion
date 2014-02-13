@@ -7,6 +7,7 @@ public class Hook : MonoBehaviour {
 	public bool movingtowards = false;
 	public bool movingback = false;
 	public bool hookpull = false;
+	public bool hookthrown = false;
 
 	public Vector3 mousePos = new Vector3(0,0, 0);
 	public HookHit hookscript;
@@ -19,6 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
+
 
 
 
@@ -89,6 +91,7 @@ public class Hook : MonoBehaviour {
 			if (Input.GetMouseButtonDown(0) && networkController.isOwner && !controller2D.snared){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
+				hookthrown = true;
 
 				if(Network.isServer)
 					networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
@@ -165,6 +168,7 @@ public class Hook : MonoBehaviour {
 		transform.rigidbody2D.gravityScale = 1;
 		hookpull = false;
 		pushpull = 0;
+		hookthrown = false;
 		movingtowards = false;
 		movingback = false;
 		going = false;

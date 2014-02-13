@@ -5,8 +5,8 @@ public class Melee : MonoBehaviour {
 	
 	private Controller2D controller;// Reference to the PlayerControl script.
 	private NetworkController networkController;
-	private Animator anim;					// Reference to the Animator component.
-
+	private Animator anim;		// Reference to the Animator component.
+	private Hook myhook;
 	[HideInInspector]
 	public float meleeTimer = 0;
 
@@ -18,6 +18,7 @@ public class Melee : MonoBehaviour {
 		// Setting up the references.
 		anim = transform.root.gameObject.GetComponent<Animator>();
 		controller = transform.root.GetComponent<Controller2D>();
+		myhook = transform.root.GetComponent<Hook>();
 		networkController = transform.root.GetComponent<NetworkController>();
 		this.GetComponent<BoxCollider2D>().enabled = false;
 
@@ -25,8 +26,9 @@ public class Melee : MonoBehaviour {
 	
 	void Update ()
 	{
-		if (meleeTimer <= 0) {
+		if (meleeTimer <= 0 && !myhook.hookthrown) {
 			// If the fire button is pressed...
+			print("maggot");
 			if (Input.GetButtonDown ("Fire3") && !controller.stunned && networkController.isOwner) {
 				startMelee ();
 			}
