@@ -7,7 +7,7 @@ public class PowerSlot : MonoBehaviour {
 
     public PowerSpawn linkedSpawn;
 
-	public delegate void KeyPress(PowerSpawn spawnInfo);
+	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
 	public static event KeyPress powerKey;
     private ArenaManager bt;
 	UILabel keyLabel;
@@ -33,13 +33,9 @@ public class PowerSlot : MonoBehaviour {
 	// Check for key press and call event .
 	void Update () {
         float currentTime = TimeManager.instance.time;
-		if(Input.GetKeyDown(keyText) && currentTime >= bt.getBeginTime() + FIGHT_COUNT_DOWN_TIME){
+		if(Input.GetKeyDown(keyText)){
 			print("Pressed " + keyText + ", try to spawn that power");
-			powerKey(linkedSpawn);
-			Vector3 offscreen = transform.position;
-			offscreen.y -= 400f;
-			TweenPosition.Begin(this.gameObject, 1f, offscreen);
-			this.enabled = false;
+			powerKey(linkedSpawn, this.gameObject);
 		}
 	}
 }
