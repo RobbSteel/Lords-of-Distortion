@@ -34,10 +34,10 @@ public class StunBar : MonoBehaviour {
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
-	//	/*
+		/*
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
-	//	//*/
+	*/
 		hitMarkSrites = hitMarks.GetComponent<SpriteRenderer>();
 
 		levelCamera = GameObject.Find("Main Camera").camera;
