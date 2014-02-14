@@ -220,16 +220,23 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	//This is is called when a player presses one of the trigger keys.
-	private void SpawnTriggerPower(PowerSpawn spawn){
+	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
+
         float currentTime = TimeManager.instance.time;
         Debug.Log(beginTime + FIGHT_COUNT_DOWN_TIME);
         if (placementUI.selectedTriggers.Contains(spawn) && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME)
         {
             networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction);
             SpawnPowerLocally(spawn);
-            //Remove from your inventory and TODO: disable button here
+            //Remove from your inventory and  disable button 
             placementUI.selectedTriggers.Remove(spawn);
             placementUI.DestroyAlphaPower(spawn);
+			if(uiElement.GetComponent<PowerSlot>() != null){
+				Vector3 offscreen = uiElement.transform.position;
+				offscreen.y -= 400f;
+				TweenPosition.Begin(uiElement, 1f, offscreen);
+				uiElement.GetComponent<PowerSlot>().enabled = false;
+			}
 		}
 	}
 

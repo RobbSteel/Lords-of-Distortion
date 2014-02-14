@@ -24,29 +24,27 @@ public class StunBar : MonoBehaviour {
 	private int horizontalMoveCheck;		//tracks horizontal current key
 	//setup references and create UI stunbar
 
+	int hitCount = 0;
+	public GameObject hitMarks;
+	SpriteRenderer hitMarkSprites;
+	public Sprite firstMark, secondMark, thirdMark;
+
 	void Awake(){
 		recoverRate = 10f;
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
+		/*
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
+	*/
+		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
+
 		levelCamera = GameObject.Find("Main Camera").camera;
 	}
 
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
-
-	// Update is called once per frame
-	void Update () {
-		RegenBar();
-		UpdateHealthBar();
-		CheckIfStunned();
-		UpdateStunBarPosition();
+	void Start(){
+		hitMarkSprites.enabled = false;
 	}
 
 	//this function acts as unitys input keydown and up for "Horizontal" input
@@ -83,12 +81,19 @@ public class StunBar : MonoBehaviour {
 
 	}
 
+	//Updates StunBar UI and tints color relative to danger
+	void UpdateHealthBar(){
+		stunBarUI.value = currentStunMeter/maxStun;
+		stunBarUI.foregroundWidget.color = Color.Lerp( Color.yellow , Color.red, stunBarUI.value  );
+	}
+
 	//sets position of stunbar correctly on player
 	void UpdateStunBarPosition(){
 		Vector3 playersPos = transform.position;
 		Vector3 screenPos = levelCamera.WorldToScreenPoint( playersPos );
 		float screenHeight = Screen.height;
 		float screenWidth = Screen.width;
+
 		screenPos.x -= (screenWidth / 2.0f);
 		screenPos.y -= (screenHeight / 2.0f);
 
@@ -97,6 +102,15 @@ public class StunBar : MonoBehaviour {
 
 		stunBarUI.transform.localPosition = screenPos;
 
+	}
+
+	
+	// Update is called once per frame
+	void Update () {
+		RegenBar();
+		//UpdateHealthBar();
+		CheckIfStunned();
+		//UpdateStunBarPosition();
 	}
 
 	[RPC]
@@ -112,31 +126,71 @@ public class StunBar : MonoBehaviour {
 		}
 	}
 
-	bool knockback = false;
-	float flip = 1f;
+	bool knockBackPending = false;
+
 	Vector2 sideForce;
+
 	void FixedUpdate(){
-		if(knockback){
-			//player should be in air by now.
+		//push the character sideways
+		if(knockBackPending){
+			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
-			knockback = false;
+			knockBackPending = false;
+			hitMarkSprites.enabled = false;
+			networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
 			rigidbody2D.AddForce(sideForce);
-			Vector2 newVelocity = rigidbody2D.velocity;
-			newVelocity.x = 30f * flip;
-			//rigidbody2D.velocity = newVelocity;
 		}
 	}
 
 	Vector2 upForce = new Vector2(0f, 300f);
-	[RPC]
-	void ApplyKnockback(bool fromLeftSide){
-		flip = 1f;
-		if(fromLeftSide != true)
-			flip = -1f;
-		sideForce = new Vector2(6000f * flip, 100f);
+	//Push the character up on this step
+	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
-		knockback = true;
-		///Time.fixedDeltaTime
+
+		sideForce = new Vector2(5000f * flip, 100f);
+		knockBackPending = true;
+	}
+
+
+	[RPC]
+	void NotifyHit(bool fromLeftSide){
+		//ignore hits if the player is already knocked back
+		if(playerControl.knockedBack){
+			return;
+		}
+		hitCount++;
+		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
+		VisualHitIndicator(hitCount);
+		if(hitCount >= 3){
+			hitCount= 0;
+			float flip = 1f;
+			if(!fromLeftSide)
+				flip = -1f;
+
+			BeginKnockBack(flip);
+		}
+
+	}
+
+	[RPC]
+	void VisualHitIndicator(int hits){
+		hitMarkSprites.enabled = true;
+
+		switch(hits){
+		case 0:
+			hitMarkSprites.enabled = false;
+			break;
+		case 1:
+			hitMarkSprites.sprite = firstMark;
+			break;
+		case 2:
+			hitMarkSprites.sprite = secondMark;
+			break;
+		case 3:
+			hitMarkSprites.sprite = thirdMark;
+			break;
+		}
+
 	}
 
 	//allows other objects to appliy a specific amount of damage
@@ -148,7 +202,7 @@ public class StunBar : MonoBehaviour {
 	}
 
 	public void AddHit( bool fromLeftSide){
-		networkView.RPC ("ApplyKnockback", GetComponent<NetworkController>().theOwner, fromLeftSide);
+		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
 	}
 
 	//checks if player is stun and then applies stunRecover
@@ -197,11 +251,7 @@ public class StunBar : MonoBehaviour {
 
 
 
-	//Updates StunBar UI and tints color relative to danger
-	void UpdateHealthBar(){
-		stunBarUI.value = currentStunMeter/maxStun;
-		stunBarUI.foregroundWidget.color = Color.Lerp( Color.yellow , Color.red, stunBarUI.value  );
-	}
+
 
 	//Ondestroy delete Stunbar Ui
 	void OnDestroy(){

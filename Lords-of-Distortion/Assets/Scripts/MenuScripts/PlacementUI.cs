@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlacementUI : MonoBehaviour {
 
-	public delegate void SpawnAction(PowerSpawn spawnInfo);
+	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
 
 
@@ -249,7 +249,7 @@ public class PlacementUI : MonoBehaviour {
 
 			if(live){
 				Destroy(activePower);
-				spawnNow(spawn);
+				spawnNow(spawn, gameObject);
 			}
 
 			state = PlacementState.Default;
@@ -275,7 +275,7 @@ public class PlacementUI : MonoBehaviour {
 
 		if(live){
 			Destroy(activePower);
-			spawnNow(spawn);
+			spawnNow(spawn, gameObject);
 		}
 
 		//Return buttons to normal
