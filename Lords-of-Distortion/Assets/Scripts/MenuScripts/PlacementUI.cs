@@ -209,6 +209,7 @@ public class PlacementUI : MonoBehaviour {
 		                           info.transform.position, Quaternion.identity) as GameObject;
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
+		Destroy (activePower.collider2D);
 	}
 
 	//Adds a mouseFollower to the current power.
