@@ -26,7 +26,7 @@ public class StunBar : MonoBehaviour {
 
 	int hitCount = 0;
 	public GameObject hitMarks;
-	SpriteRenderer hitMarkSrites;
+	SpriteRenderer hitMarkSprites;
 	public Sprite firstMark, secondMark, thirdMark;
 
 	void Awake(){
@@ -38,13 +38,13 @@ public class StunBar : MonoBehaviour {
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
 	*/
-		hitMarkSrites = hitMarks.GetComponent<SpriteRenderer>();
+		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
 
 		levelCamera = GameObject.Find("Main Camera").camera;
 	}
 
 	void Start(){
-	//	hitMarkSrites.enabled = false;
+		hitMarkSprites.enabled = false;
 	}
 
 	//this function acts as unitys input keydown and up for "Horizontal" input
@@ -136,7 +136,8 @@ public class StunBar : MonoBehaviour {
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
 			knockBackPending = false;
-			hitMarkSrites.enabled = false;
+			hitMarkSprites.enabled = false;
+			networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
 			rigidbody2D.AddForce(sideForce);
 		}
 	}
@@ -158,22 +159,8 @@ public class StunBar : MonoBehaviour {
 			return;
 		}
 		hitCount++;
-
-
-		switch(hitCount){
-		case 1:
-			hitMarkSrites.sprite = firstMark;
-			break;
-		case 2:
-			hitMarkSrites.sprite = secondMark;
-			break;
-		
-		case 3:
-			hitMarkSrites.sprite = thirdMark;
-			break;
-		}
-		hitMarkSrites.enabled = true;
-
+		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
+		VisualHitIndicator(hitCount);
 		if(hitCount >= 3){
 			hitCount= 0;
 			float flip = 1f;
@@ -181,6 +168,27 @@ public class StunBar : MonoBehaviour {
 				flip = -1f;
 
 			BeginKnockBack(flip);
+		}
+
+	}
+
+	[RPC]
+	void VisualHitIndicator(int hits){
+		hitMarkSprites.enabled = true;
+
+		switch(hits){
+		case 0:
+			hitMarkSprites.enabled = false;
+			break;
+		case 1:
+			hitMarkSprites.sprite = firstMark;
+			break;
+		case 2:
+			hitMarkSprites.sprite = secondMark;
+			break;
+		case 3:
+			hitMarkSprites.sprite = thirdMark;
+			break;
 		}
 
 	}
@@ -194,10 +202,7 @@ public class StunBar : MonoBehaviour {
 	}
 
 	public void AddHit( bool fromLeftSide){
-
-
 		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
-
 	}
 
 	//checks if player is stun and then applies stunRecover
