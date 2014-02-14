@@ -210,6 +210,10 @@ public class PlacementUI : MonoBehaviour {
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
 		Destroy (activePower.collider2D);
+
+		if(activePower.GetComponent<Animator>() != null){
+			activePower.GetComponent<Animator>().enabled = false;
+		}
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -306,8 +310,10 @@ public class PlacementUI : MonoBehaviour {
             if(pair.Key.GetComponent<ParticleSystem>() != null)
             {
                 Color particleColor = pair.Key.GetComponent<ParticleSystem>().startColor;
-                particleColor.a = 0.75f;
+                particleColor.a = 0.70f;
                 pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
+				//pause movement of system.
+				pair.Key.GetComponent<ParticleSystem>().Pause();
             }
 		}
 	}
