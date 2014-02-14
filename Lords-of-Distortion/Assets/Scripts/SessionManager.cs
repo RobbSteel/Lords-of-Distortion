@@ -14,6 +14,8 @@ public class SessionManager : MonoBehaviour {
 	public const int GAMEPLAY = 0;
 	const int SETUP = 1;
 	private int playerCounter;
+	public bool matchfinish = false;
+	public float roundsplayed = 0;
 	//public TimeManager timeManager;
 
 	String offlineLevel = "MainMenu";
@@ -145,18 +147,33 @@ public class SessionManager : MonoBehaviour {
 	public void LoadNextLevel(bool scorescreen){
 		string level;
 
+		if(roundsplayed == 3 && scorescreen){
+			matchfinish = true;
+			roundsplayed = 0;
+		}
+
+
+
 		if(scorescreen){
 				level = "PointsScreen";
 		} else {
-	    ++arenaIndex;
-		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
+	    //Right now, because we only have 1 level, we do the same map repeatedly until victory conditions
+				arenaIndex = 0;
+				level = arenas[arenaIndex];
+			if(!matchfinish){
+				roundsplayed++;
+			}
+			
+	}
+
+		//Checks if the match is finished and we're returning from the victory screen so we can go to the lobby
+		if(matchfinish && !scorescreen){
+			matchfinish = false;
 			level = "LobbyArena";
 			arenaIndex = -1;
-	
-		} else {
-			level = arenas[arenaIndex];
+			print ("return to lobby");
 		}
-	}
+
 		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
 	}
 

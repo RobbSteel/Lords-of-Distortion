@@ -300,6 +300,11 @@ public class PlacementUI : MonoBehaviour {
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);
 		}
+
+		if(activePower != null){
+			Destroy(activePower);
+		}
+
         foreach (var pair in placedPowers)
         {
 			//Destroy(pair.Key);
