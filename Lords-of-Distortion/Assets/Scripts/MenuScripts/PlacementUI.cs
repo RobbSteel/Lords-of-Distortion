@@ -72,10 +72,10 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 
 		/*Hard code some powers for now*/
-		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Smoke Bomb"));
-		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 2, "Gravity Field"));
-		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Fireball"));
-		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Sticky Bomb"));
+		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
+		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 2, "Pinwheel"));
+		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
+		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Explosive"));
 	}
 
 
@@ -209,7 +209,7 @@ public class PlacementUI : MonoBehaviour {
 		                           info.transform.position, Quaternion.identity) as GameObject;
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
-		Destroy (activePower.collider2D);
+		
 
 		if(activePower.GetComponent<Animator>() != null){
 			activePower.GetComponent<Animator>().enabled = false;
@@ -315,7 +315,9 @@ public class PlacementUI : MonoBehaviour {
 				//pause movement of system.
 				pair.Key.GetComponent<ParticleSystem>().Pause();
             }
+            Destroy(pair.Key.collider2D);
 		}
+        
 	}
 
     public void DestroyAlphaPower(PowerSpawn spawn)
