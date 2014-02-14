@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlacementUI : MonoBehaviour {
 
-	public delegate void SpawnAction(PowerSpawn spawnInfo);
+	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
 
 
@@ -209,6 +209,11 @@ public class PlacementUI : MonoBehaviour {
 		                           info.transform.position, Quaternion.identity) as GameObject;
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
+		Destroy (activePower.collider2D);
+
+		if(activePower.GetComponent<Animator>() != null){
+			activePower.GetComponent<Animator>().enabled = false;
+		}
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -249,7 +254,7 @@ public class PlacementUI : MonoBehaviour {
 
 			if(live){
 				Destroy(activePower);
-				spawnNow(spawn);
+				spawnNow(spawn, gameObject);
 			}
 
 			state = PlacementState.Default;
@@ -275,7 +280,7 @@ public class PlacementUI : MonoBehaviour {
 
 		if(live){
 			Destroy(activePower);
-			spawnNow(spawn);
+			spawnNow(spawn, gameObject);
 		}
 
 		//Return buttons to normal
@@ -295,8 +300,35 @@ public class PlacementUI : MonoBehaviour {
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);
 		}
-		foreach(var pair in placedPowers){
-			Destroy(pair.Key);
+        foreach (var pair in placedPowers)
+        {
+			//Destroy(pair.Key);
+            Debug.Log(pair);
+            Color color = pair.Key.renderer.material.color;
+            color.a = 0.5f;
+            pair.Key.renderer.material.color = color;
+            if(pair.Key.GetComponent<ParticleSystem>() != null)
+            {
+                Color particleColor = pair.Key.GetComponent<ParticleSystem>().startColor;
+                particleColor.a = 0.70f;
+                pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
+				//pause movement of system.
+				pair.Key.GetComponent<ParticleSystem>().Pause();
+            }
 		}
 	}
+
+    public void DestroyAlphaPower(PowerSpawn spawn)
+    {
+        //PowerSpawn spawn = null;
+        //placedPowers.TryGetValue(power, out spawn);
+        //placedPowers.Remove(spawn);
+        foreach (var pair in placedPowers)
+        {
+            if (spawn == pair.Value)
+            {
+                Destroy(pair.Key);
+            }
+        }
+    }
 }

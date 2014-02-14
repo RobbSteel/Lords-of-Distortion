@@ -68,6 +68,7 @@ public class Hook : MonoBehaviour {
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(going == true){
 			if(hookscript.hooked == true){
+				hittimer = 1.5f;
 				movingtowards = true;
 				going = false;
 			 
@@ -127,9 +128,20 @@ public class Hook : MonoBehaviour {
 			hittimer -= Time.deltaTime; 
 		}
 		
-		else 
+
 		if(movingtowards == true){
+
+			if(hittimer > 0){
+			
 			movingtohook(speed);
+			
+			} else {
+
+			DestroyHookPossible();
+
+			}
+
+			hittimer -= Time.deltaTime;
 		}
 
 		if(movingback == true){
