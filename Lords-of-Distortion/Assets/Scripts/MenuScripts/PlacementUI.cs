@@ -254,6 +254,7 @@ public class PlacementUI : MonoBehaviour {
 
 			if(live){
 				Destroy(activePower);
+				activePower = null;
 				spawnNow(spawn, gameObject);
 			}
 
@@ -280,6 +281,7 @@ public class PlacementUI : MonoBehaviour {
 
 		if(live){
 			Destroy(activePower);
+			activePower = null;
 			spawnNow(spawn, gameObject);
 		}
 
