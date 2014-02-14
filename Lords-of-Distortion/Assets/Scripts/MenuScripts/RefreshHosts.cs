@@ -8,7 +8,7 @@ public class RefreshHosts : MonoBehaviour {
 	private const string typeName = "Distorton";
 	private HostData[] hostList;
 
-	private float refreshtime = 3;
+	private float refreshtime = 0;
 	// Use this for initialization
 	void Start () {
 	

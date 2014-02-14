@@ -11,6 +11,7 @@ public class TransferExplosive : Power {
 	public float stickytimer = 2;
 	public bool firststick = true;
 	bool sentRPC = false;
+    bool exploded = false;
 
 	[RPC]
 	void IThinkIGotStuck(NetworkMessageInfo info){
@@ -46,6 +47,8 @@ public class TransferExplosive : Power {
 	//Note: Only the host can decide who got hit.
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
 
+        if (exploded)
+            controller.Die();
 		//cant stick to yourself again. also wait for response rpc before sending another one.
 		if(controller.hasbomb || sentRPC){
 			return;
@@ -72,6 +75,8 @@ public class TransferExplosive : Power {
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller)
 	{
+        if (exploded)
+            controller.Die();
 		print ("staying");
 		
 	}
@@ -86,12 +91,22 @@ public class TransferExplosive : Power {
 	void Update () {
 		
 		//Blow up if the time is out
-		if(timer <= 0){
-			
+		if(timer <= 0 && !exploded)
+        {
+            exploded = true;
+            GameObject explode = Instantiate(Resources.Load("ExplosionParticle"), transform.position, Quaternion.identity) as GameObject;
+            Destroy(explode, 1.0f);
+            gameObject.GetComponent<SpriteRenderer>().sprite = null;
 			print("Boom");
-			
-		} else {
-			
+            //Destroy(gameObject);
+		} 
+        else if (timer <= -5)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Bomb ELSE~~~~~");
 			//Do this only if the bomb cannot be transfered
 			if(!stickready){
 				
@@ -111,7 +126,7 @@ public class TransferExplosive : Power {
 				
 			}
 			
-			timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
 			
 		}
 	}
