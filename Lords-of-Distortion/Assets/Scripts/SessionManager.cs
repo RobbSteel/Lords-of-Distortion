@@ -158,11 +158,14 @@ public class SessionManager : MonoBehaviour {
 				level = "PointsScreen";
 		} else {
 	    //Right now, because we only have 1 level, we do the same map repeatedly until victory conditions
-		arenaIndex = 0;
-		roundsplayed++;
-		level = arenas[arenaIndex];
-		
+				arenaIndex = 0;
+				level = arenas[arenaIndex];
+			if(!matchfinish){
+				roundsplayed++;
+			}
+			
 	}
+
 		//Checks if the match is finished and we're returning from the victory screen so we can go to the lobby
 		if(matchfinish && !scorescreen){
 			matchfinish = false;
