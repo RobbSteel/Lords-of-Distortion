@@ -295,8 +295,33 @@ public class PlacementUI : MonoBehaviour {
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);
 		}
-		foreach(var pair in placedPowers){
-			Destroy(pair.Key);
+        foreach (var pair in placedPowers)
+        {
+			//Destroy(pair.Key);
+            Debug.Log(pair);
+            Color color = pair.Key.renderer.material.color;
+            color.a = 0.5f;
+            pair.Key.renderer.material.color = color;
+            if(pair.Key.GetComponent<ParticleSystem>() != null)
+            {
+                Color particleColor = pair.Key.GetComponent<ParticleSystem>().startColor;
+                particleColor.a = 0.75f;
+                pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
+            }
 		}
 	}
+
+    public void DestroyAlphaPower(PowerSpawn spawn)
+    {
+        //PowerSpawn spawn = null;
+        //placedPowers.TryGetValue(power, out spawn);
+        //placedPowers.Remove(spawn);
+        foreach (var pair in placedPowers)
+        {
+            if (spawn == pair.Value)
+            {
+                Destroy(pair.Key);
+            }
+        }
+    }
 }

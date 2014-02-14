@@ -16,7 +16,7 @@ public class ArenaManager : MonoBehaviour {
 	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
 	List<NetworkPlayer> playersReady;
 	
-	public float beginTime;
+	float beginTime;
 	int? livePlayers;
 	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
@@ -229,6 +229,7 @@ public class ArenaManager : MonoBehaviour {
             SpawnPowerLocally(spawn);
             //Remove from your inventory and TODO: disable button here
             placementUI.selectedTriggers.Remove(spawn);
+            placementUI.DestroyAlphaPower(spawn);
 		}
 	}
 
