@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System;
@@ -7,7 +7,7 @@ public class SessionManager : MonoBehaviour {
 
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[1]{"StageOne"}; //an array of arenas
+	private string[] arenas = new string[3]{"StageOne", "StageOne", "StageOne"}; //an array of arenas
 	public PSinfo gameInfo;
 
 	public bool finishedLoading = false;
@@ -147,33 +147,28 @@ public class SessionManager : MonoBehaviour {
 	public void LoadNextLevel(bool scorescreen){
 		string level;
 
-		if(roundsplayed == 3 && scorescreen){
-			matchfinish = true;
-			roundsplayed = 0;
-		}
+
 
 
 
 		if(scorescreen){
+				roundsplayed++;
 				level = "PointsScreen";
 		} else {
-	    //Right now, because we only have 1 level, we do the same map repeatedly until victory conditions
-				arenaIndex = 0;
-				level = arenas[arenaIndex];
-			if(!matchfinish){
-				roundsplayed++;
-			}
-			
-	}
-
-		//Checks if the match is finished and we're returning from the victory screen so we can go to the lobby
-		if(matchfinish && !scorescreen){
-			matchfinish = false;
+	    ++arenaIndex;
+		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 			level = "LobbyArena";
 			arenaIndex = -1;
-			print ("return to lobby");
+	
+		} else {
+			level = arenas[arenaIndex];
 		}
 
+		if(roundsplayed == 3 && scorescreen){
+			matchfinish = true;
+			roundsplayed = 0;
+		}
+	}
 		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
 	}
 
