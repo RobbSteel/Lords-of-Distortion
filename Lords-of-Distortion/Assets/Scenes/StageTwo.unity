@@ -1415,7 +1415,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 396353516}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.6500001, y: 2.91000009, z: 0}
+  m_LocalPosition: {x: -.642724991, y: -.404587865, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455499505}
@@ -1513,6 +1513,10 @@ MonoBehaviour:
   UIoffsetX: -30
   UIoffsetY: 55
   recoverRate: 0
+  hitMarks: {fileID: 0}
+  firstMark: {fileID: 0}
+  secondMark: {fileID: 0}
+  thirdMark: {fileID: 0}
 --- !u!61 &396353521
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1605,6 +1609,7 @@ MonoBehaviour:
   hasbomb: 0
   infoscript: {fileID: 0}
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+  knockedBack: 0
 --- !u!95 &396353526
 Animator:
   serializedVersion: 2
@@ -2436,15 +2441,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00373831787
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00373831787
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 400022, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00373831787
+      value: .00416666688
       objectReference: {fileID: 0}
     - target: {fileID: 14800000, guid: 57d4fcd6117deab449770e844c9b1b5c, type: 2}
       propertyPath: m_ViewID.m_ID
@@ -2637,7 +2642,6 @@ GameObject:
   - 212: {fileID: 645644053}
   - 61: {fileID: 645644052}
   - 114: {fileID: 645644051}
-  - 114: {fileID: 645644050}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -2657,45 +2661,6 @@ Transform:
   m_Children:
   - {fileID: 1078252806}
   m_Father: {fileID: 1249234588}
---- !u!114 &645644050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 1506676383}
-  m_GameObject: {fileID: 645644048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &645644051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3169,7 +3134,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &768034883
 Transform:
   m_ObjectHideFlags: 0
@@ -3524,7 +3489,6 @@ GameObject:
   - 212: {fileID: 797588144}
   - 61: {fileID: 797588143}
   - 114: {fileID: 797588142}
-  - 114: {fileID: 797588141}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -3544,45 +3508,6 @@ Transform:
   m_Children:
   - {fileID: 1076428820}
   m_Father: {fileID: 1249234588}
---- !u!114 &797588141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 581301732}
-  m_GameObject: {fileID: 797588139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &797588142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3646,7 +3571,6 @@ GameObject:
   - 212: {fileID: 829538925}
   - 61: {fileID: 829538924}
   - 114: {fileID: 829538923}
-  - 114: {fileID: 829538922}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -3666,45 +3590,6 @@ Transform:
   m_Children:
   - {fileID: 1026107108}
   m_Father: {fileID: 1249234588}
---- !u!114 &829538922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 1419270118}
-  m_GameObject: {fileID: 829538920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &829538923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4010,7 +3895,6 @@ GameObject:
   - 212: {fileID: 877983197}
   - 61: {fileID: 877983196}
   - 114: {fileID: 877983195}
-  - 114: {fileID: 877983194}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -4030,45 +3914,6 @@ Transform:
   m_Children:
   - {fileID: 1473647334}
   m_Father: {fileID: 1249234588}
---- !u!114 &877983194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 376783298}
-  m_GameObject: {fileID: 877983192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &877983195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4136,7 +3981,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &898138586
 Transform:
   m_ObjectHideFlags: 0
@@ -4664,7 +4509,6 @@ GameObject:
   - 212: {fileID: 1017399342}
   - 61: {fileID: 1017399341}
   - 114: {fileID: 1017399340}
-  - 114: {fileID: 1017399339}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -4672,45 +4516,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1017399339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 12850061}
-  m_GameObject: {fileID: 1017399338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &1017399340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4790,7 +4595,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1026107108
 Transform:
   m_ObjectHideFlags: 0
@@ -5041,7 +4846,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1076428820
 Transform:
   m_ObjectHideFlags: 0
@@ -5092,7 +4897,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1078252806
 Transform:
   m_ObjectHideFlags: 0
@@ -5767,7 +5572,6 @@ GameObject:
   - 212: {fileID: 1330554928}
   - 61: {fileID: 1330554927}
   - 114: {fileID: 1330554926}
-  - 114: {fileID: 1330554925}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -5787,45 +5591,6 @@ Transform:
   m_Children:
   - {fileID: 768034883}
   m_Father: {fileID: 1249234588}
---- !u!114 &1330554925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 845268920}
-  m_GameObject: {fileID: 1330554923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &1330554926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6712,7 +6477,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1473647334
 Transform:
   m_ObjectHideFlags: 0
@@ -7995,7 +7760,7 @@ GameObject:
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1917910306
 Transform:
   m_ObjectHideFlags: 0
@@ -8434,7 +8199,6 @@ GameObject:
   - 212: {fileID: 1986262431}
   - 61: {fileID: 1986262430}
   - 114: {fileID: 1986262429}
-  - 114: {fileID: 1986262428}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -8442,45 +8206,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1986262428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d1c7f3584f4b52b4db68b5c09eb63785,
-    type: 2}
-  m_PrefabInternal: {fileID: 1038879449}
-  m_GameObject: {fileID: 1986262427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d166255cacf07b4292b8402b3ddefc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  method: 0
-  style: 0
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-    - time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  ignoreTimeScale: 1
-  delay: 2
-  duration: 1
-  steeperCurves: 0
-  tweenGroup: 0
-  onFinished: []
-  eventReceiver: {fileID: 0}
-  callWhenFinished: 
-  from: {x: -4.0502758, y: -3.77907515, z: 0}
-  to: {x: -4.0502758, y: -3.47907495, z: 0}
 --- !u!114 &1986262429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8648,7 +8373,7 @@ Transform:
   m_GameObject: {fileID: 2027975383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00373831787, y: .00373831787, z: .00373831787}
+  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 1407413348}
   - {fileID: 640078033}
@@ -8705,7 +8430,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3000
+  startingRenderQueue: 3003
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
