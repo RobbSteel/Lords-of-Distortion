@@ -12,6 +12,7 @@ public class TransferExplosive : Power {
 	public bool firststick = true;
 	bool sentRPC = false;
     bool exploded = false;
+    GameObject explode;
 
 	[RPC]
 	void IThinkIGotStuck(NetworkMessageInfo info){
@@ -94,14 +95,15 @@ public class TransferExplosive : Power {
 		if(timer <= 0 && !exploded)
         {
             exploded = true;
-            GameObject explode = Instantiate(Resources.Load("ExplosionParticle"), transform.position, Quaternion.identity) as GameObject;
+            explode = Instantiate(Resources.Load("ExplosionParticle"), transform.position, Quaternion.identity) as GameObject;
             Destroy(explode, 1.0f);
             gameObject.GetComponent<SpriteRenderer>().sprite = null;
 			print("Boom");
             //Destroy(gameObject);
 		} 
-        else if (timer <= -5)
+        else if (timer <= -1)
         {
+            Destroy(explode);
             Destroy(gameObject);
         }
         else
