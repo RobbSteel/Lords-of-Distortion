@@ -254,9 +254,9 @@ public class PlacementUI : MonoBehaviour {
 
 			if(live){
 				Destroy(activePower);
-				activePower = null;
 				spawnNow(spawn, gameObject);
 			}
+            activePower = null;
 
 			state = PlacementState.Default;
 			GridEnabled(true);

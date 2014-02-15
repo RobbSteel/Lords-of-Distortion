@@ -147,7 +147,7 @@ public class StunBar : MonoBehaviour {
 	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
 
-		sideForce = new Vector2(5000f * flip, 100f);
+		sideForce = new Vector2(3000f * flip, 100f);
 		knockBackPending = true;
 	}
 
