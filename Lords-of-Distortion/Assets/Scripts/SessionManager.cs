@@ -4,12 +4,12 @@ using System.Collections;
 using System;
 
 public class SessionManager : MonoBehaviour {
-
+	
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
 	private string[] arenas = new string[3]{"StageOne", "StageOne", "StageOne"}; //an array of arenas
 	public PSinfo gameInfo;
-
+	
 	public bool finishedLoading = false;
 	public const int GAMEPLAY = 0;
 	const int SETUP = 1;
@@ -17,17 +17,17 @@ public class SessionManager : MonoBehaviour {
 	public bool matchfinish = false;
 	public float roundsplayed = 0;
 	//public TimeManager timeManager;
-
+	
 	String offlineLevel = "MainMenu";
-
+	
 	public static bool instanceExists = false;
 	public static SessionManager instance;
-
-
+	
+	
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 	public TimeManager timemanager;
-
+	
 	void Awake(){
 		DontDestroyOnLoad(this);
 		instanceExists = true;
@@ -39,11 +39,11 @@ public class SessionManager : MonoBehaviour {
 		levelPrefix = 0;
 		arenaIndex = -1;// lobby is -1
 	}
-
+	
 	//NetworkController myPlayer;
 	public Transform characterPrefab;
 	public GameObject timeManagerPrefab;
-
+	
 	//The client requests that the server do the following.
 	[RPC]
 	void RequestLocalSpawn( string username, NetworkMessageInfo info){
@@ -52,8 +52,8 @@ public class SessionManager : MonoBehaviour {
 		ConfirmLocalSpawn (playerCounter, username, original);
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, username, original);
 	}
-
-
+	
+	
 	//This is called by each client when told to by the server.
 	[RPC]
 	void SpawnPlayer(Vector3 location){
@@ -62,15 +62,15 @@ public class SessionManager : MonoBehaviour {
 		NetworkView charNetworkView = instance.networkView;
 		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
 	}
-
+	
 	/*
 	 * Create a local copy of PlayerOptions and PlayerStats for each player in this session
 	 */
-
+	
 	[RPC]
 	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer original){
 		playerCounter = playerNumber; //unity guarantees that rpcs will be in order
-
+		
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
@@ -78,14 +78,14 @@ public class SessionManager : MonoBehaviour {
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		gameInfo.AddPlayer(original, options, stats);
-
+		
 		if(original == Network.player){
 			Debug.Log ("My spawn " + original + " " +  playerCounter);
 			//do this at the end so that options are available to the player
 			SpawnPlayer(transform.position);
 		}
 	}
-
+	
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
@@ -107,7 +107,7 @@ public class SessionManager : MonoBehaviour {
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
 		//we could also have a custom functions like "Ready" 
 	}
-
+	
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
@@ -115,7 +115,7 @@ public class SessionManager : MonoBehaviour {
 		Destroy (this.gameObject);
 		Destroy (gameInfo.gameObject);
 	}
-
+	
 	void OnPlayerDisconnected(NetworkPlayer player){
 		/* Remember to fix this */
 		Network.RemoveRPCs(player);
@@ -123,9 +123,10 @@ public class SessionManager : MonoBehaviour {
 		gameInfo.RemovePlayer(player);
 		//Network.Destroy(myPlayer.gameObject);
 	}
-
+	
 	[RPC]
-	IEnumerator LoadLevel(String level, int commonPrefix){
+	IEnumerator LoadLevel(String level, int commonPrefix, bool finished){
+		matchfinish = finished;
 		Network.SetSendingEnabled(GAMEPLAY, false);
 		Network.isMessageQueueRunning = false;
 		Network.SetLevelPrefix(commonPrefix);
@@ -135,43 +136,49 @@ public class SessionManager : MonoBehaviour {
 		Network.isMessageQueueRunning = true;
 		Network.SetSendingEnabled(GAMEPLAY, true);
 		finishedLoading = true;
-
+		
 		/*Because we don't want to call network specific functions until we've set the level prefix
 		 avoid using Start() in other gameobjects to do networking tasks. Instead call OnNetworkLoadedLevel*/
 		GameObject[] objects =  FindObjectsOfType(typeof(GameObject)) as GameObject[];
 		foreach(GameObject go in objects)
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);	
 	}
-
+	
 	//load level now takes a bool to indicate whether the score scene should be loaded.
 	public void LoadNextLevel(bool scorescreen){
 		string level;
-
-
-
-
-
+		
+		
+		
+		
+		
 		if(scorescreen){
-				roundsplayed++;
-				level = "PointsScreen";
+			roundsplayed++;
+			level = "PointsScreen";
 		} else {
-	    ++arenaIndex;
-		if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
-			level = "LobbyArena";
-			arenaIndex = -1;
-	
-		} else {
-			level = arenas[arenaIndex];
+			++arenaIndex;
+			if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
+				level = "LobbyArena";
+				arenaIndex = -1;
+				
+				
+			} else {
+				level = arenas[arenaIndex];
+			}
+			
+			
 		}
-
+		
 		if(roundsplayed == 3 && scorescreen){
+			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;
+			
 		}
+		
+		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++, matchfinish);
 	}
-		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++);
-	}
-
+	
 	//this function should be called by the server arena manager.
 	public int SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
@@ -192,7 +199,7 @@ public class SessionManager : MonoBehaviour {
 		//in 5 seconds begin the round.
 		return players.Count;
 	}
-
+	
 	//called when we re-enter this scene after a game is over.
 	void OnNetworkLoadedLevel(){
 		if(arenaIndex != -1)
@@ -206,7 +213,7 @@ public class SessionManager : MonoBehaviour {
 			SpawnPlayers(tempLocations);
 		}
 	}
-
+	
 	public void KillPlayer(GameObject playerObject){
 		networkView.RPC ("Died", RPCMode.OthersBuffered);
 		PlayerStats stats = gameInfo.GetPlayerStats(Network.player);
@@ -215,15 +222,17 @@ public class SessionManager : MonoBehaviour {
 		//We may want to instead call a special RPC for an animation or something later on.
 		Network.Destroy(playerObject);
 	}
-
+	
 	[RPC]
 	void Died(NetworkMessageInfo info){
 		PlayerStats stats = gameInfo.GetPlayerStats(info.sender);
 		stats.deaths += 1;
 		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
 	}
-
+	
 	void OnDestroy(){
 		instanceExists = false;
 	}
 }
+
+

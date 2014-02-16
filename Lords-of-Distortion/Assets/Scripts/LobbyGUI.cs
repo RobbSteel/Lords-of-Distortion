@@ -24,7 +24,26 @@ public class LobbyGUI : MonoBehaviour {
 
 	}
 
+    public void PlayButton(GameObject go)
+    {
+        Network.RemoveRPCsInGroup(0);
+        Network.RemoveRPCsInGroup(1);
+        sessionManager.LoadNextLevel(false);
+    }
+
+    public void DisconnectButton(GameObject go)
+    {
+        Network.Disconnect(200);
+        wantConnection = false;
+    }
+
 	void Start(){
+        GameObject playButton = GameObject.Find("Play");
+        UIEventListener.Get(playButton).onClick += PlayButton;
+
+        GameObject disconnectButton = GameObject.Find("Disconnect");
+        UIEventListener.Get(disconnectButton).onClick += DisconnectButton;
+
 		var information = GameObject.Find("PSInfo");
 		infoscript = information.GetComponent<PSinfo>();
 		hostList = MasterServer.PollHostList();
@@ -46,58 +65,58 @@ public class LobbyGUI : MonoBehaviour {
 	}
 
 	void OnGUI(){
-	if (Network.peerType == NetworkPeerType.Server)
-		{
-			GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Server");
-			if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
-			{
-				Network.Disconnect(200);
-				wantConnection = false;
-			}
-			if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
-			{
-				Network.RemoveRPCsInGroup(0);
-				Network.RemoveRPCsInGroup(1);
-				sessionManager.LoadNextLevel(false);
-			}
-		}
-		/*
-		if (Network.peerType == NetworkPeerType.Disconnected)
-		{
-			GUI.Label(new Rect(10, 10, 300, 20), "Status: Disconnected");
-			if (GUI.Button(new Rect(10, 30, 120, 20), "Refresh Hosts"))
-			{
-				MasterServer.RequestHostList(typeName);
-				//wantConnection = true;
-				//Network.Connect(connectionIP, connectionPort);
-			}
-			if (GUI.Button(new Rect(10, 50, 120, 20), "Initialize Server"))
-			{
-				Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
-				MasterServer.RegisterHost(typeName, gameName);
-			}
-		}
-		else if (Network.peerType == NetworkPeerType.Client)
-		{
-			GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Client");
-			if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
-			{
-				Network.Disconnect(200);
-				wantConnection = false;
-			}
-		}
+        /*if (Network.peerType == NetworkPeerType.Server)
+            {
+                GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Server");
+                if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
+                {
+                    Network.Disconnect(200);
+                    wantConnection = false;
+                }
+                if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
+                {
+                    Network.RemoveRPCsInGroup(0);
+                    Network.RemoveRPCsInGroup(1);
+                    sessionManager.LoadNextLevel(false);
+                }
+            }*/
+        /*
+            if (Network.peerType == NetworkPeerType.Disconnected)
+            {
+                GUI.Label(new Rect(10, 10, 300, 20), "Status: Disconnected");
+                if (GUI.Button(new Rect(10, 30, 120, 20), "Refresh Hosts"))
+                {
+                    MasterServer.RequestHostList(typeName);
+                    //wantConnection = true;
+                    //Network.Connect(connectionIP, connectionPort);
+                }
+                if (GUI.Button(new Rect(10, 50, 120, 20), "Initialize Server"))
+                {
+                    Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
+                    MasterServer.RegisterHost(typeName, gameName);
+                }
+            }
+            else if (Network.peerType == NetworkPeerType.Client)
+            {
+                GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Client");
+                if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
+                {
+                    Network.Disconnect(200);
+                    wantConnection = false;
+                }
+            }
 
 
-		if (hostList != null)
-		{
-			//print ("getting here");
-			for (int i = 0; i < hostList.Length; i++)
-			{
-				if (GUI.Button(new Rect(10,90+(40*i), 120, 20), hostList[i].gameName))
-					Network.Connect(hostList[i]);
-			}
-		}
-		*/
+            if (hostList != null)
+            {
+                //print ("getting here");
+                for (int i = 0; i < hostList.Length; i++)
+                {
+                    if (GUI.Button(new Rect(10,90+(40*i), 120, 20), hostList[i].gameName))
+                        Network.Connect(hostList[i]);
+                }
+            }
+            */
 	}
 
 	
