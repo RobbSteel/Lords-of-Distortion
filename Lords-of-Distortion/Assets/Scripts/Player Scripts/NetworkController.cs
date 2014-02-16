@@ -13,9 +13,7 @@ public class NetworkController : MonoBehaviour {
 
 	private float width;
 
-	//A priority queue of events sorted by earliest time to highest.
-	private SortedList<float, Event> eventQueue;
-	
+
 	//A buffer of states. Not sure if a circular buffer is the best data structure at this point.
 	private CircularBuffer<State> states;
 
@@ -31,6 +29,7 @@ public class NetworkController : MonoBehaviour {
 	struct State{
 		public Vector3 position;
 		public bool facingRight;
+		public bool inAir;
 		public float remoteTime; //the time of this state on the client
 		public float localTime;  //the time we received a copy of this state.
 		public State(Vector3 position, bool facingRight){
@@ -38,21 +37,10 @@ public class NetworkController : MonoBehaviour {
 			this.facingRight = facingRight;
 			this.remoteTime = float.NaN;
 			this.localTime = float.NaN;
+			this.inAir = false;
 		}
 	}
-
-	/*
-	 * Stores parameters and a function name so that it can be called at a later time.
-	 * Parameters can be of any type, so casting will be needed.
-	 */
-	public class Event{
-		public string functionName;
-		public float timestamp;
-		public ArrayList parameters;
-		public Event(){
-			parameters = new ArrayList();
-		}
-	}
+	
 
 	//just learned about this, might be useful later on
 	void OnNetworkInstantiate(NetworkMessageInfo info){
@@ -99,7 +87,6 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	void Awake() {
-		eventQueue = new SortedList<float, Event>();
 		controller2D = GetComponent<Controller2D>();
 	}
 
@@ -108,19 +95,23 @@ public class NetworkController : MonoBehaviour {
 		width = collider.size.x;
 	}
 
+	float yVel = 0f;
+	float prevYVel = 0f;
+	float prevYPosition = 0f;
 	void FixedUpdate(){
-		//Process 1 event. You don't have to be the owner
-		if(eventQueue.Count != 0){
-			//If this instance is being simulated, use simTime, otherwise use real time.
-			float relativeTime = isOwner ? (float)Network.time : simTime;
-			if(eventQueue.Keys[0] <= relativeTime){
-				Event doNow = eventQueue.Values[0];
-				eventQueue.RemoveAt(0);
-				Debug.Log (doNow.functionName);
-				//Debug.Log ("Local: " + Network.time + " Remote: " + doNow.timestamp);
-				//switch(eventfunctionname){//}
-			}
-		}
+		if(isOwner)
+			return;
+		/*
+		yVel = transform.position.y - prevYPosition;
+
+		print (prevYVel);
+		if(controller2D.grounded && prevYVel <= 0.00001f && yVel > 0.00001f)
+			controller2D.anim.SetTrigger("Jump");
+
+		prevYVel = yVel;
+		prevYPosition = transform.position.y;
+		*/
+	
 	}
 
 	float interval = float.PositiveInfinity;
@@ -129,9 +120,6 @@ public class NetworkController : MonoBehaviour {
 	void Update () {
 		if (isOwner)
 			return;
-
-		//udpate animations
-		controller2D.anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
@@ -160,7 +148,10 @@ public class NetworkController : MonoBehaviour {
 			
 			if(newState.facingRight != controller2D.facingRight)
 				controller2D.Flip();
-			
+			//If player is in air, play jump animation, otherwise play ground animation.
+			if(newState.inAir)
+				controller2D.anim.SetTrigger("Jump");
+
 			Vector3 positionDifference = newState.position - oldState.position;
 			float distanceApart = positionDifference.magnitude;
 			if(distanceApart > width * 20.0f){
@@ -188,16 +179,18 @@ public class NetworkController : MonoBehaviour {
 
 		Vector3 syncPosition = Vector3.zero;
 		bool syncFacing = false;
-
+		bool syncInAir = false;
 		if (stream.isWriting)
 		{
 			//if we have control over this entity, send out our positions to everyone else.
 			syncPosition = transform.position;
 			syncFacing = controller2D.facingRight;
+			syncInAir = controller2D.inAir;
 
 			stream.Serialize(ref syncPosition.x);
 			stream.Serialize(ref syncPosition.y);
 			stream.Serialize(ref syncFacing);
+			stream.Serialize(ref syncInAir);
 		}
 
 		else {
@@ -219,14 +212,16 @@ public class NetworkController : MonoBehaviour {
 			}
 			
 	
-
+			//Write syncrhronized values to a state.
 			float xPosition = 0f;
 			float yPosition = 0f;
 			stream.Serialize(ref xPosition);
 			stream.Serialize(ref yPosition);
 			syncPosition = new Vector3(xPosition, yPosition, 0f);
 			stream.Serialize(ref syncFacing);
+			stream.Serialize(ref syncInAir);
 			State state = new State(syncPosition, syncFacing);
+			state.inAir = syncInAir;
 			state.remoteTime = (float)info.timestamp;
 			state.localTime = (float)Network.time;
 			states.Add(state); //if we advanced buffer manually, then count < maxsize

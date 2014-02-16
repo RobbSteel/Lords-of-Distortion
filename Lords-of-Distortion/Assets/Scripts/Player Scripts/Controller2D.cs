@@ -5,14 +5,14 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool facingRight;
 	[HideInInspector]
-	public bool jump = false;
+	public bool jumpRequested = false;
 
 	public bool DEBUG;
 	public float maxSpeed = 10f;
 	public Animator anim;
 
 	private bool dead = false;
-	private bool grounded = false;
+	public bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
 	public LayerMask groundLayer;
@@ -23,7 +23,7 @@ public class Controller2D : MonoBehaviour {
 	public bool canJump;
 	public bool hasbomb;
 	bool stoppedJump;
-	bool inAir = true;
+	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 	
@@ -66,10 +66,10 @@ public class Controller2D : MonoBehaviour {
 	
 	float previousY = 0f;
 	void FixedUpdate(){
-
+		IsGrounded();
 		if(!DEBUG && !networkController.isOwner)
 			return;
-		IsGrounded();
+
 		MovePlayer();
 
 		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
@@ -85,7 +85,7 @@ public class Controller2D : MonoBehaviour {
 		}
 
 		// If player jumps
-		if (jump) {
+		if (jumpRequested) {
 			// set the Jump animator trigger parameter
 			anim.SetTrigger("Jump");
 
@@ -94,17 +94,16 @@ public class Controller2D : MonoBehaviour {
 
 			//I think setting velocity feels better.
 			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
-
+			inAir = true;
 			// player can't jump again until jump conditions from Update are satisfied
-			jump = false;
+			jumpRequested = false;
 		}
 		previousY = rigidbody2D.velocity.y;
 	}
 
 	private void Jump(){
 		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
-			jump = true;
-			inAir = true;
+			jumpRequested = true;
 		}
 	}
 	// Use this for initialization
