@@ -1281,16 +1281,16 @@ MonoBehaviour:
   mPivot: 4
   mWidth: 44
   mHeight: 20
-  mDepth: 1
+  mDepth: -1
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 1
   aspectRatio: 2.20000005
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: ac44b8a25154a9d40a172ab5851e0986, type: 2}
+  mFont: {fileID: 11400000, guid: a1363d30b8808c142979462748edba01, type: 2}
   mText: 3:00
-  mFontSize: 20
+  mFontSize: 72
   mFontStyle: 0
   mEncoding: 1
   mMaxLineCount: 1
@@ -2060,6 +2060,7 @@ Transform:
   m_Children:
   - {fileID: 1880239199}
   - {fileID: 1494980935}
+  - {fileID: 1260520500}
   - {fileID: 951373778}
   - {fileID: 1960891673}
   - {fileID: 1454059031}
@@ -2067,9 +2068,8 @@ Transform:
   - {fileID: 1744473914}
   - {fileID: 1752258700}
   - {fileID: 1289123829}
-  - {fileID: 453832292}
-  - {fileID: 1260520500}
   - {fileID: 426818307}
+  - {fileID: 453832292}
   m_Father: {fileID: 944498507}
 --- !u!1 &353578576
 GameObject:
@@ -10930,6 +10930,23 @@ Prefab:
     - target: {fileID: 14800000, guid: d3cd913089056b345bd90fad246e4797, type: 2}
       propertyPath: m_ViewID.m_Type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: mFont
+      value: 
+      objectReference: {fileID: 11400000, guid: a1363d30b8808c142979462748edba01,
+        type: 2}
+    - target: {fileID: 11400024, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: mFontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: mDepth
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 14800000, guid: d3cd913089056b345bd90fad246e4797, type: 2}

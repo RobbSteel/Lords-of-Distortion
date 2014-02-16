@@ -101,7 +101,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 			} else {
 			//This one prints losers
-			scorelabel.transform.localPosition = new Vector2(-400, 100+(-100*playernumber));
+			scorelabel.transform.localPosition = new Vector2(-444, 100+(-100*playernumber));
 			playerlabel.transform.localPosition = new Vector2(-200, 100+(-100*playernumber));
 			
 			}
@@ -130,7 +130,7 @@ public class ScoreDisplay : MonoBehaviour {
 			playerlabel.transform.parent = GameObject.Find("UI Root").transform;
 			scorelabel.transform.localScale = new Vector3(1, 1, 1);
 			playerlabel.transform.localScale = new Vector3(1, 1, 1);
-			scorelabel.transform.localPosition = new Vector2(-400, 100+(-100*playernumber));
+			scorelabel.transform.localPosition = new Vector2(-444, 100+(-100*playernumber));
 			playerlabel.transform.localPosition = new Vector2(-200, 100+(-100*playernumber));
 			
 			print (infoscript.playernumb);
