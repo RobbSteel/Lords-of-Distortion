@@ -92,9 +92,13 @@ public class Controller2D : MonoBehaviour {
 			//Add a vertical force to player
 			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 
+			//Incase you were walking down a slope, rest gravity before jumping
+			rigidbody2D.gravityScale = 1f;
+
 			//I think setting velocity feels better.
 			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			inAir = true;
+
 			// player can't jump again until jump conditions from Update are satisfied
 			jumpRequested = false;
 		}
