@@ -39,7 +39,7 @@ public class PlacementUI : MonoBehaviour {
 
     private Camera cam;
    
-
+	bool powerButtonsEnabled = true;
 	enum PlacementState{
 		Default,
 		MovingPower,
@@ -101,17 +101,11 @@ public class PlacementUI : MonoBehaviour {
 		live = true;
 		int i = 0;
 		GridEnabled(true);
-		/*
-		 * we dont need to do anything special to the entries for now
+	
 		foreach(var inventoryPower in draftedPowers){
 			//Unlimited powers.
 			inventoryPower.Value.quantity = int.MaxValue;
-			UIButton button = buttons[i];
-			PowerBoard info = button.GetComponent<PowerBoard>();
-			info.Initialize(inventoryPower.Value);
-			i++;
 		}
-		*/
 	}
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
@@ -136,7 +130,8 @@ public class PlacementUI : MonoBehaviour {
 			switch(state){
 			//Checks if we've clicked on a power that was already placed..
 			case PlacementState.Default:
-				if(!live && SelectExistingPower()){ //make sure not to allow player to move powers when dead.
+				//make sure not to allow player to move powers when dead or when under an active button
+				if(!live && SelectExistingPower()){ 
 					FollowMouse();
 				}
 				break;
@@ -159,7 +154,7 @@ public class PlacementUI : MonoBehaviour {
 	public void PowerButtonClick(GameObject sender){
 		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
 		//Checks if we still have any left before doing anything.
-		if (activeInfo.associatedPower.quantity > 0 || live)
+		if (activeInfo.associatedPower.quantity > 0 && state != PlacementState.MovingPower)
 		{
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
@@ -187,7 +182,10 @@ public class PlacementUI : MonoBehaviour {
 	/*Take a power prefab and strip it down to the visuals. .*/
 	private void SpawnPowerVisual(PowerBoard info){
 
-		info.associatedPower.quantity--;
+		//remove 1 from quanitity, disable button if == 0
+		if(--info.associatedPower.quantity <= 0)
+			info.GetComponent<UIButton>().isEnabled = false;
+
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
@@ -275,10 +273,14 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(true);
 	}
 
+
 	//Enables or disables the entire grid of buttons.
 	private void GridEnabled(bool state){
+		powerButtonsEnabled = state;
         foreach(UIButton button in buttons){
-			button.isEnabled = state;
+			//if a power is out, dont re-enable it button
+			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
+				button.isEnabled = state;
 		}        
 	}
 
