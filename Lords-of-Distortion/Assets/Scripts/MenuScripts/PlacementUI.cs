@@ -159,7 +159,7 @@ public class PlacementUI : MonoBehaviour {
 	public void PowerButtonClick(GameObject sender){
 		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
 		//Checks if we still have any left before doing anything.
-		if (activeInfo.associatedPower.quantity > 0)
+		if (activeInfo.associatedPower.quantity > 0 || live)
 		{
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
