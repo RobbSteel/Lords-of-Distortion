@@ -16,12 +16,14 @@ public class Controller2D : MonoBehaviour {
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
 	public LayerMask groundLayer;
-	public float jumpForce = 700f;
+	public float jumpForce = 650f;
+	const float jumpVelocity = 12.5f;
 	public bool stunned;
 	public bool snared = false;
 	public bool canJump;
 	public bool hasbomb;
-
+	bool stoppedJump;
+	bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
@@ -62,17 +64,22 @@ public class Controller2D : MonoBehaviour {
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
-
+		stoppedJump = Input.GetButtonUp("Jump");
 	}
 	
-
+	float previousY = 0f;
 	void FixedUpdate(){
-		ApplyGravity ();
 
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		IsGrounded();
 		MovePlayer();
+
+		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
+		if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
+			//print ("started falling");
+			rigidbody2D.gravityScale = 1.8f;
+		}
 
 		//remove knockback snare when you touch ground.
 		if(grounded && knockedBack){
@@ -86,20 +93,21 @@ public class Controller2D : MonoBehaviour {
 			anim.SetTrigger("Jump");
 
 			//Add a vertical force to player
-			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+
+			//I think setting velocity feels better.
+			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 
 			// player can't jump again until jump conditions from Update are satisfied
 			jump = false;
 		}
-	}
-
-	void ApplyGravity(){
-		rigidbody2D.AddForce (-Vector2.up * 9.81f * Time.deltaTime);
+		previousY = rigidbody2D.velocity.y;
 	}
 
 	private void Jump(){
 		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
 			jump = true;
+			inAir = true;
 		}
 	}
 	// Use this for initialization
@@ -112,6 +120,10 @@ public class Controller2D : MonoBehaviour {
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
 		anim.SetBool( "Ground", grounded );
+		if(inAir && grounded){
+			inAir = false;
+			rigidbody2D.gravityScale = 1f;
+		}
 	}
 
 	//Needs to go in fixedUpdate since we use physics to move player.

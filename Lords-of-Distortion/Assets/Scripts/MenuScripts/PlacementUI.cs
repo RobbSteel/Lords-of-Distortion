@@ -75,12 +75,10 @@ public class PlacementUI : MonoBehaviour {
 		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
 		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Explosive"));
 	}
-
-
+	
 	void Start(){
         cam = Camera.main;
 
-     
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 
@@ -93,6 +91,7 @@ public class PlacementUI : MonoBehaviour {
 		}
 		InventoryGrid.Reposition();
 	}
+	
 
 	/// <summary>
 	///Place powers instantly without using trigges. 
@@ -100,15 +99,13 @@ public class PlacementUI : MonoBehaviour {
 	public void SwitchToLive(){
 		live = true;
 		int i = 0;
-
-	
 		foreach(var inventoryPower in draftedPowers){
 			//Unlimited powers.
 			inventoryPower.Value.quantity = int.MaxValue;
 		}
-
 		GridEnabled(true);
 	}
+
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
 		state = PlacementState.Default;
