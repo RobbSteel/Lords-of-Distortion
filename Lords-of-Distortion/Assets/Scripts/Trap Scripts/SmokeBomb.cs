@@ -14,8 +14,9 @@ public class SmokeBomb : Power {
 	}
 	
 	// Use this for initialization
-	void Start () {
-		
+	void Start () 
+    {
+        Destroy(gameObject, 6f);	
 	}
 	
 	// Update is called once per frame
