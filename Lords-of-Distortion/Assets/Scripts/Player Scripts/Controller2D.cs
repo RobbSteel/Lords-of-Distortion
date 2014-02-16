@@ -89,6 +89,12 @@ public class Controller2D : MonoBehaviour {
 			// set the Jump animator trigger parameter
 			anim.SetTrigger("Jump");
 
+			//Add a vertical force to player
+			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+
+			//Incase you were walking down a slope, rest gravity before jumping
+			rigidbody2D.gravityScale = 1f;
+
 			//I think setting velocity feels better.
 			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			inAir = true;
@@ -123,6 +129,10 @@ public class Controller2D : MonoBehaviour {
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
 		if( !stunned && !snared && !myHook.hookthrown){
+			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
+			
+			//to make jumping and changing direction is disabled
+			//if(!grounded) return;
 			float move = Input.GetAxis ( "Horizontal" );
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			//Problem: THis sets velocity to zero.
