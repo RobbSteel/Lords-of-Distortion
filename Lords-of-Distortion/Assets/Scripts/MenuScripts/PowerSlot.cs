@@ -9,16 +9,11 @@ public class PowerSlot : MonoBehaviour {
 
 	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
 	public static event KeyPress powerKey;
-    private ArenaManager bt;
 	UILabel keyLabel;
 	UISprite powerIcon;
 	string keyText;
 
 
-    void Awake()
-    {
-        bt = GameObject.Find("ArenaOne").GetComponent<ArenaManager>();
-    }
 
 	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
 		keyText = key;

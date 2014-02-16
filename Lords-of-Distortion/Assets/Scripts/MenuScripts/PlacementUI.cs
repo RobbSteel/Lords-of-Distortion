@@ -9,7 +9,7 @@ public class PlacementUI : MonoBehaviour {
 
 
 	//The prefab for the UI elements in grid.
-	public GameObject PowerEntry;
+	public GameObject PowerBoard;
 	public GameObject PowerSlot;
 
 	public GameObject dottedLine;
@@ -38,8 +38,7 @@ public class PlacementUI : MonoBehaviour {
 	PowerPrefabs prefabs;
 
     private Camera cam;
-    ButtonInfo activeInfo;
-    UIButton pwrBoardScript;
+   
 
 	enum PlacementState{
 		Default,
@@ -59,7 +58,6 @@ public class PlacementUI : MonoBehaviour {
 	GameObject dottedLineInstance;
 
 	void Awake(){
-        pwrBoardScript = GameObject.Find("PowerBoard").GetComponent<UIButton>();
 		draftedPowers = new Dictionary<PowerType, InventoryPower>();
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
@@ -81,36 +79,39 @@ public class PlacementUI : MonoBehaviour {
 
 	void Start(){
         cam = Camera.main;
-        GameObject pb = GameObject.Find("PowerBoard");
-        UIEventListener.Get(pb).onClick  += PowerCircleClick;
-        //ButtonInfo pbInfo = pb.GetComponent<ButtonInfo>();
-        //pbInfo.Initialize();
+
      
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
-			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerEntry);
+			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
 			buttons.Add(entry.GetComponent<UIButton>());
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
-			ButtonInfo info = entry.GetComponent<ButtonInfo>();
-			info.Initialize(inventoryPower.Value, live);
+			PowerBoard info = entry.GetComponent<PowerBoard>();
+			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
 		}
 		InventoryGrid.Reposition();
 	}
 
+	/// <summary>
+	///Place powers instantly without using trigges. 
+	/// </summary>
 	public void SwitchToLive(){
 		live = true;
 		int i = 0;
 		GridEnabled(true);
+		/*
+		 * we dont need to do anything special to the entries for now
 		foreach(var inventoryPower in draftedPowers){
 			//Unlimited powers.
 			inventoryPower.Value.quantity = int.MaxValue;
 			UIButton button = buttons[i];
-			ButtonInfo info = button.GetComponent<ButtonInfo>();
-			info.Initialize(inventoryPower.Value, true);
+			PowerBoard info = button.GetComponent<PowerBoard>();
+			info.Initialize(inventoryPower.Value);
 			i++;
 		}
+		*/
 	}
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
@@ -156,29 +157,14 @@ public class PlacementUI : MonoBehaviour {
 
 	/*The button that was pressed is passed in as a GameObject*/
 	public void PowerButtonClick(GameObject sender){
-        activeInfo = sender.GetComponent<ButtonInfo>();
-        Sprite sprite = null;
-        SpriteRenderer sprr = GameObject.Find("PowerBoard").GetComponent<SpriteRenderer>();
-        if (icons.TryGetValue(activeInfo.associatedPower.type, out sprite))
-        {
-            sprr.sprite = sprite;
-        }
-   	}
-
-    /* PowerCircleClick - Code was previously in PowerButtonClick*/
-    /* If the circle is filled with a power, and the circle is clicked, generate visual */
-    public void PowerCircleClick(GameObject sender)
-    {
-        
-        print(activeInfo.associatedPower.name);
-        //Checks if we still have any left before doing anything.
-        if (activeInfo.associatedPower.quantity > 0)
-        {
-            SpawnPowerVisual(activeInfo);
-            FollowMouse();
-        }
-        //sender.GetComponent<UIButton>().isEnabled = false;
-    }
+		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
+		//Checks if we still have any left before doing anything.
+		if (activeInfo.associatedPower.quantity > 0)
+		{
+			SpawnPowerVisual(activeInfo);
+			FollowMouse();
+		}
+	}
 
 	//Do a raycast to determine if we've clicked on a power on screen.
 	private bool SelectExistingPower(){
@@ -199,10 +185,9 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	/*Take a power prefab and strip it down to the visuals. .*/
-	private void SpawnPowerVisual(ButtonInfo info){
+	private void SpawnPowerVisual(PowerBoard info){
 
 		info.associatedPower.quantity--;
-		info.UpdateQuantity();
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
@@ -292,7 +277,6 @@ public class PlacementUI : MonoBehaviour {
 
 	//Enables or disables the entire grid of buttons.
 	private void GridEnabled(bool state){
-        pwrBoardScript.isEnabled = state;
         foreach(UIButton button in buttons){
 			button.isEnabled = state;
 		}        
