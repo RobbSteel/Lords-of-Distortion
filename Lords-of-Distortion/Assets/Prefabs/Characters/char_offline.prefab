@@ -40,7 +40,7 @@ GameObject:
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
   m_Layer: 8
-  m_Name: char_MAIN
+  m_Name: char_offline
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.57623196, y: 1.29239154, z: 0}
+  m_LocalPosition: {x: .0279875174, y: -3.07658529, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -170,7 +170,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 3257cd551cc0a0b44a313388a624346f, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .219999999, y: .829999983}
+  m_Size: {x: .365999997, y: .860057533}
   m_Center: {x: -.00244474411, y: .134455681}
 --- !u!82 &8200000
 AudioSource:
@@ -308,7 +308,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89de928a67a893b4d9080782e27ba388, type: 3}
   m_Name: 
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65945ff2494ae8a4b8bb6da1c0d85cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG: 0
+  DEBUG: 1
   instanceManager: {fileID: 0}
   isOwner: 0
 --- !u!114 &11400008
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jump: 0
-  DEBUG: 0
+  DEBUG: 1
   maxSpeed: 5
   anim: {fileID: 0}
   groundCheck: {fileID: 400004}

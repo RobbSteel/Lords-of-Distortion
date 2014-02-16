@@ -26,8 +26,7 @@ public class Controller2D : MonoBehaviour {
 	bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
-
-	public PSinfo infoscript;
+	
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
@@ -55,8 +54,6 @@ public class Controller2D : MonoBehaviour {
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
-		var psinfo = GameObject.Find("PSInfo");
-		infoscript = psinfo.GetComponent<PSinfo>();
 	}
 
 	// Update is called once per frame
