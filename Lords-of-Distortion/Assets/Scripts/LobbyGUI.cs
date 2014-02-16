@@ -21,7 +21,6 @@ public class LobbyGUI : MonoBehaviour {
 		}
 		else
 			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-
 	}
 
     public void PlayButton(GameObject go)
@@ -37,99 +36,41 @@ public class LobbyGUI : MonoBehaviour {
         wantConnection = false;
     }
 
-	void Start(){
-        GameObject playButton = GameObject.Find("Play");
-        UIEventListener.Get(playButton).onClick += PlayButton;
-
-        GameObject disconnectButton = GameObject.Find("Disconnect");
-        UIEventListener.Get(disconnectButton).onClick += DisconnectButton;
-
+	void Start()
+    {
 		var information = GameObject.Find("PSInfo");
 		infoscript = information.GetComponent<PSinfo>();
 		hostList = MasterServer.PollHostList();
-		if(Network.peerType == NetworkPeerType.Disconnected){
-
+		if(Network.peerType == NetworkPeerType.Disconnected)
+        {
 			//Check if a player is hosting or joining and execute the appropriate action
-			if(infoscript.choice == "Host"){
-				
+			if(infoscript.choice == "Host")
+            {
 				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
 				MasterServer.RegisterHost(typeName, infoscript.servername);
-				
-				
-			} else if(infoscript.choice == "Find"){
-				
-				Network.Connect(hostList[infoscript.servernumb]);
-				
-			}
+			} 
+            else if(infoscript.choice == "Find")
+            {
+                Network.Connect(hostList[infoscript.servernumb]);
+            }
 		}
-	}
 
-	void OnGUI(){
-        /*if (Network.peerType == NetworkPeerType.Server)
-            {
-                GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Server");
-                if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
-                {
-                    Network.Disconnect(200);
-                    wantConnection = false;
-                }
-                if (GUI.Button(new Rect(10, 50, 120, 20), "Play"))
-                {
-                    Network.RemoveRPCsInGroup(0);
-                    Network.RemoveRPCsInGroup(1);
-                    sessionManager.LoadNextLevel(false);
-                }
-            }*/
-        /*
-            if (Network.peerType == NetworkPeerType.Disconnected)
-            {
-                GUI.Label(new Rect(10, 10, 300, 20), "Status: Disconnected");
-                if (GUI.Button(new Rect(10, 30, 120, 20), "Refresh Hosts"))
-                {
-                    MasterServer.RequestHostList(typeName);
-                    //wantConnection = true;
-                    //Network.Connect(connectionIP, connectionPort);
-                }
-                if (GUI.Button(new Rect(10, 50, 120, 20), "Initialize Server"))
-                {
-                    Network.InitializeServer(7, connectionPort, !Network.HavePublicAddress());
-                    MasterServer.RegisterHost(typeName, gameName);
-                }
-            }
-            else if (Network.peerType == NetworkPeerType.Client)
-            {
-                GUI.Label(new Rect(10, 10, 300, 20), "Status: Connected as Client");
-                if (GUI.Button(new Rect(10, 30, 120, 20), "Disconnect"))
-                {
-                    Network.Disconnect(200);
-                    wantConnection = false;
-                }
-            }
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            GameObject playBtn = (GameObject)Instantiate(Resources.Load("Play"));
+            GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
 
+            playBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
+            playBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+            playBtn.transform.localPosition = new Vector2(-563.4375f, 305.625f);
 
-            if (hostList != null)
-            {
-                //print ("getting here");
-                for (int i = 0; i < hostList.Length; i++)
-                {
-                    if (GUI.Button(new Rect(10,90+(40*i), 120, 20), hostList[i].gameName))
-                        Network.Connect(hostList[i]);
-                }
-            }
-            */
-	}
+            disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
+            disconBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+            disconBtn.transform.localPosition = new Vector2(-563.4375f, 230.9996f);
 
-	
-	void Update(){
-		/*
-		if (hostList != null && wantConnection){
-
-			Network.Connect(hostList[0]);
-			//Should be careful here. Should really be changing this once connection is confirmed
-			wantConnection = false;
-		}
-		*/
-
+            UIEventListener.Get(playBtn).onClick += PlayButton;
+            UIEventListener.Get(disconBtn).onClick += DisconnectButton;
+        }
 	}
 	
 	void OnMasterServerEvent(MasterServerEvent msEvent)
