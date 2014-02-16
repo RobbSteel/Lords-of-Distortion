@@ -3,6 +3,11 @@ using System.Collections;
 
 public class GravityField : Power {
 
+    void Start()
+    {
+        Destroy(gameObject, 6f);
+    }
+
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
         player.rigidbody2D.gravityScale = -1;

@@ -61,6 +61,7 @@ public class ScoreDisplay : MonoBehaviour {
 		if(sessionManager.matchfinish){
 
 			for(int z = 0; z < listed.Count; z++){
+				sessionManager.matchfinish = false;
 				infoscript.GetPlayerStats(listed[z]).score = 0;
 			}
 
@@ -93,7 +94,7 @@ public class ScoreDisplay : MonoBehaviour {
 			winnerlabel.transform.localScale = new Vector3(1, 1, 1);
 			
 			scorelabel.transform.localPosition = new Vector2(200, 0);
-			playerlabel.transform.localPosition = new Vector2(400, 0);
+			playerlabel.transform.localPosition = new Vector2(500, 0);
 			winnerlabel.transform.localPosition = new Vector2(300, 100);
 
 			var wintext = winnerlabel.GetComponent<UILabel>();
@@ -101,7 +102,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 			} else {
 			//This one prints losers
-			scorelabel.transform.localPosition = new Vector2(-400, 100+(-100*playernumber));
+			scorelabel.transform.localPosition = new Vector2(-444, 100+(-100*playernumber));
 			playerlabel.transform.localPosition = new Vector2(-200, 100+(-100*playernumber));
 			
 			}
@@ -130,7 +131,7 @@ public class ScoreDisplay : MonoBehaviour {
 			playerlabel.transform.parent = GameObject.Find("UI Root").transform;
 			scorelabel.transform.localScale = new Vector3(1, 1, 1);
 			playerlabel.transform.localScale = new Vector3(1, 1, 1);
-			scorelabel.transform.localPosition = new Vector2(-400, 100+(-100*playernumber));
+			scorelabel.transform.localPosition = new Vector2(-444, 100+(-100*playernumber));
 			playerlabel.transform.localPosition = new Vector2(-200, 100+(-100*playernumber));
 			
 			print (infoscript.playernumb);
