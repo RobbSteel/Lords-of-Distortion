@@ -62,10 +62,13 @@ public class Controller2D : MonoBehaviour {
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
+
 	}
 	
 
 	void FixedUpdate(){
+		ApplyGravity ();
+
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		IsGrounded();
@@ -90,12 +93,15 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
+	void ApplyGravity(){
+		rigidbody2D.AddForce (-Vector2.up * 9.81f * Time.deltaTime);
+	}
+
 	private void Jump(){
 		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
 			jump = true;
 		}
 	}
-
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
