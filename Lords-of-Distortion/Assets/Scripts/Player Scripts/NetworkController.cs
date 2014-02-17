@@ -173,7 +173,8 @@ public class NetworkController : MonoBehaviour {
 
 	void OnDestroy(){
 		//remove self from dictionary since gameobject will be invalid.
-		instanceManager.gameInfo.playerObjects.Remove(theOwner);
+		if(!DEBUG)
+			instanceManager.gameInfo.playerObjects.Remove(theOwner);
 	}
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
 
