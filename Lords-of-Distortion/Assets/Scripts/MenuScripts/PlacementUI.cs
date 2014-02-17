@@ -38,8 +38,9 @@ public class PlacementUI : MonoBehaviour {
 	PowerPrefabs prefabs;
 
     private Camera cam;
+    float timer = 0.0f;
    
-
+	bool powerButtonsEnabled = true;
 	enum PlacementState{
 		Default,
 		MovingPower,
@@ -75,12 +76,10 @@ public class PlacementUI : MonoBehaviour {
 		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
 		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Explosive"));
 	}
-
-
+	
 	void Start(){
         cam = Camera.main;
 
-     
 		/*Turn available powers into UI buttons.*/
 		foreach(var inventoryPower in draftedPowers){
 
@@ -93,6 +92,7 @@ public class PlacementUI : MonoBehaviour {
 		}
 		InventoryGrid.Reposition();
 	}
+	
 
 	/// <summary>
 	///Place powers instantly without using trigges. 
@@ -100,19 +100,13 @@ public class PlacementUI : MonoBehaviour {
 	public void SwitchToLive(){
 		live = true;
 		int i = 0;
-		GridEnabled(true);
-		/*
-		 * we dont need to do anything special to the entries for now
 		foreach(var inventoryPower in draftedPowers){
 			//Unlimited powers.
 			inventoryPower.Value.quantity = int.MaxValue;
-			UIButton button = buttons[i];
-			PowerBoard info = button.GetComponent<PowerBoard>();
-			info.Initialize(inventoryPower.Value);
-			i++;
 		}
-		*/
+		GridEnabled(true);
 	}
+
 	//Called when we want to tween away our GUI.
 	public void Finalize(){
 		state = PlacementState.Default;
@@ -131,12 +125,18 @@ public class PlacementUI : MonoBehaviour {
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
 
+        if (live)
+        {
+            timer -= Time.deltaTime;
+        }
+
 		if(Input.GetMouseButtonDown(0)){
 
 			switch(state){
 			//Checks if we've clicked on a power that was already placed..
 			case PlacementState.Default:
-				if(!live && SelectExistingPower()){ //make sure not to allow player to move powers when dead.
+				//make sure not to allow player to move powers when dead or when under an active button
+				if(!live && SelectExistingPower()){ 
 					FollowMouse();
 				}
 				break;
@@ -159,11 +159,17 @@ public class PlacementUI : MonoBehaviour {
 	public void PowerButtonClick(GameObject sender){
 		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
 		//Checks if we still have any left before doing anything.
-		if (activeInfo.associatedPower.quantity > 0)
+		if (activeInfo.associatedPower.quantity > 0 && state != PlacementState.MovingPower && !live)
 		{
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
 		}
+        else if (live && timer <= 0.0f)
+        {
+            timer = 3.5f;
+            SpawnPowerVisual(activeInfo);
+            FollowMouse();
+        }
 	}
 
 	//Do a raycast to determine if we've clicked on a power on screen.
@@ -187,7 +193,10 @@ public class PlacementUI : MonoBehaviour {
 	/*Take a power prefab and strip it down to the visuals. .*/
 	private void SpawnPowerVisual(PowerBoard info){
 
-		info.associatedPower.quantity--;
+		//remove 1 from quanitity, disable button if == 0
+		if(--info.associatedPower.quantity <= 0)
+			info.GetComponent<UIButton>().isEnabled = false;
+
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
@@ -275,10 +284,14 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(true);
 	}
 
+
 	//Enables or disables the entire grid of buttons.
 	private void GridEnabled(bool state){
+		powerButtonsEnabled = state;
         foreach(UIButton button in buttons){
-			button.isEnabled = state;
+			//if a power is out, dont re-enable it button
+			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
+				button.isEnabled = state;
 		}        
 	}
 
@@ -305,7 +318,18 @@ public class PlacementUI : MonoBehaviour {
                 pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
 				//pause movement of system.
 				pair.Key.GetComponent<ParticleSystem>().Pause();
-            }
+			}
+
+			if(pair.Key.GetComponentInChildren<ParticleSystem>() != null){
+				print ("Particle Attempt");
+				Color particleColor = pair.Key.GetComponentInChildren<ParticleSystem>().startColor;
+				particleColor.a = 0.70f;
+				pair.Key.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
+				//pause movement of system.
+				pair.Key.GetComponentInChildren<ParticleSystem>().Pause();
+
+			}
+
             Destroy(pair.Key.collider2D);
 		}
         

@@ -5,27 +5,28 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool facingRight;
 	[HideInInspector]
-	public bool jump = false;
+	public bool jumpRequested = false;
 
 	public bool DEBUG;
 	public float maxSpeed = 10f;
 	public Animator anim;
 
 	private bool dead = false;
-	private bool grounded = false;
+	public bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
 	public LayerMask groundLayer;
-	public float jumpForce = 700f;
+	public float jumpForce = 650f;
+	const float jumpVelocity = 12.5f;
 	public bool stunned;
 	public bool snared = false;
 	public bool canJump;
 	public bool hasbomb;
-
+	bool stoppedJump;
+	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
-
-	public PSinfo infoscript;
+	
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
@@ -53,8 +54,6 @@ public class Controller2D : MonoBehaviour {
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
-		var psinfo = GameObject.Find("PSInfo");
-		infoscript = psinfo.GetComponent<PSinfo>();
 	}
 
 	// Update is called once per frame
@@ -62,17 +61,22 @@ public class Controller2D : MonoBehaviour {
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		Jump();
-
+		stoppedJump = Input.GetButtonUp("Jump");
 	}
 	
-
+	float previousY = 0f;
 	void FixedUpdate(){
-		ApplyGravity ();
-
+		IsGrounded();
 		if(!DEBUG && !networkController.isOwner)
 			return;
-		IsGrounded();
+
 		MovePlayer();
+
+		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
+		if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
+			//print ("started falling");
+			rigidbody2D.gravityScale = 1.8f;
+		}
 
 		//remove knockback snare when you touch ground.
 		if(grounded && knockedBack){
@@ -81,25 +85,29 @@ public class Controller2D : MonoBehaviour {
 		}
 
 		// If player jumps
-		if (jump) {
+		if (jumpRequested) {
 			// set the Jump animator trigger parameter
 			anim.SetTrigger("Jump");
 
 			//Add a vertical force to player
-			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+
+			//Incase you were walking down a slope, rest gravity before jumping
+			rigidbody2D.gravityScale = 1f;
+
+			//I think setting velocity feels better.
+			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
+			inAir = true;
 
 			// player can't jump again until jump conditions from Update are satisfied
-			jump = false;
+			jumpRequested = false;
 		}
-	}
-
-	void ApplyGravity(){
-		rigidbody2D.AddForce (-Vector2.up * 9.81f * Time.deltaTime);
+		previousY = rigidbody2D.velocity.y;
 	}
 
 	private void Jump(){
 		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
-			jump = true;
+			jumpRequested = true;
 		}
 	}
 	// Use this for initialization
@@ -112,6 +120,10 @@ public class Controller2D : MonoBehaviour {
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
 		anim.SetBool( "Ground", grounded );
+		if(inAir && grounded){
+			inAir = false;
+			rigidbody2D.gravityScale = 1f;
+		}
 	}
 
 	//Needs to go in fixedUpdate since we use physics to move player.
