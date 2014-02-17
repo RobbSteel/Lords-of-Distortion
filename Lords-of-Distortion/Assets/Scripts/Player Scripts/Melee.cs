@@ -1,6 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * The general outline for a melee attack (proposal 1):
+ * 1. You press melee button, character begins playing animation and enables collider for hit detection.
+ * 2. If you hit a player, that player is notified as fast as possible via RPC.
+ * 3. All clients play the same feedback sound and animation for a melee hitting.
+ * 4. That player's hit count goes up, something happens depending on the hit count:
+ *    I. The player is marked once with something visual but not too obstrusive
+ *    II. The player is knocked back. Upon landing, play a gloomy bell sound and mark him with something more noticeable. 
+ *    III. The third hit kills the player. Leave room for double knockouts and stuff.
+ */
+
 public class Melee : MonoBehaviour {
 	
 	private Controller2D controller;// Reference to the PlayerControl script.
@@ -69,7 +80,7 @@ public class Melee : MonoBehaviour {
 		//playerObject.GetComponent<StunBar>().TakeDamage(damageDealt);
 		audio.Play ();
 		punchEffect.Play();
-		playerObject.GetComponent<StunBar>().AddHit(controller.facingRight);
+		playerObject.GetComponent<PlayerStatus>().AddHit(controller.facingRight);
 	}
 	
 }

@@ -7,7 +7,7 @@ public class SmokeBomb : Power {
 	public float dmgGiven;
 	
 	public float dmgTimer;
-	private StunBar applyDmg;
+	private PlayerStatus applyDmg;
 
 	void Awake(){
 		dmgTimer = timeTillDmg;
@@ -31,7 +31,7 @@ public class SmokeBomb : Power {
 	public override void PowerActionStay(GameObject player, Controller2D controller){
 			dmgTimer += Time.deltaTime;
 			if( dmgTimer >= timeTillDmg ){
-				applyDmg = player.GetComponent<StunBar>();
+				applyDmg = player.GetComponent<PlayerStatus>();
 				applyDmg.TakeDamage( dmgGiven );
 				dmgTimer = 0;
 			}

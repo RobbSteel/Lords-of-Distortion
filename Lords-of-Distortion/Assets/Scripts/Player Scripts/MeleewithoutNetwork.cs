@@ -60,7 +60,7 @@ public class MeleewithoutNetwork : MonoBehaviour {
 		 if(col.gameObject.tag == "Player"){
 			
 			// ... find the StunBar script and call the TakeDamage function.
-			col.gameObject.GetComponent<StunBar>().TakeDamage(damageDealt);
+			col.gameObject.GetComponent<PlayerStatus>().TakeDamage(damageDealt);
 		
 			Debug.Log ("Player hit");
 		}

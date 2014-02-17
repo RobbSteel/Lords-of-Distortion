@@ -30,6 +30,7 @@ public class Controller2D : MonoBehaviour {
 	public GameObject DeathSpirit;
 
 	NetworkController networkController;
+	PlayerStatus status;
 	Hook myHook;
 
 	public bool knockedBack = false;
@@ -78,10 +79,10 @@ public class Controller2D : MonoBehaviour {
 			rigidbody2D.gravityScale = 1.8f;
 		}
 
-		//remove knockback snare when you touch ground.
-		if(grounded && knockedBack){
+		//Remove knockback when you compose yourself.
+		if(grounded && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
 			knockedBack = false;
-			snared = false;
+			FreeFromSnare();
 		}
 
 		// If player jumps
@@ -114,6 +115,7 @@ public class Controller2D : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator>();
 		networkController = GetComponent<NetworkController>();
+		status = GetComponent<PlayerStatus>();
 	}
 
 	//Constantly checks if player is on the ground
@@ -233,7 +235,6 @@ public class Controller2D : MonoBehaviour {
 
 
 	public void Die(){
-		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
 		if(dead == false){
 			//Spawns the spirit upon player death
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
