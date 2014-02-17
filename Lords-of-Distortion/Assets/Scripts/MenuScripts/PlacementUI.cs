@@ -38,6 +38,7 @@ public class PlacementUI : MonoBehaviour {
 	PowerPrefabs prefabs;
 
     private Camera cam;
+    float timer = 0.0f;
    
 	bool powerButtonsEnabled = true;
 	enum PlacementState{
@@ -124,6 +125,11 @@ public class PlacementUI : MonoBehaviour {
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
 
+        if (live)
+        {
+            timer -= Time.deltaTime;
+        }
+
 		if(Input.GetMouseButtonDown(0)){
 
 			switch(state){
@@ -153,11 +159,17 @@ public class PlacementUI : MonoBehaviour {
 	public void PowerButtonClick(GameObject sender){
 		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
 		//Checks if we still have any left before doing anything.
-		if (activeInfo.associatedPower.quantity > 0 && state != PlacementState.MovingPower)
+		if (activeInfo.associatedPower.quantity > 0 && state != PlacementState.MovingPower && !live)
 		{
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
 		}
+        else if (live && timer <= 0.0f)
+        {
+            timer = 3.5f;
+            SpawnPowerVisual(activeInfo);
+            FollowMouse();
+        }
 	}
 
 	//Do a raycast to determine if we've clicked on a power on screen.
