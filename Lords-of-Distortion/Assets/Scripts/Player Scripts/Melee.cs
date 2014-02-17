@@ -53,6 +53,7 @@ public class Melee : MonoBehaviour {
 		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
 		// Enable Box Collider 2D
 		meleeObject.GetComponent<BoxCollider2D>().enabled = true;
+		controller.Snare();
 		anim.SetTrigger ("Melee");
 		meleeTimer =  coolDownTimer;
 	}
@@ -60,6 +61,7 @@ public class Melee : MonoBehaviour {
 	//Called by animator when the animation is done. Previously the collider was sticking around.
 	public void StopMelee(){
 		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
+		controller.FreeFromSnare();
 	}
 
 	public void HandleCollsion(GameObject playerObject){
