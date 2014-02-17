@@ -19,7 +19,7 @@ public class PlacementUI : MonoBehaviour {
 	public UIGrid TriggerGrid;
 
 	public Dictionary<PowerType, Sprite> icons;
-	string[] triggerKeys = new string[] {"1", "2", "3", "4", "5"};
+	string[] triggerKeys = new string[] {"z", "x", "c", "v", "f"};
 
 
 	public Sprite glueSprite;
@@ -306,7 +306,18 @@ public class PlacementUI : MonoBehaviour {
                 pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
 				//pause movement of system.
 				pair.Key.GetComponent<ParticleSystem>().Pause();
-            }
+			}
+
+			if(pair.Key.GetComponentInChildren<ParticleSystem>() != null){
+				print ("Particle Attempt");
+				Color particleColor = pair.Key.GetComponentInChildren<ParticleSystem>().startColor;
+				particleColor.a = 0.70f;
+				pair.Key.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
+				//pause movement of system.
+				pair.Key.GetComponentInChildren<ParticleSystem>().Pause();
+
+			}
+
             Destroy(pair.Key.collider2D);
 		}
         
