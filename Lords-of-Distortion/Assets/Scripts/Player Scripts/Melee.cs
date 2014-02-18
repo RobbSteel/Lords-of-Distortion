@@ -19,12 +19,12 @@ public class Melee : MonoBehaviour {
 	private Animator anim;		// Reference to the Animator component.
 	private Hook myhook;
 	public GameObject meleeObject;
-	public GameObject punchParticles;
+
 	[HideInInspector]
 
 
 	public float meleeTimer = 0;
-	public ParticleSystem punchEffect;
+
 	public float coolDownTimer = 0.5f;
 	public float damageDealt = 15f;
 
@@ -36,7 +36,7 @@ public class Melee : MonoBehaviour {
 		myhook = GetComponent<Hook>();
 		networkController = GetComponent<NetworkController>();
 		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
-		punchEffect = punchParticles.GetComponent<ParticleSystem>();
+
 	}
 	
 	void Update ()
@@ -75,11 +75,10 @@ public class Melee : MonoBehaviour {
 		controller.FreeFromSnare();
 	}
 
+
 	public void HandleCollsion(GameObject playerObject){
 		// ... find the StunBar script and call the TakeDamage function.
 		//playerObject.GetComponent<StunBar>().TakeDamage(damageDealt);
-		audio.Play ();
-		punchEffect.Play();
 		playerObject.GetComponent<PlayerStatus>().AddHit(controller.facingRight);
 	}
 	

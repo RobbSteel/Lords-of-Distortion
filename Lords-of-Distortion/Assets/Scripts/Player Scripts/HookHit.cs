@@ -66,7 +66,6 @@ public class HookHit : MonoBehaviour {
 				players = col.gameObject;
 				affectedPlayerC2D.Snare();
 				rigidbody2D.velocity = Vector2.zero;
-
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				//TODO: call hitplayer locally instead of doing the following:
 				//do what the remote rpc would do, but locally:

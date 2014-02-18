@@ -28,7 +28,8 @@ public class PlayerStatus : MonoBehaviour {
 	public GameObject hitMarks;
 	SpriteRenderer hitMarkSprites;
 	public Sprite firstMark, secondMark, thirdMark;
-
+	public GameObject punchParticles;
+	private ParticleSystem punchEffect;
 	bool knockBackPending = false;
 	Vector2 sideForce;
 
@@ -42,7 +43,7 @@ public class PlayerStatus : MonoBehaviour {
 		stunBarUI = UI.GetComponent<UISlider>();
 	*/
 		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
-
+		punchEffect = punchParticles.GetComponent<ParticleSystem>();
 		levelCamera = GameObject.Find("Main Camera").camera;
 	}
 
@@ -184,8 +185,18 @@ public class PlayerStatus : MonoBehaviour {
 		//Wait a little and then play bell sound.
 	}
 
+
+	public void HitFeedback(){
+		audio.Play ();
+		punchEffect.Play();
+	}
+
+
 	[RPC]
 	void VisualHitIndicator(int hits){
+
+		HitFeedback();
+
 		hitMarkSprites.enabled = true;
 
 		switch(hits){
