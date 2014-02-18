@@ -63,11 +63,7 @@ public class Hook : MonoBehaviour {
 			return;
 		ShootHookLocal(target);
 	}
-
-	void FixedUpdate () {
-	
-		float speed = 1.0f;
-		speed = speed / 4;
+	void Update(){
 
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(going == true){
@@ -75,7 +71,7 @@ public class Hook : MonoBehaviour {
 				hittimer = 1.5f;
 				movingtowards = true;
 				going = false;
-			 
+				
 			}else if(hookscript.destroyed == true){
 				movingback = true;
 				going = false;
@@ -84,11 +80,17 @@ public class Hook : MonoBehaviour {
 				hookpull = true;
 				going = false;
 				pushpull = 1;
-				networkView.RPC ("PullPlayer", hitPlayer);
-
-
+				if(networkController.isOwner)
+					networkView.RPC ("PullPlayer", hitPlayer); //only call this one client, the owner.
 			}
 		}
+
+	}
+
+	void FixedUpdate () {
+	
+		float speed = 1.0f;
+		speed = speed / 4;
 
 		//Get input from user and set cooldown to avoid repeated use.
 		if(hooktimer <= 0){
@@ -157,17 +159,12 @@ public class Hook : MonoBehaviour {
 
 //Gives players the option to hook players to them or pull themselves to the hooked player.
 
-				
-				
-	
-			
-	
-
 	/*
 	 * When player A chooses to pull player in, send RPC to the hook on player B that sets choice to 1.
 	 */
 	[RPC]
 	void PullPlayer(){
+		print ("pull");
 		pushpull = 1;
 	}
 
@@ -235,14 +232,14 @@ public class Hook : MonoBehaviour {
 
 	NetworkPlayer hitPlayer;
 	[RPC]
-	void HitPlayer(Vector3 playerLocation, NetworkMessageInfo info){
+	void HitPlayer(Vector3 playerLocation, NetworkPlayer hitPlayer){
 		go.transform.position = playerLocation;
-		hookscript.players = networkController.instanceManager.gameInfo.GetPlayerGameObject(info.sender);
+		hookscript.players = networkController.instanceManager.gameInfo.GetPlayerGameObject(hitPlayer);
 		hookscript.affectedPlayerC2D = hookscript.players.GetComponent<Controller2D>();
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;
 		hookscript.playerhooked = true;
-		hitPlayer = info.sender;
+		this.hitPlayer = hitPlayer;
 	}
 
 	public void HitPlayerLocal(Vector3 playerLocation){

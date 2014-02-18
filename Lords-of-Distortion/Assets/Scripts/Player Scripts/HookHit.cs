@@ -52,21 +52,22 @@ public class HookHit : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && col.gameObject.tag != "Melee"){
 
-			print ("hello");
+			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
 			hooked = true;
 
 		}
 
 		if(col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
-			NetworkController  affectedPlayerNC = col.gameObject.GetComponent<NetworkController>();
-			affectedPlayerC2D = col.gameObject.GetComponent<Controller2D>();
-			if(affectedPlayerNC.theOwner == Network.player){
+
+			if(Network.isServer){
+				NetworkController  affectedPlayerNC = col.gameObject.GetComponent<NetworkController>();
+				affectedPlayerC2D = col.gameObject.GetComponent<Controller2D>();
 				players = col.gameObject;
 				affectedPlayerC2D.Snare();
 				rigidbody2D.velocity = Vector2.zero;
 
-				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position);
+				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				//TODO: call hitplayer locally instead of doing the following:
 				//do what the remote rpc would do, but locally:
 				playerhooked = true; 
