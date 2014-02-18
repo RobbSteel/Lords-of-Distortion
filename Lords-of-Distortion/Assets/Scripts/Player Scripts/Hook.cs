@@ -44,6 +44,10 @@ public class Hook : MonoBehaviour {
 		hookscript.shooter = gameObject;
 		hooktimer = 5;
 		print (hookscript.shooter);
+		//Calculate angle from player to mouse and rotate hook that way.
+		Vector3 direction = Vector3.Normalize(target - transform.position);
+		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 	}
 
@@ -99,6 +103,7 @@ public class Hook : MonoBehaviour {
 
 				else
 					networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
+
 				ShootHookLocal(mouseClick);
 			}
 
