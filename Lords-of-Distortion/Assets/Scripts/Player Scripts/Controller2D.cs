@@ -236,6 +236,8 @@ public class Controller2D : MonoBehaviour {
 		//IMPORTANT: This is here temporarily. We want this check in all collision functions.
 		if(dead == false){
 			//Spawns the spirit upon player death
+
+			anim.SetTrigger("Die");
 			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 			dead = true;
 
