@@ -108,7 +108,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	//Called when we want to tween away our GUI.
-	public void Finalize(){
+	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
 		foreach(PowerSpawn spawn in selectedTriggers){

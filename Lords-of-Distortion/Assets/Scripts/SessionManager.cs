@@ -147,11 +147,7 @@ public class SessionManager : MonoBehaviour {
 	//load level now takes a bool to indicate whether the score scene should be loaded.
 	public void LoadNextLevel(bool scorescreen){
 		string level;
-		
-		
-		
-		
-		
+
 		if(scorescreen){
 			roundsplayed++;
 			level = "PointsScreen";
@@ -159,14 +155,10 @@ public class SessionManager : MonoBehaviour {
 			++arenaIndex;
 			if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 				level = "LobbyArena";
-				arenaIndex = -1;
-				
-				
+				arenaIndex = -1;	
 			} else {
 				level = arenas[arenaIndex];
 			}
-			
-			
 		}
 		
 		if(roundsplayed == 3 && scorescreen){

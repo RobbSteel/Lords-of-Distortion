@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StunBar : MonoBehaviour {
+public class PlayerStatus : MonoBehaviour {
 
 
 	public float maxStun = 100f;
@@ -28,6 +28,10 @@ public class StunBar : MonoBehaviour {
 	public GameObject hitMarks;
 	SpriteRenderer hitMarkSprites;
 	public Sprite firstMark, secondMark, thirdMark;
+	public GameObject punchParticles;
+	private ParticleSystem punchEffect;
+	bool knockBackPending = false;
+	Vector2 sideForce;
 
 	void Awake(){
 		recoverRate = 10f;
@@ -39,7 +43,7 @@ public class StunBar : MonoBehaviour {
 		stunBarUI = UI.GetComponent<UISlider>();
 	*/
 		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
-
+		punchEffect = punchParticles.GetComponent<ParticleSystem>();
 		levelCamera = GameObject.Find("Main Camera").camera;
 	}
 
@@ -126,18 +130,15 @@ public class StunBar : MonoBehaviour {
 		}
 	}
 
-	bool knockBackPending = false;
-
-	Vector2 sideForce;
-
+	
 	void FixedUpdate(){
 		//push the character sideways
 		if(knockBackPending){
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
 			knockBackPending = false;
-			hitMarkSprites.enabled = false;
-			networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
+			//hitMarkSprites.enabled = false;
+			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
 			rigidbody2D.AddForce(sideForce);
 		}
 	}
@@ -146,8 +147,7 @@ public class StunBar : MonoBehaviour {
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
-
-		sideForce = new Vector2(3000f * flip, 100f);
+		sideForce = new Vector2(800f * flip, 100f);
 		knockBackPending = true;
 	}
 
@@ -158,11 +158,15 @@ public class StunBar : MonoBehaviour {
 		if(playerControl.knockedBack){
 			return;
 		}
+
 		hitCount++;
+		//This tells all other players to visually play a hit effect. 
+		//Only the owner of the character does anything with physics or death.
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
 		VisualHitIndicator(hitCount);
-		if(hitCount >= 3){
-			hitCount= 0;
+
+		if(hitCount == 2){
+			//hitCount= 0;
 			float flip = 1f;
 			if(!fromLeftSide)
 				flip = -1f;
@@ -170,10 +174,29 @@ public class StunBar : MonoBehaviour {
 			BeginKnockBack(flip);
 		}
 
+		else if(hitCount == 3){
+			playerControl.Die();
+		}
+
 	}
+
+
+	public void ThirdMarkSound(){
+		//Wait a little and then play bell sound.
+	}
+
+
+	public void HitFeedback(){
+		audio.Play ();
+		punchEffect.Play();
+	}
+
 
 	[RPC]
 	void VisualHitIndicator(int hits){
+
+		HitFeedback();
+
 		hitMarkSprites.enabled = true;
 
 		switch(hits){
@@ -184,10 +207,11 @@ public class StunBar : MonoBehaviour {
 			hitMarkSprites.sprite = firstMark;
 			break;
 		case 2:
-			hitMarkSprites.sprite = secondMark;
+			hitMarkSprites.sprite = thirdMark; //use this ugly one for now.
+			ThirdMarkSound();
 			break;
 		case 3:
-			hitMarkSprites.sprite = thirdMark;
+			//hitMarkSprites.sprite = thirdMark;
 			break;
 		}
 
@@ -201,6 +225,7 @@ public class StunBar : MonoBehaviour {
 		ApplyDamage(dmgTaken);
 	}
 
+	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
 		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
 	}

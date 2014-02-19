@@ -12,6 +12,7 @@ GameObject:
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400004}
   - 212: {fileID: 21200000}
+  - 61: {fileID: 6100000}
   m_Layer: 0
   m_Name: Hook
   m_TagString: Untagged
@@ -41,7 +42,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.17412281, y: -2.441324, z: 0}
+  m_LocalPosition: {x: 1.91347098, y: 6.29230976, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 400006}
@@ -78,11 +79,22 @@ CircleCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Radius: .100000001
   m_Center: {x: 0, y: 0}
+--- !u!61 &6100000
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Size: {x: .49000001, y: .610000014}
+  m_Center: {x: -.0299999993, y: .00999999978}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

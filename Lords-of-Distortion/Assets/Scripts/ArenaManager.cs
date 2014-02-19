@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Priority_Queue;
@@ -283,7 +283,7 @@ public class ArenaManager : MonoBehaviour {
             //if(!lordsSpawnManager.readyToSend)
 			//	lordsSpawnManager.FinalizePowers(this.gameObject);
 
-			placementUI.Finalize();
+			placementUI.ShowTriggers();
             placementUI.DestroyPowers();
 			placementUI.enabled = false;
 			

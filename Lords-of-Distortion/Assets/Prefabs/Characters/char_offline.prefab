@@ -314,7 +314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 100000}
+  punchParticles: {fileID: 0}
   meleeTimer: 0
+  punchEffect: {fileID: 0}
   coolDownTimer: .5
   damageDealt: 15
 --- !u!114 &11400002
@@ -390,10 +392,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   facingRight: 0
-  jump: 0
+  jumpRequested: 0
   DEBUG: 1
   maxSpeed: 5
   anim: {fileID: 0}
+  grounded: 0
   groundCheck: {fileID: 400004}
   groundLayer:
     serializedVersion: 2
@@ -403,6 +406,7 @@ MonoBehaviour:
   snared: 0
   canJump: 0
   hasbomb: 0
+  inAir: 1
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   knockedBack: 0
 --- !u!114 &11400010
@@ -461,7 +465,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_SortingLayerID: 2858795347
-  m_Sprite: {fileID: 21300000, guid: f10f0a66e5e80c542b9c70412d386fa8, type: 3}
+  m_Sprite: {fileID: 21300046, guid: 990e6275983829d4c811cafdb49f58a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!212 &21200002
 SpriteRenderer:
