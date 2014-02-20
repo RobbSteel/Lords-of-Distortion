@@ -130,7 +130,7 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun)
-				Stun (); //this will only matter if called on the client which controls the player to be stunned
+				Stun(); //this will only matter if called on the client which controls the player to be stunned
 		}
 	}
 	
@@ -244,7 +244,7 @@ public class PlayerStatus : MonoBehaviour {
 			StunRecover();
 			if( currentStunMeter <= 0 ){
 				playerControl.stunned = false;
-				playerControl.anim.SetBool("stunned", false);
+				playerControl.anim.SetTrigger("unstunned");
 				currentStunMeter = 0;
 			}
 		}
@@ -252,7 +252,7 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void Stun(){
 		playerControl.stunned = true;
-		playerControl.anim.SetBool("stunned", true);
+		playerControl.anim.SetTrigger("stunned");
 		audio.Play ();
 	}
 	
