@@ -10,7 +10,10 @@ public class ArenaManager : MonoBehaviour {
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
-	List<Vector3> playerSpawnLocations;
+
+	public List<Transform> spawnPositions;
+	private List<Vector3> playerSpawnVectors;
+
 	public bool finishgame = false;
 	
 	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
@@ -137,11 +140,11 @@ public class ArenaManager : MonoBehaviour {
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
 		SetUpTimer();
-		playerSpawnLocations = new List<Vector3>();
-		playerSpawnLocations.Add(new Vector3(-9f, -1.5f, 0f));
-		playerSpawnLocations.Add(new Vector3(9f, -1.5f, 0f));
-		playerSpawnLocations.Add(new Vector3(-9f, 4.3f, 0f));
-		playerSpawnLocations.Add (new Vector3(9f, 4.3f, 0f));
+		playerSpawnVectors = new List<Vector3>();
+
+		foreach(Transform location in spawnPositions){
+			playerSpawnVectors.Add(location.position);
+		}
 		playersReady = new List<NetworkPlayer>();
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
@@ -313,7 +316,7 @@ public class ArenaManager : MonoBehaviour {
 			return;
 		
 		if(livePlayers == null && Network.isServer){
-			livePlayers = sessionManager.SpawnPlayers(playerSpawnLocations);
+			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
 		}
 		
 		//Spawn one timed trap per frame, locally.
