@@ -236,10 +236,6 @@ public class Controller2D : MonoBehaviour {
 
 	public void Die(){
 		if(dead == false){
-			//Spawns the spirit upon player death
-
-			anim.SetTrigger("Die");
-
 			dead = true;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
@@ -253,6 +249,9 @@ public class Controller2D : MonoBehaviour {
 			//Here we call whatever events are subscribed to us.
 			if(onDeath != null)
 				onDeath(gameObject);
+
+			//play death animation.
+			anim.SetTrigger("Die");
 			//We don't need the next line any more
 			//networkController.instanceManager.KillPlayer(gameObject);
 		}
