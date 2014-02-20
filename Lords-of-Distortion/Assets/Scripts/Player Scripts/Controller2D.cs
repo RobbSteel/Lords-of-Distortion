@@ -27,7 +27,7 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 	
-	public GameObject DeathSpirit;
+
 
 	NetworkController networkController;
 	PlayerStatus status;
@@ -239,7 +239,7 @@ public class Controller2D : MonoBehaviour {
 			//Spawns the spirit upon player death
 
 			anim.SetTrigger("Die");
-			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
+
 			dead = true;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting

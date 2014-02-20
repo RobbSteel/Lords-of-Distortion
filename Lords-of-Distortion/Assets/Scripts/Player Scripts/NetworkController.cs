@@ -13,6 +13,7 @@ public class NetworkController : MonoBehaviour {
 
 	private float width;
 
+	public GameObject DeathSpirit;
 
 	//A buffer of states. Not sure if a circular buffer is the best data structure at this point.
 	private CircularBuffer<State> states;
@@ -169,6 +170,12 @@ public class NetworkController : MonoBehaviour {
 			float unit = Mathf.Abs(newState.position.x - oldState.position.x) > .01f ? 1.0f : 0.0f;
 			controller2D.anim.SetFloat( "Speed", unit);
 		}
+	}
+
+	public void DestroyPlayer(){
+		if (isOwner)
+			Network.Destroy (gameObject);
+			Network.Instantiate(DeathSpirit, transform.position, transform.rotation, 0);
 	}
 
 	void OnDestroy(){

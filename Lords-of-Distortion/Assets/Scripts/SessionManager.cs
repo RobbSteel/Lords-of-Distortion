@@ -205,6 +205,7 @@ public class SessionManager : MonoBehaviour {
 			SpawnPlayers(tempLocations);
 		}
 	}
+
 	
 	public void KillPlayer(GameObject playerObject){
 		networkView.RPC ("Died", RPCMode.OthersBuffered);
@@ -212,7 +213,7 @@ public class SessionManager : MonoBehaviour {
 		stats.deaths += 1;
 		//Because the player spawned himself, let him destroy himself as well.
 		//We may want to instead call a special RPC for an animation or something later on.
-		Network.Destroy(playerObject);
+		//Network.Destroy(playerObject);
 	}
 	
 	[RPC]
