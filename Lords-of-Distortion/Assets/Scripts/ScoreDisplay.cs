@@ -34,6 +34,7 @@ public class ScoreDisplay : MonoBehaviour {
 		print(infoscript.GetPlayerStats(listed[0]).score);
 
 
+
 		//If the Match is finished check who was the winner
 		if(sessionManager.matchfinish){
 			print ("calculate winnings");
@@ -126,10 +127,10 @@ public class ScoreDisplay : MonoBehaviour {
 			winnerlabel.transform.parent = GameObject.Find ("UI Root").transform;
 			winnerlabel.transform.localScale = new Vector3(1, 1, 1);
 			
-			scorelabel.transform.localPosition = new Vector2(150, -100);
-			playerlabel.transform.localPosition = new Vector2(400, -100);
-			winnerlabel.transform.localPosition = new Vector2(275, 0);
-			playerpose.transform.localPosition = new Vector2(275, 150);
+			scorelabel.transform.localPosition = new Vector2(200, -100);
+			playerlabel.transform.localPosition = new Vector2(450, -100);
+			winnerlabel.transform.localPosition = new Vector2(325, 0);
+			playerpose.transform.localPosition = new Vector2(325, 150);
 			
 			var wintext = winnerlabel.GetComponent<UILabel>();
 			wintext.text = "Winner!";
