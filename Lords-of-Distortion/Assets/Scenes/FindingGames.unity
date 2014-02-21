@@ -617,7 +617,7 @@ Transform:
   m_GameObject: {fileID: 307190872}
   m_LocalRotation: {x: 0, y: 0, z: -8.74227766e-08, w: -1}
   m_LocalPosition: {x: 0, y: -2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.23000002, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1989346031}
 --- !u!1 &852184196
@@ -731,7 +731,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: 0b882ba3358d30542ae2ce83a2956aab, type: 3}
+  mTexture: {fileID: 2800000, guid: d08eb824ec65c1641ade94c037784d82, type: 3}
   mMat: {fileID: 0}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &1000889383
@@ -834,6 +834,7 @@ GameObject:
   - 92: {fileID: 1323097118}
   - 124: {fileID: 1323097117}
   - 81: {fileID: 1323097116}
+  - 82: {fileID: 1323097121}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -902,6 +903,64 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!82 &1323097121
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1323097115}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: fd7f270181bc62f48a3f9f8597d7adaf, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1 &1621850540
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,7 +1030,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: 0b882ba3358d30542ae2ce83a2956aab, type: 3}
+  mTexture: {fileID: 2800000, guid: d08eb824ec65c1641ade94c037784d82, type: 3}
   mMat: {fileID: 0}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!1 &1838745311
@@ -1048,7 +1107,7 @@ Transform:
   m_GameObject: {fileID: 1875389101}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -.0505123101, y: .0298402291, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 1}
+  m_LocalScale: {x: 6.38999987, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!1 &1923424415

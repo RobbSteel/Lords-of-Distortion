@@ -206,9 +206,9 @@ public class SessionManager : MonoBehaviour {
 		}
 	}
 
-	
+	//Called only by the client of the player who died.
 	public void KillPlayer(GameObject playerObject){
-		networkView.RPC ("Died", RPCMode.OthersBuffered);
+		networkView.RPC ("Died", RPCMode.Others);
 		PlayerStats stats = gameInfo.GetPlayerStats(Network.player);
 		stats.deaths += 1;
 		//Because the player spawned himself, let him destroy himself as well.
@@ -220,6 +220,10 @@ public class SessionManager : MonoBehaviour {
 	void Died(NetworkMessageInfo info){
 		PlayerStats stats = gameInfo.GetPlayerStats(info.sender);
 		stats.deaths += 1;
+
+		GameObject deadPlayer = gameInfo.GetPlayerGameObject(info.sender);
+		//once you learn that a player has died, play his death animation.
+		deadPlayer.GetComponent<Controller2D>().anim.SetTrigger("Die");
 		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
 	}
 	

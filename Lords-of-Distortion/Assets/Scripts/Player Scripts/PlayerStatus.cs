@@ -3,7 +3,8 @@ using System.Collections;
 
 public class PlayerStatus : MonoBehaviour {
 	
-	
+
+	//varible to adjust stunbar & stun
 	public float maxStun = 100f;
 	public float currentStunMeter = 50f;
 	public float regenAmount = 15f;
@@ -15,25 +16,26 @@ public class PlayerStatus : MonoBehaviour {
 	public float UIoffsetY;
 	public float recoverRate;
 	
-	private Controller2D playerControl;		// Reference to the PlayerControl script.
-	private GameObject UI;					// Reference UI GUI
-	private UISlider stunBarUI;				// Reference UI slider values
-	private Camera levelCamera;
-	private bool horizontalPressedUp;
-	private bool horizontalPressedDown;
-	private int horizontalMoveCheck;		//tracks horizontal current key
-	//setup references and create UI stunbar
-	
 	int hitCount = 0;
 	public GameObject hitMarks;
 	SpriteRenderer hitMarkSprites;
 	public Sprite firstMark, secondMark, thirdMark;
 	public GameObject punchParticles;
 	public GameObject shieldParticles;
-	private ParticleSystem punchEffect;
-	private ParticleSystem shield;
 	bool knockBackPending = false;
 	Vector2 sideForce;
+	public float MashIconYOffset;
+	private GameObject MashIcon;
+	private ParticleSystem punchEffect;
+	private ParticleSystem shield;
+
+	private Controller2D playerControl;		// Reference to the PlayerControl script.
+	private GameObject UI;					// Reference UI GUI
+	private UISlider stunBarUI;				// Reference UI slider values
+	private Camera levelCamera;
+	private bool horizontalPressedUp;		//tracks horizontal keyup
+	private bool horizontalPressedDown;		//tracks horizontal keydown
+	private int horizontalMoveCheck;		//tracks horizontal current key
 	
 	void Awake(){
 		recoverRate = 10f;
@@ -44,6 +46,10 @@ public class PlayerStatus : MonoBehaviour {
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
 	*/
+
+		MashIcon = (GameObject)Instantiate (Resources.Load ("MashAlertIcon"));
+		MashIcon.SetActive (false);
+
 		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
 		punchEffect = punchParticles.GetComponent<ParticleSystem>();
 		shield = shieldParticles.GetComponent<ParticleSystem>();
@@ -54,7 +60,20 @@ public class PlayerStatus : MonoBehaviour {
 	void Start(){
 		hitMarkSprites.enabled = false;
 	}
-	
+
+	//used to turn on MashAlertIcon
+	void TurnOnMashAlert(){
+		MashIcon.SetActive(true);
+		Vector3 playersPos = transform.position;
+		playersPos.y += MashIconYOffset;
+		MashIcon.transform.localPosition = playersPos;
+	}
+
+	//used to turn off MashAlertIcon
+	void TurnOffMashAlert(){
+		MashIcon.SetActive (false);
+	}
+
 	//this function acts as unitys input keydown and up for "Horizontal" input
 	//**unity does not have this functionality yet needed to do this way 
 	//**because if we change movement for keys it wont apply correctly 
@@ -130,7 +149,7 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun)
-				Stun (); //this will only matter if called on the client which controls the player to be stunned
+				Stun(); //this will only matter if called on the client which controls the player to be stunned
 		}
 	}
 	
@@ -241,10 +260,12 @@ public class PlayerStatus : MonoBehaviour {
 	//checks if player is stun and then applies stunRecover
 	private void CheckIfStunned(){
 		if( playerControl.stunned == true ){
+			TurnOnMashAlert();
 			StunRecover();
 			if( currentStunMeter <= 0 ){
 				playerControl.stunned = false;
-				playerControl.anim.SetBool("stunned", false);
+				TurnOffMashAlert();
+				playerControl.anim.SetTrigger("unstunned");
 				currentStunMeter = 0;
 			}
 		}
@@ -252,7 +273,7 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void Stun(){
 		playerControl.stunned = true;
-		playerControl.anim.SetBool("stunned", true);
+		playerControl.anim.SetTrigger("stunned");
 		audio.Play ();
 	}
 	

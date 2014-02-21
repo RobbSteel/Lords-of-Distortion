@@ -247,10 +247,10 @@ ParticleSystem:
         rgba: 4294967295
       maxColor:
         serializedVersion: 2
-        rgba: 4282992969
+        rgba: 4293092982
       minMaxState: 0
     startSize:
-      scalar: .670000017
+      scalar: 1.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -335,7 +335,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 240
+      scalar: 13
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -412,9 +412,9 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 1
   RotationModule:
-    enabled: 0
+    enabled: 1
     curve:
-      scalar: .785398126
+      scalar: 3.49065852
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -447,18 +447,18 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4278190080
         key1:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4282365682
         key2:
           serializedVersion: 2
-          rgba: 0
+          rgba: 2561814
         key3:
           serializedVersion: 2
           rgba: 0
@@ -474,9 +474,9 @@ ParticleSystem:
         key7:
           serializedVersion: 2
           rgba: 0
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
+        ctime0: 964
+        ctime1: 31033
+        ctime2: 65150
         ctime3: 0
         ctime4: 0
         ctime5: 0
@@ -490,7 +490,7 @@ ParticleSystem:
         atime5: 0
         atime6: 0
         atime7: 0
-        m_NumColorKeys: 2
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         key0:
@@ -1133,11 +1133,11 @@ ParticleSystemRenderer:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4172996bb0317ce40ae7f268732664d7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1154,7 +1154,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_SortMode: 0
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -1180,7 +1180,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_SortingLayerID: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: .477941155, g: .172199383, b: .172199383, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

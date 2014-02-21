@@ -11,6 +11,8 @@ GameObject:
   - 82: {fileID: 8200000}
   - 212: {fileID: 21200000}
   - 148: {fileID: 14800000}
+  - 111: {fileID: 11100000}
+  - 95: {fileID: 9500000}
   m_Layer: 0
   m_Name: alert-sign
   m_TagString: Untagged
@@ -87,6 +89,34 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!95 &9500000
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8f71f681433f4e548bdc02e276fb16d5, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &11100000
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: e8dcd87ec73749c478159f2cb28286cb, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
@@ -120,7 +150,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 64c8614fcaa13ce4ca8b4c2484b30e1c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37f82410e9b5be248bd93a393fdb67fb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
