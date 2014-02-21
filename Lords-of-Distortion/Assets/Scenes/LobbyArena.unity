@@ -87,6 +87,7 @@ GameObject:
   - 124: {fileID: 70314170}
   - 81: {fileID: 70314169}
   - 114: {fileID: 70314168}
+  - 82: {fileID: 70314174}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -168,6 +169,64 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!82 &70314174
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 70314167}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: 6c923e6b578691c43852f7b43761711d, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1 &111437750
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,6 +443,7 @@ MonoBehaviour:
   secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
   thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 0}
+  shieldParticles: {fileID: 0}
 --- !u!61 &144827927
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -448,6 +508,7 @@ MonoBehaviour:
   DEBUG: 1
   instanceManager: {fileID: 0}
   isOwner: 0
+  DeathSpirit: {fileID: 0}
 --- !u!114 &144827931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +537,6 @@ MonoBehaviour:
   canJump: 0
   hasbomb: 0
   inAir: 1
-  DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   knockedBack: 0
 --- !u!95 &144827932
 Animator:
