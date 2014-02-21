@@ -15,6 +15,8 @@ public class HookHit : MonoBehaviour {
 	public NetworkController networkController;
 	public Controller2D affectedPlayerC2D;
 	public Vector3 targetPosition;
+	public Animator anim;
+
 	void Awake(){
 
 		destroyed = false;
@@ -30,7 +32,6 @@ public class HookHit : MonoBehaviour {
 	void Update () {
 	
 		if(playerhooked == true){
-		
 			transform.position = Vector3.MoveTowards(transform.position, players.transform.position, 10);
 		}
 
@@ -52,7 +53,8 @@ public class HookHit : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && col.gameObject.tag != "Melee"){
 
-			//print ("hello");
+			print ("hello");
+			anim.SetTrigger("Grapple");
 			rigidbody2D.velocity = Vector2.zero;
 			hooked = true;
 
