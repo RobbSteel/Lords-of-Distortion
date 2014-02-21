@@ -15,7 +15,7 @@ GameObject:
   - 198: {fileID: 19800000}
   - 199: {fileID: 19900000}
   m_Layer: 9
-  m_Name: SmokeBomb
+  m_Name: sb1
   m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,7 +90,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: .0500000007
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -247,10 +247,10 @@ ParticleSystem:
         rgba: 4294967295
       maxColor:
         serializedVersion: 2
-        rgba: 4278190080
+        rgba: 4291129724
       minMaxState: 0
     startSize:
-      scalar: 0
+      scalar: 1.78999996
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -322,7 +322,7 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     type: 0
-    radius: .800000012
+    radius: 1.69000006
     angle: 25
     length: 5
     boxX: 1
@@ -335,7 +335,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 11.4799995
+      scalar: 100
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -412,9 +412,9 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 1
   RotationModule:
-    enabled: 0
+    enabled: 1
     curve:
-      scalar: .785398126
+      scalar: 3.49065852
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -452,13 +452,13 @@ ParticleSystem:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 4278190080
+          rgba: 4290145952
         key1:
           serializedVersion: 2
-          rgba: 4280361250
+          rgba: 4285812059
         key2:
           serializedVersion: 2
-          rgba: 4284243042
+          rgba: 2561814
         key3:
           serializedVersion: 2
           rgba: 0
@@ -475,23 +475,23 @@ ParticleSystem:
           serializedVersion: 2
           rgba: 0
         ctime0: 0
-        ctime1: 64379
-        ctime2: 65535
+        ctime1: 964
+        ctime2: 65150
         ctime3: 0
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 64379
-        atime2: 65535
+        atime1: 65535
+        atime2: 0
         atime3: 0
         atime4: 0
         atime5: 0
         atime6: 0
         atime7: 0
         m_NumColorKeys: 3
-        m_NumAlphaKeys: 3
+        m_NumAlphaKeys: 2
       minGradient:
         key0:
           serializedVersion: 2
@@ -584,7 +584,7 @@ ParticleSystem:
     cycles: 1
     randomRow: 1
   VelocityModule:
-    enabled: 1
+    enabled: 0
     x:
       scalar: 0
       maxCurve:
@@ -1133,7 +1133,7 @@ ParticleSystemRenderer:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
@@ -1147,7 +1147,7 @@ ParticleSystemRenderer:
   m_SortingOrder: 0
   m_SortingLayerID: 0
   m_RenderMode: 0
-  m_MaxParticleSize: .469999999
+  m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
