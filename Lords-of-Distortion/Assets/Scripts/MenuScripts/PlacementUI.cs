@@ -39,6 +39,7 @@ public class PlacementUI : MonoBehaviour {
 
     private Camera cam;
     float timer = 0.0f;
+    public UISprite deadLordBtnRed;
    
 	bool powerButtonsEnabled = true;
 	enum PlacementState{
@@ -72,9 +73,9 @@ public class PlacementUI : MonoBehaviour {
 
 		/*Hard code some powers for now*/
 		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
-		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 2, "Pinwheel"));
+		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 1, "Pinwheel"));
 		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
-		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Explosive"));
+		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Bomb"));
 	}
 	
 	void Start(){
@@ -128,6 +129,7 @@ public class PlacementUI : MonoBehaviour {
         if (live)
         {
             timer -= Time.deltaTime;
+            deadLordBtnRed.fillAmount = timer / 3.5f;
         }
 
 		if(Input.GetMouseButtonDown(0)){
@@ -166,7 +168,6 @@ public class PlacementUI : MonoBehaviour {
 		}
         else if (live && timer <= 0.0f)
         {
-            timer = 3.5f;
             SpawnPowerVisual(activeInfo);
             FollowMouse();
         }
@@ -222,6 +223,7 @@ public class PlacementUI : MonoBehaviour {
 	//Sets down the power and stores it as a power spawn. 
 
 	private void PlacePower(){
+        timer = 3.5f;
 		Destroy(activePower.GetComponent<MouseFollow>());
 		PowerSpawn spawn = null;
 

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Hook : MonoBehaviour {
 
-	public  bool going = false;
+	public bool going = false;
 	public bool movingtowards = false;
 	public bool movingback = false;
 	public bool hookpull = false;

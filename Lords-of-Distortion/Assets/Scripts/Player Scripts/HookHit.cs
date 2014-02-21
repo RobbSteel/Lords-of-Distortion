@@ -15,6 +15,7 @@ public class HookHit : MonoBehaviour {
 	public NetworkController networkController;
 	public Controller2D affectedPlayerC2D;
 	public Vector3 targetPosition;
+
 	public Animator anim;
 
 	void Awake(){
@@ -26,6 +27,7 @@ public class HookHit : MonoBehaviour {
 		lr.material = rope;
 		lr.sortingLayerName = "Player";
 		lr.sortingOrder = 1;
+		anim = GetComponent<Animator>();
 	}
 
 
@@ -53,10 +55,11 @@ public class HookHit : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && col.gameObject.tag != "Melee"){
 
-			print ("hello");
-			anim.SetTrigger("Grapple");
+			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
+			anim.SetTrigger("Hooked");
 			hooked = true;
+
 
 		}
 
@@ -71,6 +74,7 @@ public class HookHit : MonoBehaviour {
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				//TODO: call hitplayer locally instead of doing the following:
 				//do what the remote rpc would do, but locally:
+				anim.SetTrigger("Hooked");
 				playerhooked = true; 
 				targetPosition = transform.position;
 				print ("I'm hit!");
