@@ -80,7 +80,7 @@ public class Hook : MonoBehaviour {
 				hookpull = true;
 				going = false;
 				pushpull = 1;
-				if(networkController.isOwner)
+				if(networkView.isMine)
 					networkView.RPC ("PullPlayer", hitPlayer); //only call this one client, the owner.
 			}
 		}

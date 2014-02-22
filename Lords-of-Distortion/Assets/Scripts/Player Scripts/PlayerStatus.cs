@@ -177,8 +177,12 @@ public class PlayerStatus : MonoBehaviour {
 	
 	[RPC]
 	void NotifyHit(bool fromLeftSide){
+
+		if(!GetComponent<NetworkController>().isOwner)
+			return;
+
 		//ignore hits if the player is already knocked back
-		if(playerControl.knockedBack){
+		if(playerControl.knockedBack ){
 			return;
 		}
 		
