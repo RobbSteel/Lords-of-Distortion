@@ -282,9 +282,11 @@ public class PlayerStatus : MonoBehaviour {
 	//checks if player is stun and then applies stunRecover
 	private void CheckIfStunned(){
 		if( playerControl.stunned == true ){
+			playerControl.snared = true;
 			TurnOnMashAlert();
 			StunRecover();
 			if( currentStunMeter <= 0 ){
+				playerControl.snared = false;
 				playerControl.stunned = false;
 				TurnOffMashAlert();
 				playerControl.anim.SetTrigger("unstunned");
