@@ -1827,7 +1827,7 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 17.0666676
   mAtlas: {fileID: 11400000, guid: 7bf31929753e4ac46a4f227efd898ee7, type: 2}
-  mSpriteName: bar_texture
+  mSpriteName: bar-solid
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -2151,7 +2151,7 @@ Transform:
   m_PrefabInternal: {fileID: 715819549}
   m_GameObject: {fileID: 232454368}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -66.9999771, y: 3.30310059, z: 0}
+  m_LocalPosition: {x: -66.9999771, y: -2025.62793, z: 0}
   m_LocalScale: {x: 2.99991012, y: 2.99991012, z: 2.99991012}
   m_Children: []
   m_Father: {fileID: 181226030}
@@ -5558,6 +5558,14 @@ Prefab:
       propertyPath: arenaManager
       value: 
       objectReference: {fileID: 1038793230}
+    - target: {fileID: 11400020, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: mSpriteName
+      value: bar-solid
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -2025.62793
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d3cd913089056b345bd90fad246e4797, type: 2}
   m_RootGameObject: {fileID: 794641542}

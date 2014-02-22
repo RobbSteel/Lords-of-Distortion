@@ -21,8 +21,6 @@ public class countdown : MonoBehaviour {
 	void Awake(){
 		
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-		
-		
 	}
 
 	void Start(){
