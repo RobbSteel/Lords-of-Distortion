@@ -80,7 +80,7 @@ public class Hook : MonoBehaviour {
 				hookpull = true;
 				going = false;
 				pushpull = 1;
-				if(networkController.isOwner)
+				if(networkView.isMine)
 					networkView.RPC ("PullPlayer", hitPlayer); //only call this one client, the owner.
 			}
 		}
@@ -222,7 +222,7 @@ public class Hook : MonoBehaviour {
 		}
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
-		if(distance < .5){
+		if(distance < 3){
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}

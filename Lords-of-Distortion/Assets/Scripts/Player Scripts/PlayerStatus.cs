@@ -36,8 +36,11 @@ public class PlayerStatus : MonoBehaviour {
 	private bool horizontalPressedUp;		//tracks horizontal keyup
 	private bool horizontalPressedDown;		//tracks horizontal keydown
 	private int horizontalMoveCheck;		//tracks horizontal current key
-	
+
+    public UISprite shieldIcon;
+
 	void Awake(){
+        shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
 		recoverRate = 10f;
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
@@ -183,8 +186,12 @@ public class PlayerStatus : MonoBehaviour {
 	
 	[RPC]
 	void NotifyHit(bool fromLeftSide){
+
+		if(!GetComponent<NetworkController>().isOwner)
+			return;
+
 		//ignore hits if the player is already knocked back
-		if(playerControl.knockedBack){
+		if(playerControl.knockedBack ){
 			return;
 		}
 		
@@ -227,19 +234,32 @@ public class PlayerStatus : MonoBehaviour {
 		HitFeedback();
 		
 		//hitMarkSprites.enabled = true;
-		
+        Color newColor;
 		switch(hits){
 		case 0:
-			
+            newColor = shieldIcon.color;
+            newColor.r = 0.0f;
+            newColor.b = 0.0f;
+            newColor.g = 0.0f;
+            shieldIcon.color = newColor;
 			//hitMarkSprites.enabled = false;
 			break;
 		case 1:
 			shield.enableEmission = true;
-			
+            newColor = shieldIcon.color;
+            newColor.r = 1f;
+            newColor.b = 0.0f;
+            newColor.g = 1f;
+            shieldIcon.color = newColor;
 			//hitMarkSprites.sprite = firstMark;
 			break;
 		case 2:
 			shield.startColor = Color.red;
+			newColor = shieldIcon.color;
+            newColor.r = 1.0f;
+            newColor.b = 0.0f;
+            newColor.g = 0.0f;
+            shieldIcon.color = newColor;
 			//hitMarkSprites.sprite = thirdMark; //use this ugly one for now.
 			ThirdMarkSound();
 			break;
@@ -266,9 +286,11 @@ public class PlayerStatus : MonoBehaviour {
 	//checks if player is stun and then applies stunRecover
 	private void CheckIfStunned(){
 		if( playerControl.stunned == true ){
+			playerControl.snared = true;
 			TurnOnMashAlert();
 			StunRecover();
 			if( currentStunMeter <= 0 ){
+				playerControl.snared = false;
 				playerControl.stunned = false;
 				TurnOffMashAlert();
 				playerControl.anim.SetTrigger("unstunned");

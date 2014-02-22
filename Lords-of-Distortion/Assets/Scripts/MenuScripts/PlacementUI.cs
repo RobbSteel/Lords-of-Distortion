@@ -19,7 +19,7 @@ public class PlacementUI : MonoBehaviour {
 	public UIGrid TriggerGrid;
 
 	public Dictionary<PowerType, Sprite> icons;
-	string[] triggerKeys = new string[] {"z", "x", "c", "v", "f"};
+	string[] triggerKeys = new string[] {"1", "2", "3", "4", "5"};
 
 
 	public Sprite glueSprite;
@@ -151,6 +151,7 @@ public class PlacementUI : MonoBehaviour {
 			//called when we're in the process of changing the direction of a power.
 			case PlacementState.ChangingDirection:
 				ChooseDirection();
+                activePower = null;
 				break;
 			}
 		}

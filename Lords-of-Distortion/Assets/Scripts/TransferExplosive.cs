@@ -95,7 +95,7 @@ public class TransferExplosive : Power {
 		if(timer <= 0 && !exploded)
         {
             exploded = true;
-            explode = Instantiate(Resources.Load("ExplosionParticle"), transform.position, Quaternion.identity) as GameObject;
+            explode = Instantiate(Resources.Load("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
             Destroy(explode, 1.0f);
             gameObject.GetComponent<SpriteRenderer>().sprite = null;
 			print("Boom");
