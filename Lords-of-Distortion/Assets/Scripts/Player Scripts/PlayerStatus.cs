@@ -186,8 +186,12 @@ public class PlayerStatus : MonoBehaviour {
 	
 	[RPC]
 	void NotifyHit(bool fromLeftSide){
+
+		if(!GetComponent<NetworkController>().isOwner)
+			return;
+
 		//ignore hits if the player is already knocked back
-		if(playerControl.knockedBack){
+		if(playerControl.knockedBack ){
 			return;
 		}
 		
@@ -282,9 +286,11 @@ public class PlayerStatus : MonoBehaviour {
 	//checks if player is stun and then applies stunRecover
 	private void CheckIfStunned(){
 		if( playerControl.stunned == true ){
+			playerControl.snared = true;
 			TurnOnMashAlert();
 			StunRecover();
 			if( currentStunMeter <= 0 ){
+				playerControl.snared = false;
 				playerControl.stunned = false;
 				TurnOffMashAlert();
 				playerControl.anim.SetTrigger("unstunned");

@@ -41,8 +41,6 @@ public class NetworkController : MonoBehaviour {
 			this.inAir = false;
 		}
 	}
-	
-
 	//just learned about this, might be useful later on
 	void OnNetworkInstantiate(NetworkMessageInfo info){
 
