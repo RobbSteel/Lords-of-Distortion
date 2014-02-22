@@ -151,6 +151,7 @@ public class PlacementUI : MonoBehaviour {
 			//called when we're in the process of changing the direction of a power.
 			case PlacementState.ChangingDirection:
 				ChooseDirection();
+                activePower = null;
 				break;
 			}
 		}
