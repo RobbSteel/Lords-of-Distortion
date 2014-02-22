@@ -235,6 +235,7 @@ public class SessionManager : MonoBehaviour {
 		GameObject deadPlayer = gameInfo.GetPlayerGameObject(info.sender);
 		//once you learn that a player has died, play his death animation.
 		deadPlayer.GetComponent<Controller2D>().anim.SetTrigger("Die");
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
 		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
 	}
 	
