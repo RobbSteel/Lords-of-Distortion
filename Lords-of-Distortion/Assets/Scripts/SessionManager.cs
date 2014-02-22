@@ -58,11 +58,22 @@ public class SessionManager : MonoBehaviour {
 	[RPC]
 	void SpawnPlayer(Vector3 location){
 		//var timeInstance = (GameObject)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		Transform instance = (Transform)Network.Instantiate(characterPrefab, location, Quaternion.identity, GAMEPLAY);
-		NetworkView charNetworkView = instance.networkView;
-		charNetworkView.RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
+		NetworkViewID newID = Network.AllocateViewID();
+		int group = GAMEPLAY;
+		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, newID, group);
+		Transform instance = InstantiatePlayer(location, newID, group);
+		instance.GetComponent<NetworkView>().RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
 	}
-	
+
+	[RPC]
+	Transform InstantiatePlayer(Vector3 location, NetworkViewID viewID, int group){
+		Transform instance = (Transform)Instantiate(characterPrefab, location, Quaternion.identity);
+		NetworkView charNetworkView = instance.GetComponent<NetworkView>();
+		charNetworkView.viewID = viewID;
+		charNetworkView.group = group;
+		return instance;
+	}
+
 	/*
 	 * Create a local copy of PlayerOptions and PlayerStats for each player in this session
 	 */

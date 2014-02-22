@@ -15,11 +15,13 @@ public class MeleeHit : MonoBehaviour {
 		if(col.gameObject.tag == "Player"){
 			melee.HandleCollsion(col.gameObject);
 			Debug.Log ("Player hit");
+			// Disable BoxCollider2D so that only one hit registers.
+			GetComponent<BoxCollider2D>().enabled = false;
 		}
 		// ...else melee hits nothing
 		else
 			Debug.Log ("Hit something other than player");
-		// Disable BoxCollider2D so that only one hit registers.
-		GetComponent<BoxCollider2D>().enabled = false;
+
+
 	}
 }

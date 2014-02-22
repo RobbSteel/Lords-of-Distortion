@@ -79,7 +79,8 @@ public class Melee : MonoBehaviour {
 	public void HandleCollsion(GameObject playerObject){
 		// ... find the StunBar script and call the TakeDamage function.
 		//playerObject.GetComponent<StunBar>().TakeDamage(damageDealt);
-		playerObject.GetComponent<PlayerStatus>().AddHit(controller.facingRight);
+		//playerObject.GetComponent<PlayerStatus>().AddHit(controller.facingRight);
+		playerObject.GetComponent<PlayerStatus>().networkView.RPC ("NotifyHit", RPCMode.Others, controller.facingRight);
 	}
 	
 }
