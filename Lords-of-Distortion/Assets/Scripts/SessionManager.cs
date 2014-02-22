@@ -4,7 +4,8 @@ using System.Collections;
 using System;
 
 public class SessionManager : MonoBehaviour {
-	
+
+	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
 	private string[] arenas = new string[3]{"StageOne", "StageOne", "StageOne"}; //an array of arenas
