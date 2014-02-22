@@ -63,6 +63,8 @@ public class Controller2D : MonoBehaviour {
 			return;
 		Jump();
 		stoppedJump = Input.GetButtonUp("Jump");
+        if(snared)
+            rigidbody2D.gravityScale = 1;
 	}
 	
 	float previousY = 0f;
