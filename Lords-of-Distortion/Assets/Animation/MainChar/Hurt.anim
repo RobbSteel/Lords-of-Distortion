@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Collasus_Jump
+  m_Name: Hurt
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -18,12 +18,20 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300064, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+      value: {fileID: 21300102, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .100000001
+      value: {fileID: 21300104, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .200000003
+      value: {fileID: 21300106, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .300000012
+      value: {fileID: 21300108, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .400000006
+      value: {fileID: 21300110, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 7
+  m_SampleRate: 10
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -31,7 +39,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .142857149
+    m_StopTime: .5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

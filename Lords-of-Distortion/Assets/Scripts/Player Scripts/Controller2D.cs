@@ -63,6 +63,8 @@ public class Controller2D : MonoBehaviour {
 			return;
 		Jump();
 		stoppedJump = Input.GetButtonUp("Jump");
+        if(snared)
+            rigidbody2D.gravityScale = 1;
 	}
 	
 	float previousY = 0f;
@@ -236,7 +238,9 @@ public class Controller2D : MonoBehaviour {
 
 	public void Die(){
 		if(dead == false){
+
 			dead = true;
+			snared = true;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*

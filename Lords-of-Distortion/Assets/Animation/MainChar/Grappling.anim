@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Collasus_Hit
+  m_Name: Grappling
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -15,8 +15,23 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
-  m_PPtrCurves: []
-  m_SampleRate: 60
+  m_PPtrCurves:
+  - curve:
+    - time: 0
+      value: {fileID: 21300000, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+    - time: .0500000007
+      value: {fileID: 21300002, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+    - time: .100000001
+      value: {fileID: 21300004, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+    - time: .150000006
+      value: {fileID: 21300006, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+    - time: .200000003
+      value: {fileID: 21300008, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+  m_SampleRate: 20
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -24,7 +39,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: .25
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
