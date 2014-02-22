@@ -71,7 +71,13 @@ public class PlayerStatus : MonoBehaviour {
 
 	//used to turn off MashAlertIcon
 	void TurnOffMashAlert(){
+
 		MashIcon.SetActive (false);
+	}
+
+	public void DestroyMashIcon(){
+		playerControl.stunned = false;
+		Destroy( MashIcon );
 	}
 
 	//this function acts as unitys input keydown and up for "Horizontal" input
@@ -309,6 +315,7 @@ public class PlayerStatus : MonoBehaviour {
 	
 	//Ondestroy delete Stunbar Ui
 	void OnDestroy(){
+		Destroy( MashIcon );
 		Destroy( UI );
 	}
 	

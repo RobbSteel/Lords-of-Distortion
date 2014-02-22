@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Grappling Hook
+  m_Name: Melee
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -18,20 +18,20 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
-    - time: .0500000007
-      value: {fileID: 21300002, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
-    - time: .100000001
-      value: {fileID: 21300004, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
-    - time: .150000006
-      value: {fileID: 21300006, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+      value: {fileID: 21300040, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .0666666701
+      value: {fileID: 21300042, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .13333334
+      value: {fileID: 21300044, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
     - time: .200000003
-      value: {fileID: 21300008, guid: 3b11ec48b7ff0e34d8c21db0f8b8d257, type: 3}
+      value: {fileID: 21300046, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .266666681
+      value: {fileID: 21300048, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 20
+  m_SampleRate: 15
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -39,7 +39,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .25
+    m_StopTime: .333333343
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -55,4 +55,11 @@ AnimationClip:
     m_Mirror: 0
   m_EditorCurves: []
   m_EulerEditorCurves: []
-  m_Events: []
+  m_Events:
+  - time: .266666681
+    functionName: StopMelee
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

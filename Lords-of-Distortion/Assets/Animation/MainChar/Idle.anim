@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Grapple1
+  m_Name: Idle
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -15,8 +15,23 @@ AnimationClip:
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
-  m_PPtrCurves: []
-  m_SampleRate: 60
+  m_PPtrCurves:
+  - curve:
+    - time: 0
+      value: {fileID: 21300050, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .166666672
+      value: {fileID: 21300052, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .333333343
+      value: {fileID: 21300054, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .5
+      value: {fileID: 21300056, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    - time: .666666687
+      value: {fileID: 21300058, guid: 153d06456838c1149b3f0a3818f48872, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+  m_SampleRate: 6
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -24,7 +39,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: .833333373
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
