@@ -172,9 +172,10 @@ public class NetworkController : MonoBehaviour {
 
 	//typically only called by the death animation finishingz
 	public void DestroyPlayer(){
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
-		if (isOwner)
+		if (isOwner){
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			Network.Destroy (gameObject);
+		}
 	}
 
 	void OnDestroy(){
