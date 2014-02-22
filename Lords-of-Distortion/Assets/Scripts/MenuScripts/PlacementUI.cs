@@ -19,7 +19,7 @@ public class PlacementUI : MonoBehaviour {
 	public UIGrid TriggerGrid;
 
 	public Dictionary<PowerType, Sprite> icons;
-	string[] triggerKeys = new string[] {"z", "x", "c", "v", "f"};
+	string[] triggerKeys = new string[] {"1", "2", "3", "4", "5"};
 
 
 	public Sprite glueSprite;
