@@ -250,6 +250,8 @@ public class Controller2D : MonoBehaviour {
 			if(onDeath != null)
 				onDeath(gameObject);
 
+			//Remove MashIcon from PlayerStatus Script
+			status.DestroyMashIcon();
 			//play death animation.
 			anim.SetTrigger("Die");
 			//We don't need the next line any more
