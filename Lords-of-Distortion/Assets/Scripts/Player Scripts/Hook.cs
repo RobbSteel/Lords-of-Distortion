@@ -20,11 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
-
-
-
-
-
+	
 
 	NetworkController networkController;
 	Controller2D  controller2D;
@@ -43,7 +39,6 @@ public class Hook : MonoBehaviour {
 		hookscript.networkController = networkController;
 		hookscript.shooter = gameObject;
 		hooktimer = 5;
-		print (hookscript.shooter);
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -63,6 +58,7 @@ public class Hook : MonoBehaviour {
 			return;
 		ShootHookLocal(target);
 	}
+
 	void Update(){
 
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
@@ -76,12 +72,15 @@ public class Hook : MonoBehaviour {
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
-				hittimer = 2;
-				hookpull = true;
-				going = false;
-				pushpull = 1;
-				if(networkView.isMine)
-					networkView.RPC ("PullPlayer", hitPlayer); //only call this one client, the owner.
+				//apparently clients cant rpc each other directly, so let server tell the character
+				//on the hooked players client when to start pulling the hooked player.
+				if(Network.isServer && !hookpull){
+					hittimer = 2;
+					pushpull = 1;
+					going = false;
+					hookpull = true;
+					networkView.RPC ("PullPlayer", hitPlayer); 
+				}
 			}
 		}
 
@@ -166,8 +165,12 @@ public class Hook : MonoBehaviour {
 	void PullPlayer(){
 		print ("pull");
 		pushpull = 1;
+		//slightly longer to account for lag
+		hittimer = 2.2f;
+		going = false;
+		hookpull = true;
 	}
-
+	
 	[RPC]
 	void GoToPlayer(){
 		pushpull = 2;
@@ -210,7 +213,7 @@ public class Hook : MonoBehaviour {
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
 
-		var player = hookscript.players;
+		var player = hookscript.hookedPlayer;
 		///player died
 		if(player == null){
 			DestroyHookPossible();
@@ -220,6 +223,7 @@ public class Hook : MonoBehaviour {
 		if(!networkController.isOwner){
 			player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, speed);
 		}
+
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
 		if(distance < 3){
@@ -232,25 +236,28 @@ public class Hook : MonoBehaviour {
 
 	NetworkPlayer hitPlayer;
 	[RPC]
-	void HitPlayer(Vector3 playerLocation, NetworkPlayer hitPlayer){
+	void HitPlayer( Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+		print ("Hit by "  + info.networkView.viewID);
+		print ("My id is " + networkView.viewID);
 		go.transform.position = playerLocation;
-		hookscript.players = networkController.instanceManager.gameInfo.GetPlayerGameObject(hitPlayer);
-		hookscript.affectedPlayerC2D = hookscript.players.GetComponent<Controller2D>();
+		hookscript.hookedPlayer = networkController.instanceManager.gameInfo.GetPlayerGameObject(hitPlayer);
+		hookscript.affectedPlayerC2D = hookscript.hookedPlayer.GetComponent<Controller2D>();
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;
 		hookscript.playerhooked = true;
 		this.hitPlayer = hitPlayer;
 	}
 
-	public void HitPlayerLocal(Vector3 playerLocation){
-		go.transform.position = playerLocation;
+	//to be called by hookhit
+	public void HitPlayerLocal(Vector3 playerLocation, NetworkPlayer hitPlayer){
 		targetLocation = playerLocation;
+		this.hitPlayer = hitPlayer;
 	}
 
 	Vector3 targetLocation;
 	//Player pulling himself to opponent
 	void goingtoplayer(float speed){
-		var player = hookscript.players;
+		var player = hookscript.hookedPlayer;
 		transform.position = Vector2.MoveTowards(transform.position, hookscript.targetPosition, speed);
 		var distance = Vector2.Distance(go.transform.position, transform.position);
 		if(distance < .5){

@@ -22,7 +22,7 @@ public class NetworkController : MonoBehaviour {
 	private float currentSmooth = 0f;
 	private bool canInterpolate= false;
 	private float simTime;
-
+	
 
 	/*
 	 * Holds various properties required to simulate the state of a player locally.
@@ -50,7 +50,6 @@ public class NetworkController : MonoBehaviour {
 	[RPC]
 	void SetPlayerID(NetworkPlayer player)
 	{
-		Debug.Log ("received owner id");
 		theOwner = player;
 		if(player == Network.player){ 
 			isOwner = true; //we can control the player locally
