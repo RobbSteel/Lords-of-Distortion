@@ -139,6 +139,7 @@ public class SessionManager : MonoBehaviour {
 	[RPC]
 	IEnumerator LoadLevel(String level, int commonPrefix, bool finished){
 		matchfinish = finished;
+		finishedLoading = false;
 		Network.SetSendingEnabled(GAMEPLAY, false);
 		Network.isMessageQueueRunning = false;
 		Network.SetLevelPrefix(commonPrefix);

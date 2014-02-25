@@ -20,7 +20,7 @@ public class ArenaManager : MonoBehaviour {
 	List<NetworkPlayer> playersReady;
 	
 	float beginTime;
-	int? livePlayers;
+	int? livePlayerCount;
 	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
 	bool sentMyPowers = false;
@@ -49,7 +49,7 @@ public class ArenaManager : MonoBehaviour {
 		deadPlayerStats.score += CalculateScore();
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
-		if(livePlayers == 0){
+		if(livePlayerCount == 0){
 			print ("No more players");
 			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
 			finishgame = true;
@@ -59,7 +59,7 @@ public class ArenaManager : MonoBehaviour {
 	//Called only on the server.
 	[RPC]
 	void NotifyPlayerDied(NetworkMessageInfo info){
-		livePlayers--;
+		livePlayerCount--;
 		if(Network.isServer){
 			ServerDeathHandler(info.sender);
 		}
@@ -75,14 +75,14 @@ public class ArenaManager : MonoBehaviour {
 	//Called locally on every client including server when the player you control dies.
 	void LostPlayer(GameObject deadPlayer){
 		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
-		livePlayers--;
+		livePlayerCount--;
 		if(Network.isServer){
 			ServerDeathHandler(Network.player);
 		}
 		sessionManager.KillPlayer(deadPlayer);
 
 		//brign up the dead player placement screen.
-		placementUI.SwitchToLive();
+		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 		PlayMenuTween(false);
 
@@ -102,8 +102,6 @@ public class ArenaManager : MonoBehaviour {
 	
 	private void CheckIfAllSynchronized(){
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
-			print ("Spam every player with every powerinfo");
-			
 			foreach(PowerSpawn power in allTimedSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 (int)power.type, power.position, power.spawnTime);
@@ -186,14 +184,32 @@ public class ArenaManager : MonoBehaviour {
        * 6. Have an event queue similar to the one in NetworkController.
        * 7. Players themselves determine if they're hit or not.* 
 	 */
-	
+
+	void SnarePlayers(){
+		foreach(NetworkPlayer player in sessionManager.gameInfo.players){
+			GameObject playerObject = sessionManager.gameInfo.GetPlayerGameObject(player);
+			playerObject.GetComponent<Controller2D>().Snare();
+		}
+	}
+
+	void FreePlayers(){
+		foreach(NetworkPlayer player in sessionManager.gameInfo.players){
+			GameObject playerObject = sessionManager.gameInfo.GetPlayerGameObject(player);
+			playerObject.GetComponent<Controller2D>().FreeFromSnare();
+		}
+	}
+
 	void OnNetworkLoadedLevel(){
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
 		
 		if(Network.isServer){
-			Debug.Log ("start timer");
 			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
+			//spawn players immediately
+			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
+			SnarePlayers();
+			//TODO: make this a UI text function. (fade in fade out quickly)
+			print ("You may place pleliminary traps");
 		}
 		//TODO: have something that checks if all players have finished loading.
 	}
@@ -204,7 +220,7 @@ public class ArenaManager : MonoBehaviour {
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority));
 			
 			//Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME + allTimedSpawns.First.Priority && prevYield != allTimedSpawns.First)
+			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME  + allTimedSpawns.First.Priority && prevYield != allTimedSpawns.First)
 			{
 				prevYield = allTimedSpawns.First;
 				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allTimedSpawns.First.position, Quaternion.identity);
@@ -223,8 +239,7 @@ public class ArenaManager : MonoBehaviour {
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
 
         float currentTime = TimeManager.instance.time;
-        Debug.Log(beginTime + FIGHT_COUNT_DOWN_TIME);
-        if (placementUI.selectedTriggers.Contains(spawn) && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME)
+		if (placementUI.selectedTriggers.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
@@ -278,18 +293,21 @@ public class ArenaManager : MonoBehaviour {
 		StartCoroutine(YieldThenPower(spawn, optionalViewID));
 	}
 
+	bool playersFreed = false;
+	bool trapsEnabled = false;
 	void Update () {
-		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
-			//print("Time's up: current " +TimeManager.instance.time + " begin time " + beginTime);
-			PlayMenuTween(true);
-			
-            //if(!lordsSpawnManager.readyToSend)
-			//	lordsSpawnManager.FinalizePowers(this.gameObject);
 
-			placementUI.ShowTriggers();
+		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
             placementUI.DestroyPowers();
-			placementUI.enabled = false;
-			
+			placementUI.Disable();
+
+
+			/*
+			 * Don't tween away powers
+			PlayMenuTween(true);
+
+			*/
+
 			//Synchronize traps to server.
             foreach(PowerSpawn power in  placementUI.selectedTraps){
                 if(Network.isServer){
@@ -310,13 +328,25 @@ public class ArenaManager : MonoBehaviour {
 
 			
 		}
-		
+
+
 		//the rest of the code doesn't run until powers are finalized.
 		if(!powersSynchronized)
 			return;
-		
-		if(livePlayers == null && Network.isServer){
-			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
+
+		if(!playersFreed){
+			print ("5 seconds until proximity and remote activated traps are enabled.");
+			FreePlayers();
+			playersFreed = true;
+		}
+		if(!trapsEnabled && TimeManager.instance.time >= beginTime + FIGHT_COUNT_DOWN_TIME){
+			print ("Traps are Enabled");
+
+			//also bring back power placement
+			placementUI.SwitchToLive(false);
+			placementUI.Enable();
+			placementUI.ShowTriggers();
+			trapsEnabled = true;
 		}
 		
 		//Spawn one timed trap per frame, locally.
@@ -349,19 +379,19 @@ public class ArenaManager : MonoBehaviour {
 		
 		int score = 0;
 		
-		if(livePlayers == 0){
+		if(livePlayerCount == 0){
 			
 			score += 10;
 			
-		} else if(livePlayers == 1){
+		} else if(livePlayerCount == 1){
 			
 			score += 8;
 			
-		} else if(livePlayers == 2){
+		} else if(livePlayerCount == 2){
 			
 			score += 6;
 			
-		} else if(livePlayers == 3){
+		} else if(livePlayerCount == 3){
 			
 			score += 4;
 		}
