@@ -195,25 +195,19 @@ public class PlayerStatus : MonoBehaviour {
 			return;
 		}
 		
-		hitCount++;
+		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
-		VisualHitIndicator(hitCount);
+		VisualHitIndicator();
 		
-		if(hitCount == 2){
-			//hitCount= 0;
+
 			float flip = 1f;
 			if(!fromLeftSide)
 				flip = -1f;
 			
 			BeginKnockBack(flip);
-		}
-		
-		else if(hitCount == 3){
-			playerControl.Die();
-		}
-		
+	
 	}
 	
 	
@@ -229,46 +223,13 @@ public class PlayerStatus : MonoBehaviour {
 	
 	
 	[RPC]
-	void VisualHitIndicator(int hits){
+	void VisualHitIndicator(){
 		
 		HitFeedback();
-		
-		//hitMarkSprites.enabled = true;
-        Color newColor;
-		switch(hits){
-		case 0:
-            newColor = shieldIcon.color;
-            newColor.r = 0.0f;
-            newColor.b = 0.0f;
-            newColor.g = 0.0f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.enabled = false;
-			break;
-		case 1:
-			shield.enableEmission = true;
-            newColor = shieldIcon.color;
-            newColor.r = 1f;
-            newColor.b = 0.0f;
-            newColor.g = 1f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.sprite = firstMark;
-			break;
-		case 2:
-			shield.startColor = Color.red;
-			newColor = shieldIcon.color;
-            newColor.r = 1.0f;
-            newColor.b = 0.0f;
-            newColor.g = 0.0f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.sprite = thirdMark; //use this ugly one for now.
-			ThirdMarkSound();
-			break;
-		case 3:
-			//hitMarkSprites.sprite = thirdMark;
-			break;
+
 		}
 		
-	}
+
 	
 	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
