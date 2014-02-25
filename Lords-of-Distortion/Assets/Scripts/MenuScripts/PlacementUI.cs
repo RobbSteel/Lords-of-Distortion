@@ -73,6 +73,9 @@ public class PlacementUI : MonoBehaviour {
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
+        PowerType powerNum1 = PowerSpawn.RandomActivePower();
+        PowerType powerNum2 = PowerSpawn.RandomPassivePower();
+
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
 		icons.Add(PowerType.SMOKE, smokeSprite);
@@ -81,10 +84,16 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 
 		/*Hard code some powers for now*/
-		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
-		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 1, "Pinwheel"));
-		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
-		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Bomb"));
+		/*
+         * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
+		 * draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 1, "Pinwheel"));
+		 * draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
+		 * draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Bomb"));
+         */
+        /* Randomize some powers */
+
+        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
+        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
 	}
 	
 	void Start(){
