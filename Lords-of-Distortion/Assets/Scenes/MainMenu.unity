@@ -874,6 +874,7 @@ GameObject:
   - 114: {fileID: 1411885665}
   - 114: {fileID: 1411885664}
   - 65: {fileID: 1411885663}
+  - 114: {fileID: 1411885666}
   m_Layer: 8
   m_Name: playerName
   m_TagString: Untagged
@@ -922,13 +923,13 @@ MonoBehaviour:
   validation: 0
   characterLimit: 10
   savedAs: 
-  selectOnTab: {fileID: 0}
+  selectOnTab: {fileID: 1982121383}
   activeTextColor: {r: .486274511, g: .498039216, b: 1, a: 1}
   caretColor: {r: 1, g: 1, b: 1, a: .800000012}
   selectionColor: {r: 1, g: .91922003, b: 0, a: .501960814}
   onSubmit: []
   onChange: []
-  mValue: Player Name
+  mValue: 
 --- !u!114 &1411885665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,6 +990,20 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &1411885666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1411885661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049a2bcd8df653c4d9cb9d39404363a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyCode: 13
+  modifier: 0
+  action: 1
 --- !u!1 &1610089342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,7 +1266,7 @@ Transform:
   m_GameObject: {fileID: 1979524387}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.35833335, y: .308333337, z: 0}
-  m_LocalScale: {x: .00579710165, y: .00579710165, z: .00579710165}
+  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 1610089343}
   - {fileID: 1396803620}
@@ -1377,13 +1392,13 @@ MonoBehaviour:
   validation: 0
   characterLimit: 10
   savedAs: 
-  selectOnTab: {fileID: 0}
+  selectOnTab: {fileID: 1411885661}
   activeTextColor: {r: .486274511, g: .498039216, b: 1, a: 1}
   caretColor: {r: 1, g: 1, b: 1, a: .800000012}
   selectionColor: {r: 1, g: .952646255, b: 0, a: .501960814}
   onSubmit: []
   onChange: []
-  mValue: Server Name
+  mValue: 
 --- !u!114 &1982121386
 MonoBehaviour:
   m_ObjectHideFlags: 0

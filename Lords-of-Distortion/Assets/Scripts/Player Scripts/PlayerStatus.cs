@@ -175,11 +175,11 @@ public class PlayerStatus : MonoBehaviour {
 		}
 	}
 	
-	Vector2 upForce = new Vector2(0f, 300f);
+	Vector2 upForce = new Vector2(0f, 200f);
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
-		sideForce = new Vector2(800f * flip, 100f);
+		sideForce = new Vector2(400f * flip, 100f);
 		knockBackPending = true;
 	}
 	
