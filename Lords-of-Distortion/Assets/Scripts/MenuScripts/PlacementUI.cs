@@ -34,6 +34,7 @@ public class PlacementUI : MonoBehaviour {
 
 	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
 	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+    public List<PowerType> currentPowers = new List<PowerType>();
 
 	PowerPrefabs prefabs;
 
@@ -94,6 +95,8 @@ public class PlacementUI : MonoBehaviour {
 
         draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
         draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
+        currentPowers.Add(powerNum1);
+        currentPowers.Add(powerNum2);
 	}
 	
 	void Start(){
@@ -103,13 +106,13 @@ public class PlacementUI : MonoBehaviour {
 		foreach(var inventoryPower in draftedPowers){
 
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
-			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			buttons.Add(entry.GetComponent<UIButton>());
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
 			PowerBoard info = entry.GetComponent<PowerBoard>();
 			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
 		}
-		InventoryGrid.Reposition();
+		TriggerGrid.Reposition();
 	}
 	
 
@@ -135,14 +138,14 @@ public class PlacementUI : MonoBehaviour {
 	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
-		foreach(PowerSpawn spawn in selectedTriggers){
+        foreach(PowerSpawn spawn in selectedTriggers){
 			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
 			Sprite sprite = null;
 			icons.TryGetValue(spawn.type, out sprite);
 			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
 			i++;
-		}
-		TriggerGrid.Reposition();
+		}		
+        TriggerGrid.Reposition();
 	}
 
 
