@@ -34,6 +34,7 @@ public class PlacementUI : MonoBehaviour {
 
 	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
 	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+    public List<GameObject> currentPowers = new List<GameObject>();
 
 	PowerPrefabs prefabs;
 
@@ -108,6 +109,7 @@ public class PlacementUI : MonoBehaviour {
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
 			PowerBoard info = entry.GetComponent<PowerBoard>();
 			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
+            currentPowers.Add(entry);
 		}
 		InventoryGrid.Reposition();
 	}
@@ -118,7 +120,7 @@ public class PlacementUI : MonoBehaviour {
 	/// </summary>
 	public void SwitchToLive(bool infinitePowers){
 		live = true;
-
+        InventoryGrid.gameObject.SetActive(true);
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
 			useTimer = true;
@@ -135,14 +137,15 @@ public class PlacementUI : MonoBehaviour {
 	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
-		foreach(PowerSpawn spawn in selectedTriggers){
+        InventoryGrid.gameObject.SetActive(false);
+        foreach(PowerSpawn spawn in selectedTriggers){
 			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
 			Sprite sprite = null;
 			icons.TryGetValue(spawn.type, out sprite);
 			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
 			i++;
-		}
-		TriggerGrid.Reposition();
+		}		
+        TriggerGrid.Reposition();
 	}
 
 
