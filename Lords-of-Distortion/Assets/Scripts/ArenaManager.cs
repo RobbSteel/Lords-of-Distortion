@@ -283,6 +283,7 @@ public class ArenaManager : MonoBehaviour {
 
 	bool playersFreed = false;
 	bool trapsEnabled = false;
+
 	void Update () {
 
 		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
