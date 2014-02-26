@@ -48,8 +48,17 @@ public class PlacementUI : MonoBehaviour {
 		ChangingDirection,
 	}
 
+	/*
+	 * TODO: figure out a way to differentiate and/or transition between
+	 * a) traps that are being placed (to do: disable animations from the start)
+	 * b) traps that have been placed but not armed (keep them the same as a?)
+	 * c) traps that have been armed - dont know
+	 * d) traps that are real - DONE warning sign and enabling of animations
+	 */
+
 	//http://www.youtube.com/watch?v=eUFY8Zw0Bag
 	public bool live = false;
+	bool useTimer = false;
 
 
 	PlacementState state = PlacementState.Default;
@@ -64,6 +73,9 @@ public class PlacementUI : MonoBehaviour {
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
+        PowerType powerNum1 = PowerSpawn.RandomActivePower();
+        PowerType powerNum2 = PowerSpawn.RandomPassivePower();
+
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
 		icons.Add(PowerType.SMOKE, smokeSprite);
@@ -72,10 +84,16 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 
 		/*Hard code some powers for now*/
-		draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
-		draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 1, "Pinwheel"));
-		draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
-		draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Bomb"));
+		/*
+         * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
+		 * draftedPowers.Add(PowerType.GRAVITY, new InventoryPower(PowerType.GRAVITY, 1, "Pinwheel"));
+		 * draftedPowers.Add(PowerType.FIREBALL, new InventoryPower(PowerType.FIREBALL, 1, "Ink Shot"));
+		 * draftedPowers.Add(PowerType.EXPLOSIVE, new InventoryPower(PowerType.EXPLOSIVE, 1, "Transfer Bomb"));
+         */
+        /* Randomize some powers */
+
+        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
+        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
 	}
 	
 	void Start(){
@@ -96,15 +114,20 @@ public class PlacementUI : MonoBehaviour {
 	
 
 	/// <summary>
-	///Place powers instantly without using trigges. 
+	///Place powers instantly without using triggers. 
 	/// </summary>
-	public void SwitchToLive(){
+	public void SwitchToLive(bool infinitePowers){
 		live = true;
-		int i = 0;
-		foreach(var inventoryPower in draftedPowers){
-			//Unlimited powers.
-			inventoryPower.Value.quantity = int.MaxValue;
+
+		if(infinitePowers){
+			//Only limit placement if the player is dead and has infinite powers.
+			useTimer = true;
+			foreach(var inventoryPower in draftedPowers){
+				//Unlimited powers.
+				inventoryPower.Value.quantity = int.MaxValue;
+			}
 		}
+
 		GridEnabled(true);
 	}
 
@@ -167,10 +190,17 @@ public class PlacementUI : MonoBehaviour {
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
 		}
-        else if (live && timer <= 0.0f)
+        else if (live)
         {
-            SpawnPowerVisual(activeInfo);
-            FollowMouse();
+			if(!useTimer){
+				SpawnPowerVisual(activeInfo);
+				FollowMouse();
+			}
+			else if(timer <= 0.0f){
+				SpawnPowerVisual(activeInfo);
+				FollowMouse();
+			}
+
         }
 	}
 
@@ -179,7 +209,7 @@ public class PlacementUI : MonoBehaviour {
 		//TODO: only hit things in the powers layer
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), -Vector2.up);
 		if(hit != null){
-			if(hit.collider.tag.Equals("Power")){
+			if(hit.collider.tag.Equals("UIPower")){
 				activePower = hit.transform.gameObject;
 				PowerSpawn spawn= null;
 				placedPowers.TryGetValue(activePower, out spawn);
@@ -205,7 +235,8 @@ public class PlacementUI : MonoBehaviour {
 		                           info.transform.position, Quaternion.identity) as GameObject;
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
-		
+		activePower.GetComponent<Collider2D>().isTrigger = true;
+		activePower.tag = "UIPower";
 
 		if(activePower.GetComponent<Animator>() != null){
 			activePower.GetComponent<Animator>().enabled = false;
@@ -298,6 +329,8 @@ public class PlacementUI : MonoBehaviour {
 		}        
 	}
 
+	//TODO: play an animation that tells players they can now use their powers.
+	//This function pauses animations for  powers and destroyes any unplaced instances.
 	public void DestroyPowers(){
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);
@@ -307,6 +340,7 @@ public class PlacementUI : MonoBehaviour {
 			Destroy(activePower);
 		}
 
+		//TODO: move this to a one by one basis when you spawn it
         foreach (var pair in placedPowers)
         {
 			//Destroy(pair.Key);
@@ -336,6 +370,15 @@ public class PlacementUI : MonoBehaviour {
             Destroy(pair.Key.collider2D);
 		}
         
+	}
+	public void Disable(){
+		GridEnabled(false);
+		this.enabled = false;
+	}
+
+	public void Enable(){
+		GridEnabled(true);
+		this.enabled = true;
 	}
 
     public void DestroyAlphaPower(PowerSpawn spawn)

@@ -20,17 +20,48 @@ public class PowerSpawn : PriorityQueueNode {
 	public Vector3 direction = Vector3.zero;
 	public NetworkPlayer owner;
 
+    private static System.Random rnd = new System.Random();
 
 	private static List<PowerType> powersRequiringDirection;
+    private static List<PowerType> powersActive;
+    private static List<PowerType> powersPassive;
 
 	public static bool TypeRequiresDirection(PowerType type){
 		return powersRequiringDirection.Contains(type);
 	}
 
+    public static bool TypeIsActive(PowerType type){
+        return powersActive.Contains(type);
+    }
+
+    public static bool TypeIsPassive(PowerType type){
+        return powersPassive.Contains(type);
+    }
+
+    public static PowerType RandomActivePower()
+    {
+        int thisOne = rnd.Next(0, powersActive.Count);
+        return powersActive[thisOne];
+    }
+
+    public static PowerType RandomPassivePower()
+    {
+        int thisOne = rnd.Next(0, powersPassive.Count);
+        return powersPassive[thisOne];
+    }
+
 	//The static constructor called automatically
 	static PowerSpawn(){
 		powersRequiringDirection = new List<PowerType>();
 		powersRequiringDirection.Add(PowerType.FIREBALL);
+
+        powersActive = new List<PowerType>();
+        powersActive.Add(PowerType.FIREBALL);
+        powersActive.Add(PowerType.EXPLOSIVE);
+
+        powersPassive = new List<PowerType>();
+        powersPassive.Add(PowerType.GRAVITY);
+        powersPassive.Add(PowerType.SMOKE);
 	}
 
 	public PowerSpawn(){
