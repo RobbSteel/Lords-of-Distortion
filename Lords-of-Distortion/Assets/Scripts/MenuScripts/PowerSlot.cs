@@ -13,7 +13,7 @@ public class PowerSlot : MonoBehaviour {
 	UISprite powerIcon;
 	string keyText;
 
-
+	bool enabled = false;
 
 	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
 		keyText = key;
@@ -28,7 +28,7 @@ public class PowerSlot : MonoBehaviour {
 	// Check for key press and call event .
 	void Update () {
         float currentTime = TimeManager.instance.time;
-		if(Input.GetKeyDown(keyText)){
+		if(enabled && Input.GetKeyDown(keyText)){
 			print("Pressed " + keyText + ", try to spawn that power");
 			powerKey(linkedSpawn, this.gameObject);
 		}

@@ -14,6 +14,12 @@ public enum PowerType{
 
 public class PowerSpawn : PriorityQueueNode {
 
+	public delegate void Timer(PowerSpawn powerSpawn);
+	public event Timer timeUpEvent;
+
+	float timeCountdown;
+	public bool timerSet = false;
+
 	public PowerType type;
 	public float spawnTime;
 	public Vector3 position;
@@ -67,5 +73,21 @@ public class PowerSpawn : PriorityQueueNode {
 	public PowerSpawn(){
 		type = PowerType.UNDEFINED;
 	}
-	
+
+	public void SetTimer(float time){
+		timerSet = true;
+		timeCountdown = time;
+	}
+
+	bool calledEvent = false;
+	public void ElapseTime(float deltaTime){
+		if(timeCountdown > 0f)
+			timeCountdown -= deltaTime;
+		else if(!calledEvent){
+			timeUpEvent(this);
+			calledEvent = true;
+		}
+	}
+
+
 }

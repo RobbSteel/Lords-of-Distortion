@@ -36,6 +36,7 @@ public class PlacementUI : MonoBehaviour {
 	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
     public List<GameObject> currentPowers = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
+	List<PowerSpawn> delayedPowers = new List<PowerSpawn>();
 
     private PowerType powerNum1;
     private PowerType powerNum2;
@@ -55,9 +56,9 @@ public class PlacementUI : MonoBehaviour {
 
 	/*
 	 * TODO: figure out a way to differentiate and/or transition between
-	 * a) traps that are being placed (to do: disable animations from the start)
+	 * a) traps that are being placed (to do: disable animations from the start) highlight a certain color (your own?)
 	 * b) traps that have been placed but not armed (keep them the same as a?)
-	 * c) traps that have been armed - dont know
+	 * c) traps that have been armed - display cooldown on ui and remove special color
 	 * d) traps that are real - DONE warning sign and enabling of animations
 	 */
 
@@ -217,6 +218,11 @@ public class PlacementUI : MonoBehaviour {
             deadLordBtnRed.fillAmount = timer / 3.5f;
         }
 
+		//Advance armament time for delayed powers.
+		foreach(PowerSpawn spawn in delayedPowers){
+			spawn.ElapseTime(Time.deltaTime);
+		}
+
 		if(Input.GetMouseButtonDown(0)){
 
 			switch(state){
@@ -314,6 +320,22 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(false);
 	}
 
+	private void LivePlacement(PowerSpawn spawn){
+		//Destroy(activePower);
+		//spawnNow(spawn, gameObject);
+		
+		spawn.SetTimer(2f); //start armament time
+		//TODO: remove passsive from ui, start radial cooldown on actives
+		if(PowerSpawn.TypeIsPassive(spawn.type)){
+			print ("add timed spawn locally and remotely"); //TODO: spawn timed power invisibly on all clients
+		}
+		else{
+			print ("disable triggering until time is up");
+		}
+		spawn.timeUpEvent += PowerArmed;
+		delayedPowers.Add(spawn);
+	}
+
 	//Sets down the power and stores it as a power spawn. 
 
 	private void PlacePower(){
@@ -341,16 +363,21 @@ public class PlacementUI : MonoBehaviour {
             activePower.AddComponent<powerRotate>();
 		}
 		else {
-
+			//When we're placing powers mid game:
 			if(live){
-				Destroy(activePower);
-				spawnNow(spawn, gameObject);
+				LivePlacement(spawn);
 			}
             activePower = null;
 
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
+	}
+
+	void PowerArmed(PowerSpawn powerSpawn){
+		//TODO: Make power go back to normal color.
+		if(PowerSpawn.TypeIsActive(powerSpawn.type))
+			print ("armament timer up, enable activation key");
 	}
 
 	///<summary>Calculates a direction vector from the current power to the mouse. Stores
@@ -370,9 +397,7 @@ public class PlacementUI : MonoBehaviour {
 
 
 		if(live){
-			Destroy(activePower);
-			activePower = null;
-			spawnNow(spawn, gameObject);
+			LivePlacement(spawn);
 		}
 
 		//Return buttons to normal
@@ -388,7 +413,7 @@ public class PlacementUI : MonoBehaviour {
 			//if a power is out, dont re-enable it button
 			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
 				button.isEnabled = state;
-		}        
+		}
 	}
 
 	//TODO: play an animation that tells players they can now use their powers.
