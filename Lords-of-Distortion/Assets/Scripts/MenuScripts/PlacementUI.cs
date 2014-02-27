@@ -39,7 +39,7 @@ public class PlacementUI : MonoBehaviour {
 
 
 	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
-	public List<PowerSpawn> delayedTraps = new List<PowerSpawn>();
+	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
 
     private PowerType powerNum1;
@@ -222,8 +222,10 @@ public class PlacementUI : MonoBehaviour {
         }
 
 		//Advance armament time for delayed powers.
-		foreach(PowerSpawn spawn in delayedTraps){
-			spawn.ElapseTime(Time.deltaTime);
+		for(int i = allTraps.Count - 1; i >= 0; i--){
+			PowerSpawn spawn = allTraps[i];
+			if(spawn.timerSet)
+				spawn.ElapseTime(Time.deltaTime);
 		}
 
 		if(Input.GetMouseButtonDown(0)){
@@ -245,7 +247,7 @@ public class PlacementUI : MonoBehaviour {
 			//called when we're in the process of changing the direction of a power.
 			case PlacementState.ChangingDirection:
 				ChooseDirection();
-                activePower = null;
+                //activePower = null;
 				break;
 			}
 		}
@@ -327,16 +329,17 @@ public class PlacementUI : MonoBehaviour {
 		//Destroy(activePower);
 		//spawnNow(spawn, gameObject);
 		
-		spawn.SetTimer(2f); //start armament time
-		//TODO: remove passsive from ui, start radial cooldown on actives
+		spawn.SetTimer(3f); //start armament time
+		//TODO: start radial cooldown on actives
 		if(PowerSpawn.TypeIsPassive(spawn.type)){
+
 			print ("add timed spawn locally and remotely"); //TODO: spawn timed power invisibly on all clients
-			spawn.spawnTime = 2f;
-			delayedTraps.Add(spawn);
+			spawn.spawnTime = 3f;
+			spawn.timeUpEvent += DestroyUIPower;
 		}
 		else{
 			print ("disable triggering until time is up");
-			activatedTraps.Add(spawn);
+			//activatedTraps.Add(spawn);
 		}
 		spawn.timeUpEvent += PowerArmed;
 
@@ -361,7 +364,7 @@ public class PlacementUI : MonoBehaviour {
 			allTraps.Add(spawn);
 			if(PowerSpawn.TypeIsPassive(spawn.type)){
 				spawn.SetTimer(0f);
-				delayedTraps.Add(spawn);
+				delayedTraps.Enqueue(spawn);
 			}
 		}
 		spawn.position = activePower.transform.position;
@@ -377,8 +380,7 @@ public class PlacementUI : MonoBehaviour {
 			if(live){
 				LivePlacement(spawn);
 			}
-            activePower = null;
-
+            //activePower = null;
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
@@ -478,17 +480,22 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
-    public void DestroyAlphaPower(PowerSpawn spawn)
+    public void DestroyUIPower(PowerSpawn spawn)
     {
         //PowerSpawn spawn = null;
         //placedPowers.TryGetValue(power, out spawn);
         //placedPowers.Remove(spawn);
+
+		allTraps.Remove(spawn); //TODO: remove from grid
+		GameObject key = null;
         foreach (var pair in placedPowers)
         {
             if (spawn == pair.Value)
             {
                 Destroy(pair.Key);
+				key = pair.Key;
             }
         }
+		placedPowers.Remove(key);
     }
 }

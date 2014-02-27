@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 15f; 
+	const float PLACEMENT_TIME = 8f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -216,6 +216,8 @@ public class ArenaManager : MonoBehaviour {
 				Destroy(yield_sign, 1.0f);
 			}
 			*/
+
+
 			if(currentTime >= beginTime + allTimedSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allTimedSpawns.Dequeue();
 				//convert power type to an int, which is an index to the array of power prefabs.
@@ -239,8 +241,7 @@ public class ArenaManager : MonoBehaviour {
 			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID);
 			SpawnPowerLocally(spawn, newViewID);
             //Remove from your inventory and  disable button 
-            placementUI.allTraps.Remove(spawn);
-            placementUI.DestroyAlphaPower(spawn);
+            placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
 				Vector3 offscreen = uiElement.transform.position;
 				offscreen.y -= 400f;
@@ -343,7 +344,7 @@ public class ArenaManager : MonoBehaviour {
 
 		//send traps placed in live mode
 		if(placementUI.delayedTraps.Count > 0){
-			PowerSpawn spawn = placementUI.delayedTraps[0];
+			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
 			if(Network.isServer){
 				AddPowerSpawnLocally((int)spawn.type, spawn.position, spawn.spawnTime); 
 			}
@@ -351,7 +352,6 @@ public class ArenaManager : MonoBehaviour {
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
 				                 (int)spawn.type, spawn.position, spawn.spawnTime);
 			}
-			placementUI.delayedTraps.Remove(spawn);
 		}
 
 		//Spawn one timed trap per frame, locally.

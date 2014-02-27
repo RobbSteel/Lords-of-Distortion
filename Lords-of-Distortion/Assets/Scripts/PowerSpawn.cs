@@ -84,8 +84,9 @@ public class PowerSpawn : PriorityQueueNode {
 		if(timeCountdown > 0f)
 			timeCountdown -= deltaTime;
 		else if(!calledEvent){
-			if(timeUpEvent!= null)
+			if(timeUpEvent!= null){
 				timeUpEvent(this);
+			}
 			calledEvent = true;
 		}
 	}
