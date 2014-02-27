@@ -198,7 +198,7 @@ public class PlayerStatus : MonoBehaviour {
 		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
-		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
+		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
 		
 
@@ -218,6 +218,15 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void HitFeedback(){
 		audio.Play ();
+
+		if(playerControl.facingRight){
+
+			punchParticles.transform.localScale = new Vector3(1,1,1);
+
+		}else{
+			punchParticles.transform.localScale = new Vector3(-1,1,1);
+		}
+
 		punchEffect.Play();
 	}
 	
