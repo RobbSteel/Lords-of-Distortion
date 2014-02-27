@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 15f; 
+	const float PLACEMENT_TIME = 8f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -90,7 +90,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 	
 	/*Clients request this fucntion on the server for every power. After that the server tells every
-             other player*/
+     other player*/
 	
 	[RPC]
 	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
@@ -206,14 +206,17 @@ public class ArenaManager : MonoBehaviour {
 		if(allTimedSpawns.Count != 0){
 			float currentTime = TimeManager.instance.time;
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority));
-			
-			//Display yield sign .5 seconds before power spawns, and destroy it when power spawns
+
+			//dont need this.
+			/*Display yield sign .5 seconds before power spawns, and destroy it when power spawns
 			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME  + allTimedSpawns.First.Priority && prevYield != allTimedSpawns.First)
 			{
 				prevYield = allTimedSpawns.First;
 				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allTimedSpawns.First.position, Quaternion.identity);
 				Destroy(yield_sign, 1.0f);
 			}
+			*/
+
 
 			if(currentTime >= beginTime + allTimedSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
 				PowerSpawn spawn = allTimedSpawns.Dequeue();
@@ -227,7 +230,7 @@ public class ArenaManager : MonoBehaviour {
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
 
         float currentTime = TimeManager.instance.time;
-		if (placementUI.selectedTriggers.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
+		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
@@ -238,8 +241,7 @@ public class ArenaManager : MonoBehaviour {
 			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID);
 			SpawnPowerLocally(spawn, newViewID);
             //Remove from your inventory and  disable button 
-            placementUI.selectedTriggers.Remove(spawn);
-            placementUI.DestroyAlphaPower(spawn);
+            placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
 				Vector3 offscreen = uiElement.transform.position;
 				offscreen.y -= 400f;
@@ -286,7 +288,9 @@ public class ArenaManager : MonoBehaviour {
 
 	void Update () {
 
-		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
+		float currentTime = TimeManager.instance.time;
+
+		if(sentMyPowers == false && currentTime >= beginTime){
             placementUI.DestroyPowers();
 			placementUI.Disable();
 
@@ -297,25 +301,22 @@ public class ArenaManager : MonoBehaviour {
 
 			*/
 
-			//Synchronize traps to server.
-            foreach(PowerSpawn power in  placementUI.selectedTraps){
+			//Synchronize proximity traps to server.
+            foreach(PowerSpawn power in  placementUI.delayedTraps){
                 if(Network.isServer){
-					AddPowerSpawnLocally((int)power.type, power.position, power.spawnTime);
+					AddPowerSpawnLocally((int)power.type, power.position, 0f); //no custom time so use 0
 				}
 				else {
 					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
-					                 (int)power.type, power.position, power.spawnTime);
+					                 (int)power.type, power.position, 0f);
 				}
 			}
-
 			if(Network.isServer)
 				SentAllMyPowers();
 			else
 				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
-			
-			sentMyPowers = true;
 
-			
+			sentMyPowers = true;
 		}
 
 
@@ -323,12 +324,21 @@ public class ArenaManager : MonoBehaviour {
 		if(!powersSynchronized)
 			return;
 
+
 		if(!playersFreed){
 			print ("5 seconds until proximity and remote activated traps are enabled.");
 			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
-		if(!trapsEnabled && TimeManager.instance.time >= beginTime + FIGHT_COUNT_DOWN_TIME){
+		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
+			//Delete already synchornized pregame traps
+			foreach(PowerSpawn spawn in placementUI.delayedTraps){
+				placementUI.DestroyUIPower(spawn);
+			}
+
+			placementUI.delayedTraps.Clear();
+
+
 			print ("Traps are Enabled");
 
 			//also bring back power placement
@@ -338,6 +348,19 @@ public class ArenaManager : MonoBehaviour {
 			trapsEnabled = true;
 		}
 		
+
+		//send traps placed in live mode
+		if(placementUI.delayedTraps.Count > 0 && placementUI.live){
+			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
+			if(Network.isServer){
+				AddPowerSpawnLocally((int)spawn.type, spawn.position, spawn.spawnTime); 
+			}
+			else {
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
+				                 (int)spawn.type, spawn.position, spawn.spawnTime);
+			}
+		}
+
 		//Spawn one timed trap per frame, locally.
 		SpawnTimedTraps();
 

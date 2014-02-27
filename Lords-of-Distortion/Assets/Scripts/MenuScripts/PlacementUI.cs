@@ -32,10 +32,15 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
-	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+
+
     public List<GameObject> currentPowers = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
+
+
+	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
+	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
+	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
 
     private PowerType powerNum1;
     private PowerType powerNum2;
@@ -55,9 +60,9 @@ public class PlacementUI : MonoBehaviour {
 
 	/*
 	 * TODO: figure out a way to differentiate and/or transition between
-	 * a) traps that are being placed (to do: disable animations from the start)
+	 * a) traps that are being placed (to do: disable animations from the start) highlight a certain color (your own?)
 	 * b) traps that have been placed but not armed (keep them the same as a?)
-	 * c) traps that have been armed - dont know
+	 * c) traps that have been armed - display cooldown on ui and remove special color
 	 * d) traps that are real - DONE warning sign and enabling of animations
 	 */
 
@@ -97,8 +102,8 @@ public class PlacementUI : MonoBehaviour {
          */
         /* Randomize some powers */
 
-        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
-        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
+        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1));
+        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1));
 	}
 	
 	void Start(){
@@ -192,7 +197,7 @@ public class PlacementUI : MonoBehaviour {
         InventoryGrid.Reposition();
 
         //Set Triggers in appropriate spot
-        foreach(PowerSpawn spawn in selectedTriggers){
+        foreach(PowerSpawn spawn in allTraps){
             if(PowerSpawn.TypeIsActive(spawn.type))
             { 
 			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
@@ -203,7 +208,6 @@ public class PlacementUI : MonoBehaviour {
             }
 		}
         TriggerGrid.Reposition();
-
 
 	}
 
@@ -216,6 +220,13 @@ public class PlacementUI : MonoBehaviour {
             timer -= Time.deltaTime;
             deadLordBtnRed.fillAmount = timer / 3.5f;
         }
+
+		//Advance armament time for delayed powers.
+		for(int i = allTraps.Count - 1; i >= 0; i--){
+			PowerSpawn spawn = allTraps[i];
+			if(spawn.timerSet)
+				spawn.ElapseTime(Time.deltaTime);
+		}
 
 		if(Input.GetMouseButtonDown(0)){
 
@@ -236,7 +247,7 @@ public class PlacementUI : MonoBehaviour {
 			//called when we're in the process of changing the direction of a power.
 			case PlacementState.ChangingDirection:
 				ChooseDirection();
-                activePower = null;
+                //activePower = null;
 				break;
 			}
 		}
@@ -262,7 +273,6 @@ public class PlacementUI : MonoBehaviour {
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
-
         }
 	}
 
@@ -300,9 +310,6 @@ public class PlacementUI : MonoBehaviour {
 		activePower.GetComponent<Collider2D>().isTrigger = true;
 		activePower.tag = "UIPower";
 
-		if(activePower.GetComponent<Animator>() != null){
-			activePower.GetComponent<Animator>().enabled = false;
-		}
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -314,8 +321,53 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(false);
 	}
 
-	//Sets down the power and stores it as a power spawn. 
+	private void LivePlacement(PowerSpawn spawn){
+		//Destroy(activePower);
+		//spawnNow(spawn, gameObject);
+		
+		spawn.SetTimer(3f); //start armament time
+		//TODO: start radial cooldown on actives
+		if(PowerSpawn.TypeIsPassive(spawn.type)){
 
+			print ("add timed spawn locally and remotely"); //TODO: spawn timed power invisibly on all clients
+			spawn.spawnTime = 3f; //spawn real trap 3 seconds later.
+			spawn.timeUpEvent += DestroyUIPower;
+		}
+		else{
+			print ("disable triggering until time is up");
+			//Do this for now:
+			ShowTriggers();
+			//activatedTraps.Add(spawn);
+		}
+		spawn.timeUpEvent += PowerArmed;
+
+	}
+	private void KillMovement(GameObject power){
+		//Pause all animations
+		if(power.GetComponent<Animator>() != null){
+			power.GetComponent<Animator>().enabled = false;
+		}
+		
+		if(power.GetComponent<ParticleSystem>() != null)
+		{
+			Color particleColor = power.GetComponent<ParticleSystem>().startColor;
+			particleColor.a = 0.70f;
+			power.GetComponent<ParticleSystem>().startColor = particleColor;
+			//pause movement of system.
+			power.GetComponent<ParticleSystem>().Pause();
+		}
+		
+		if(power.GetComponentInChildren<ParticleSystem>() != null){
+			//print ("Particle Attempt");
+			Color particleColor = power.GetComponentInChildren<ParticleSystem>().startColor;
+			particleColor.a = 0.70f;
+			power.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
+			//pause movement of system.
+			power.GetComponentInChildren<ParticleSystem>().Pause();
+		}
+	}
+
+	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
         timer = 3.5f;
 		Destroy(activePower.GetComponent<MouseFollow>());
@@ -330,9 +382,16 @@ public class PlacementUI : MonoBehaviour {
 			spawn.type = activePowerType;
 			placedPowers.Add(activePower, spawn);
 			//TODO: Check if power is triggered or a trap.
-			selectedTriggers.Add(spawn);
+			allTraps.Add(spawn);
+			if(PowerSpawn.TypeIsPassive(spawn.type)){
+				//spawn.SetTimer(0f);
+				delayedTraps.Enqueue(spawn);
+			}
 		}
 		spawn.position = activePower.transform.position;
+
+		KillMovement(activePower);
+
 
 		//Either go back to default state or require setting a direction.
 		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
@@ -341,16 +400,21 @@ public class PlacementUI : MonoBehaviour {
             activePower.AddComponent<powerRotate>();
 		}
 		else {
-
+			//When we're placing powers mid game:
 			if(live){
-				Destroy(activePower);
-				spawnNow(spawn, gameObject);
+				LivePlacement(spawn);
 			}
-            activePower = null;
-
+            
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
+
+	}
+
+	void PowerArmed(PowerSpawn powerSpawn){
+		//TODO: Make power go back to normal color.
+		if(PowerSpawn.TypeIsActive(powerSpawn.type))
+			print ("armament timer up, enable activation key");
 	}
 
 	///<summary>Calculates a direction vector from the current power to the mouse. Stores
@@ -370,11 +434,8 @@ public class PlacementUI : MonoBehaviour {
 
 
 		if(live){
-			Destroy(activePower);
-			activePower = null;
-			spawnNow(spawn, gameObject);
+			LivePlacement(spawn);
 		}
-
 		//Return buttons to normal
 		state = PlacementState.Default;
 		GridEnabled(true);
@@ -388,7 +449,7 @@ public class PlacementUI : MonoBehaviour {
 			//if a power is out, dont re-enable it button
 			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
 				button.isEnabled = state;
-		}        
+		}
 	}
 
 	//TODO: play an animation that tells players they can now use their powers.
@@ -398,8 +459,9 @@ public class PlacementUI : MonoBehaviour {
 			Destroy(dottedLineInstance);
 		}
 
-		if(activePower != null){
+		if(state != PlacementState.Default){
 			Destroy(activePower);
+			state = PlacementState.Default;
 		}
 
 		//TODO: move this to a one by one basis when you spawn it
@@ -443,17 +505,20 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
-    public void DestroyAlphaPower(PowerSpawn spawn)
+    public void DestroyUIPower(PowerSpawn spawn)
     {
-        //PowerSpawn spawn = null;
-        //placedPowers.TryGetValue(power, out spawn);
-        //placedPowers.Remove(spawn);
+		print ("delete it");
+		allTraps.Remove(spawn); //TODO: remove from grid
+		GameObject key = null;
         foreach (var pair in placedPowers)
         {
             if (spawn == pair.Value)
             {
                 Destroy(pair.Key);
+				key = pair.Key;
             }
         }
+		if(key != null)
+			placedPowers.Remove(key);
     }
 }
