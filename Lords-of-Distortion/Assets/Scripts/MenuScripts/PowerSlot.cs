@@ -13,7 +13,7 @@ public class PowerSlot : MonoBehaviour {
 	UISprite powerIcon;
 	string keyText;
 
-	bool activationEnabled = false;
+	bool activationEnabled = true;
 
 	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
 		keyText = key;
