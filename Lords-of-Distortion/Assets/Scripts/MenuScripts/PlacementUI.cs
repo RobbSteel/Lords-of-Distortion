@@ -32,11 +32,15 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
-	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+
+
     public List<GameObject> currentPowers = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
-	List<PowerSpawn> delayedPowers = new List<PowerSpawn>();
+
+
+	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
+	public List<PowerSpawn> delayedTraps = new List<PowerSpawn>();
+	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
 
     private PowerType powerNum1;
     private PowerType powerNum2;
@@ -98,8 +102,8 @@ public class PlacementUI : MonoBehaviour {
          */
         /* Randomize some powers */
 
-        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
-        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
+        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1));
+        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1));
 	}
 	
 	void Start(){
@@ -193,7 +197,7 @@ public class PlacementUI : MonoBehaviour {
         InventoryGrid.Reposition();
 
         //Set Triggers in appropriate spot
-        foreach(PowerSpawn spawn in selectedTriggers){
+        foreach(PowerSpawn spawn in allTraps){
             if(PowerSpawn.TypeIsActive(spawn.type))
             { 
 			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
@@ -204,7 +208,6 @@ public class PlacementUI : MonoBehaviour {
             }
 		}
         TriggerGrid.Reposition();
-
 
 	}
 
@@ -219,7 +222,7 @@ public class PlacementUI : MonoBehaviour {
         }
 
 		//Advance armament time for delayed powers.
-		foreach(PowerSpawn spawn in delayedPowers){
+		foreach(PowerSpawn spawn in delayedTraps){
 			spawn.ElapseTime(Time.deltaTime);
 		}
 
@@ -328,12 +331,15 @@ public class PlacementUI : MonoBehaviour {
 		//TODO: remove passsive from ui, start radial cooldown on actives
 		if(PowerSpawn.TypeIsPassive(spawn.type)){
 			print ("add timed spawn locally and remotely"); //TODO: spawn timed power invisibly on all clients
+			spawn.spawnTime = 2f;
+			delayedTraps.Add(spawn);
 		}
 		else{
 			print ("disable triggering until time is up");
+			activatedTraps.Add(spawn);
 		}
 		spawn.timeUpEvent += PowerArmed;
-		delayedPowers.Add(spawn);
+
 	}
 
 	//Sets down the power and stores it as a power spawn. 
@@ -352,7 +358,7 @@ public class PlacementUI : MonoBehaviour {
 			spawn.type = activePowerType;
 			placedPowers.Add(activePower, spawn);
 			//TODO: Check if power is triggered or a trap.
-			selectedTriggers.Add(spawn);
+			allTraps.Add(spawn);
 		}
 		spawn.position = activePower.transform.position;
 
