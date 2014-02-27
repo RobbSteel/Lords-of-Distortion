@@ -288,7 +288,9 @@ public class ArenaManager : MonoBehaviour {
 
 	void Update () {
 
-		if(sentMyPowers == false && TimeManager.instance.time >= beginTime){
+		float currentTime = TimeManager.instance.time;
+
+		if(sentMyPowers == false && currentTime >= beginTime){
             placementUI.DestroyPowers();
 			placementUI.Disable();
 
@@ -309,9 +311,6 @@ public class ArenaManager : MonoBehaviour {
 					                 (int)power.type, power.position, 0f);
 				}
 			}
-
-			placementUI.delayedTraps.Clear();
-
 			if(Network.isServer)
 				SentAllMyPowers();
 			else
@@ -331,7 +330,15 @@ public class ArenaManager : MonoBehaviour {
 			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
-		if(!trapsEnabled && TimeManager.instance.time >= beginTime + FIGHT_COUNT_DOWN_TIME){
+		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
+			//Delete already synchornized pregame traps
+			foreach(PowerSpawn spawn in placementUI.delayedTraps){
+				placementUI.DestroyUIPower(spawn);
+			}
+
+			placementUI.delayedTraps.Clear();
+
+
 			print ("Traps are Enabled");
 
 			//also bring back power placement
@@ -343,7 +350,7 @@ public class ArenaManager : MonoBehaviour {
 		
 
 		//send traps placed in live mode
-		if(placementUI.delayedTraps.Count > 0){
+		if(placementUI.delayedTraps.Count > 0 && placementUI.live){
 			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
 			if(Network.isServer){
 				AddPowerSpawnLocally((int)spawn.type, spawn.position, spawn.spawnTime); 
