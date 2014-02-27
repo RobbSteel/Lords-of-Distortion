@@ -359,6 +359,10 @@ public class PlacementUI : MonoBehaviour {
 			placedPowers.Add(activePower, spawn);
 			//TODO: Check if power is triggered or a trap.
 			allTraps.Add(spawn);
+			if(PowerSpawn.TypeIsPassive(spawn.type)){
+				spawn.SetTimer(0f);
+				delayedTraps.Add(spawn);
+			}
 		}
 		spawn.position = activePower.transform.position;
 

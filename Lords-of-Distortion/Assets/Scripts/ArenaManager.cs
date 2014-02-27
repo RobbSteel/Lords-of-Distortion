@@ -309,6 +309,8 @@ public class ArenaManager : MonoBehaviour {
 				}
 			}
 
+			placementUI.delayedTraps.Clear();
+
 			if(Network.isServer)
 				SentAllMyPowers();
 			else
