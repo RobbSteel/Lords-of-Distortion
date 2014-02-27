@@ -167,7 +167,7 @@ public class PlacementUI : MonoBehaviour {
             InventoryPower inv;
             draftedPowers.TryGetValue(inventoryPower.Key, out inv);
          
-            if (inv.quantity <= 0)
+            if (inv.quantity <= 0 && !PowerSpawn.TypeIsPassive(inv.type))
             {
                 GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
                 //buttons.Add(entry.GetComponent<UIButton>());
