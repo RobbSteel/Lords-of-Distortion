@@ -35,6 +35,10 @@ public class PlacementUI : MonoBehaviour {
 	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
 	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
     public List<GameObject> currentPowers = new List<GameObject>();
+    public List<GameObject> dummyInv = new List<GameObject>();
+
+    private PowerType powerNum1;
+    private PowerType powerNum2;
 
 	PowerPrefabs prefabs;
 
@@ -74,8 +78,8 @@ public class PlacementUI : MonoBehaviour {
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
-        PowerType powerNum1 = PowerSpawn.RandomActivePower();
-        PowerType powerNum2 = PowerSpawn.RandomPassivePower();
+        powerNum1 = PowerSpawn.RandomActivePower();
+        powerNum2 = PowerSpawn.RandomPassivePower();
 
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
@@ -120,10 +124,23 @@ public class PlacementUI : MonoBehaviour {
 	/// </summary>
 	public void SwitchToLive(bool infinitePowers){
 		live = true;
-        InventoryGrid.gameObject.SetActive(true);
+
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
 			useTimer = true;
+            
+            //Destroy boards placed in inventory grid used as the offset.
+            foreach(GameObject g0 in dummyInv)
+            {
+                NGUITools.Destroy(g0);
+            }
+
+            //Re-activate original powers for use.
+            foreach(GameObject g0 in currentPowers)
+            {
+                g0.SetActive(true);
+            }
+
 			foreach(var inventoryPower in draftedPowers){
 				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
@@ -137,15 +154,57 @@ public class PlacementUI : MonoBehaviour {
 	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
-        InventoryGrid.gameObject.SetActive(false);
+
+        //Deactivate current InventoryGrid so the icons disappear. Re-enable upon death.
+        foreach (GameObject g0 in currentPowers)
+        {
+            g0.SetActive(false);
+        }
+
+        //Add powers to InventoryGrid to offset power icons
+        foreach (var inventoryPower in draftedPowers)
+        {
+            InventoryPower inv;
+            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
+         
+            if (inv.quantity <= 0 && !PowerSpawn.TypeIsPassive(inv.type))
+            {
+                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                //buttons.Add(entry.GetComponent<UIButton>());
+                dummyInv.Add(entry);
+            }
+        }
+        //Add powers to InventoryGrid that players can use to spawn powers mid game
+        foreach (var inventoryPower in draftedPowers)
+        {
+            InventoryPower inv;
+            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
+            if (inv.quantity > 0)
+            {
+                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                //buttons.Add(entry.GetComponent<UIButton>());
+                UIEventListener.Get(entry).onClick += PowerButtonClick;
+                PowerBoard info = entry.GetComponent<PowerBoard>();
+                info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
+                dummyInv.Add(entry);
+            }
+        }
+        InventoryGrid.Reposition();
+
+        //Set Triggers in appropriate spot
         foreach(PowerSpawn spawn in selectedTriggers){
-			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
-			Sprite sprite = null;
-			icons.TryGetValue(spawn.type, out sprite);
-			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
-			i++;
-		}		
+            if(PowerSpawn.TypeIsActive(spawn.type))
+            { 
+			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
+			    Sprite sprite = null;
+			    icons.TryGetValue(spawn.type, out sprite);
+			    slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+			    i++;
+            }
+		}
         TriggerGrid.Reposition();
+
+
 	}
 
 
