@@ -41,6 +41,7 @@ public class ArenaManager : MonoBehaviour {
 	void NotifyBeginTime(float time){
 		Debug.Log ("start timer");
 		beginTime = time;
+		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 	}
 	
 	
@@ -184,30 +185,17 @@ public class ArenaManager : MonoBehaviour {
        * 6. Have an event queue similar to the one in NetworkController.
        * 7. Players themselves determine if they're hit or not.* 
 	 */
-
-	void SnarePlayers(){
-		foreach(NetworkPlayer player in sessionManager.gameInfo.players){
-			GameObject playerObject = sessionManager.gameInfo.GetPlayerGameObject(player);
-			playerObject.GetComponent<Controller2D>().Snare();
-		}
-	}
-
-	void FreePlayers(){
-		foreach(NetworkPlayer player in sessionManager.gameInfo.players){
-			GameObject playerObject = sessionManager.gameInfo.GetPlayerGameObject(player);
-			playerObject.GetComponent<Controller2D>().FreeFromSnare();
-		}
-	}
-
+	
 	void OnNetworkLoadedLevel(){
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
 		
 		if(Network.isServer){
-			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
-			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
+
 			//spawn players immediately
 			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
-			SnarePlayers();
+			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
+			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
+			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			//TODO: make this a UI text function. (fade in fade out quickly)
 			print ("You may place pleliminary traps");
 		}
@@ -337,7 +325,7 @@ public class ArenaManager : MonoBehaviour {
 
 		if(!playersFreed){
 			print ("5 seconds until proximity and remote activated traps are enabled.");
-			FreePlayers();
+			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
 		if(!trapsEnabled && TimeManager.instance.time >= beginTime + FIGHT_COUNT_DOWN_TIME){

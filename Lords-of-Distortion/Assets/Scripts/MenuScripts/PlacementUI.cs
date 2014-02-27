@@ -270,7 +270,7 @@ public class PlacementUI : MonoBehaviour {
 	private bool SelectExistingPower(){
 		//TODO: only hit things in the powers layer
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), -Vector2.up);
-		if(hit != null){
+		if(hit.collider != null){
 			if(hit.collider.tag.Equals("UIPower")){
 				activePower = hit.transform.gameObject;
 				PowerSpawn spawn= null;

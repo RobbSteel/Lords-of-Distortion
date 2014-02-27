@@ -48,8 +48,6 @@ public class TransferExplosive : Power {
 	//Note: Only the host can decide who got hit.
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
 
-        if (exploded)
-            controller.Die();
 		//cant stick to yourself again. also wait for response rpc before sending another one.
 		if(controller.hasbomb || sentRPC){
 			return;
@@ -76,9 +74,7 @@ public class TransferExplosive : Power {
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller)
 	{
-        if (exploded)
-            controller.Die();
-		print ("staying");
+     
 		
 	}
 	
@@ -94,18 +90,12 @@ public class TransferExplosive : Power {
 		//Blow up if the time is out
 		if(timer <= 0 && !exploded)
         {
-            exploded = true;
             explode = Instantiate(Resources.Load("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
+			var charmark = Instantiate(Resources.Load("Charmark"), transform.position, Quaternion.identity) as GameObject;
             Destroy(explode, 1.0f);
-            gameObject.GetComponent<SpriteRenderer>().sprite = null;
-			print("Boom");
-            //Destroy(gameObject);
+			Destroy (gameObject);
+            
 		} 
-        else if (timer <= -1)
-        {
-            Destroy(explode);
-            Destroy(gameObject);
-        }
         else
         {
             Debug.Log("Bomb ELSE~~~~~");

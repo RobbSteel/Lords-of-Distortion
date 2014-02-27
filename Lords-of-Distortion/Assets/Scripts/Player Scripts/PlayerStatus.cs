@@ -175,11 +175,11 @@ public class PlayerStatus : MonoBehaviour {
 		}
 	}
 	
-	Vector2 upForce = new Vector2(0f, 300f);
+	Vector2 upForce = new Vector2(0f, 200f);
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
 		rigidbody2D.AddForce(upForce);
-		sideForce = new Vector2(800f * flip, 100f);
+		sideForce = new Vector2(400f * flip, 100f);
 		knockBackPending = true;
 	}
 	
@@ -195,25 +195,19 @@ public class PlayerStatus : MonoBehaviour {
 			return;
 		}
 		
-		hitCount++;
+		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
-		networkView.RPC ("VisualHitIndicator", RPCMode.Others, hitCount);
-		VisualHitIndicator(hitCount);
+		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
+		VisualHitIndicator();
 		
-		if(hitCount == 2){
-			//hitCount= 0;
+
 			float flip = 1f;
 			if(!fromLeftSide)
 				flip = -1f;
 			
 			BeginKnockBack(flip);
-		}
-		
-		else if(hitCount == 3){
-			playerControl.Die();
-		}
-		
+	
 	}
 	
 	
@@ -224,51 +218,27 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void HitFeedback(){
 		audio.Play ();
+
+		if(playerControl.facingRight){
+
+			punchParticles.transform.localScale = new Vector3(1,1,1);
+
+		}else{
+			punchParticles.transform.localScale = new Vector3(-1,1,1);
+		}
+
 		punchEffect.Play();
 	}
 	
 	
 	[RPC]
-	void VisualHitIndicator(int hits){
+	void VisualHitIndicator(){
 		
 		HitFeedback();
-		
-		//hitMarkSprites.enabled = true;
-        Color newColor;
-		switch(hits){
-		case 0:
-            newColor = shieldIcon.color;
-            newColor.r = 0.0f;
-            newColor.b = 0.0f;
-            newColor.g = 0.0f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.enabled = false;
-			break;
-		case 1:
-			shield.enableEmission = true;
-            newColor = shieldIcon.color;
-            newColor.r = 1f;
-            newColor.b = 0.0f;
-            newColor.g = 1f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.sprite = firstMark;
-			break;
-		case 2:
-			shield.startColor = Color.red;
-			newColor = shieldIcon.color;
-            newColor.r = 1.0f;
-            newColor.b = 0.0f;
-            newColor.g = 0.0f;
-            shieldIcon.color = newColor;
-			//hitMarkSprites.sprite = thirdMark; //use this ugly one for now.
-			ThirdMarkSound();
-			break;
-		case 3:
-			//hitMarkSprites.sprite = thirdMark;
-			break;
+
 		}
 		
-	}
+
 	
 	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
