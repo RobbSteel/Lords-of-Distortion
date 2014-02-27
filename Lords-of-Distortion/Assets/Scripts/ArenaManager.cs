@@ -5,7 +5,7 @@ using Priority_Queue;
 
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
-
+	// change placement_time back t0 15f
 	const float PLACEMENT_TIME = 15f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
