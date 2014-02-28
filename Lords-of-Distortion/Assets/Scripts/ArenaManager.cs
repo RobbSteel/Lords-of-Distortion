@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 8f; 
+	const float PLACEMENT_TIME = 15f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -97,8 +97,9 @@ public class ArenaManager : MonoBehaviour {
 		PowerSpawn requested =  new PowerSpawn();
 		requested.type = (PowerType)typeIndex;
 		requested.position = position;
-		requested.spawnTime = time;
-		allTimedSpawns.Enqueue(requested, time);
+		requested.spawnTime = TimeManager.instance.time + time;
+		//print ("Time is set to " + requested.spawnTime)
+		allTimedSpawns.Enqueue(requested, requested.spawnTime);
 	}
 	
 	private void CheckIfAllSynchronized(){
@@ -188,7 +189,8 @@ public class ArenaManager : MonoBehaviour {
 	
 	void OnNetworkLoadedLevel(){
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
-		
+		//TODO: Resynchronize times when level loads, dont draw the timer  ui until this happens
+		//TimeManager.instance.SyncTimes();
 		if(Network.isServer){
 
 			//spawn players immediately
@@ -202,23 +204,11 @@ public class ArenaManager : MonoBehaviour {
 		//TODO: have something that checks if all players have finished loading.
 	}
 
-	private void SpawnTimedTraps(){
+	private void SpawnTimedTraps(float currentTime){
 		if(allTimedSpawns.Count != 0){
-			float currentTime = TimeManager.instance.time;
-			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority));
-
-			//dont need this.
-			/*Display yield sign .5 seconds before power spawns, and destroy it when power spawns
-			if (currentTime + 1.0f >= beginTime + FIGHT_COUNT_DOWN_TIME  + allTimedSpawns.First.Priority && prevYield != allTimedSpawns.First)
-			{
-				prevYield = allTimedSpawns.First;
-				GameObject yield_sign = (GameObject)Instantiate(Resources.Load("alert-sign"), allTimedSpawns.First.position, Quaternion.identity);
-				Destroy(yield_sign, 1.0f);
-			}
-			*/
-
-
-			if(currentTime >= beginTime + allTimedSpawns.First.Priority + FIGHT_COUNT_DOWN_TIME){
+			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority))
+		
+			if(currentTime >= allTimedSpawns.First.Priority){
 				PowerSpawn spawn = allTimedSpawns.Dequeue();
 				//convert power type to an int, which is an index to the array of power prefabs.
 				Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
@@ -270,7 +260,6 @@ public class ArenaManager : MonoBehaviour {
 	//this function converts parameters into a powerspawn object
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID){
-		//TODO: add networkgroup thing to bomb because it requires rpc calls.
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
@@ -362,7 +351,8 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		//Spawn one timed trap per frame, locally.
-		SpawnTimedTraps();
+		if(trapsEnabled)
+			SpawnTimedTraps(currentTime);
 
 	}
 	
