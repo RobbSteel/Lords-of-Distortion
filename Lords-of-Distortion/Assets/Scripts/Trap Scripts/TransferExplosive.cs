@@ -91,7 +91,7 @@ public class TransferExplosive : Power
 				if (timer <= 3 && !exploded) {
 						//anim.SetTrigger("BombExplo");
 						var bombExpo = Instantiate (Resources.Load ("BombE"), transform.position, Quaternion.identity) as GameObject;
-						Destroy (gameObject);
+						//Destroy (gameObject);
 				
 				}
 				
