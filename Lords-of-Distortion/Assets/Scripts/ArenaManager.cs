@@ -260,7 +260,6 @@ public class ArenaManager : MonoBehaviour {
 	//this function converts parameters into a powerspawn object
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID){
-		//TODO: add networkgroup thing to bomb because it requires rpc calls.
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;

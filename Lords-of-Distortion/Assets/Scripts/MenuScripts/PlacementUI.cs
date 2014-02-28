@@ -310,6 +310,14 @@ public class PlacementUI : MonoBehaviour {
 		activePower.GetComponent<Collider2D>().isTrigger = true;
 		activePower.tag = "UIPower";
 
+		if(live){
+			Color uiColor = Color.magenta;
+			uiColor.a = .4f;
+			activePower.renderer.material.color = uiColor;
+			ChangeParticleColor(activePower, uiColor);
+			//power.GetComponent<ParticleSystem>().startColor;
+		}
+
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -329,9 +337,10 @@ public class PlacementUI : MonoBehaviour {
 		//TODO: start radial cooldown on actives
 		if(PowerSpawn.TypeIsPassive(spawn.type)){
 
-			print ("add timed spawn locally and remotely"); //TODO: spawn timed power invisibly on all clients
+			print ("add timed spawn locally and remotely");
 			spawn.spawnTime = 3f; //spawn real trap 3 seconds later.
-			spawn.timeUpEvent += DestroyUIPower;
+			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
+			spawn.timeUpEvent += DestroyUIPower; 
 		}
 		else{
 			print ("disable triggering until time is up");
@@ -342,6 +351,21 @@ public class PlacementUI : MonoBehaviour {
 		spawn.timeUpEvent += PowerArmed;
 
 	}
+
+	void ChangeParticleColor(GameObject power, Color color){
+
+		if(power.GetComponent<ParticleSystem>() != null)
+		{
+			power.GetComponent<ParticleSystem>().startColor = color;
+		}
+
+
+		if(power.GetComponentInChildren<ParticleSystem>() != null){
+			power.GetComponentInChildren<ParticleSystem>().startColor = color;
+		}
+
+	}
+
 	private void KillMovement(GameObject power){
 		//Pause all animations
 		if(power.GetComponent<Animator>() != null){
@@ -350,18 +374,12 @@ public class PlacementUI : MonoBehaviour {
 		
 		if(power.GetComponent<ParticleSystem>() != null)
 		{
-			Color particleColor = power.GetComponent<ParticleSystem>().startColor;
-			particleColor.a = 0.70f;
-			power.GetComponent<ParticleSystem>().startColor = particleColor;
 			//pause movement of system.
 			power.GetComponent<ParticleSystem>().Pause();
 		}
 		
 		if(power.GetComponentInChildren<ParticleSystem>() != null){
 			//print ("Particle Attempt");
-			Color particleColor = power.GetComponentInChildren<ParticleSystem>().startColor;
-			particleColor.a = 0.70f;
-			power.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
 			//pause movement of system.
 			power.GetComponentInChildren<ParticleSystem>().Pause();
 		}
@@ -412,7 +430,18 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	void PowerArmed(PowerSpawn powerSpawn){
-		//TODO: Make power go back to normal color.
+
+		foreach (var pair in placedPowers)
+		{
+			if (powerSpawn == pair.Value)
+			{
+				Color original = Color.white;
+				original.a = .5f;
+				pair.Key.renderer.material.color = original;
+			}
+		}
+
+
 		if(PowerSpawn.TypeIsActive(powerSpawn.type))
 			print ("armament timer up, enable activation key");
 	}
@@ -469,28 +498,6 @@ public class PlacementUI : MonoBehaviour {
         {
 			//Destroy(pair.Key);
             Debug.Log(pair);
-            Color color = pair.Key.renderer.material.color;
-            color.a = 0.5f;
-            pair.Key.renderer.material.color = color;
-            if(pair.Key.GetComponent<ParticleSystem>() != null)
-            {
-                Color particleColor = pair.Key.GetComponent<ParticleSystem>().startColor;
-                particleColor.a = 0.70f;
-                pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
-				//pause movement of system.
-				pair.Key.GetComponent<ParticleSystem>().Pause();
-			}
-
-			if(pair.Key.GetComponentInChildren<ParticleSystem>() != null){
-				print ("Particle Attempt");
-				Color particleColor = pair.Key.GetComponentInChildren<ParticleSystem>().startColor;
-				particleColor.a = 0.70f;
-				pair.Key.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
-				//pause movement of system.
-				pair.Key.GetComponentInChildren<ParticleSystem>().Pause();
-
-			}
-
             Destroy(pair.Key.collider2D);
 		}
         
