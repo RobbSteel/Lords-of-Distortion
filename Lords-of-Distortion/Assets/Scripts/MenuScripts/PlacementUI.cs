@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -354,7 +355,7 @@ public class PlacementUI : MonoBehaviour {
 			print ("add timed spawn locally and remotely");
 			spawn.spawnTime = 3f; //spawn real trap 3 seconds later.
 			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
-			spawn.timeUpEvent += DestroyUIPower; 
+			//spawn.timeUpEvent += DestroyUIPower; 
 		}
 		else{
 			print ("disable triggering until time is up");
@@ -365,7 +366,7 @@ public class PlacementUI : MonoBehaviour {
 		spawn.timeUpEvent += PowerArmed;
 
 	}
-
+	
 	void ChangeParticleColor(GameObject power, Color color){
 
 		if(power.GetComponent<ParticleSystem>() != null)
@@ -452,6 +453,7 @@ public class PlacementUI : MonoBehaviour {
 				Color original = Color.white;
 				original.a = .5f;
 				pair.Key.renderer.material.color = original;
+				ChangeParticleColor(pair.Key, original);
 			}
 		}
 
