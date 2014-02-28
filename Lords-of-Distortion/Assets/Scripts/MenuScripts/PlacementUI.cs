@@ -122,7 +122,28 @@ public class PlacementUI : MonoBehaviour {
 		}
 		InventoryGrid.Reposition();
 	}
-	
+
+    /// <summary>
+    /// Destroy GameObjects in dummyInv. Removes used items from Grid.
+    /// </summary>
+    public void DestroyDummyInv()
+    {
+        foreach (GameObject g0 in dummyInv)
+        {
+            NGUITools.Destroy(g0);
+        }
+    }
+
+    /// <summary>
+    /// Enable or Disable GameObjects tied to the player's original powers. 
+    /// </summary>
+    public void ToggleStartPowers(bool enabled)
+    {
+        foreach (GameObject g0 in currentPowers)
+        {
+            g0.SetActive(enabled);
+        }
+    }
 
 	/// <summary>
 	///Place powers instantly without using triggers. 
@@ -135,16 +156,10 @@ public class PlacementUI : MonoBehaviour {
 			useTimer = true;
             
             //Destroy boards placed in inventory grid used as the offset.
-            foreach(GameObject g0 in dummyInv)
-            {
-                NGUITools.Destroy(g0);
-            }
+            DestroyDummyInv();  
 
             //Re-activate original powers for use.
-            foreach(GameObject g0 in currentPowers)
-            {
-                g0.SetActive(true);
-            }
+            ToggleStartPowers(true);
 
 			foreach(var inventoryPower in draftedPowers){
 				//Unlimited powers.
@@ -161,10 +176,9 @@ public class PlacementUI : MonoBehaviour {
 		int i = 0;
 
         //Deactivate current InventoryGrid so the icons disappear. Re-enable upon death.
-        foreach (GameObject g0 in currentPowers)
-        {
-            g0.SetActive(false);
-        }
+        ToggleStartPowers(false);
+
+        DestroyDummyInv();
 
         //Add powers to InventoryGrid to offset power icons
         foreach (var inventoryPower in draftedPowers)
