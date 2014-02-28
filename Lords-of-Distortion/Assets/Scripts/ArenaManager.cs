@@ -321,8 +321,9 @@ public class ArenaManager : MonoBehaviour {
 		}
 		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
 			//Delete already synchornized pregame traps
+
 			foreach(PowerSpawn spawn in placementUI.delayedTraps){
-				placementUI.DestroyUIPower(spawn);
+				placementUI.PowerArmed(spawn);
 			}
 
 			placementUI.delayedTraps.Clear();
