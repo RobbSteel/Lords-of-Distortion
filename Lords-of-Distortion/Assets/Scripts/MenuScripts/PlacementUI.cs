@@ -325,13 +325,13 @@ public class PlacementUI : MonoBehaviour {
 		activePower.GetComponent<Collider2D>().isTrigger = true;
 		activePower.tag = "UIPower";
 
-		if(live){
-			Color uiColor = Color.magenta;
-			uiColor.a = .4f;
-			activePower.renderer.material.color = uiColor;
-			ChangeParticleColor(activePower, uiColor);
-			//power.GetComponent<ParticleSystem>().startColor;
-		}
+
+		Color uiColor = Color.magenta;
+		uiColor.a = .4f;
+		activePower.renderer.material.color = uiColor;
+		ChangeParticleColor(activePower, uiColor);
+		//power.GetComponent<ParticleSystem>().startColor;
+		
 
 	}
 
@@ -444,7 +444,7 @@ public class PlacementUI : MonoBehaviour {
 
 	}
 
-	void PowerArmed(PowerSpawn powerSpawn){
+	public void PowerArmed(PowerSpawn powerSpawn){
 
 		foreach (var pair in placedPowers)
 		{
