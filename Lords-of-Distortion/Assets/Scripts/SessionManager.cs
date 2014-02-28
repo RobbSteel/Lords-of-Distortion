@@ -207,15 +207,15 @@ public class SessionManager : MonoBehaviour {
 	
 	//called when we re-enter this scene after a game is over.
 	void OnNetworkLoadedLevel(){
-		if(arenaIndex != -1)
-			return;
-		if(Network.isServer){
-			List<Vector3> tempLocations = new List<Vector3>();
-			tempLocations.Add(transform.position);
-			tempLocations.Add(transform.position);
-			tempLocations.Add(transform.position);
-			tempLocations.Add(transform.position);
-			SpawnPlayers(tempLocations);
+		if(arenaIndex == -1){
+			if(Network.isServer){
+				List<Vector3> tempLocations = new List<Vector3>();
+				tempLocations.Add(transform.position);
+				tempLocations.Add(transform.position);
+				tempLocations.Add(transform.position);
+				tempLocations.Add(transform.position);
+				SpawnPlayers(tempLocations);
+			}
 		}
 	}
 

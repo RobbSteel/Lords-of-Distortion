@@ -32,9 +32,18 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-	public List<PowerSpawn> selectedTraps = new List<PowerSpawn>();
-	public List<PowerSpawn> selectedTriggers = new List<PowerSpawn>();
+
+
     public List<GameObject> currentPowers = new List<GameObject>();
+    public List<GameObject> dummyInv = new List<GameObject>();
+
+
+	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
+	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
+	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
+
+    private PowerType powerNum1;
+    private PowerType powerNum2;
 
 	PowerPrefabs prefabs;
 
@@ -51,9 +60,9 @@ public class PlacementUI : MonoBehaviour {
 
 	/*
 	 * TODO: figure out a way to differentiate and/or transition between
-	 * a) traps that are being placed (to do: disable animations from the start)
+	 * a) traps that are being placed (to do: disable animations from the start) highlight a certain color (your own?)
 	 * b) traps that have been placed but not armed (keep them the same as a?)
-	 * c) traps that have been armed - dont know
+	 * c) traps that have been armed - display cooldown on ui and remove special color
 	 * d) traps that are real - DONE warning sign and enabling of animations
 	 */
 
@@ -74,8 +83,8 @@ public class PlacementUI : MonoBehaviour {
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
-        PowerType powerNum1 = PowerSpawn.RandomActivePower();
-        PowerType powerNum2 = PowerSpawn.RandomPassivePower();
+        powerNum1 = PowerSpawn.RandomActivePower();
+        powerNum2 = PowerSpawn.RandomPassivePower();
 
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
@@ -93,8 +102,8 @@ public class PlacementUI : MonoBehaviour {
          */
         /* Randomize some powers */
 
-        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1, "Power1"));
-        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1, "Power2"));
+        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1));
+        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1));
 	}
 	
 	void Start(){
@@ -120,10 +129,23 @@ public class PlacementUI : MonoBehaviour {
 	/// </summary>
 	public void SwitchToLive(bool infinitePowers){
 		live = true;
-        InventoryGrid.gameObject.SetActive(true);
+
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
 			useTimer = true;
+            
+            //Destroy boards placed in inventory grid used as the offset.
+            foreach(GameObject g0 in dummyInv)
+            {
+                NGUITools.Destroy(g0);
+            }
+
+            //Re-activate original powers for use.
+            foreach(GameObject g0 in currentPowers)
+            {
+                g0.SetActive(true);
+            }
+
 			foreach(var inventoryPower in draftedPowers){
 				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
@@ -137,15 +159,56 @@ public class PlacementUI : MonoBehaviour {
 	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
-        InventoryGrid.gameObject.SetActive(false);
-        foreach(PowerSpawn spawn in selectedTriggers){
-			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
-			Sprite sprite = null;
-			icons.TryGetValue(spawn.type, out sprite);
-			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
-			i++;
-		}		
+
+        //Deactivate current InventoryGrid so the icons disappear. Re-enable upon death.
+        foreach (GameObject g0 in currentPowers)
+        {
+            g0.SetActive(false);
+        }
+
+        //Add powers to InventoryGrid to offset power icons
+        foreach (var inventoryPower in draftedPowers)
+        {
+            InventoryPower inv;
+            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
+         
+            if (inv.quantity <= 0 && !PowerSpawn.TypeIsPassive(inv.type))
+            {
+                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                //buttons.Add(entry.GetComponent<UIButton>());
+                dummyInv.Add(entry);
+            }
+        }
+        //Add powers to InventoryGrid that players can use to spawn powers mid game
+        foreach (var inventoryPower in draftedPowers)
+        {
+            InventoryPower inv;
+            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
+            if (inv.quantity > 0)
+            {
+                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                //buttons.Add(entry.GetComponent<UIButton>());
+                UIEventListener.Get(entry).onClick += PowerButtonClick;
+                PowerBoard info = entry.GetComponent<PowerBoard>();
+                info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
+                dummyInv.Add(entry);
+            }
+        }
+        InventoryGrid.Reposition();
+
+        //Set Triggers in appropriate spot
+        foreach(PowerSpawn spawn in allTraps){
+            if(PowerSpawn.TypeIsActive(spawn.type))
+            { 
+			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
+			    Sprite sprite = null;
+			    icons.TryGetValue(spawn.type, out sprite);
+			    slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+			    i++;
+            }
+		}
         TriggerGrid.Reposition();
+
 	}
 
 
@@ -157,6 +220,13 @@ public class PlacementUI : MonoBehaviour {
             timer -= Time.deltaTime;
             deadLordBtnRed.fillAmount = timer / 3.5f;
         }
+
+		//Advance armament time for delayed powers.
+		for(int i = allTraps.Count - 1; i >= 0; i--){
+			PowerSpawn spawn = allTraps[i];
+			if(spawn.timerSet)
+				spawn.ElapseTime(Time.deltaTime);
+		}
 
 		if(Input.GetMouseButtonDown(0)){
 
@@ -177,7 +247,7 @@ public class PlacementUI : MonoBehaviour {
 			//called when we're in the process of changing the direction of a power.
 			case PlacementState.ChangingDirection:
 				ChooseDirection();
-                activePower = null;
+                //activePower = null;
 				break;
 			}
 		}
@@ -203,7 +273,6 @@ public class PlacementUI : MonoBehaviour {
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
-
         }
 	}
 
@@ -241,9 +310,14 @@ public class PlacementUI : MonoBehaviour {
 		activePower.GetComponent<Collider2D>().isTrigger = true;
 		activePower.tag = "UIPower";
 
-		if(activePower.GetComponent<Animator>() != null){
-			activePower.GetComponent<Animator>().enabled = false;
+		if(live){
+			Color uiColor = Color.magenta;
+			uiColor.a = .4f;
+			activePower.renderer.material.color = uiColor;
+			ChangeParticleColor(activePower, uiColor);
+			//power.GetComponent<ParticleSystem>().startColor;
 		}
+
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -255,8 +329,63 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(false);
 	}
 
-	//Sets down the power and stores it as a power spawn. 
+	private void LivePlacement(PowerSpawn spawn){
+		//Destroy(activePower);
+		//spawnNow(spawn, gameObject);
+		
+		spawn.SetTimer(3f); //start armament time
+		//TODO: start radial cooldown on actives
+		if(PowerSpawn.TypeIsPassive(spawn.type)){
 
+			print ("add timed spawn locally and remotely");
+			spawn.spawnTime = 3f; //spawn real trap 3 seconds later.
+			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
+			spawn.timeUpEvent += DestroyUIPower; 
+		}
+		else{
+			print ("disable triggering until time is up");
+			//Do this for now:
+			ShowTriggers();
+			//activatedTraps.Add(spawn);
+		}
+		spawn.timeUpEvent += PowerArmed;
+
+	}
+
+	void ChangeParticleColor(GameObject power, Color color){
+
+		if(power.GetComponent<ParticleSystem>() != null)
+		{
+			power.GetComponent<ParticleSystem>().startColor = color;
+		}
+
+
+		if(power.GetComponentInChildren<ParticleSystem>() != null){
+			power.GetComponentInChildren<ParticleSystem>().startColor = color;
+		}
+
+	}
+
+	private void KillMovement(GameObject power){
+		//Pause all animations
+		if(power.GetComponent<Animator>() != null){
+			power.GetComponent<Animator>().enabled = false;
+		}
+		
+		if(power.GetComponent<ParticleSystem>() != null)
+		{
+			//pause movement of system.
+			power.GetComponent<ParticleSystem>().Pause();
+		}
+		
+		if(power.GetComponentInChildren<ParticleSystem>() != null){
+			//print ("Particle Attempt");
+			//pause movement of system.
+			power.GetComponentInChildren<ParticleSystem>().Pause();
+		}
+	}
+
+	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
         timer = 3.5f;
 		Destroy(activePower.GetComponent<MouseFollow>());
@@ -271,9 +400,16 @@ public class PlacementUI : MonoBehaviour {
 			spawn.type = activePowerType;
 			placedPowers.Add(activePower, spawn);
 			//TODO: Check if power is triggered or a trap.
-			selectedTriggers.Add(spawn);
+			allTraps.Add(spawn);
+			if(PowerSpawn.TypeIsPassive(spawn.type)){
+				//spawn.SetTimer(0f);
+				delayedTraps.Enqueue(spawn);
+			}
 		}
 		spawn.position = activePower.transform.position;
+
+		KillMovement(activePower);
+
 
 		//Either go back to default state or require setting a direction.
 		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
@@ -282,16 +418,32 @@ public class PlacementUI : MonoBehaviour {
             activePower.AddComponent<powerRotate>();
 		}
 		else {
-
+			//When we're placing powers mid game:
 			if(live){
-				Destroy(activePower);
-				spawnNow(spawn, gameObject);
+				LivePlacement(spawn);
 			}
-            activePower = null;
-
+            
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
+
+	}
+
+	void PowerArmed(PowerSpawn powerSpawn){
+
+		foreach (var pair in placedPowers)
+		{
+			if (powerSpawn == pair.Value)
+			{
+				Color original = Color.white;
+				original.a = .5f;
+				pair.Key.renderer.material.color = original;
+			}
+		}
+
+
+		if(PowerSpawn.TypeIsActive(powerSpawn.type))
+			print ("armament timer up, enable activation key");
 	}
 
 	///<summary>Calculates a direction vector from the current power to the mouse. Stores
@@ -311,11 +463,8 @@ public class PlacementUI : MonoBehaviour {
 
 
 		if(live){
-			Destroy(activePower);
-			activePower = null;
-			spawnNow(spawn, gameObject);
+			LivePlacement(spawn);
 		}
-
 		//Return buttons to normal
 		state = PlacementState.Default;
 		GridEnabled(true);
@@ -329,7 +478,7 @@ public class PlacementUI : MonoBehaviour {
 			//if a power is out, dont re-enable it button
 			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
 				button.isEnabled = state;
-		}        
+		}
 	}
 
 	//TODO: play an animation that tells players they can now use their powers.
@@ -339,8 +488,9 @@ public class PlacementUI : MonoBehaviour {
 			Destroy(dottedLineInstance);
 		}
 
-		if(activePower != null){
+		if(state != PlacementState.Default){
 			Destroy(activePower);
+			state = PlacementState.Default;
 		}
 
 		//TODO: move this to a one by one basis when you spawn it
@@ -348,28 +498,6 @@ public class PlacementUI : MonoBehaviour {
         {
 			//Destroy(pair.Key);
             Debug.Log(pair);
-            Color color = pair.Key.renderer.material.color;
-            color.a = 0.5f;
-            pair.Key.renderer.material.color = color;
-            if(pair.Key.GetComponent<ParticleSystem>() != null)
-            {
-                Color particleColor = pair.Key.GetComponent<ParticleSystem>().startColor;
-                particleColor.a = 0.70f;
-                pair.Key.GetComponent<ParticleSystem>().startColor = particleColor;
-				//pause movement of system.
-				pair.Key.GetComponent<ParticleSystem>().Pause();
-			}
-
-			if(pair.Key.GetComponentInChildren<ParticleSystem>() != null){
-				print ("Particle Attempt");
-				Color particleColor = pair.Key.GetComponentInChildren<ParticleSystem>().startColor;
-				particleColor.a = 0.70f;
-				pair.Key.GetComponentInChildren<ParticleSystem>().startColor = particleColor;
-				//pause movement of system.
-				pair.Key.GetComponentInChildren<ParticleSystem>().Pause();
-
-			}
-
             Destroy(pair.Key.collider2D);
 		}
         
@@ -384,17 +512,20 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
-    public void DestroyAlphaPower(PowerSpawn spawn)
+    public void DestroyUIPower(PowerSpawn spawn)
     {
-        //PowerSpawn spawn = null;
-        //placedPowers.TryGetValue(power, out spawn);
-        //placedPowers.Remove(spawn);
+		print ("delete it");
+		allTraps.Remove(spawn); //TODO: remove from grid
+		GameObject key = null;
         foreach (var pair in placedPowers)
         {
             if (spawn == pair.Value)
             {
                 Destroy(pair.Key);
+				key = pair.Key;
             }
         }
+		if(key != null)
+			placedPowers.Remove(key);
     }
 }
