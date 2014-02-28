@@ -3,11 +3,14 @@ using System.Collections;
 
 public class GravityField : Power {
 	public float force = 500f;
-	public GameObject windObject;
-	public bool triggered = false;
+	//public GameObject windObject;
+
+	public bool triggered; 
+
 	ParticleSystem wind; 
 
 	void Awake(){
+		triggered = false;
 		wind = GetComponent<ParticleSystem>();
 		wind.enableEmission = true;
 		//windObject.GetComponent<Sprite>().enabled = false;
@@ -22,7 +25,7 @@ public class GravityField : Power {
 		//need to play audio clip here because audio would play during placement mode
 		//audio.Play ();
 		//if(triggered)
-     	  // Destroy(gameObject, 6f);
+     	 //  Destroy(gameObject, 6f);
 
     }
 	void Update(){
@@ -33,7 +36,7 @@ public class GravityField : Power {
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
 		wind.enableEmission = true;
-		wind.Play();
+		triggered = true;
 
 		player.rigidbody2D.gravityScale = -3;
 		//windObject.GetComponent<Sprite>().enabled = true;

@@ -9,16 +9,17 @@ public class SmokeBomb : Power {
 	public float dmgTimer;
 	private PlayerStatus applyDmg;
 
-	public GameObject smokeObject;
+	//public GameObject smokeObject;
 
-	public bool triggered = false;
+	public bool triggered;
 
 	ParticleSystem smoke; 
 
 
 	void Awake(){
+		triggered = false;
 		dmgTimer = timeTillDmg;
-		smoke= GetComponent<ParticleSystem>();
+		smoke = GetComponent<ParticleSystem>();
 		smoke.enableEmission = true;
 
 	}
@@ -29,7 +30,7 @@ public class SmokeBomb : Power {
 		smoke.enableEmission = false;
 
 		//if(triggered)
-        //	Destroy(gameObject, 6f);	
+        	//Destroy(gameObject, 6f);	
 	}
 	
 	// Update is called once per frame
