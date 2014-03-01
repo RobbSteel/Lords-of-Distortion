@@ -423,6 +423,7 @@ public class PlacementUI : MonoBehaviour {
 				delayedTraps.Enqueue(spawn);
 			}
 		}
+
 		spawn.position = activePower.transform.position;
 
 		KillMovement(activePower);
@@ -458,10 +459,16 @@ public class PlacementUI : MonoBehaviour {
 				ChangeParticleColor(pair.Key, original);
 			}
 		}
+	}
 
-
-		if(PowerSpawn.TypeIsActive(powerSpawn.type))
-			print ("armament timer up, enable activation key");
+	public void ColorizeAll(){
+		foreach (var pair in placedPowers)
+		{
+			Color original = Color.white;
+			original.a = .5f;
+			pair.Key.renderer.material.color = original;
+			ChangeParticleColor(pair.Key, original);
+		}
 	}
 
 	///<summary>Calculates a direction vector from the current power to the mouse. Stores

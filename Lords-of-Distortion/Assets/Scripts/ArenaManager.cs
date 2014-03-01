@@ -344,12 +344,16 @@ public class ArenaManager : MonoBehaviour {
 			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
-		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
-			//Delete already synchornized pregame traps
 
+		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
+
+			/*
 			foreach(PowerSpawn spawn in placementUI.delayedTraps){
 				placementUI.PowerArmed(spawn);
 			}
+			*/
+
+			placementUI.ColorizeAll();
 
 			placementUI.delayedTraps.Clear();
 			print ("Traps are Enabled");
