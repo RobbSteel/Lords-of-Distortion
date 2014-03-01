@@ -214,8 +214,6 @@ public class PlacementUI : MonoBehaviour {
         //Set Triggers in appropriate spot
         // Need something to prevent duplicates from happening
         foreach(PowerSpawn spawn in allTraps){
-            if (allTraps.Contains(spawn))
-                continue;
             if(PowerSpawn.TypeIsActive(spawn.type))
             { 
 			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
