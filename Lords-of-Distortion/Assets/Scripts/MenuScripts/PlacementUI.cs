@@ -219,6 +219,10 @@ public class PlacementUI : MonoBehaviour {
 			    Sprite sprite = null;
 			    icons.TryGetValue(spawn.type, out sprite);
 			    slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+                slot.GetComponentInChildren<UILabel>().enabled = true;
+                slot.GetComponentInChildren<UILabel>().text = (i+1).ToString();
+                slot.GetComponentInChildren<UIStretch>().container = slot;
+                slot.GetComponentInChildren<UIAnchor>().container = slot;
 			    i++;
             }
 		}

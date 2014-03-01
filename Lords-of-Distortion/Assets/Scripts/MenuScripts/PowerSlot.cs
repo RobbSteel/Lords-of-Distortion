@@ -18,8 +18,11 @@ public class PowerSlot : MonoBehaviour {
 	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
 		keyText = key;
 		this.linkedSpawn = linkedSpawn;
-		keyLabel = GameObject.Find("TriggerKey").GetComponent<UILabel>();
-		//keyLabel.text = key;
+        if(GameObject.Find("TriggerKey") != null)
+        { 
+		    keyLabel = GameObject.Find("TriggerKey").GetComponent<UILabel>();
+		    //keyLabel.text = key;
+        }
 		powerIcon = GetComponent<UISprite>();
 		powerIcon.spriteName = sprite.name;
 		if(linkedSpawn.timerSet){
