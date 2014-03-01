@@ -12,4 +12,9 @@ public abstract class Power : MonoBehaviour {
 	public abstract void PowerActionStay(GameObject player, Controller2D controller);
 	public abstract void PowerActionExit(GameObject player, Controller2D controller);
 
+	// function for calling onTrapTrigger
+	public void callOnTrapTrigger(){
+		if(onTrapTrigger != null)
+			onTrapTrigger(this);
+	}
 }
