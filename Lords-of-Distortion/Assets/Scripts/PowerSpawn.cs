@@ -60,6 +60,7 @@ public class PowerSpawn : PriorityQueueNode {
 	static PowerSpawn(){
 		powersRequiringDirection = new List<PowerType>();
 		powersRequiringDirection.Add(PowerType.FIREBALL);
+		powersRequiringDirection.Add (PowerType.GRAVITY);
 
         powersActive = new List<PowerType>();
         powersActive.Add(PowerType.FIREBALL);
