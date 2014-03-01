@@ -26,6 +26,13 @@ public class PowerSpawn : PriorityQueueNode {
 	public Vector3 direction = Vector3.zero;
 	public NetworkPlayer owner;
 
+	//keeps track of the order in which these powers were spawned.
+	private static int powersCreated = 0;
+
+	//Not guaranteed to be unique.
+	private int localID;
+
+
     private static System.Random rnd = new System.Random();
 
 	private static List<PowerType> powersRequiringDirection;
@@ -73,11 +80,21 @@ public class PowerSpawn : PriorityQueueNode {
 
 	public PowerSpawn(){
 		type = PowerType.UNDEFINED;
+		localID = powersCreated++;
+	}
+
+	public PowerSpawn(int localID){
+		type = PowerType.UNDEFINED;
+		this.localID = localID;
 	}
 
 	public void SetTimer(float time){
 		timerSet = true;
 		timeCountdown = time;
+	}
+
+	public int GetLocalID(){
+		return localID;
 	}
 
 	bool calledEvent = false;

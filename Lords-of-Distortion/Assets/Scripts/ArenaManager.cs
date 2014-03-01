@@ -93,20 +93,38 @@ public class ArenaManager : MonoBehaviour {
      other player*/
 	
 	[RPC]
-	void AddPowerSpawnLocally(int typeIndex, Vector3 position, float time){
-		PowerSpawn requested =  new PowerSpawn();
+	void AddPowerSpawnLocally(bool live, int typeIndex, Vector3 position, float time, int localID, NetworkMessageInfo info){
+		PowerSpawn requested =  new PowerSpawn(localID);
 		requested.type = (PowerType)typeIndex;
 		requested.position = position;
 		requested.spawnTime = TimeManager.instance.time + time;
+		requested.owner = info.sender;
 		//print ("Time is set to " + requested.spawnTime)
 		allTimedSpawns.Enqueue(requested, requested.spawnTime);
+		if(live && Network.isServer){
+			networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others, true, (int)requested.type,
+			                 requested.position, requested.spawnTime, requested.GetLocalID());
+		}
 	}
-	
+
+	//only to be called by server.
+	void AddPowerSpawnLocally(bool live, PowerSpawn requested){
+		requested.owner = Network.player;
+		allTimedSpawns.Enqueue(requested, requested.spawnTime);
+		if(live){
+			networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others, true, (int)requested.type,
+			                 requested.position, requested.spawnTime, requested.GetLocalID());
+		}
+	}
+
+
+
+	//Once server has all the spawn info from the other players, send it out.
 	private void CheckIfAllSynchronized(){
 		if(playersReady.Count == sessionManager.gameInfo.players.Count){
 			foreach(PowerSpawn power in allTimedSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
-				                 (int)power.type, power.position, power.spawnTime);
+				                 false, (int)power.type, power.position, power.spawnTime, power.GetLocalID());
 			}
 			powersSynchronized = true;
 			networkView.RPC("FinishedSettingPowers", RPCMode.Others);
@@ -211,7 +229,14 @@ public class ArenaManager : MonoBehaviour {
 			if(currentTime >= allTimedSpawns.First.Priority){
 				PowerSpawn spawn = allTimedSpawns.Dequeue();
 				//convert power type to an int, which is an index to the array of power prefabs.
-				Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
+				GameObject trap = (GameObject)Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity);
+
+				Power powerScript = trap.GetComponent<Power>();
+				powerScript.spawnInfo = spawn;
+				//One of my own powers just spawned.
+				if(spawn.owner == Network.player){
+					powerScript.onTrapTrigger += placementUI.DestroyUIPower;
+				}
 			}
 		}
 	}
@@ -249,8 +274,8 @@ public class ArenaManager : MonoBehaviour {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, spawn.position, Quaternion.identity);
         yield return new WaitForSeconds(0.7f);
 		Destroy(instantiatedSymbol);
-		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
-		power.GetComponent<Power>().direction = spawn.direction;
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
+		power.GetComponent<Power>().spawnInfo = spawn;
 		//If the networkview id is specified, apply it to the networkview of the new power
 		if(!Equals(optionalViewID, default(NetworkViewID))){
 			power.GetComponent<NetworkView>().viewID = optionalViewID;
@@ -287,17 +312,17 @@ public class ArenaManager : MonoBehaviour {
 			/*
 			 * Don't tween away powers
 			PlayMenuTween(true);
-
 			*/
 
 			//Synchronize proximity traps to server.
             foreach(PowerSpawn power in  placementUI.delayedTraps){
+				power.spawnTime = 0f; //no custom time so use 0
                 if(Network.isServer){
-					AddPowerSpawnLocally((int)power.type, power.position, 0f); //no custom time so use 0
+					AddPowerSpawnLocally(false, power); 
 				}
 				else {
-					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
-					                 (int)power.type, power.position, 0f);
+					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, false,
+					                 (int)power.type, power.position, power.spawnTime, power.GetLocalID());
 				}
 			}
 			if(Network.isServer)
@@ -327,8 +352,6 @@ public class ArenaManager : MonoBehaviour {
 			}
 
 			placementUI.delayedTraps.Clear();
-
-
 			print ("Traps are Enabled");
 
 			//also bring back power placement
@@ -343,10 +366,10 @@ public class ArenaManager : MonoBehaviour {
 		if(placementUI.delayedTraps.Count > 0 && placementUI.live){
 			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
 			if(Network.isServer){
-				AddPowerSpawnLocally((int)spawn.type, spawn.position, spawn.spawnTime); 
+				AddPowerSpawnLocally(true, spawn); 
 			}
 			else {
-				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,
+				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,true,
 				                 (int)spawn.type, spawn.position, spawn.spawnTime);
 			}
 		}
