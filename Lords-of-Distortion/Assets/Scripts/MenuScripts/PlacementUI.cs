@@ -42,6 +42,7 @@ public class PlacementUI : MonoBehaviour {
 	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
 	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
+	public Dictionary<int, PowerSpawn> spawnByID = new Dictionary<int, PowerSpawn>();
 
     private PowerType powerNum1;
     private PowerType powerNum2;
@@ -423,6 +424,7 @@ public class PlacementUI : MonoBehaviour {
 			placedPowers.Add(activePower, spawn);
 			//TODO: Check if power is triggered or a trap.
 			allTraps.Add(spawn);
+			spawnByID.Add(spawn.GetLocalID(), spawn);
 			if(PowerSpawn.TypeIsPassive(spawn.type)){
 				//spawn.SetTimer(0f);
 				delayedTraps.Enqueue(spawn);
@@ -535,20 +537,27 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
+	//Destroy the associated UI power based solely on localID
+	public void DestroyUIPower(Power power){
+		DestroyUIPower(spawnByID[power.spawnInfo.GetLocalID()]);
+	}
+
     public void DestroyUIPower(PowerSpawn spawn)
     {
-		print ("delete it");
+		//print ("delete it");
 		allTraps.Remove(spawn); //TODO: remove from grid
 		GameObject key = null;
         foreach (var pair in placedPowers)
         {
             if (spawn == pair.Value)
             {
+				spawnByID.Remove(spawn.GetLocalID());
                 Destroy(pair.Key);
 				key = pair.Key;
             }
         }
-		if(key != null)
+		if(key != null){
 			placedPowers.Remove(key);
+		}
     }
 }
