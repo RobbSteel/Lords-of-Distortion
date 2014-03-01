@@ -212,7 +212,10 @@ public class PlacementUI : MonoBehaviour {
         InventoryGrid.Reposition();
 
         //Set Triggers in appropriate spot
+        // Need something to prevent duplicates from happening
         foreach(PowerSpawn spawn in allTraps){
+            if (allTraps.Contains(spawn))
+                continue;
             if(PowerSpawn.TypeIsActive(spawn.type))
             { 
 			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
@@ -334,9 +337,9 @@ public class PlacementUI : MonoBehaviour {
 		uiColor.a = .4f;
 		activePower.renderer.material.color = uiColor;
 		ChangeParticleColor(activePower, uiColor);
+
 		//power.GetComponent<ParticleSystem>().startColor;
 		
-
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -441,7 +444,7 @@ public class PlacementUI : MonoBehaviour {
 			if(live){
 				LivePlacement(spawn);
 			}
-            
+
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
