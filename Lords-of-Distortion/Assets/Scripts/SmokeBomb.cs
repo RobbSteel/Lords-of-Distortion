@@ -5,17 +5,12 @@ public class SmokeBomb : Power {
 	
 	public float timeTillDmg;
 	public float dmgGiven;
-	
 	public float dmgTimer;
 	private PlayerStatus applyDmg;
-
-	//public GameObject smokeObject;
-
 	public bool triggered;
 
 	ParticleSystem smoke; 
-
-
+	
 	void Awake(){
 		triggered = false;
 		dmgTimer = timeTillDmg;
@@ -28,9 +23,6 @@ public class SmokeBomb : Power {
 	void Start () 
     {
 		smoke.enableEmission = false;
-
-		//if(triggered)
-        	//Destroy(gameObject, 6f);	
 	}
 	
 	// Update is called once per frame
@@ -44,7 +36,8 @@ public class SmokeBomb : Power {
 		triggered = true;
 		smoke.enableEmission = true;
 
-		//windObject.GetComponent<Sprite>().enabled = true;
+		// calling on Trap Trigger function to destory UIpower when triggered
+		callOnTrapTrigger();
 
 	}
 
