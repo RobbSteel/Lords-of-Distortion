@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class TrapFountainManager : MonoBehaviour {
 
 	public List<Transform> potentialLocations;
+	public PlacementUI placementUI;
 	private bool activated;
 
 	float spawnTime = 15f;
@@ -19,7 +20,9 @@ public class TrapFountainManager : MonoBehaviour {
 
 	void SpawnFountain(){
 		Transform location = potentialLocations[random.Next(0, potentialLocations.Count - 1)];
-		Instantiate (TrapFountainPrefab, location.position, Quaternion.identity);
+		GameObject fountain = (GameObject)Instantiate (TrapFountainPrefab, location.position, Quaternion.identity);
+		fountain.GetComponent<TrapFountain>().placementUI = placementUI;
+
 	}
 
 	public void SetFirstSpawnTime(float time){

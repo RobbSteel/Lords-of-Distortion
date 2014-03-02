@@ -4,6 +4,7 @@ using System.Collections;
 public class TrapFountain : MonoBehaviour {
 
 	bool used = false;
+	public PlacementUI placementUI;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,7 @@ public class TrapFountain : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag == "Player"){
 			if(!used){
+				placementUI.Resupply();
 				used = true;
 				audio.Play();
 			}
