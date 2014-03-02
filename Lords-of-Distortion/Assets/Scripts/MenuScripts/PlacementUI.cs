@@ -71,7 +71,7 @@ public class PlacementUI : MonoBehaviour {
 
 	//http://www.youtube.com/watch?v=eUFY8Zw0Bag
 	public bool live = false;
-	bool useTimer = false;
+	bool deadScreen = false;
 
 
 	PlacementState state = PlacementState.Default;
@@ -157,7 +157,7 @@ public class PlacementUI : MonoBehaviour {
 
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
-			useTimer = true;
+			deadScreen = true;
             
             //Destroy boards placed in inventory grid used as the offset.
             DestroyDummyInv();  
@@ -276,7 +276,7 @@ public class PlacementUI : MonoBehaviour {
 		}
         else if (live)
         {
-			if(!useTimer){
+			if(!deadScreen){
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
@@ -341,8 +341,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	private void LivePlacement(PowerSpawn spawn){
-		//Destroy(activePower);
-		//spawnNow(spawn, gameObject);
+
 		
 		spawn.SetTimer(3f); //start armament time
 		//TODO: start radial cooldown on actives
@@ -448,7 +447,12 @@ public class PlacementUI : MonoBehaviour {
 		else {
 			//When we're placing powers mid game:
 			if(live){
-				LivePlacement(spawn);
+				if(deadScreen){
+					Destroy(activePower);
+					spawnNow(spawn, gameObject);
+				}
+				else
+					LivePlacement(spawn);
 			}
 
 			state = PlacementState.Default;
@@ -498,7 +502,12 @@ public class PlacementUI : MonoBehaviour {
 
 
 		if(live){
-			LivePlacement(spawn);
+			if(deadScreen){
+				Destroy(activePower);
+				spawnNow(spawn, gameObject);
+			}
+			else
+				LivePlacement(spawn);
 		}
 		//Return buttons to normal
 		state = PlacementState.Default;
