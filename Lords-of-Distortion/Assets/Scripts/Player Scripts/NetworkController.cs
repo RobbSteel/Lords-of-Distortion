@@ -56,6 +56,8 @@ public class NetworkController : MonoBehaviour {
 		}
 		else{
 			rigidbody2D.isKinematic = true;
+			//put on other player layer
+			gameObject.layer = 13;
 			states = new CircularBuffer<State>(4);
 		}
 

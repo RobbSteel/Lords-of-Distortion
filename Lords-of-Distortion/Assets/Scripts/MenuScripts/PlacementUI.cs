@@ -28,6 +28,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite inkSprite;
 	public Sprite windSprite;
 	public Sprite transferSprite;
+	public Sprite boulderSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	Dictionary<PowerType, InventoryPower> draftedPowers;
@@ -94,6 +95,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.FIREBALL, inkSprite);
 		icons.Add(PowerType.GRAVITY, windSprite);
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
+		icons.Add(PowerType.BOULDER, boulderSprite);
 
 		/*Hard code some powers for now*/
 		/*
