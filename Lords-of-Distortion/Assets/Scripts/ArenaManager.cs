@@ -6,10 +6,11 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 15f; 
+	const float PLACEMENT_TIME = 8f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
+	TrapFountainManager fountainManager; 
 
 	public List<Transform> spawnPositions;
 	private List<Vector3> playerSpawnVectors;
@@ -39,9 +40,11 @@ public class ArenaManager : MonoBehaviour {
 
 	[RPC]
 	void NotifyBeginTime(float time){
-		Debug.Log ("start timer");
 		beginTime = time;
 		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
+		//set seed of fountain random generator to time
+		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 10f);
+		fountainManager.SetSeed((int)(beginTime * 1000f));
 	}
 	
 	
@@ -166,6 +169,7 @@ public class ArenaManager : MonoBehaviour {
 		playersReady = new List<NetworkPlayer>();
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
 		placementUI = GetComponent<PlacementUI>();
 		powerPrefabs = GetComponent<PowerPrefabs>();
 	}
@@ -213,8 +217,7 @@ public class ArenaManager : MonoBehaviour {
 
 			//spawn players immediately
 			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
-			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
-			beginTime =  TimeManager.instance.time + PLACEMENT_TIME;
+			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			//TODO: make this a UI text function. (fade in fade out quickly)
 			print ("You may place pleliminary traps");
