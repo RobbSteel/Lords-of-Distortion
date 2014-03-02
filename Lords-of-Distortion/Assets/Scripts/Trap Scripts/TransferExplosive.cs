@@ -108,7 +108,7 @@ public class TransferExplosive : Power
 						Destroy (gameObject);
             
 				} else {
-						Debug.Log ("Bomb ELSE~~~~~");
+						//Debug.Log ("Bomb ELSE~~~~~");
 						//Do this only if the bomb cannot be transfered
 						if (!stickready) {
 

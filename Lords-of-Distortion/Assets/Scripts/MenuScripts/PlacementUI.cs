@@ -370,9 +370,24 @@ public class PlacementUI : MonoBehaviour {
 	
 	void ChangeParticleColor(GameObject power, Color color){
 
-		if(power.GetComponent<ParticleSystem>() != null)
+		ParticleSystem particleSystem = power.GetComponent<ParticleSystem>();
+
+
+
+
+		if(particleSystem != null)
 		{
-			power.GetComponent<ParticleSystem>().startColor = color;
+			ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
+			
+			particleSystem.GetParticles(particles);
+
+			for(int i = 0; i < particles.Length; ++i)
+			{
+				particles[i].color = color;
+				particleSystem.SetParticles(particles, particleSystem.particleCount);
+			}
+
+			particleSystem.startColor = color;
 		}
 
 

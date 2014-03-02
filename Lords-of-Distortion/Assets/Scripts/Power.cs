@@ -14,7 +14,9 @@ public abstract class Power : MonoBehaviour {
 
 	// function for calling onTrapTrigger
 	public void callOnTrapTrigger(){
-		if(onTrapTrigger != null)
+		if(onTrapTrigger != null){
 			onTrapTrigger(this);
+			onTrapTrigger = null;
+		}
 	}
 }
