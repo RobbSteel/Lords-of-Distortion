@@ -345,6 +345,8 @@ public class PlacementUI : MonoBehaviour {
 		
 		spawn.SetTimer(3f); //start armament time
 		//TODO: start radial cooldown on actives
+		/*
+		 * switch back to all triggers.
 		if(PowerSpawn.TypeIsPassive(spawn.type)){
 
 			print ("add timed spawn locally and remotely");
@@ -352,12 +354,13 @@ public class PlacementUI : MonoBehaviour {
 			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
 			//spawn.timeUpEvent += DestroyUIPower; 
 		}
-		else{
+		*/
+	//	else{
 			print ("disable triggering until time is up");
 			//Do this for now:
 			ShowTriggers();
 			//activatedTraps.Add(spawn);
-		}
+		//}
 		spawn.timeUpEvent += PowerArmed;
 
 	}
@@ -427,10 +430,13 @@ public class PlacementUI : MonoBehaviour {
 			//TODO: Check if power is triggered or a trap.
 			allTraps.Add(spawn);
 			spawnByID.Add(spawn.GetLocalID(), spawn);
+			/*
+			 * revert to no passives
 			if(PowerSpawn.TypeIsPassive(spawn.type)){
 				//spawn.SetTimer(0f);
 				delayedTraps.Enqueue(spawn);
 			}
+			*/
 		}
 
 		spawn.position = activePower.transform.position;
