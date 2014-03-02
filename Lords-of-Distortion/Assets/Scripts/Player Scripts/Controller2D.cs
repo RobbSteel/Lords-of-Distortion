@@ -239,7 +239,7 @@ public class Controller2D : MonoBehaviour {
 
 			dead = true;
 			snared = true;
-			Destroy(collider2D);
+			collider2D.enabled = false;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
