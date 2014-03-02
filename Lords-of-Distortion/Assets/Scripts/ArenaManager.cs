@@ -86,7 +86,7 @@ public class ArenaManager : MonoBehaviour {
 		sessionManager.KillPlayer(deadPlayer);
 
 		//brign up the dead player placement screen.
-		placementUI.SwitchToLive(false);
+		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 		PlayMenuTween(false);
 
