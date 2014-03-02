@@ -26,7 +26,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.0912528, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -70,6 +70,9 @@ MonoBehaviour:
   inkSprite: {fileID: 21300000, guid: 4d7044b828d4a9d4a89c8953a300549b, type: 3}
   windSprite: {fileID: 21300000, guid: 6c8477ef063fe2c4b8cb79220905d874, type: 3}
   transferSprite: {fileID: 21300000, guid: bbc55ebdc3addc04fa129dbd369f27a9, type: 3}
+  boulderSprite: {fileID: 21300000, guid: 6fe48849d8209574cb3471b849d62714, type: 3}
+  currentPowers: []
+  dummyInv: []
   deadLordBtnRed: {fileID: 0}
   live: 0
 --- !u!114 &11400004
@@ -89,6 +92,7 @@ MonoBehaviour:
   - {fileID: 100000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
   - {fileID: 100000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
   - {fileID: 100000, guid: b0bfe78a6e8b4744a8b806d6381a3301, type: 2}
+  - {fileID: 100000, guid: a7396905615ee79439f9e25e31b15434, type: 2}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
