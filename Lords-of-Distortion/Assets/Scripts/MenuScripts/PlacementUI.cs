@@ -39,7 +39,7 @@ public class PlacementUI : MonoBehaviour {
     public List<GameObject> currentPowers = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
 
-
+    // allTraps is the powers placed
 	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
 	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
@@ -117,14 +117,14 @@ public class PlacementUI : MonoBehaviour {
 		foreach(var inventoryPower in draftedPowers){
 
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
-			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			buttons.Add(entry.GetComponent<UIButton>());
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
 			PowerBoard info = entry.GetComponent<PowerBoard>();
 			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
             currentPowers.Add(entry);
 		}
-		InventoryGrid.Reposition();
+		TriggerGrid.Reposition();
 	}
 
     /// <summary>
@@ -184,19 +184,6 @@ public class PlacementUI : MonoBehaviour {
 
         DestroyDummyInv();
 
-        //Add powers to InventoryGrid to offset power icons
-        foreach (var inventoryPower in draftedPowers)
-        {
-            InventoryPower inv;
-            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
-         
-            if (inv.quantity <= 0 && !PowerSpawn.TypeIsPassive(inv.type))
-            {
-                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
-                //buttons.Add(entry.GetComponent<UIButton>());
-                dummyInv.Add(entry);
-            }
-        }
         //Add powers to InventoryGrid that players can use to spawn powers mid game
         foreach (var inventoryPower in draftedPowers)
         {
@@ -204,7 +191,7 @@ public class PlacementUI : MonoBehaviour {
             draftedPowers.TryGetValue(inventoryPower.Key, out inv);
             if (inv.quantity > 0)
             {
-                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
                 //buttons.Add(entry.GetComponent<UIButton>());
                 UIEventListener.Get(entry).onClick += PowerButtonClick;
                 PowerBoard info = entry.GetComponent<PowerBoard>();
@@ -212,11 +199,12 @@ public class PlacementUI : MonoBehaviour {
                 dummyInv.Add(entry);
             }
         }
-        InventoryGrid.Reposition();
-
+        TriggerGrid.Reposition();
+        
         //Set Triggers in appropriate spot
         // Need something to prevent duplicates from happening
         foreach(PowerSpawn spawn in allTraps){
+            Debug.Log("POWERSPAWN IN ALL TRAPS: " + spawn.type);
             if(PowerSpawn.TypeIsActive(spawn.type))
             { 
 			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
@@ -292,7 +280,7 @@ public class PlacementUI : MonoBehaviour {
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
-			else if(timer <= 0.0f){
+			else{// if(timer <= 0.0f){
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
