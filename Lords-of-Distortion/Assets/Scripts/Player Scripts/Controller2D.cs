@@ -201,7 +201,6 @@ public class Controller2D : MonoBehaviour {
 	void OnCollisionStay2D(Collision2D col ) {
 		if(dead)
 			return;
-		
         if (col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
 			power.PowerActionStay(gameObject, this);
@@ -214,7 +213,6 @@ public class Controller2D : MonoBehaviour {
 		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
-		
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
@@ -241,6 +239,7 @@ public class Controller2D : MonoBehaviour {
 
 			dead = true;
 			snared = true;
+			collider2D.enabled = false;
 
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*

@@ -52,7 +52,7 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
-		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && col.gameObject.tag != "Melee"){
+		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
 
 			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;

@@ -28,6 +28,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite inkSprite;
 	public Sprite windSprite;
 	public Sprite transferSprite;
+	public Sprite boulderSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	Dictionary<PowerType, InventoryPower> draftedPowers;
@@ -94,6 +95,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.FIREBALL, inkSprite);
 		icons.Add(PowerType.GRAVITY, windSprite);
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
+		icons.Add(PowerType.BOULDER, boulderSprite);
 
 		/*Hard code some powers for now*/
 		/*
@@ -370,9 +372,24 @@ public class PlacementUI : MonoBehaviour {
 	
 	void ChangeParticleColor(GameObject power, Color color){
 
-		if(power.GetComponent<ParticleSystem>() != null)
+		ParticleSystem particleSystem = power.GetComponent<ParticleSystem>();
+
+
+
+
+		if(particleSystem != null)
 		{
-			power.GetComponent<ParticleSystem>().startColor = color;
+			ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
+			
+			particleSystem.GetParticles(particles);
+
+			for(int i = 0; i < particles.Length; ++i)
+			{
+				particles[i].color = color;
+				particleSystem.SetParticles(particles, particleSystem.particleCount);
+			}
+
+			particleSystem.startColor = color;
 		}
 
 
@@ -423,6 +440,7 @@ public class PlacementUI : MonoBehaviour {
 				delayedTraps.Enqueue(spawn);
 			}
 		}
+
 		spawn.position = activePower.transform.position;
 
 		KillMovement(activePower);
@@ -458,10 +476,16 @@ public class PlacementUI : MonoBehaviour {
 				ChangeParticleColor(pair.Key, original);
 			}
 		}
+	}
 
-
-		if(PowerSpawn.TypeIsActive(powerSpawn.type))
-			print ("armament timer up, enable activation key");
+	public void ColorizeAll(){
+		foreach (var pair in placedPowers)
+		{
+			Color original = Color.white;
+			original.a = .5f;
+			pair.Key.renderer.material.color = original;
+			ChangeParticleColor(pair.Key, original);
+		}
 	}
 
 	///<summary>Calculates a direction vector from the current power to the mouse. Stores
