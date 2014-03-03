@@ -4,13 +4,14 @@ using System.Collections;
 public class FreezeTrap : Power {
 
 	private PlayerStatus applyDmg;
-	public float trapDuration;
+	private float trapDuration;
+	private GameObject frozenEffect;
 
 	void Awake(){
 
 	}
 	void Start(){
-		trapDuration = 6f;
+		trapDuration = 1.5f;
 	}
 
 	void Update(){
@@ -21,6 +22,10 @@ public class FreezeTrap : Power {
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
 		applyDmg = controller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
+
+		frozenEffect = (GameObject)Instantiate (Resources.Load ("FrozenEffect"));
+		frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
+
 
 	}
 	
