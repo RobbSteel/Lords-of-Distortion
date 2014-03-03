@@ -260,17 +260,14 @@ public class PlayerStatus : MonoBehaviour {
 			TurnOnMashAlert();
 			StunRecover();
 			if( currentStunMeter <= 0 ){
-				playerControl.snared = false;
-				playerControl.stunned = false;
-				TurnOffMashAlert();
-				playerControl.anim.SetTrigger("unstunned");
-				currentStunMeter = 0;
+				UnStun();
 			}
 		}
 	}
 	
 	public void Stun(){
 		playerControl.stunned = true;
+		currentStunMeter = maxStun;
 		playerControl.anim.SetTrigger("stunned");
 		audio.Play ();
 	}
@@ -279,6 +276,23 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		recoverRate = newRecoverRate;
+	}
+
+	public void Frozen(){
+		playerControl.stunned = true;
+		currentStunMeter = maxStun;
+		playerControl.anim.enabled = false;
+
+
+	}
+
+	public void UnStun(){
+		playerControl.snared = false;
+		playerControl.stunned = false;
+		TurnOffMashAlert();
+		playerControl.anim.SetTrigger("unstunned");
+		currentStunMeter = 0;
+		playerControl.anim.enabled = true;
 	}
 	
 	//Only runs if your stun bar is injured
