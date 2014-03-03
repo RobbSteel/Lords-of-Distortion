@@ -205,18 +205,16 @@ public class PlacementUI : MonoBehaviour {
         // Need something to prevent duplicates from happening
         foreach(PowerSpawn spawn in allTraps){
             Debug.Log("POWERSPAWN IN ALL TRAPS: " + spawn.type);
-            if(PowerSpawn.TypeIsActive(spawn.type))
-            { 
-			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
-			    Sprite sprite = null;
-			    icons.TryGetValue(spawn.type, out sprite);
-			    slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
-                slot.GetComponentInChildren<UILabel>().enabled = true;
-                slot.GetComponentInChildren<UILabel>().text = (i+1).ToString();
-                slot.GetComponentInChildren<UIStretch>().container = slot;
-                slot.GetComponentInChildren<UIAnchor>().container = slot;
-			    i++;
-            }
+           
+			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
+			Sprite sprite = null;
+			icons.TryGetValue(spawn.type, out sprite);
+			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+            slot.GetComponentInChildren<UILabel>().enabled = true;
+            slot.GetComponentInChildren<UILabel>().text = (i+1).ToString();
+            slot.GetComponentInChildren<UIStretch>().container = slot;
+            slot.GetComponentInChildren<UIAnchor>().container = slot;
+			i++;
 		}
         TriggerGrid.Reposition();
 

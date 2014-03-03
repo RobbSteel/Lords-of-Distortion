@@ -12,32 +12,32 @@ public class SmokeBomb : Power {
 	ParticleSystem smoke; 
 	
 	void Awake(){
-		triggered = false;
+		//triggered = false;
 		dmgTimer = timeTillDmg;
 		smoke = GetComponent<ParticleSystem>();
 		smoke.enableEmission = true;
-
 	}
 	
 	// Use this for initialization
 	void Start () 
     {
-		smoke.enableEmission = false;
+        Destroy(gameObject, 6f);
+		//smoke.enableEmission = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-			if(triggered)
-				Destroy(gameObject, 6f);
+			//if(triggered)
+				//Destroy(gameObject, 6f);
 
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
-		triggered = true;
+		//triggered = true;
 		smoke.enableEmission = true;
 
 		// calling on Trap Trigger function to destory UIpower when triggered
-		callOnTrapTrigger();
+		//callOnTrapTrigger();
 
 	}
 
