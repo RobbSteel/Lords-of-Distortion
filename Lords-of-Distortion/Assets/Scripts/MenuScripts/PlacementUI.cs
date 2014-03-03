@@ -560,6 +560,32 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
+	
+	public void Resupply(){
+		foreach( var inventory in draftedPowers ){
+			Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
+			if( inventory.Value.quantity <= 0 ){
+				Debug.Log("USED ALL THIS POWER " + inventory.Key );
+				powerNum1 = PowerSpawn.RandomActivePower();
+				powerNum2 = PowerSpawn.RandomPassivePower();
+				
+				//draftedPowers.Remove( inventory.Key );
+				if( inventory.Key == powerNum1 && inventory.Value.quantity <= 0  )
+					inventory.Value.quantity = 1;
+				else{
+					//draftedPowers.Remove( inventory.Key );
+					draftedPowers.Add( powerNum1 , new InventoryPower( powerNum1, 1));
+				}
+				
+				//DestroyDummyInv();
+				//ShowTriggers();
+				//InventoryGrid.Reposition();
+				
+				break;
+			}
+		}
+	}
+
 	//Destroy the associated UI power based solely on localID
 	public void DestroyUIPower(Power power){
 		DestroyUIPower(spawnByID[power.spawnInfo.GetLocalID()]);

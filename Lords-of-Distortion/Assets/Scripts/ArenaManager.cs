@@ -45,6 +45,7 @@ public class ArenaManager : MonoBehaviour {
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 10f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
+		fountainManager.placementUI = placementUI;
 	}
 	
 	
