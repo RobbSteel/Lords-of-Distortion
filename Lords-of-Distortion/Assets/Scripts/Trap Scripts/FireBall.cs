@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class FireBall : Power
 {
 	public float speed; 
+
+
+
 
     void Start()
     {
@@ -21,7 +25,9 @@ public class FireBall : Power
 
     public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-        controller.Die();
+		GA.API.Design.NewEvent("Fireball Death", player.transform.position);
+		controller.Die();
+
 	}
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)

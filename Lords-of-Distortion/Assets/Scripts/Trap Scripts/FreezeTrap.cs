@@ -10,6 +10,7 @@ public class FreezeTrap : Power {
 	void Awake(){
 
 	}
+
 	void Start(){
 		trapDuration = 1.5f;
 	}
@@ -23,9 +24,11 @@ public class FreezeTrap : Power {
 		applyDmg = controller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
 
-		frozenEffect = (GameObject)Instantiate (Resources.Load ("FrozenEffect"));
-		frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
-
+		//to keep from duplicating the effect since we had 2 colliders 
+		if (!controller.transform.FindChild ("FrozenEffect(Clone)")) {
+			frozenEffect = (GameObject)Instantiate (Resources.Load ("FrozenEffect"));
+			frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
+		}
 
 	}
 	

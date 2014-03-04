@@ -4,7 +4,7 @@ using System.Collections;
 public class MeleeHit : MonoBehaviour {
 
 	private Melee melee;
-
+	private Controller2D onHitDeath;
 	void Start(){
 		melee = transform.root.GetComponent<Melee>();
 	}
@@ -13,10 +13,19 @@ public class MeleeHit : MonoBehaviour {
 	{
 		// If melee atack hits a player...
 		if(col.gameObject.tag == "Player"){
-			melee.HandleCollsion(col.gameObject);
+			col.GetComponent<Controller2D>();
+			//check to see if an effect is in place to be killed on melee hit
+			onHitDeath = col.GetComponent<Controller2D>();
+			if( onHitDeath.deathOnHit ){
+				onHitDeath.Die();
+			}
+			else{
+				melee.HandleCollsion(col.gameObject);
+			}
 			Debug.Log ("Player hit");
 			// Disable BoxCollider2D so that only one hit registers.
 			GetComponent<BoxCollider2D>().enabled = false;
+		
 		}
 		// ...else melee hits nothing
 		else
