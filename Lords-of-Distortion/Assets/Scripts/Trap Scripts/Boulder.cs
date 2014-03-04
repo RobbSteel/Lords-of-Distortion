@@ -6,6 +6,7 @@ public class Boulder : Power {
 	float direction = -1.0f;
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
+		GA.API.Design.NewEvent("Boulder Death", player.transform.position);
 		controller.Die();
 	}
 	public override void PowerActionStay (GameObject player, Controller2D controller)
