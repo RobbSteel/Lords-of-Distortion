@@ -242,7 +242,6 @@ public class PlacementUI : MonoBehaviour {
             if(g0.GetComponent<PowerSlot>().wasSpawned)
             {
                 Destroy(g0);
-                allTrapsGO.RemoveAt(i);
             }
             i++;
         }
