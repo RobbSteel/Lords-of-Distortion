@@ -200,8 +200,6 @@ public class PlacementUI : MonoBehaviour {
             }
         }
 
-        
-
         TriggerGrid.Reposition();
         
         //Set Triggers in appropriate spot
@@ -220,7 +218,7 @@ public class PlacementUI : MonoBehaviour {
             allTrapsGO.Add(slot);
 			i++;
 		}
-
+        RemoveDuplicatePowerSlots(allTraps);
         TriggerGrid.Reposition();
 
 	}
@@ -232,6 +230,21 @@ public class PlacementUI : MonoBehaviour {
         {
             if (spawn.timeCountdown <= 0)
                 g0.GetComponentInChildren<UILabel>().color = new Color(0f, 1f, 0f, 1f);
+        }
+    }
+
+    public void RemoveDuplicatePowerSlots(List<PowerSpawn> traps)
+    {
+        int i = 0;
+        GameObject[] powerSlots = GameObject.FindGameObjectsWithTag("PowerSlot");
+        foreach(GameObject g0 in powerSlots)
+        {
+            if(g0.GetComponent<PowerSlot>().wasSpawned)
+            {
+                Destroy(g0);
+                allTrapsGO.RemoveAt(i);
+            }
+            i++;
         }
     }
 
@@ -575,27 +588,40 @@ public class PlacementUI : MonoBehaviour {
 
 	
 	public void Resupply(){
-		foreach( var inventory in draftedPowers ){
-			Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
-			if( inventory.Value.quantity <= 0 ){
-				Debug.Log("USED ALL THIS POWER " + inventory.Key );
-				PowerType newPower = RandomPower();
+        int k = 0;
+        // Make sure players can only hold at most 2 powers. In their inventory and on the map.
+        foreach(var inv in allTraps)
+        {
+            k++;
+        }
+        foreach(var inv in draftedPowers)
+        {
+            k += inv.Value.quantity;
+        }
+        if (k < 2)
+        { 
+		    foreach( var inventory in draftedPowers ){
+	    		Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
+	    		if( inventory.Value.quantity <= 0 ){
+	    			Debug.Log("USED ALL THIS POWER " + inventory.Key );
+	    			PowerType newPower = RandomPower();
 				
-				//draftedPowers.Remove( inventory.Key );
-				if((newPower == powerNum1 || newPower == powerNum2) && inventory.Value.quantity <= 0)
-					inventory.Value.quantity = 1;
-				else{
-					//draftedPowers.Remove( inventory.Key );
-				    draftedPowers.Add(newPower, new InventoryPower(newPower, 1));
-				}
+		    		//draftedPowers.Remove( inventory.Key );
+		    		if((newPower == powerNum1 || newPower == powerNum2) && inventory.Value.quantity <= 0)
+		    			inventory.Value.quantity = 1;
+		    		else{
+		    			//draftedPowers.Remove( inventory.Key );
+		    		    draftedPowers.Add(newPower, new InventoryPower(newPower, 1));
+		    		}
 				
-				//DestroyDummyInv();
-				ShowTriggers();
-				//InventoryGrid.Reposition();
+			    	//DestroyDummyInv();
+			    	ShowTriggers();
+			    	//InventoryGrid.Reposition();
 				
-				break;
-			}
-		}
+			    	break;
+			    }
+		    }
+        }
 	}
 
 	//Destroy the associated UI power based solely on localID

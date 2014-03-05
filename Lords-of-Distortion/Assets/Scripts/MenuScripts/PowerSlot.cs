@@ -6,7 +6,7 @@ public class PowerSlot : MonoBehaviour {
     const float FIGHT_COUNT_DOWN_TIME = 5f;
 
     public PowerSpawn linkedSpawn;
-
+    public bool wasSpawned = false;
 	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
 	public static event KeyPress powerKey;
 	UILabel keyLabel;
@@ -38,6 +38,7 @@ public class PowerSlot : MonoBehaviour {
 	void Update () {
         float currentTime = TimeManager.instance.time;
 		if(activationEnabled && Input.GetKeyDown(keyText)){
+            wasSpawned = true;
 			print("Pressed " + keyText + ", try to spawn that power");
 			powerKey(linkedSpawn, this.gameObject);
 		}
