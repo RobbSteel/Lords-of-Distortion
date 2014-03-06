@@ -171,6 +171,12 @@ public class Controller2D : MonoBehaviour {
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
 		}
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = other.transform;
+        }
+        else transform.parent = null;
 	}
 
 	//while player is within the powers collider apply's powers on player 
@@ -178,6 +184,12 @@ public class Controller2D : MonoBehaviour {
     {
         if (dead)
             return;
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = other.transform;
+        }
+        else transform.parent = null;
 
 		if (other.gameObject.tag == "Power")
 		{
@@ -197,6 +209,11 @@ public class Controller2D : MonoBehaviour {
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);
 		}
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = null;
+        }
 	}
 
 	//while player is colliding with the powers collider apply's powers on player 
