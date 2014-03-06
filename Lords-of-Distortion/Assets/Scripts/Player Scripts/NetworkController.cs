@@ -58,7 +58,6 @@ public class NetworkController : MonoBehaviour {
 			rigidbody2D.isKinematic = true;
 			//put on other player layer
 			gameObject.layer = 13;
-			states = new CircularBuffer<State>(4);
 		}
 
 		//we should have created a local playeroptions by now
@@ -88,6 +87,7 @@ public class NetworkController : MonoBehaviour {
 
 	void Awake() {
 		controller2D = GetComponent<Controller2D>();
+		states = new CircularBuffer<State>(4);
 	}
 
 	void Start () {
@@ -204,7 +204,7 @@ public class NetworkController : MonoBehaviour {
 
 		else {
 			//reject out of order/duplicate packets
-			if(states != null && states.Count >= 2){
+			if(states.Count >= 2){
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
 					Debug.Log("lost previous packet");
@@ -234,8 +234,8 @@ public class NetworkController : MonoBehaviour {
 			state.remoteTime = (float)info.timestamp;
 			state.localTime = (float)Network.time;
 			states.Add(state); //if we advanced buffer manually, then count < maxsize
-
-			if(canInterpolate == false && states != null && states.Count >= 3){
+			//print ("----- " + state.remoteTime);
+			if(canInterpolate == false && states.Count >= 3){
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
 			}
