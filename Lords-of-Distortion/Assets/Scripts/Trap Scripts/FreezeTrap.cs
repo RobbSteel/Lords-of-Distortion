@@ -26,7 +26,7 @@ public class FreezeTrap : Power {
 
 		//to keep from duplicating the effect since we had 2 colliders 
 		if (!controller.transform.FindChild ("FrozenEffect(Clone)")) {
-			frozenEffect = (GameObject)Instantiate (Resources.Load ("FrozenEffect"));
+			frozenEffect = (GameObject)Network.Instantiate (Resources.Load ("FrozenEffect"),player.transform.position, Quaternion.identity, 1);
 			frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
 		}
 

@@ -27,6 +27,15 @@ public class Controller2D : MonoBehaviour {
 	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
+
+	//Player Audio Clips  --
+	public AudioClip hookSfx;
+	public AudioClip meleeSfx;
+	public AudioClip meleeHitSfx;
+	public AudioClip deathSfx;
+	public AudioClip jumpSfx;
+
+
 	
 
 
@@ -171,6 +180,12 @@ public class Controller2D : MonoBehaviour {
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
 		}
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = other.transform;
+        }
+        
 	}
 
 	//while player is within the powers collider apply's powers on player 
@@ -178,6 +193,11 @@ public class Controller2D : MonoBehaviour {
     {
         if (dead)
             return;
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = other.transform;
+        }
 
 		if (other.gameObject.tag == "Power")
 		{
@@ -197,6 +217,11 @@ public class Controller2D : MonoBehaviour {
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);
 		}
+
+        if (other.gameObject.tag == "movingPlatform")
+        {
+            transform.parent = null;
+        }
 	}
 
 	//while player is colliding with the powers collider apply's powers on player 

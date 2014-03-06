@@ -36,7 +36,10 @@ public class GravityField : Power {
 
 		// calling on Trap Trigger function to destory UIpower when triggered
 		//callOnTrapTrigger ();
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Gravity Touches", player.transform.position);
 
+		}
 		// CHANGE GRAVITY OF PLAYER
 		player.rigidbody2D.gravityScale = -3;
 	}

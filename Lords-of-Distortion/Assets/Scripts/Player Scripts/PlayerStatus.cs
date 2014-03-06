@@ -15,6 +15,12 @@ public class PlayerStatus : MonoBehaviour {
 	public float UIoffsetX;
 	public float UIoffsetY;
 	public float recoverRate;
+
+	//Metrics for death
+	public float timegrav;
+	public float timesmoke;
+	public float timehook;
+	public float timemelee;
 	
 	int hitCount = 0;
 	public GameObject hitMarks;
@@ -158,6 +164,7 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun)
+
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
 		}
 	}
@@ -250,6 +257,11 @@ public class PlayerStatus : MonoBehaviour {
 	
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
+
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Melee Attack Hits", transform.position);
+		}
+
 		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
 	}
 	
@@ -273,12 +285,17 @@ public class PlayerStatus : MonoBehaviour {
 	}
 	
 	public void Stun( float newRecoverRate ){
+
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		recoverRate = newRecoverRate;
 	}
 
 	public void Frozen(){
+
+		if(GameObject.Find("CollectData") != null){
+		GA.API.Design.NewEvent("Times Frozen", transform.position);
+		}
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.enabled = false;
