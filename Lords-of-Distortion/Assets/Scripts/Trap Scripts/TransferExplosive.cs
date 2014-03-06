@@ -50,6 +50,10 @@ public class TransferExplosive : Power
 		public override void PowerActionEnter (GameObject player, Controller2D controller)
 		{
 
+
+
+
+
 				//cant stick to yourself again. also wait for response rpc before sending another one.
 				if (controller.hasbomb || sentRPC) {
 						return;
@@ -57,6 +61,12 @@ public class TransferExplosive : Power
 				if (stickready) {
 						//No need to confirm getting stuck if you're the server.
 						if (Network.isServer) {
+								
+				if(GameObject.Find("CollectData") != null){
+					GA.API.Design.NewEvent("Players Stuck", player.transform.position);
+				}
+
+								GA.API.Design.NewEvent("Player Stuck", player.transform.position);
 								networkView.RPC ("AttachToPlayer", RPCMode.Others, Network.player, firststick);
 								//do this second so that firstick isnt changed until the end.
 								AttachToPlayer (Network.player, firststick);
@@ -65,6 +75,12 @@ public class TransferExplosive : Power
 								//stick to different characters on different clients. 
 								//Those with lower ping at a disadvantage (since their message gets there first)
 								// but its probably not important for now.
+								
+				if(GameObject.Find("CollectData") != null){
+					GA.API.Design.NewEvent("Bomb Transfers", player.transform.position);
+				}
+
+
 								print ("Entered bomb");
 								sentRPC = true;
 								networkView.RPC ("IThinkIGotStuck", RPCMode.Server);
