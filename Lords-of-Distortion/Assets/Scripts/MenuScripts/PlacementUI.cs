@@ -406,8 +406,8 @@ public class PlacementUI : MonoBehaviour {
 		activePower.tag = "UIPower";
 
 
-		Color uiColor = Color.magenta;
-		uiColor.a = .4f;
+		Color uiColor = new Color(.5f, 0f, 0f);
+		uiColor.a = .6f;
 		activePower.renderer.material.color = uiColor;
 		ChangeParticleColor(activePower, uiColor);
 
