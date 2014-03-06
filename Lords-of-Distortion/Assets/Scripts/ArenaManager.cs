@@ -265,7 +265,12 @@ public class ArenaManager : MonoBehaviour {
 				Vector3 offscreen = uiElement.transform.position;
 				offscreen.y -= 400f;
 				TweenPosition.Begin(uiElement, 1f, offscreen);
-				uiElement.GetComponent<PowerSlot>().enabled = false;
+
+				PowerSlot powerSlot = uiElement.GetComponent<PowerSlot>();
+				powerSlot.enabled = false;
+				//remove from grid if power is not infinite.
+				if(!powerSlot.associatedPower.infinite)
+					placementUI.RemoveFromInventory(powerSlot.associatedPower.type);
 			}
 		}
 	}
@@ -365,7 +370,7 @@ public class ArenaManager : MonoBehaviour {
 			//also bring back power placement
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
-			placementUI.ShowTriggers();
+			placementUI.ShowTriggersInitial();
 			trapsEnabled = true;
 		}
 		

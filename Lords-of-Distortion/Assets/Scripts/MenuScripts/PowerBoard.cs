@@ -3,10 +3,20 @@ using System.Collections;
 
 public class PowerBoard : MonoBehaviour {
 
-	public InventoryPower associatedPower;
+	public PowerSlot currentPower;
+	public int index;
 
-	public void Initialize(InventoryPower power, Sprite sprite){
-		associatedPower = power;
-		GetComponent<UI2DSprite>().sprite2D = sprite;
+
+
+	public void SetChild(PowerSlot power){
+		currentPower = power;
+	}
+	public void RemoveChild(){
+		NGUITools.Destroy(currentPower.gameObject);
+		currentPower = null;
+	}
+
+	public PowerType GetType(){
+		return currentPower.associatedPower.type;
 	}
 }
