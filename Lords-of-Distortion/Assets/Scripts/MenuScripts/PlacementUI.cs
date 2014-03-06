@@ -34,7 +34,7 @@ public class PlacementUI : MonoBehaviour {
 	private Dictionary<PowerType, PowerBoard> boardsByType = new Dictionary<PowerType, PowerBoard>();
 	private List<PowerBoard> fixedBoards = new List<PowerBoard>();
 
-	Dictionary<PowerType, InventoryPower> draftedPowers;
+	Dictionary<PowerType, InventoryPower> inventoryPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
 
@@ -85,7 +85,7 @@ public class PlacementUI : MonoBehaviour {
 	GameObject dottedLineInstance;
 
 	void Awake(){
-		draftedPowers = new Dictionary<PowerType, InventoryPower>();
+		inventoryPowers = new Dictionary<PowerType, InventoryPower>();
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
@@ -109,8 +109,8 @@ public class PlacementUI : MonoBehaviour {
          */
         /* Randomize some powers */
 
-        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
-        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
+        inventoryPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
+        inventoryPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
 	}
 	
 	void Start(){
@@ -120,7 +120,7 @@ public class PlacementUI : MonoBehaviour {
 		 puts in initial slots.*/
 
 		int i = 1;
-		foreach(var inventoryPower in draftedPowers){
+		foreach(var inventoryPower in inventoryPowers){
 
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			entry.GetComponent<PowerBoard>().index = i;
@@ -135,6 +135,7 @@ public class PlacementUI : MonoBehaviour {
 	void AddToInventory(InventoryPower associatedPower){
 
 		foreach(PowerBoard board in fixedBoards){
+
 			if(board.currentPower == null){
 				//add slot as child to empty board
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
@@ -153,7 +154,6 @@ public class PlacementUI : MonoBehaviour {
 				break;
 			}
 		}
-
 	}
 
 	//removes slot from board.
@@ -162,7 +162,7 @@ public class PlacementUI : MonoBehaviour {
 		buttons.Remove(slot.GetComponent<UIButton>());
 		boardsByType[type].RemoveChild();
 		boardsByType.Remove(type);
-
+		inventoryPowers.Remove(type);
 	}
 
 	//Enable text label and set a key
@@ -170,32 +170,8 @@ public class PlacementUI : MonoBehaviour {
 		slot.GetComponent<PowerSlot>().keyText = triggerKey.ToString();
 		slot.GetComponentInChildren<UILabel>().enabled = true;
 		slot.GetComponentInChildren<UILabel>().text = triggerKey.ToString();
-		//slot.GetComponentInChildren<UIStretch>().container = slot;
-		//slot.GetComponentInChildren<UIAnchor>().container = slot;
-
 	}
-	
-	/// <summary>
-    /// Destroy GameObjects in dummyInv. Removes used items from Grid.
-    /// </summary>
-    public void DestroyDummyInv()
-    {
-        foreach (GameObject g0 in dummyInv)
-        {
-            NGUITools.Destroy(g0);
-        }
-    }
 
-    /// <summary>
-    /// Enable or Disable GameObjects tied to the player's original powers. 
-    /// </summary>
-    public void ToggleStartPowers(bool enabled)
-    {
-        foreach (GameObject g0 in slots)
-        {
-            g0.SetActive(enabled);
-        }
-    }
 
 	/// <summary>
 	///Place powers instantly without using triggers. 
@@ -206,22 +182,18 @@ public class PlacementUI : MonoBehaviour {
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
 			deadScreen = true;
-            
-            //Destroy boards placed in inventory grid used as the offset.
-            //DestroyDummyInv();  
 
-            //Re-activate original powers for use.
-            //ToggleStartPowers(true);
+			//resupply twice
+			Resupply();
+			Resupply();
 
-			foreach(var inventoryPower in draftedPowers){
+			foreach(var inventoryPower in inventoryPowers){
 				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
 				inventoryPower.Value.infinite = true;
-				//TODO: remove whatever powers are there
-				AddToInventory(inventoryPower.Value);
 			}
 		}
-
+		//TODO: destroy untriggered trapss
 		GridEnabled(true);
 	}
 
@@ -307,6 +279,28 @@ public class PlacementUI : MonoBehaviour {
                 Destroy(g0);
             }
             i++;
+        }
+    }
+
+	/// <summary>
+    /// Destroy GameObjects in dummyInv. Removes used items from Grid.
+    /// </summary>
+    public void DestroyDummyInv()
+    {
+        foreach (GameObject g0 in dummyInv)
+        {
+            NGUITools.Destroy(g0);
+        }
+    }
+
+    /// <summary>
+    /// Enable or Disable GameObjects tied to the player's original powers. 
+    /// </summary>
+    public void ToggleStartPowers(bool enabled)
+    {
+        foreach (GameObject g0 in slots)
+        {
+            g0.SetActive(enabled);
         }
     }
 */
@@ -643,41 +637,22 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
-	
+	public bool CanResupply(){
+		return inventoryPowers.Count < 2;
+	}
 	public void Resupply(){
-        int k = 0;
         // Make sure players can only hold at most 2 powers. In their inventory and on the map.
-        foreach(var inv in allTraps)
-        {
-            k++;
-        }
-        foreach(var inv in draftedPowers)
-        {
-            k += inv.Value.quantity;
-        }
-        if (k < 2)
-        { 
-		    foreach( var inventory in draftedPowers ){
-	    		Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
-	    		if( inventory.Value.quantity <= 0 ){
-	    			Debug.Log("USED ALL THIS POWER " + inventory.Key );
-	    			PowerType newPower = RandomPower();
-				
-		    		//draftedPowers.Remove( inventory.Key );
-		    		if((newPower == powerNum1 || newPower == powerNum2) && inventory.Value.quantity <= 0)
-		    			inventory.Value.quantity = 1;
-		    		else{
-		    			//draftedPowers.Remove( inventory.Key );
-		    		    draftedPowers.Add(newPower, new InventoryPower(newPower, false));
-		    		}
-				
-			    	//DestroyDummyInv();
-			    	//ShowTriggers();
-			    	//InventoryGrid.Reposition();
-				
-			    	break;
-			    }
-		    }
+		if(inventoryPowers.Count < 2){
+			//avoid giving same power
+			PowerType newPower = PowerType.UNDEFINED;
+			do {
+				newPower =  RandomPower();
+			} while (inventoryPowers.ContainsKey(newPower));
+
+			InventoryPower freePower = new InventoryPower(newPower, false);
+
+			inventoryPowers.Add(newPower, freePower);
+			AddToInventory(freePower);
         }
 	}
 

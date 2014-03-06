@@ -41,13 +41,15 @@ public class PowerSlot : MonoBehaviour {
 			Debug.Log("Warning, you need to set a timer first.");
 	}
 	public void EnableActivation(){
+		print ("Manual version");
 		activationEnabled = true;
-		keyLabel.color = new Color(0f, 1f, 0f, 1f);
+		keyLabel.color = Color.green;
 	}
 
 	void EnableActivation(PowerSpawn spawn){
+		print ("Timed version");
 		activationEnabled = true;
-		keyLabel.color = new Color(0f, 1f, 0f, 1f);
+		keyLabel.color = Color.green;
 	}
 
 	// Check for key press and call event .
