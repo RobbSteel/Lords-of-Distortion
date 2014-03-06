@@ -27,7 +27,7 @@ public class TrapFountain : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag == "Player"){
-			if(!used){
+			if(!used && placementUI.CanResupply()){
 				placementUI.Resupply();
 				used = true;
 				audio.Play();

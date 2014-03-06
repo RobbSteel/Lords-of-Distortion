@@ -29,17 +29,18 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite windSprite;
 	public Sprite transferSprite;
 	public Sprite boulderSprite;
-    public Sprite freezeSprite;
+	public Sprite freezeSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
-	Dictionary<PowerType, InventoryPower> draftedPowers;
+	private Dictionary<PowerType, PowerBoard> boardsByType = new Dictionary<PowerType, PowerBoard>();
+	private List<PowerBoard> fixedBoards = new List<PowerBoard>();
+
+	Dictionary<PowerType, InventoryPower> inventoryPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-    //Want to use this to keep track of the gameobjects in allTraps and destroy them after theyve been used
+
     public List<GameObject> allTrapsGO = new List<GameObject>();
-    //Powers the player starts out with
-    public List<GameObject> currentPowers = new List<GameObject>();
-    //Clears the ghost image of the power icon left behind after activating.
+    public List<GameObject> slots = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
 
     // allTraps is the powers placed
@@ -85,7 +86,7 @@ public class PlacementUI : MonoBehaviour {
 	GameObject dottedLineInstance;
 
 	void Awake(){
-		draftedPowers = new Dictionary<PowerType, InventoryPower>();
+		inventoryPowers = new Dictionary<PowerType, InventoryPower>();
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
@@ -99,8 +100,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.GRAVITY, windSprite);
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 		icons.Add(PowerType.BOULDER, boulderSprite);
-        icons.Add(PowerType.FREEZE, freezeSprite);
-
+		icons.Add(PowerType.FREEZE, freezeSprite);
 		/*Hard code some powers for now*/
 		/*
          * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
@@ -110,48 +110,69 @@ public class PlacementUI : MonoBehaviour {
          */
         /* Randomize some powers */
 
-        draftedPowers.Add(powerNum1, new InventoryPower(powerNum1, 1));
-        draftedPowers.Add(powerNum2, new InventoryPower(powerNum2, 1));
+        inventoryPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
+        inventoryPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
 	}
 	
 	void Start(){
         cam = Camera.main;
 
-		/*Turn available powers into UI buttons.*/
-		foreach(var inventoryPower in draftedPowers){
+		/*Turn available powers into empty boards depending on count. Also
+		 puts in initial slots.*/
 
-			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
+		int i = 1;
+		foreach(var inventoryPower in inventoryPowers){
+
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
-			buttons.Add(entry.GetComponent<UIButton>());
-			UIEventListener.Get(entry).onClick  += PowerButtonClick;
-			PowerBoard info = entry.GetComponent<PowerBoard>();
-			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
-            currentPowers.Add(entry);
+			entry.GetComponent<PowerBoard>().index = i;
+			fixedBoards.Add( entry.GetComponent<PowerBoard>());
+			AddToInventory(inventoryPower.Value);
+			i++;
 		}
 		TriggerGrid.Reposition();
 	}
 
-    /// <summary>
-    /// Destroy GameObjects in dummyInv. Removes used items from Grid.
-    /// </summary>
-    public void DestroyDummyInv()
-    {
-        foreach (GameObject g0 in dummyInv)
-        {
-            NGUITools.Destroy(g0);
-        }
-    }
+	//Finds first empty powerboard and insert new power.
+	void AddToInventory(InventoryPower associatedPower){
 
-    /// <summary>
-    /// Enable or Disable GameObjects tied to the player's original powers. 
-    /// </summary>
-    public void ToggleStartPowers(bool enabled)
-    {
-        foreach (GameObject g0 in currentPowers)
-        {
-            g0.SetActive(enabled);
-        }
-    }
+		foreach(PowerBoard board in fixedBoards){
+
+			if(board.currentPower == null){
+				//add slot as child to empty board
+				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
+
+				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower);
+				slots.Add(slot);
+				board.SetChild(slot.GetComponent<PowerSlot>());
+				buttons.Add(slot.GetComponent<UIButton>());
+				UIEventListener.Get(slot).onClick  += PowerButtonClick;
+
+				PowerBoard boardReference = null;
+				boardsByType.TryGetValue(associatedPower.type, out boardReference);
+				if(boardReference == null){
+					boardsByType.Add(associatedPower.type, board);
+				}
+				break;
+			}
+		}
+	}
+
+	//removes slot from board.
+	public void RemoveFromInventory(PowerType type){
+		GameObject slot = boardsByType[type].currentPower.gameObject;
+		buttons.Remove(slot.GetComponent<UIButton>());
+		boardsByType[type].RemoveChild();
+		boardsByType.Remove(type);
+		inventoryPowers.Remove(type);
+	}
+
+	//Enable text label and set a key
+	void GiveTrigger(GameObject slot, int triggerKey){
+		slot.GetComponent<PowerSlot>().keyText = triggerKey.ToString();
+		slot.GetComponentInChildren<UILabel>().enabled = true;
+		slot.GetComponentInChildren<UILabel>().text = triggerKey.ToString();
+	}
+
 
 	/// <summary>
 	///Place powers instantly without using triggers. 
@@ -162,23 +183,34 @@ public class PlacementUI : MonoBehaviour {
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
 			deadScreen = true;
-            
-            //Destroy boards placed in inventory grid used as the offset.
-            DestroyDummyInv();  
 
-            //Re-activate original powers for use.
-            ToggleStartPowers(true);
+			//resupply twice
+			Resupply();
+			Resupply();
 
-			foreach(var inventoryPower in draftedPowers){
+			foreach(var inventoryPower in inventoryPowers){
 				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
+				inventoryPower.Value.infinite = true;
 			}
 		}
-
+		//TODO: destroy untriggered trapss
 		GridEnabled(true);
 	}
 
+	//Check which boards have something in them, and if they've been placed, enable triggers.
+	public void ShowTriggersInitial(){
+		state = PlacementState.Default;
+		foreach(PowerBoard board in fixedBoards){
+			if(board.currentPower.linkedSpawn != null){
+				GiveTrigger(board.currentPower.gameObject, board.index);
+				board.currentPower.EnableActivation();
+			}
+		}
+	}
+
 	//Called when we want to tween away our GUI.
+	/* no
 	public void ShowTriggers(){
 		state = PlacementState.Default;
 		int i = 0;
@@ -214,7 +246,7 @@ public class PlacementUI : MonoBehaviour {
 			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
 			Sprite sprite = null;
 			icons.TryGetValue(spawn.type, out sprite);
-			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+			slot.GetComponent<PowerSlot>().Initialize( sprite, spawn);
             slot.GetComponentInChildren<UILabel>().enabled = true;
             slot.GetComponentInChildren<UILabel>().text = (i+1).ToString();
             slot.GetComponentInChildren<UIStretch>().container = slot;
@@ -251,6 +283,28 @@ public class PlacementUI : MonoBehaviour {
         }
     }
 
+	/// <summary>
+    /// Destroy GameObjects in dummyInv. Removes used items from Grid.
+    /// </summary>
+    public void DestroyDummyInv()
+    {
+        foreach (GameObject g0 in dummyInv)
+        {
+            NGUITools.Destroy(g0);
+        }
+    }
+
+    /// <summary>
+    /// Enable or Disable GameObjects tied to the player's original powers. 
+    /// </summary>
+    public void ToggleStartPowers(bool enabled)
+    {
+        foreach (GameObject g0 in slots)
+        {
+            g0.SetActive(enabled);
+        }
+    }
+*/
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
         //UpdateTriggerColor();
@@ -295,12 +349,13 @@ public class PlacementUI : MonoBehaviour {
 
 	/*The button that was pressed is passed in as a GameObject*/
 	public void PowerButtonClick(GameObject sender){
-		PowerBoard activeInfo = sender.GetComponent<PowerBoard>();
+		PowerSlot activeInfo = sender.GetComponent<PowerSlot>();
 		//Checks if we still have any left before doing anything.
-		if (activeInfo.associatedPower.quantity > 0 && state != PlacementState.MovingPower && !live)
+		if (state != PlacementState.MovingPower && !live)
 		{
 			SpawnPowerVisual(activeInfo);
 			FollowMouse();
+			//removepowerfrom
 		}
         else if (live)
         {
@@ -335,7 +390,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	/*Take a power prefab and strip it down to the visuals. .*/
-	private void SpawnPowerVisual(PowerBoard info){
+	private void SpawnPowerVisual(PowerSlot info){
 
 		//remove 1 from quanitity, disable button if == 0
 		if(--info.associatedPower.quantity <= 0)
@@ -351,8 +406,8 @@ public class PlacementUI : MonoBehaviour {
 		activePower.tag = "UIPower";
 
 
-		Color uiColor = Color.magenta;
-		uiColor.a = .4f;
+		Color uiColor = new Color(.5f, 0f, 0f);
+		uiColor.a = .6f;
 		activePower.renderer.material.color = uiColor;
 		ChangeParticleColor(activePower, uiColor);
 
@@ -370,28 +425,17 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	private void LivePlacement(PowerSpawn spawn){
-
+		print ("disable triggering until time is up");
 		spawn.SetTimer(3f); //start armament time
         
         //TODO: start radial cooldown on actives
-		/*
-		 * switch back to all triggers.
-		if(PowerSpawn.TypeIsPassive(spawn.type)){
-
-			print ("add timed spawn locally and remotely");
-			spawn.spawnTime = 3f; //spawn real trap 3 seconds later.
-			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
-			//spawn.timeUpEvent += DestroyUIPower; 
-		}
-		*/
-	//	else{
-			print ("disable triggering until time is up");
-			//Do this for now:
-			ShowTriggers();
-			//activatedTraps.Add(spawn);
-		//}
+		PowerBoard relevantBoard = boardsByType[spawn.type];
+		PowerSlot slotFromBoard = relevantBoard.currentPower;
+		//Give button a trigger (inital color)
+		GiveTrigger(slotFromBoard.gameObject, relevantBoard.index);
+		//dont immediately enable key triggering
+		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;
-        spawn.timeUpEvent += UpdateTriggerColor;
 
 	}
 	
@@ -440,12 +484,6 @@ public class PlacementUI : MonoBehaviour {
 		}
 	}
 
-	private void PowerMetric(GameObject powername){
-
-		GA.API.Design.NewEvent(powername.name + " Spawn", powername.transform.position);
-
-	}
-
 	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
         timer = 3.5f;
@@ -460,9 +498,14 @@ public class PlacementUI : MonoBehaviour {
 			spawn = new PowerSpawn();
 			spawn.type = activePowerType;
 			placedPowers.Add(activePower, spawn);
-			//TODO: Check if power is triggered or a trap.
 			allTraps.Add(spawn);
 			spawnByID.Add(spawn.GetLocalID(), spawn);
+
+			//link associated spawn to ui script
+			PowerBoard relevantBoard = boardsByType[spawn.type];
+			PowerSlot slotFromBoard = relevantBoard.currentPower;
+			slotFromBoard.SetSpawn(spawn);
+
 			/*
 			 * revert to no passives
 			if(PowerSpawn.TypeIsPassive(spawn.type)){
@@ -473,13 +516,6 @@ public class PlacementUI : MonoBehaviour {
 		}
 
 		spawn.position = activePower.transform.position;
-		
-		if(GameObject.Find("CollectData") != null){
-			PowerMetric(activePower);
-		}
-
-
-
 
 		KillMovement(activePower);
 
@@ -565,8 +601,8 @@ public class PlacementUI : MonoBehaviour {
 	private void GridEnabled(bool state){
 		powerButtonsEnabled = state;
         foreach(UIButton button in buttons){
-			//if a power is out, dont re-enable it button
-			if(button.GetComponent<PowerBoard>().associatedPower.quantity > 0)
+			//if a power is out, dont re-enable its button
+			if(button.GetComponent<PowerSlot>().associatedPower.quantity > 0)
 				button.isEnabled = state;
 		}
 	}
@@ -602,41 +638,22 @@ public class PlacementUI : MonoBehaviour {
 		this.enabled = true;
 	}
 
-	
+	public bool CanResupply(){
+		return inventoryPowers.Count < 2;
+	}
 	public void Resupply(){
-        int k = 0;
         // Make sure players can only hold at most 2 powers. In their inventory and on the map.
-        foreach(var inv in allTraps)
-        {
-            k++;
-        }
-        foreach(var inv in draftedPowers)
-        {
-            k += inv.Value.quantity;
-        }
-        if (k < 2)
-        { 
-		    foreach( var inventory in draftedPowers ){
-	    		Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
-	    		if( inventory.Value.quantity <= 0 ){
-	    			Debug.Log("USED ALL THIS POWER " + inventory.Key );
-	    			PowerType newPower = RandomPower();
-				
-		    		//draftedPowers.Remove( inventory.Key );
-		    		if((newPower == powerNum1 || newPower == powerNum2) && inventory.Value.quantity <= 0)
-		    			inventory.Value.quantity = 1;
-		    		else{
-		    			//draftedPowers.Remove( inventory.Key );
-		    		    draftedPowers.Add(newPower, new InventoryPower(newPower, 1));
-		    		}
-				
-			    	//DestroyDummyInv();
-			    	ShowTriggers();
-			    	//InventoryGrid.Reposition();
-				
-			    	break;
-			    }
-		    }
+		if(inventoryPowers.Count < 2){
+			//avoid giving same power
+			PowerType newPower = PowerType.UNDEFINED;
+			do {
+				newPower =  RandomPower();
+			} while (inventoryPowers.ContainsKey(newPower));
+
+			InventoryPower freePower = new InventoryPower(newPower, false);
+
+			inventoryPowers.Add(newPower, freePower);
+			AddToInventory(freePower);
         }
 	}
 

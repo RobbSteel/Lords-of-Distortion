@@ -10,33 +10,50 @@ public class PowerSlot : MonoBehaviour {
 	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
 	public static event KeyPress powerKey;
 	UILabel keyLabel;
-	UISprite powerIcon;
-	string keyText;
+	UI2DSprite powerIcon;
+	public string keyText;
+	bool activationEnabled = false;
 
-	bool activationEnabled = true;
+	
+	public InventoryPower associatedPower;
 
-	public void Initialize(string key, Sprite sprite, PowerSpawn linkedSpawn){
-		keyText = key;
-		this.linkedSpawn = linkedSpawn;
+
+	public void Initialize(Sprite sprite, InventoryPower power){
+		associatedPower = power;
         if(GameObject.Find("TriggerKey") != null)
         { 
 		    keyLabel = GameObject.Find("TriggerKey").GetComponent<UILabel>();
-		    //keyLabel.text = key;
         }
-		powerIcon = GetComponent<UISprite>();
-		powerIcon.spriteName = sprite.name;
+		powerIcon = GetComponent<UI2DSprite>();
+		powerIcon.sprite2D = sprite;
+	}
+
+	public void SetSpawn(PowerSpawn linkedSpawn){
+		this.linkedSpawn = linkedSpawn;
+	}
+	//make sure to call set spawn before this
+	public void UseTimer(){
 		if(linkedSpawn.timerSet){
 			activationEnabled = false;
 			linkedSpawn.timeUpEvent += EnableActivation;
 		}
+		else
+			Debug.Log("Warning, you need to set a timer first.");
 	}
-	void EnableActivation(PowerSpawn spawn){
+	public void EnableActivation(){
+		print ("Manual version");
 		activationEnabled = true;
+		keyLabel.color = Color.green;
+	}
+
+	void EnableActivation(PowerSpawn spawn){
+		print ("Timed version");
+		activationEnabled = true;
+		keyLabel.color = Color.green;
 	}
 
 	// Check for key press and call event .
 	void Update () {
-        float currentTime = TimeManager.instance.time;
 		if(activationEnabled && Input.GetKeyDown(keyText)){
             wasSpawned = true;
 			print("Pressed " + keyText + ", try to spawn that power");
