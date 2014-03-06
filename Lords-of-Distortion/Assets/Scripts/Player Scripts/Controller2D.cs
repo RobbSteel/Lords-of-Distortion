@@ -27,6 +27,17 @@ public class Controller2D : MonoBehaviour {
 	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
+
+	//Player Audio Clips  --
+	public AudioClip hookSfx;
+	public AudioClip hookHitSfx;
+	public AudioClip hookWallHitSfx;
+	public AudioClip meleeSfx;
+	public AudioClip meleeHitSfx;
+	public AudioClip deathSfx;
+	public AudioClip jumpSfx;
+
+
 	
 
 
