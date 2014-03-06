@@ -292,7 +292,10 @@ public class PlayerStatus : MonoBehaviour {
 	}
 
 	public void Frozen(){
+
+		if(GameObject.Find("CollectData") != null){
 		GA.API.Design.NewEvent("Times Frozen", transform.position);
+		}
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.enabled = false;
