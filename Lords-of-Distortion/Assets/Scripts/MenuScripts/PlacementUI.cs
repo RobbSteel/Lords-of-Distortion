@@ -436,6 +436,12 @@ public class PlacementUI : MonoBehaviour {
 		}
 	}
 
+	private void PowerMetric(GameObject powername){
+
+		GA.API.Design.NewEvent(powername.name + " Spawn", powername.transform.position);
+
+	}
+
 	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
         timer = 3.5f;
@@ -463,6 +469,13 @@ public class PlacementUI : MonoBehaviour {
 		}
 
 		spawn.position = activePower.transform.position;
+		
+		if(GameObject.Find("CollectData") != null){
+			PowerMetric(activePower);
+		}
+
+
+
 
 		KillMovement(activePower);
 
