@@ -61,6 +61,10 @@ public class Melee : MonoBehaviour {
 
 	private void startMelee(){
 
+		if(GameObject.Find("CollectData") != null){
+		GA.API.Design.NewEvent("Melee Attack", transform.position);
+		}
+
 		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
 		// Enable Box Collider 2D
 		meleeObject.GetComponent<BoxCollider2D>().enabled = true;

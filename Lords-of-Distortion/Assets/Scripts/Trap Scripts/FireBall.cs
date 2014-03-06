@@ -25,7 +25,11 @@ public class FireBall : Power
 
     public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		GA.API.Design.NewEvent("Fireball Death", player.transform.position);
+
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Fireball Death", player.transform.position);
+		}
+		
 		controller.Die();
 
 	}

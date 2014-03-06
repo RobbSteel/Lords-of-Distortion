@@ -65,6 +65,11 @@ public class HookHit : MonoBehaviour {
 		if(col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
 
 			if(Network.isServer){
+
+				if(GameObject.Find("Hook Hits") != null){
+					GA.API.Design.NewEvent("Melee Attack", col.transform.position);
+				}
+
 				hookedPlayer = col.gameObject;
 				NetworkController  affectedPlayerNC = hookedPlayer.GetComponent<NetworkController>();
 			
