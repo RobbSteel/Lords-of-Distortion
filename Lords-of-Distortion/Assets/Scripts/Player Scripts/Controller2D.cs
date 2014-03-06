@@ -30,8 +30,6 @@ public class Controller2D : MonoBehaviour {
 
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
-	public AudioClip hookHitSfx;
-	public AudioClip hookWallHitSfx;
 	public AudioClip meleeSfx;
 	public AudioClip meleeHitSfx;
 	public AudioClip deathSfx;
