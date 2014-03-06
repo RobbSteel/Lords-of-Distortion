@@ -2,12 +2,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlacementUI : MonoBehaviour {
 
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
-
 
 	//The prefab for the UI elements in grid.
 	public GameObject PowerBoard;
@@ -35,11 +35,11 @@ public class PlacementUI : MonoBehaviour {
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
 
-
+    public List<GameObject> allTrapsGO = new List<GameObject>();
     public List<GameObject> currentPowers = new List<GameObject>();
     public List<GameObject> dummyInv = new List<GameObject>();
 
-
+    // allTraps is the powers placed
 	public List<PowerSpawn> allTraps = new List<PowerSpawn>();
 	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
@@ -71,7 +71,7 @@ public class PlacementUI : MonoBehaviour {
 
 	//http://www.youtube.com/watch?v=eUFY8Zw0Bag
 	public bool live = false;
-	bool useTimer = false;
+	bool deadScreen = false;
 
 
 	PlacementState state = PlacementState.Default;
@@ -86,8 +86,8 @@ public class PlacementUI : MonoBehaviour {
 		prefabs = GetComponent<PowerPrefabs>();
 		icons = new Dictionary<PowerType, Sprite>();
 
-        powerNum1 = PowerSpawn.RandomActivePower();
-        powerNum2 = PowerSpawn.RandomPassivePower();
+        powerNum1 = RandomActivePower();
+        powerNum2 = RandomPassivePower();
 
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
@@ -117,14 +117,14 @@ public class PlacementUI : MonoBehaviour {
 		foreach(var inventoryPower in draftedPowers){
 
 			//GameObject entry = Instantiate (PowerEntry, transform.position, Quaternion.identity) as GameObject;
-			GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			buttons.Add(entry.GetComponent<UIButton>());
 			UIEventListener.Get(entry).onClick  += PowerButtonClick;
 			PowerBoard info = entry.GetComponent<PowerBoard>();
 			info.Initialize(inventoryPower.Value, icons[inventoryPower.Key]);
             currentPowers.Add(entry);
 		}
-		InventoryGrid.Reposition();
+		TriggerGrid.Reposition();
 	}
 
     /// <summary>
@@ -157,7 +157,7 @@ public class PlacementUI : MonoBehaviour {
 
 		if(infinitePowers){
 			//Only limit placement if the player is dead and has infinite powers.
-			useTimer = true;
+			deadScreen = true;
             
             //Destroy boards placed in inventory grid used as the offset.
             DestroyDummyInv();  
@@ -184,19 +184,6 @@ public class PlacementUI : MonoBehaviour {
 
         DestroyDummyInv();
 
-        //Add powers to InventoryGrid to offset power icons
-        foreach (var inventoryPower in draftedPowers)
-        {
-            InventoryPower inv;
-            draftedPowers.TryGetValue(inventoryPower.Key, out inv);
-         
-            if (inv.quantity <= 0 && !PowerSpawn.TypeIsPassive(inv.type))
-            {
-                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
-                //buttons.Add(entry.GetComponent<UIButton>());
-                dummyInv.Add(entry);
-            }
-        }
         //Add powers to InventoryGrid that players can use to spawn powers mid game
         foreach (var inventoryPower in draftedPowers)
         {
@@ -204,7 +191,7 @@ public class PlacementUI : MonoBehaviour {
             draftedPowers.TryGetValue(inventoryPower.Key, out inv);
             if (inv.quantity > 0)
             {
-                GameObject entry = NGUITools.AddChild(InventoryGrid.gameObject, PowerBoard);
+                GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
                 //buttons.Add(entry.GetComponent<UIButton>());
                 UIEventListener.Get(entry).onClick += PowerButtonClick;
                 PowerBoard info = entry.GetComponent<PowerBoard>();
@@ -212,27 +199,57 @@ public class PlacementUI : MonoBehaviour {
                 dummyInv.Add(entry);
             }
         }
-        InventoryGrid.Reposition();
 
+        TriggerGrid.Reposition();
+        
         //Set Triggers in appropriate spot
+        // Need something to prevent duplicates from happening
         foreach(PowerSpawn spawn in allTraps){
-            if(PowerSpawn.TypeIsActive(spawn.type))
-            { 
-			    GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
-			    Sprite sprite = null;
-			    icons.TryGetValue(spawn.type, out sprite);
-			    slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
-			    i++;
-            }
+            Debug.Log("POWERSPAWN IN ALL TRAPS: " + i);
+            
+			GameObject slot = NGUITools.AddChild(TriggerGrid.gameObject, PowerSlot);
+			Sprite sprite = null;
+			icons.TryGetValue(spawn.type, out sprite);
+			slot.GetComponent<PowerSlot>().Initialize(triggerKeys[i], sprite, spawn);
+            slot.GetComponentInChildren<UILabel>().enabled = true;
+            slot.GetComponentInChildren<UILabel>().text = (i+1).ToString();
+            slot.GetComponentInChildren<UIStretch>().container = slot;
+            slot.GetComponentInChildren<UIAnchor>().container = slot;
+            allTrapsGO.Add(slot);
+			i++;
 		}
+        RemoveDuplicatePowerSlots(allTraps);
         TriggerGrid.Reposition();
 
 	}
 
+    // changes color of trigger number 
+    public void UpdateTriggerColor(PowerSpawn spawn)
+    {
+        foreach(GameObject g0 in allTrapsGO)
+        {
+            if (spawn.timeCountdown <= 0)
+                g0.GetComponentInChildren<UILabel>().color = new Color(0f, 1f, 0f, 1f);
+        }
+    }
+
+    public void RemoveDuplicatePowerSlots(List<PowerSpawn> traps)
+    {
+        int i = 0;
+        GameObject[] powerSlots = GameObject.FindGameObjectsWithTag("PowerSlot");
+        foreach(GameObject g0 in powerSlots)
+        {
+            if(g0.GetComponent<PowerSlot>().wasSpawned)
+            {
+                Destroy(g0);
+            }
+            i++;
+        }
+    }
 
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
-
+        //UpdateTriggerColor();
         if (live)
         {
             timer -= Time.deltaTime;
@@ -283,11 +300,12 @@ public class PlacementUI : MonoBehaviour {
 		}
         else if (live)
         {
-			if(!useTimer){
+			if(!deadScreen){
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
-			else if(timer <= 0.0f){
+            // Uncomment the timer to set restrictions on how often players place powers while dead.
+			else{// if(timer <= 0.0f){
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
@@ -333,9 +351,9 @@ public class PlacementUI : MonoBehaviour {
 		uiColor.a = .4f;
 		activePower.renderer.material.color = uiColor;
 		ChangeParticleColor(activePower, uiColor);
+
 		//power.GetComponent<ParticleSystem>().startColor;
 		
-
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -348,11 +366,12 @@ public class PlacementUI : MonoBehaviour {
 	}
 
 	private void LivePlacement(PowerSpawn spawn){
-		//Destroy(activePower);
-		//spawnNow(spawn, gameObject);
-		
+
 		spawn.SetTimer(3f); //start armament time
-		//TODO: start radial cooldown on actives
+        
+        //TODO: start radial cooldown on actives
+		/*
+		 * switch back to all triggers.
 		if(PowerSpawn.TypeIsPassive(spawn.type)){
 
 			print ("add timed spawn locally and remotely");
@@ -360,22 +379,21 @@ public class PlacementUI : MonoBehaviour {
 			//TODO: Instead of destroying, switch to live color. Destroy when someone sets off
 			//spawn.timeUpEvent += DestroyUIPower; 
 		}
-		else{
+		*/
+	//	else{
 			print ("disable triggering until time is up");
 			//Do this for now:
 			ShowTriggers();
 			//activatedTraps.Add(spawn);
-		}
+		//}
 		spawn.timeUpEvent += PowerArmed;
+        spawn.timeUpEvent += UpdateTriggerColor;
 
 	}
 	
 	void ChangeParticleColor(GameObject power, Color color){
 
 		ParticleSystem particleSystem = power.GetComponent<ParticleSystem>();
-
-
-
 
 		if(particleSystem != null)
 		{
@@ -435,10 +453,13 @@ public class PlacementUI : MonoBehaviour {
 			//TODO: Check if power is triggered or a trap.
 			allTraps.Add(spawn);
 			spawnByID.Add(spawn.GetLocalID(), spawn);
+			/*
+			 * revert to no passives
 			if(PowerSpawn.TypeIsPassive(spawn.type)){
 				//spawn.SetTimer(0f);
 				delayedTraps.Enqueue(spawn);
 			}
+			*/
 		}
 
 		spawn.position = activePower.transform.position;
@@ -455,9 +476,14 @@ public class PlacementUI : MonoBehaviour {
 		else {
 			//When we're placing powers mid game:
 			if(live){
-				LivePlacement(spawn);
+				if(deadScreen){
+					Destroy(activePower);
+					spawnNow(spawn, gameObject);
+				}
+				else
+					LivePlacement(spawn);
 			}
-            
+
 			state = PlacementState.Default;
 			GridEnabled(true);
 		}
@@ -505,7 +531,12 @@ public class PlacementUI : MonoBehaviour {
 
 
 		if(live){
-			LivePlacement(spawn);
+			if(deadScreen){
+				Destroy(activePower);
+				spawnNow(spawn, gameObject);
+			}
+			else
+				LivePlacement(spawn);
 		}
 		//Return buttons to normal
 		state = PlacementState.Default;
@@ -556,28 +587,40 @@ public class PlacementUI : MonoBehaviour {
 
 	
 	public void Resupply(){
-		foreach( var inventory in draftedPowers ){
-			Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
-			if( inventory.Value.quantity <= 0 ){
-				Debug.Log("USED ALL THIS POWER " + inventory.Key );
-				powerNum1 = PowerSpawn.RandomActivePower();
-				powerNum2 = PowerSpawn.RandomPassivePower();
+        int k = 0;
+        // Make sure players can only hold at most 2 powers. In their inventory and on the map.
+        foreach(var inv in allTraps)
+        {
+            k++;
+        }
+        foreach(var inv in draftedPowers)
+        {
+            k += inv.Value.quantity;
+        }
+        if (k < 2)
+        { 
+		    foreach( var inventory in draftedPowers ){
+	    		Debug.Log( "Checking " + inventory.Key + " Amount: " + inventory.Value.quantity );
+	    		if( inventory.Value.quantity <= 0 ){
+	    			Debug.Log("USED ALL THIS POWER " + inventory.Key );
+	    			PowerType newPower = RandomPower();
 				
-				//draftedPowers.Remove( inventory.Key );
-				if( inventory.Key == powerNum1 && inventory.Value.quantity <= 0  )
-					inventory.Value.quantity = 1;
-				else{
-					//draftedPowers.Remove( inventory.Key );
-					draftedPowers.Add( powerNum1 , new InventoryPower( powerNum1, 1));
-				}
+		    		//draftedPowers.Remove( inventory.Key );
+		    		if((newPower == powerNum1 || newPower == powerNum2) && inventory.Value.quantity <= 0)
+		    			inventory.Value.quantity = 1;
+		    		else{
+		    			//draftedPowers.Remove( inventory.Key );
+		    		    draftedPowers.Add(newPower, new InventoryPower(newPower, 1));
+		    		}
 				
-				//DestroyDummyInv();
-				//ShowTriggers();
-				//InventoryGrid.Reposition();
+			    	//DestroyDummyInv();
+			    	ShowTriggers();
+			    	//InventoryGrid.Reposition();
 				
-				break;
-			}
-		}
+			    	break;
+			    }
+		    }
+        }
 	}
 
 	//Destroy the associated UI power based solely on localID
@@ -603,4 +646,25 @@ public class PlacementUI : MonoBehaviour {
 			placedPowers.Remove(key);
 		}
     }
+
+    public PowerType RandomActivePower()
+    {
+        int thisOne = Random.Range(0, PowerSpawn.powersActive.Count);
+        return PowerSpawn.powersActive[thisOne];
+    }
+
+    public PowerType RandomPassivePower()
+    {
+        int thisOne = Random.Range(0, PowerSpawn.powersPassive.Count);
+        return PowerSpawn.powersPassive[thisOne];
+    }
+
+    public PowerType RandomPower()
+    {
+        int thisOne = Random.Range(0, 2);
+        if (thisOne == 0)
+            return RandomActivePower();
+        else return RandomPassivePower();
+    }
+
 }

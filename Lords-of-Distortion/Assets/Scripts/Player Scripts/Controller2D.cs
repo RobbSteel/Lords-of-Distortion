@@ -20,6 +20,7 @@ public class Controller2D : MonoBehaviour {
 	const float jumpVelocity = 12.5f;
 	public bool stunned;
 	public bool snared = false;
+	public bool deathOnHit;
 	public bool canJump;
 	public bool hasbomb;
 	bool stoppedJump;
@@ -50,6 +51,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
+		deathOnHit = false;
 		stunned = false;
 		canJump = true;
 		facingRight = true;

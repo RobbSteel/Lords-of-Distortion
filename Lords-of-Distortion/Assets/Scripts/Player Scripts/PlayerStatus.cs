@@ -296,7 +296,7 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.enabled = false;
-
+		playerControl.deathOnHit = true;
 
 	}
 
@@ -307,6 +307,7 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.anim.SetTrigger("unstunned");
 		currentStunMeter = 0;
 		playerControl.anim.enabled = true;
+		playerControl.deathOnHit = false;
 	}
 	
 	//Only runs if your stun bar is injured
