@@ -185,7 +185,7 @@ public class Controller2D : MonoBehaviour {
         {
             transform.parent = other.transform;
         }
-        else transform.parent = null;
+        
 	}
 
 	//while player is within the powers collider apply's powers on player 
@@ -198,7 +198,6 @@ public class Controller2D : MonoBehaviour {
         {
             transform.parent = other.transform;
         }
-        else transform.parent = null;
 
 		if (other.gameObject.tag == "Power")
 		{
