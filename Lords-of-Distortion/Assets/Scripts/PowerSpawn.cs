@@ -25,7 +25,7 @@ public class PowerSpawn : PriorityQueueNode {
 	public PowerType type;
 	public float spawnTime;
 	public Vector3 position;
-	public Vector3 direction = Vector3.zero;
+	public Vector3 direction = Vector3.right;
 	public NetworkPlayer owner;
 
 	//keeps track of the order in which these powers were spawned.

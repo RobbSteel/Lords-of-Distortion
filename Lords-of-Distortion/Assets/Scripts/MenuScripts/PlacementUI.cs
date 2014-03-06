@@ -393,8 +393,7 @@ public class PlacementUI : MonoBehaviour {
 	private void SpawnPowerVisual(PowerSlot info){
 
 		//remove 1 from quanitity, disable button if == 0
-		if(--info.associatedPower.quantity <= 0)
-			info.GetComponent<UIButton>().isEnabled = false;
+			//info.GetComponent<UIButton>().isEnabled = false;
 
 		activePowerType = info.associatedPower.type;
 
@@ -504,6 +503,8 @@ public class PlacementUI : MonoBehaviour {
 			//link associated spawn to ui script
 			PowerBoard relevantBoard = boardsByType[spawn.type];
 			PowerSlot slotFromBoard = relevantBoard.currentPower;
+			//Remove one from quantity
+			--slotFromBoard.associatedPower.quantity;
 			slotFromBoard.SetSpawn(spawn);
 
 			/*
