@@ -15,6 +15,8 @@ public class GravityField : Power {
 	}
     void Start()
     {
+		float angle = Mathf.Atan2(spawnInfo.direction.y, spawnInfo.direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		wind.enableEmission = false;
 		//float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		//transform.rotation = Quaternion.AngleAxis(angle-90f, Vector3.forward);
@@ -25,8 +27,8 @@ public class GravityField : Power {
 
     }
 	void Update(){
-		if(triggered)
-			Destroy(gameObject, 6f);
+
+			//Destroy(gameObject);
 	}
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
@@ -38,18 +40,19 @@ public class GravityField : Power {
 		callOnTrapTrigger ();
 
 		// CHANGE GRAVITY OF PLAYER
-		player.rigidbody2D.gravityScale = -3;
+		//player.rigidbody2D.gravityScale = -3;
+
+		player.rigidbody2D.velocity = spawnInfo.direction * 10;
 	}
 
     public override void PowerActionStay(GameObject player, Controller2D controller)
     {
-		//Debug.Log (transform.up);
-		//player.rigidbody2D.AddForce(transform.up * force);
-	}
 
+		player.rigidbody2D.velocity = spawnInfo.direction * 10;
+	}
     public override void PowerActionExit(GameObject player, Controller2D controller)
     {
-        player.rigidbody2D.gravityScale = 1;
+        //player.rigidbody2D.gravityScale = 1;
     }
   
     void OnDestroy()
