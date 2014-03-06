@@ -18,7 +18,7 @@ public class PowerSpawn : PriorityQueueNode {
 	public delegate void Timer(PowerSpawn powerSpawn);
 	public event Timer timeUpEvent;
 
-	float timeCountdown;
+	public float timeCountdown;
 	public bool timerSet = false;
 
 	public PowerType type;
@@ -33,12 +33,9 @@ public class PowerSpawn : PriorityQueueNode {
 	//Not guaranteed to be unique.
 	private int localID;
 
-
-    private static System.Random rnd = new System.Random();
-
 	private static List<PowerType> powersRequiringDirection;
-    private static List<PowerType> powersActive;
-    private static List<PowerType> powersPassive;
+    public static List<PowerType> powersActive;
+    public static List<PowerType> powersPassive;
 
 	public static bool TypeRequiresDirection(PowerType type){
 		return powersRequiringDirection.Contains(type);
@@ -50,18 +47,6 @@ public class PowerSpawn : PriorityQueueNode {
 
     public static bool TypeIsPassive(PowerType type){
         return powersPassive.Contains(type);
-    }
-
-    public static PowerType RandomActivePower()
-    {
-        int thisOne = rnd.Next(0, powersActive.Count);
-        return powersActive[thisOne];
-    }
-
-    public static PowerType RandomPassivePower()
-    {
-        int thisOne = rnd.Next(0, powersPassive.Count);
-        return powersPassive[thisOne];
     }
 
 	//The static constructor called automatically

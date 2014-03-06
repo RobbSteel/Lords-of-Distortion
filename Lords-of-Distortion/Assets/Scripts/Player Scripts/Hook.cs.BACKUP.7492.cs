@@ -97,11 +97,15 @@ public class Hook : MonoBehaviour {
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
+<<<<<<< HEAD
 				//AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
+=======
+
 				if(GameObject.Find("CollectData") != null){
 					GA.API.Design.NewEvent("Hook Shot", mouseClick);
 				}
 
+>>>>>>> 63fc4b52c2b72eb62efc911a36d379122aa1d5b1
 				GA.API.Design.NewEvent("Hook Shot", mouseClick);
 
 				if(Network.isServer)
