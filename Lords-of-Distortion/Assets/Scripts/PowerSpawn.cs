@@ -10,6 +10,7 @@ public enum PowerType{
 	GRAVITY,
 	EXPLOSIVE,
 	BOULDER,
+    FREEZE,
 	UNDEFINED
 }
 
@@ -60,6 +61,7 @@ public class PowerSpawn : PriorityQueueNode {
         powersActive.Add(PowerType.FIREBALL);
         powersActive.Add(PowerType.EXPLOSIVE);
 		powersActive.Add(PowerType.BOULDER);
+        powersActive.Add(PowerType.FREEZE);
 
         powersPassive = new List<PowerType>();
         powersPassive.Add(PowerType.GRAVITY);
