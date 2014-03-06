@@ -17,6 +17,9 @@ public class HookHit : MonoBehaviour {
 	public Vector3 targetPosition;
 	public Animator anim;
 
+	public AudioClip hookHitSfx;
+	public AudioClip hookWallHitSfx;
+
 	void Awake(){
 
 		destroyed = false;
@@ -58,6 +61,7 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			anim.SetTrigger("Hooked");
 			hooked = true;
+			//AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
 
 
 		}
@@ -72,13 +76,15 @@ public class HookHit : MonoBehaviour {
 
 				hookedPlayer = col.gameObject;
 				NetworkController  affectedPlayerNC = hookedPlayer.GetComponent<NetworkController>();
-			
+			    
 				affectedPlayerC2D = hookedPlayer.GetComponent<Controller2D>();
 				affectedPlayerC2D.Snare();
 				rigidbody2D.velocity = Vector2.zero;
 				targetPosition = transform.position;
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				playerhooked = true; 
+				//AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
+
 
 				shooter.GetComponent<Hook>().HitPlayerLocal(transform.position, affectedPlayerNC.theOwner);
 				//TODO: make this animation appear on all players screens

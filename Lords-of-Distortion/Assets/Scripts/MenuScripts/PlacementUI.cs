@@ -29,14 +29,17 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite windSprite;
 	public Sprite transferSprite;
 	public Sprite boulderSprite;
+    public Sprite freezeSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	Dictionary<PowerType, InventoryPower> draftedPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
 
-
+    //Want to use this to keep track of the gameobjects in allTraps and destroy them after theyve been used
     public List<GameObject> allTrapsGO = new List<GameObject>();
+    //Powers the player starts out with
     public List<GameObject> currentPowers = new List<GameObject>();
+    //Clears the ghost image of the power icon left behind after activating.
     public List<GameObject> dummyInv = new List<GameObject>();
 
     // allTraps is the powers placed
@@ -96,6 +99,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.GRAVITY, windSprite);
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);
 		icons.Add(PowerType.BOULDER, boulderSprite);
+        icons.Add(PowerType.FREEZE, freezeSprite);
 
 		/*Hard code some powers for now*/
 		/*
