@@ -66,8 +66,8 @@ public class HookHit : MonoBehaviour {
 
 			if(Network.isServer){
 
-				if(GameObject.Find("Hook Hits") != null){
-					GA.API.Design.NewEvent("Melee Attack", col.transform.position);
+				if(GameObject.Find("CollectData") != null){
+					GA.API.Design.NewEvent("Hook Hits", col.transform.position);
 				}
 
 				hookedPlayer = col.gameObject;
