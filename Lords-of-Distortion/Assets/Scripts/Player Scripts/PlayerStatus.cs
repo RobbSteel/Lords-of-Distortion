@@ -302,10 +302,9 @@ public class PlayerStatus : MonoBehaviour {
 
 	public void Frozen(){
 
-
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
-		playerControl.anim.enabled = false;
+		//playerControl.anim.enabled = false;
 		playerControl.deathOnHit = true;
 
 	}
