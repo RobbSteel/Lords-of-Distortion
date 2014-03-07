@@ -24,6 +24,10 @@ public class FreezeTrap : Power {
 		applyDmg = controller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
 
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Times Frozen", player.transform.position);
+		}
+
 		//to keep from duplicating the effect since we had 2 colliders 
 		if (!controller.transform.FindChild ("FrozenEffect(Clone)")) {
 			frozenEffect = (GameObject)Network.Instantiate (Resources.Load ("FrozenEffect"),player.transform.position, Quaternion.identity, 1);

@@ -165,6 +165,7 @@ public class PlayerStatus : MonoBehaviour {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun)
 
+				GA.API.Design.NewEvent("Smoke Stuns", transform.position);
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
 		}
 	}
@@ -207,7 +208,17 @@ public class PlayerStatus : MonoBehaviour {
 		//Only the owner of the character does anything with physics or death.
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
-		
+
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Melee Attack Hits", transform.position);
+		}
+
+		if(playerControl.deathOnHit){
+
+			print("shattered");
+			playerControl.Die();
+
+		}
 
 			float flip = 1f;
 			if(!fromLeftSide)
@@ -258,10 +269,8 @@ public class PlayerStatus : MonoBehaviour {
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
 
-		if(GameObject.Find("CollectData") != null){
-			GA.API.Design.NewEvent("Melee Attack Hits", transform.position);
-		}
 
+		print ("got hit");
 		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
 	}
 	
@@ -293,9 +302,7 @@ public class PlayerStatus : MonoBehaviour {
 
 	public void Frozen(){
 
-		if(GameObject.Find("CollectData") != null){
-		GA.API.Design.NewEvent("Times Frozen", transform.position);
-		}
+
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.enabled = false;

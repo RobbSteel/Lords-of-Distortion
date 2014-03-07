@@ -20,9 +20,9 @@ public class PowerSlot : MonoBehaviour {
 
 	public void Initialize(Sprite sprite, InventoryPower power){
 		associatedPower = power;
-        if(GameObject.Find("TriggerKey") != null)
+        if(transform.Find("TriggerKey") != null)
         { 
-		    keyLabel = GameObject.Find("TriggerKey").GetComponent<UILabel>();
+			keyLabel = transform.Find("TriggerKey").GetComponent<UILabel>();
         }
 		powerIcon = GetComponent<UI2DSprite>();
 		powerIcon.sprite2D = sprite;
@@ -40,14 +40,13 @@ public class PowerSlot : MonoBehaviour {
 		else
 			Debug.Log("Warning, you need to set a timer first.");
 	}
+	//can be called from anywhere (no parameters)
 	public void EnableActivation(){
-		print ("Manual version");
 		activationEnabled = true;
 		keyLabel.color = Color.green;
 	}
-
+	//To be called by timer in powerspawn
 	void EnableActivation(PowerSpawn spawn){
-		print ("Timed version");
 		activationEnabled = true;
 		keyLabel.color = Color.green;
 	}
