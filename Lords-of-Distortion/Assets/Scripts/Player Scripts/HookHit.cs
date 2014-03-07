@@ -57,6 +57,9 @@ public class HookHit : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
 
+			if(GameObject.Find("CollectData") != null){
+				GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
+			}
 			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
 			anim.SetTrigger("Hooked");
