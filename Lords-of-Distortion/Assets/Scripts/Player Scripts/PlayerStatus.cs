@@ -217,7 +217,7 @@ public class PlayerStatus : MonoBehaviour {
 
 			print("shattered");
 			playerControl.Die();
-
+			return;
 		}
 
 			float flip = 1f;
