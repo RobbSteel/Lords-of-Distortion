@@ -284,6 +284,8 @@ public class Controller2D : MonoBehaviour {
 			status.DestroyMashIcon();
 			//play death animation.
 			anim.SetTrigger("Die");
+            GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
+            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			//We don't need the next line any more
 			//networkController.instanceManager.KillPlayer(gameObject);
 		}
