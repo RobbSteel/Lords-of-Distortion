@@ -6,16 +6,20 @@ public class movingPlatform : MonoBehaviour {
     public Transform pointB;
     public float speed;
     public bool wait;
+    public float startAt;
+    public float pauseFor;
 
     IEnumerator Start()
     {
         var pointA = transform.position;
+        if (wait)
+            yield return new WaitForSeconds(startAt);
         while (true)
         {
             yield return StartCoroutine(MoveObject(transform, pointA, pointB.position, 3.0f));
             yield return StartCoroutine(MoveObject(transform, pointB.position, pointA, 3.0f));
             if (wait)
-                yield return new WaitForSeconds(5f);
+                yield return new WaitForSeconds(pauseFor);
         }
     }
 

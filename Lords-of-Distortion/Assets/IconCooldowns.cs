@@ -20,7 +20,7 @@ public class IconCooldowns : MonoBehaviour {
             character = GameObject.FindGameObjectWithTag("Player");
         }
         
-        if (Input.GetMouseButton(0))
+        if (Input.GetButtonDown("Fire2"))
         {
             if (character != null)
             {
@@ -30,6 +30,6 @@ public class IconCooldowns : MonoBehaviour {
         else
             timer -= Time.deltaTime;
 
-        hookCDBtnRed.fillAmount = timer / 5; //((Time.time - timer) / 5);
+        hookCDBtnRed.fillAmount = timer / 5;
 	}
 }
