@@ -364,7 +364,7 @@ public class PlacementUI : MonoBehaviour {
 				FollowMouse();
 			}
             // Uncomment the timer to set restrictions on how often players place powers while dead.
-			else{// if(timer <= 0.0f){
+			else if(timer <= 0.0f){
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
