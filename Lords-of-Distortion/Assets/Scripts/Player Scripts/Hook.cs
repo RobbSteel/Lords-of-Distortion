@@ -38,7 +38,7 @@ public class Hook : MonoBehaviour {
 		hookscript = go.GetComponent<HookHit>();
 		hookscript.networkController = networkController;
 		hookscript.shooter = gameObject;
-		hooktimer = 5;
+		hooktimer = 3;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

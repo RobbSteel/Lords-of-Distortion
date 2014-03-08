@@ -23,8 +23,8 @@ public class IconCooldowns : MonoBehaviour {
         }
         else
             timer -= Time.deltaTime;
-
-        hookCDBtnRed.fillAmount = timer / 5;
+        // The number in timer / x is the hooktimer value in Hook.cs
+        hookCDBtnRed.fillAmount = timer / 3;
      
 	}
 }

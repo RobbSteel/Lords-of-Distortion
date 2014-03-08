@@ -13,7 +13,6 @@ public class SmokeBomb : Power {
 	
 	void Awake(){
 		//triggered = false;
-		dmgTimer = timeTillDmg;
 		smoke = GetComponent<ParticleSystem>();
 		smoke.enableEmission = true;
 	}
