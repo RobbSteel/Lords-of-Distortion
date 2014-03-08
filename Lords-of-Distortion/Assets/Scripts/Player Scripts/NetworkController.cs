@@ -21,6 +21,7 @@ public class NetworkController : MonoBehaviour {
 	/* Synchronization Variables */                                                                                                                                                                                                                                      
 	private float currentSmooth = 0f;
 	private bool canInterpolate= false;
+	private bool canExtrapolate = false;
 	private float simTime;
 	
 
@@ -117,28 +118,38 @@ public class NetworkController : MonoBehaviour {
 	float interval = float.PositiveInfinity;
 
 
+	void ExtrapolatePosition(){
+
+	}
+
 	void Update () {
 		if (isOwner)
 			return;
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
-			//if we go past these two states, move to next one.
+			//if we go past these two states, try to move to next one.
 			if(currentSmooth >= interval){
-				if(states.Count > 2){
-					states.DiscardOldest();
+				//Delete oldest state since we don't need it.
+				states.DiscardOldest();
+
+				//Case 1: We still have states we can interpolate between
+				if(states.Count > 1){
 					//if we were perfectly in sync, we could reset to 0, but instead set it to the amount we overshot
 					currentSmooth = currentSmooth - interval; 
 				}
+				//Case 2: We're out, need to switch to prediction.
 				else {
-					Debug.Log("Missed too many packets. We need 2 states to interpolate between.");
+					Debug.Log("Packets missed or arriving slow. Switching to extrapolation.");
 					currentSmooth = 0f;
 					interval = float.PositiveInfinity;
 					canInterpolate = false;
-					//don't interpolate but let gravity do its job so that players dont freeze in air
-					rigidbody2D.isKinematic = false;
+					canExtrapolate = true;
 				}
 			}
+		}
+
+		if(canInterpolate){
 			//read the two oldest states.
 			State oldState = states.ReadOldest(); 
 			State newState = states.GetByIndex(1);
@@ -159,15 +170,37 @@ public class NetworkController : MonoBehaviour {
 				transform.position = newState.position;
 				oldState.position = newState.position;
 			}
-			else
+			else{
+				//interpolate!!
 				transform.position = Vector3.Lerp(oldState.position, newState.position,
 				                                  currentSmooth/(interval));
+			}
+
 			//The local simulation time of this thing.
-			simTime = oldState.remoteTime +  currentSmooth;
+			simTime = oldState.remoteTime + currentSmooth;
 
 			//simulate animations.
 			float unit = Mathf.Abs(newState.position.x - oldState.position.x) > .01f ? 1.0f : 0.0f;
 			controller2D.anim.SetFloat( "Speed", unit);
+		}
+
+		else if(canExtrapolate){
+
+			if(currentSmooth >= .25f){
+				Debug.Log("Too much lag, just stop movement");
+				currentSmooth = 0f;
+				canExtrapolate = false;
+				//don't interpolate but let gravity do its job so that players dont freeze in air
+				rigidbody2D.isKinematic = false;
+				return;
+			}
+			else{
+				//extrapolating
+				Vector3 estimatedVelocity = states.ReadOldest().position - transform.position;
+				transform.position = states.ReadOldest().position + estimatedVelocity * currentSmooth;
+				currentSmooth += Time.deltaTime;
+				//transform.position = Vector3.Lerp(oldState.position, newState.position, currentSmooth/(currentSmooth));
+			}
 		}
 	}
 
@@ -208,7 +241,7 @@ public class NetworkController : MonoBehaviour {
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
 					Debug.Log("lost previous packet");
-					Debug.Log("local" + newestTime + "server" + info.timestamp);
+					Debug.Log("Delay: " + (newestTime - info.timestamp) + " (s)");
 				}
 				else if(info.timestamp < newestTime) {
 					Debug.Log("out of order packet");
@@ -238,6 +271,8 @@ public class NetworkController : MonoBehaviour {
 			if(canInterpolate == false && states.Count >= 3){
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
+				//in case we were extrapolating
+				canExtrapolate = false;
 			}
 		}
 	}
