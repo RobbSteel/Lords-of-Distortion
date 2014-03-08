@@ -20,11 +20,7 @@ public class BlastRadius : Power {
 	public override void PowerActionStay(GameObject player, Controller2D controller)
 	{
 
-		if(GameObject.Find("CollectData") != null){
-			GA.API.Design.NewEvent("Explosion Death", transform.position);
-		}
-
-
+	
 		controller.Die();
 
 

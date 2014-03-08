@@ -109,7 +109,7 @@ public class TransferExplosive : Power
 						//var bombExpo = Instantiate (Resources.Load ("BombE"), transform.position, Quaternion.identity) as GameObject;
 						//Destroy (gameObject);
 
-				var bombanim = gameObject.GetComponent<Animator>();
+			var bombanim = gameObject.GetComponent<Animator>();
 			bombanim.enabled = true;
 				
 				}
@@ -120,7 +120,7 @@ public class TransferExplosive : Power
 	
 						explode = Instantiate (Resources.Load ("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
 						var charmark = Instantiate (Resources.Load ("Charmark"), transform.position, Quaternion.identity) as GameObject;
-						Destroy (explode, 1.0f);
+						Destroy (explode, 0.8f);
 						Destroy (gameObject);
             
 				} else {
