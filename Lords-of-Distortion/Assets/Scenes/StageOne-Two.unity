@@ -2432,6 +2432,8 @@ GameObject:
   - 212: {fileID: 367614046}
   - 61: {fileID: 367614045}
   - 114: {fileID: 367614044}
+  - 111: {fileID: 367614048}
+  - 95: {fileID: 367614047}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -2499,8 +2501,36 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!95 &367614047
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 367614042}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &367614048
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 367614042}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4829abd0ac785df4cb145b9774a41358, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &396325378
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,7 +2635,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &410370614
 Prefab:
@@ -2702,6 +2732,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 4.37113883e-08
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 1465671821}
@@ -2895,6 +2930,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 4.37113883e-08
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 732921633}
@@ -2989,6 +3029,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 1566382661}
@@ -4138,6 +4183,8 @@ GameObject:
   - 212: {fileID: 732921637}
   - 61: {fileID: 732921636}
   - 114: {fileID: 732921635}
+  - 111: {fileID: 732921639}
+  - 95: {fileID: 732921638}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -4205,8 +4252,36 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!95 &732921638
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 732921633}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &732921639
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 732921633}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4829abd0ac785df4cb145b9774a41358, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &770486033
 GameObject:
   m_ObjectHideFlags: 0
@@ -4572,6 +4647,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 401735283}
@@ -6856,6 +6936,8 @@ GameObject:
   - 212: {fileID: 1465671824}
   - 61: {fileID: 1465671823}
   - 114: {fileID: 1465671822}
+  - 111: {fileID: 1465671827}
+  - 95: {fileID: 1465671826}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -6912,7 +6994,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1465671825
 Transform:
@@ -6925,6 +7007,34 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 946834178}
+--- !u!95 &1465671826
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465671821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &1465671827
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465671821}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 7c5b0f6b1d9f01b4eb183d3139beaeb7, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1468400943
 GameObject:
   m_ObjectHideFlags: 0
@@ -7228,6 +7338,8 @@ GameObject:
   - 212: {fileID: 1565371754}
   - 61: {fileID: 1565371753}
   - 114: {fileID: 1565371752}
+  - 111: {fileID: 1565371756}
+  - 95: {fileID: 1565371755}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -7295,8 +7407,36 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!95 &1565371755
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565371750}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &1565371756
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565371750}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4829abd0ac785df4cb145b9774a41358, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1566382661
 GameObject:
   m_ObjectHideFlags: 0
@@ -7308,6 +7448,8 @@ GameObject:
   - 212: {fileID: 1566382665}
   - 61: {fileID: 1566382664}
   - 114: {fileID: 1566382663}
+  - 111: {fileID: 1566382667}
+  - 95: {fileID: 1566382666}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Power
@@ -7375,8 +7517,36 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_SortingLayerID: 1448056335
-  m_Sprite: {fileID: 21300000, guid: 224570a7c1cb6314f9212412964e10c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!95 &1566382666
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1566382661}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &1566382667
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1566382661}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4829abd0ac785df4cb145b9774a41358, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1573722173
 GameObject:
   m_ObjectHideFlags: 0
@@ -7875,8 +8045,8 @@ MonoBehaviour:
   inkSprite: {fileID: 21300000, guid: 4d7044b828d4a9d4a89c8953a300549b, type: 3}
   windSprite: {fileID: 21300000, guid: 6c8477ef063fe2c4b8cb79220905d874, type: 3}
   transferSprite: {fileID: 21300000, guid: bbc55ebdc3addc04fa129dbd369f27a9, type: 3}
-  boulderSprite: {fileID: 21300000, guid: 6fe48849d8209574cb3471b849d62714, type: 3}
-  freezeSprite: {fileID: 21300000, guid: 64dc660f72f22f84194eb3b468025555, type: 3}
+  boulderSprite: {fileID: 21300000, guid: 64192bcd8afb8a24c9c794f2906811ea, type: 3}
+  freezeSprite: {fileID: 21300000, guid: f427a8fcb7b73ba41b38de2afa3af328, type: 3}
   allTrapsGO: []
   slots: []
   dummyInv: []
@@ -8269,6 +8439,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 367614042}
@@ -9860,6 +10035,11 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 4.37113883e-08
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1c7f3584f4b52b4db68b5c09eb63785, type: 2}
   m_RootGameObject: {fileID: 1565371750}
