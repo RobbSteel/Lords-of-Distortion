@@ -122,6 +122,9 @@ public class NetworkController : MonoBehaviour {
 
 	}
 
+
+	Vector3 estimatedVelocity;
+	Vector3 latestPosition;
 	void Update () {
 		if (isOwner)
 			return;
@@ -141,6 +144,8 @@ public class NetworkController : MonoBehaviour {
 				//Case 2: We're out, need to switch to prediction.
 				else {
 					Debug.Log("Packets missed or arriving slow. Switching to extrapolation.");
+					latestPosition = states.ReadOldest().position;
+					states.DiscardOldest();
 					currentSmooth = 0f;
 					interval = float.PositiveInfinity;
 					canInterpolate = false;
@@ -164,6 +169,7 @@ public class NetworkController : MonoBehaviour {
 				controller2D.anim.SetTrigger("Jump");
 
 			Vector3 positionDifference = newState.position - oldState.position;
+			estimatedVelocity = positionDifference/interval;
 			float distanceApart = positionDifference.magnitude;
 			if(distanceApart > width * 20.0f){
 				//snap to position if difference is too great.
@@ -196,15 +202,15 @@ public class NetworkController : MonoBehaviour {
 			}
 			else{
 				//extrapolating
-				Vector3 estimatedVelocity = states.ReadOldest().position - transform.position;
-				transform.position = states.ReadOldest().position + estimatedVelocity * currentSmooth;
+
+				transform.position = latestPosition + estimatedVelocity * currentSmooth;
 				currentSmooth += Time.deltaTime;
 				//transform.position = Vector3.Lerp(oldState.position, newState.position, currentSmooth/(currentSmooth));
 			}
 		}
 	}
 
-	//typically only called by the death animation finishingz
+	//typically only called by the death animation finishing
 	public void DestroyPlayer(){
 		if (isOwner){
 			Instantiate(DeathSpirit, transform.position, transform.rotation);

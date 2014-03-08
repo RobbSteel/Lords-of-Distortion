@@ -57,8 +57,13 @@ public class CircularBuffer<T> : IEnumerable<T>
 	//advances head
 	public void DiscardOldest()
 	{
-		Head = (Head + 1) % buffer.Length;
-		--Count;
+		if(Count > 0){
+			Head = (Head + 1) % buffer.Length;
+			--Count;
+		}
+		else{
+			Console.WriteLine("Nothing else to delete.");
+		}
 	}
 		
 	public IEnumerator<T> GetEnumerator()
