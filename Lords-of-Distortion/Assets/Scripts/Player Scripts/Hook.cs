@@ -79,7 +79,9 @@ public class Hook : MonoBehaviour {
 					pushpull = 1;
 					going = false;
 					hookpull = true;
-					networkView.RPC ("PullPlayer", hitPlayer); 
+					//If the server got hit it doesnt need to send this.
+					if(hitPlayer != Network.player)
+						networkView.RPC ("PullPlayer", hitPlayer); 
 				}
 			}
 		}

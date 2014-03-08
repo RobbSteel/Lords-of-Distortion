@@ -628,7 +628,8 @@ public class PlacementUI : MonoBehaviour {
 			Destroy(dottedLineInstance);
 		}
 
-		if(state != PlacementState.Default){
+		if(state != PlacementState.Default && state != PlacementState.ChangingDirection){
+			//Destroy active power if we didn't get to place it (for now direction isnt mandatory).
 			Destroy(activePower);
 			state = PlacementState.Default;
 		}
