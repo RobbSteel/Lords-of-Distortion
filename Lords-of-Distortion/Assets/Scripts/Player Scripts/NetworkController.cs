@@ -154,7 +154,7 @@ public class NetworkController : MonoBehaviour {
 			}
 		}
 
-		if(canInterpolate){
+		if(canInterpolate && states.Count > 0){
 			//read the two oldest states.
 			State oldState = states.ReadOldest(); 
 			State newState = states.GetByIndex(1);
@@ -279,6 +279,7 @@ public class NetworkController : MonoBehaviour {
 				canInterpolate = true;
 				//in case we were extrapolating
 				canExtrapolate = false;
+				currentSmooth = 0f;
 			}
 		}
 	}
