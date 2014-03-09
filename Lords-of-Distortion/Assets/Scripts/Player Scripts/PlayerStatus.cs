@@ -43,10 +43,10 @@ public class PlayerStatus : MonoBehaviour {
 	private bool horizontalPressedDown;		//tracks horizontal keydown
 	private int horizontalMoveCheck;		//tracks horizontal current key
 
-    public UISprite shieldIcon;
+    //public UISprite shieldIcon;
 
 	void Awake(){
-        shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
+        //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
 		recoverRate = 10f;
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;

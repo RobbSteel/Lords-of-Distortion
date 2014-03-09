@@ -58,19 +58,22 @@ public class LobbyGUI : MonoBehaviour {
         if (Network.peerType == NetworkPeerType.Server)
         {
             GameObject playBtn = (GameObject)Instantiate(Resources.Load("Play"));
-            GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
-
+            
             playBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
             playBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
             playBtn.transform.localPosition = new Vector2(-563.4375f, 305.625f);
 
-            disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
-            disconBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-            disconBtn.transform.localPosition = new Vector2(-563.4375f, 230.9996f);
-
             UIEventListener.Get(playBtn).onClick += PlayButton;
-            UIEventListener.Get(disconBtn).onClick += DisconnectButton;
         }
+
+        GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
+        
+        disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
+        disconBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        disconBtn.transform.localPosition = new Vector2(-563.4375f, 230.9996f);
+
+        UIEventListener.Get(disconBtn).onClick += DisconnectButton;
+
 	}
 	
 	void OnMasterServerEvent(MasterServerEvent msEvent)
