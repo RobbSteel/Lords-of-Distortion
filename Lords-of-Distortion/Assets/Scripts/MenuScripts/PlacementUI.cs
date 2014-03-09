@@ -623,13 +623,16 @@ public class PlacementUI : MonoBehaviour {
 
 	//TODO: play an animation that tells players they can now use their powers.
 	//This function pauses animations for  powers and destroyes any unplaced instances.
-	public void DestroyPowers(){
+	public void DisableEditing(){
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);
 		}
 
 		if(state != PlacementState.Default){
-			Destroy(activePower);
+			if(state == PlacementState.MovingPower)
+				PlacePower();
+			if(state == PlacementState.ChangingDirection)
+				ChooseDirection();
 			state = PlacementState.Default;
 		}
 
@@ -637,7 +640,6 @@ public class PlacementUI : MonoBehaviour {
         foreach (var pair in placedPowers)
         {
 			//Destroy(pair.Key);
-            Debug.Log(pair);
             Destroy(pair.Key.collider2D);
 		}
         

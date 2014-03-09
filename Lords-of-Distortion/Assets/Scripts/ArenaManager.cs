@@ -314,7 +314,7 @@ public class ArenaManager : MonoBehaviour {
 		float currentTime = TimeManager.instance.time;
 
 		if(sentMyPowers == false && currentTime >= beginTime){
-            placementUI.DestroyPowers();
+            placementUI.DisableEditing();
 			placementUI.Disable();
 
 

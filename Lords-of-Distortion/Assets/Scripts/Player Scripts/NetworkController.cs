@@ -21,6 +21,7 @@ public class NetworkController : MonoBehaviour {
 	/* Synchronization Variables */                                                                                                                                                                                                                                      
 	private float currentSmooth = 0f;
 	private bool canInterpolate= false;
+	private bool canExtrapolate = false;
 	private float simTime;
 	
 
@@ -117,28 +118,43 @@ public class NetworkController : MonoBehaviour {
 	float interval = float.PositiveInfinity;
 
 
+	void ExtrapolatePosition(){
+
+	}
+
+
+	Vector3 estimatedVelocity;
+	Vector3 latestPosition;
 	void Update () {
 		if (isOwner)
 			return;
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
-			//if we go past these two states, move to next one.
+			//if we go past these two states, try to move to next one.
 			if(currentSmooth >= interval){
-				if(states.Count > 2){
-					states.DiscardOldest();
+				//Delete oldest state since we don't need it.
+				states.DiscardOldest();
+
+				//Case 1: We still have states we can interpolate between
+				if(states.Count > 1){
 					//if we were perfectly in sync, we could reset to 0, but instead set it to the amount we overshot
 					currentSmooth = currentSmooth - interval; 
 				}
+				//Case 2: We're out, need to switch to prediction.
 				else {
-					Debug.Log("Missed too many packets. We need 2 states to interpolate between.");
+					Debug.Log("Packets missed or arriving slow. Switching to extrapolation.");
+					latestPosition = states.ReadOldest().position;
+					states.DiscardOldest();
 					currentSmooth = 0f;
 					interval = float.PositiveInfinity;
 					canInterpolate = false;
-					//don't interpolate but let gravity do its job so that players dont freeze in air
-					rigidbody2D.isKinematic = false;
+					canExtrapolate = true;
 				}
 			}
+		}
+
+		if(canInterpolate && states.Count > 0){
 			//read the two oldest states.
 			State oldState = states.ReadOldest(); 
 			State newState = states.GetByIndex(1);
@@ -153,25 +169,48 @@ public class NetworkController : MonoBehaviour {
 				controller2D.anim.SetTrigger("Jump");
 
 			Vector3 positionDifference = newState.position - oldState.position;
+			estimatedVelocity = positionDifference/interval;
 			float distanceApart = positionDifference.magnitude;
 			if(distanceApart > width * 20.0f){
 				//snap to position if difference is too great.
 				transform.position = newState.position;
 				oldState.position = newState.position;
 			}
-			else
+			else{
+				//interpolate!!
 				transform.position = Vector3.Lerp(oldState.position, newState.position,
 				                                  currentSmooth/(interval));
+			}
+
 			//The local simulation time of this thing.
-			simTime = oldState.remoteTime +  currentSmooth;
+			simTime = oldState.remoteTime + currentSmooth;
 
 			//simulate animations.
 			float unit = Mathf.Abs(newState.position.x - oldState.position.x) > .01f ? 1.0f : 0.0f;
 			controller2D.anim.SetFloat( "Speed", unit);
 		}
+
+		else if(canExtrapolate){
+
+			if(currentSmooth >= .25f){
+				Debug.Log("Too much lag, just stop movement");
+				currentSmooth = 0f;
+				canExtrapolate = false;
+				//don't interpolate but let gravity do its job so that players dont freeze in air
+				rigidbody2D.isKinematic = false;
+				return;
+			}
+			else{
+				//extrapolating
+
+				transform.position = latestPosition + estimatedVelocity * currentSmooth;
+				currentSmooth += Time.deltaTime;
+				//transform.position = Vector3.Lerp(oldState.position, newState.position, currentSmooth/(currentSmooth));
+			}
+		}
 	}
 
-	//typically only called by the death animation finishingz
+	//typically only called by the death animation finishing
 	public void DestroyPlayer(){
 		if (isOwner){
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
@@ -208,7 +247,7 @@ public class NetworkController : MonoBehaviour {
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
 					Debug.Log("lost previous packet");
-					Debug.Log("local" + newestTime + "server" + info.timestamp);
+					Debug.Log("Delay: " + (newestTime - info.timestamp) + " (s)");
 				}
 				else if(info.timestamp < newestTime) {
 					Debug.Log("out of order packet");
@@ -238,6 +277,9 @@ public class NetworkController : MonoBehaviour {
 			if(canInterpolate == false && states.Count >= 3){
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
+				//in case we were extrapolating
+				canExtrapolate = false;
+				currentSmooth = 0f;
 			}
 		}
 	}
