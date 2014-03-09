@@ -19,6 +19,7 @@ public class Controller2D : MonoBehaviour {
 	public float jumpForce = 650f;
 	const float jumpVelocity = 12.5f;
 	public bool stunned;
+    public bool meleeStunned;
 	public bool snared = false;
 	public bool deathOnHit;
 	public bool canJump;
@@ -62,6 +63,7 @@ public class Controller2D : MonoBehaviour {
 	void Awake(){
 		deathOnHit = false;
 		stunned = false;
+        meleeStunned = false;
 		canJump = true;
 		facingRight = true;
 		hasbomb = false;
@@ -76,6 +78,8 @@ public class Controller2D : MonoBehaviour {
 		stoppedJump = Input.GetButtonUp("Jump");
         if(snared)
             rigidbody2D.gravityScale = 1;
+        if (meleeStunned && grounded)
+            status.UnStun();
 	}
 	
 	float previousY = 0f;

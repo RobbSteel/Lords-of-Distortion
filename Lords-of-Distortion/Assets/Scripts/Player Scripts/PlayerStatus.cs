@@ -300,6 +300,13 @@ public class PlayerStatus : MonoBehaviour {
 		recoverRate = newRecoverRate;
 	}
 
+    public void MeleeStun()
+    {
+        playerControl.meleeStunned = true;
+        playerControl.snared = true;
+        currentStunMeter = maxStun;
+    }
+
 	public void Frozen(){
 
 		playerControl.stunned = true;
