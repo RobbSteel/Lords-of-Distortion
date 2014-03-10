@@ -30,6 +30,7 @@ public class PlayerStatus : MonoBehaviour {
 	public GameObject shieldParticles;
 	bool knockBackPending = false;
 	Vector2 sideForce;
+    Vector2 velocityChange;
 	public float MashIconYOffset;
 	private GameObject MashIcon;
 	private ParticleSystem punchEffect;
@@ -44,6 +45,7 @@ public class PlayerStatus : MonoBehaviour {
 	private int horizontalMoveCheck;		//tracks horizontal current key
 
     //public UISprite shieldIcon;
+    
 
 	void Awake(){
         //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
@@ -179,16 +181,18 @@ public class PlayerStatus : MonoBehaviour {
 			knockBackPending = false;
 			//hitMarkSprites.enabled = false;
 			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
-			rigidbody2D.AddForce(sideForce);
+            rigidbody2D.AddForce(velocityChange);
+            //rigidbody2D.AddForce(sideForce);
 		}
 	}
 	
 	Vector2 upForce = new Vector2(0f, 200f);
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
-		rigidbody2D.AddForce(upForce);
-		sideForce = new Vector2(400f * flip, 100f);
-		knockBackPending = true;
+        rigidbody2D.AddForce(upForce);
+		sideForce = new Vector2(7f * flip, 7f);
+        velocityChange = (sideForce * rigidbody2D.mass / Time.fixedDeltaTime);
+        knockBackPending = true;
 	}
 	
 	
