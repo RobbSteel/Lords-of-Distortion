@@ -104,7 +104,7 @@ public class Hook : MonoBehaviour {
 					GA.API.Design.NewEvent("Hook Shot", mouseClick);
 				}
 
-				GA.API.Design.NewEvent("Hook Shot", mouseClick);
+
 
 				if(Network.isServer)
 					networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
