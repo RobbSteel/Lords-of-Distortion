@@ -12,6 +12,7 @@ GameObject:
   - 148: {fileID: 14800000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: ArenaManager
   m_TagString: Untagged
@@ -73,7 +74,7 @@ MonoBehaviour:
   boulderSprite: {fileID: 21300000, guid: 6fe48849d8209574cb3471b849d62714, type: 3}
   freezeSprite: {fileID: 21300000, guid: 64dc660f72f22f84194eb3b468025555, type: 3}
   allTrapsGO: []
-  currentPowers: []
+  slots: []
   dummyInv: []
   deadLordBtnRed: {fileID: 0}
   live: 0
@@ -96,6 +97,18 @@ MonoBehaviour:
   - {fileID: 100000, guid: b0bfe78a6e8b4744a8b806d6381a3301, type: 2}
   - {fileID: 100000, guid: a7396905615ee79439f9e25e31b15434, type: 2}
   - {fileID: 100002, guid: 7e0b659d989623f45ac62d4e837d0dc1, type: 2}
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d4d1ac433f17142b57d99fd750d679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextPrefab: {fileID: 11400004, guid: 23be67396af99e54eab302b862007366, type: 2}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
