@@ -17,16 +17,16 @@ public class HUDTools : MonoBehaviour {
 		tween.PlayForward();
 		yield return new WaitForSeconds(time);
 		tween.PlayReverse();
-		EventDelegate.Add(tween.onFinished, Destroy);
+		EventDelegate.Add(tween.onFinished, DestroyLabel);
 	}
 
-	void Destroy(){
+	void DestroyLabel(){
 		//Get the tweener that called this function and destroy it.
 		NGUITools.Destroy(UITweener.current.gameObject);
 	}
 
 	/// <summary>
-	/// Displays Text for a certain amount of time on the scenes UI camera.
+	/// Displays Text for a certain amount of time on the scene's UI camera.
 	/// </summary>
 	/// <param name="text">Text.</param>
 	/// <param name="displayTime">Display time.</param>
