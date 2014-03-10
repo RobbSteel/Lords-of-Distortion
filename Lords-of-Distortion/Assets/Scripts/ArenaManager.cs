@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 8f; 
+	const float PLACEMENT_TIME = 10f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -30,6 +30,9 @@ public class ArenaManager : MonoBehaviour {
 	private GameObject timer;
 	private PowerSpawn prevYield;
 	public GameObject alertSymbol;
+
+
+	private HUDTools hudTools;
 	/*
      * Commenting out LordSpawnManager and other relating parts
      * as we are not using it anymore 
@@ -167,6 +170,7 @@ public class ArenaManager : MonoBehaviour {
 		foreach(Transform location in spawnPositions){
 			playerSpawnVectors.Add(location.position);
 		}
+		hudTools = GetComponent<HUDTools>();
 		playersReady = new List<NetworkPlayer>();
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
@@ -220,8 +224,7 @@ public class ArenaManager : MonoBehaviour {
 			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
 			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
-			//TODO: make this a UI text function. (fade in fade out quickly)
-			print ("You may place pleliminary traps");
+			hudTools.DisplayText ("You may place initial traps");
 		}
 		//TODO: have something that checks if all players have finished loading.
 	}
@@ -349,7 +352,7 @@ public class ArenaManager : MonoBehaviour {
 
 
 		if(!playersFreed){
-			print ("5 seconds until proximity and remote activated traps are enabled.");
+			hudTools.DisplayText("Get Ready");
 			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
@@ -365,7 +368,7 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.ColorizeAll();
 
 			placementUI.delayedTraps.Clear();
-			print ("Traps are Enabled");
+			hudTools.DisplayText ("Activation of traps now enabled");
 
 			//also bring back power placement
 			placementUI.SwitchToLive(false);
