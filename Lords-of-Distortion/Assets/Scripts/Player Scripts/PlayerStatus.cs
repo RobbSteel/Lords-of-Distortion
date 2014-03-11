@@ -240,7 +240,7 @@ public class PlayerStatus : MonoBehaviour {
 	
 	
 	public void HitFeedback(){
-		audio.Play ();
+//		audio.Play (); 
 
 		if(playerControl.facingRight){
 

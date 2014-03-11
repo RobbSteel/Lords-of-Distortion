@@ -188,7 +188,6 @@ public class SessionManager : MonoBehaviour {
 	public int SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
 		List<NetworkPlayer> players = gameInfo.players;
-		print ("There are " + gameInfo.players.Count);
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player
@@ -221,24 +220,24 @@ public class SessionManager : MonoBehaviour {
 
 	//Called only by the client of the player who died.
 	public void KillPlayer(GameObject playerObject){
-		networkView.RPC ("Died", RPCMode.Others);
+		print ("My name is " + gameInfo.GetPlayerOptions(Network.player).username);
+		networkView.RPC ("Died", RPCMode.Others, Network.player); //Explicitly pass our network player id
 		PlayerStats stats = gameInfo.GetPlayerStats(Network.player);
 		stats.deaths += 1;
-		//Because the player spawned himself, let him destroy himself as well.
-		//We may want to instead call a special RPC for an animation or something later on.
-		//Network.Destroy(playerObject);
 	}
 	
 	[RPC]
-	void Died(NetworkMessageInfo info){
-		PlayerStats stats = gameInfo.GetPlayerStats(info.sender);
+	void Died(NetworkPlayer deadPlayerKey){
+		PlayerStats stats = gameInfo.GetPlayerStats(deadPlayerKey);
 		stats.deaths += 1;
 
-		GameObject deadPlayer = gameInfo.GetPlayerGameObject(info.sender);
+		GameObject deadPlayer = gameInfo.GetPlayerGameObject(deadPlayerKey);
+		//TODO: delay this animation from playing until player reaches spot where he died
+		//(using a simple timer and lag calculation)
+
 		//once you learn that a player has died, play his death animation.
 		deadPlayer.GetComponent<Controller2D>().anim.SetTrigger("Die");
 		Instantiate(DeathSpirit, deadPlayer.transform.position, transform.rotation);
-		Debug.Log (gameInfo.GetPlayerOptions(info.sender).username + " died."); 
 	}
 	
 	void OnDestroy(){

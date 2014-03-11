@@ -95,7 +95,7 @@ public class Hook : MonoBehaviour {
 
 		//Get input from user and set cooldown to avoid repeated use.
 		if(hooktimer <= 0){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared){
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
@@ -211,7 +211,7 @@ public class Hook : MonoBehaviour {
 
 
 	public void DestroyHookPossible(){
-		if(networkController.isOwner){
+		if(Network.isServer){
 			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 			DestroyHook();
 		}
@@ -233,7 +233,7 @@ public class Hook : MonoBehaviour {
 
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
-		if(distance < 3){
+		if(distance < .1f){
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}

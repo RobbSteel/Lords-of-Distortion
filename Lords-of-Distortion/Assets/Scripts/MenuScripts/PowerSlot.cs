@@ -10,12 +10,17 @@ public class PowerSlot : MonoBehaviour {
 	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
 	public static event KeyPress powerKey;
 	UILabel keyLabel;
+	UIButton button;
 	UI2DSprite powerIcon;
 	public string keyText;
 	bool activationEnabled = false;
-
+	public bool activationMode = false;
 	
 	public InventoryPower associatedPower;
+
+	void Start(){
+		button = GetComponent<UIButton>();
+	}
 
 
 	public void Initialize(Sprite sprite, InventoryPower power){
@@ -43,19 +48,28 @@ public class PowerSlot : MonoBehaviour {
 	//can be called from anywhere (no parameters)
 	public void EnableActivation(){
 		activationEnabled = true;
+		activationMode = true;
 		keyLabel.color = Color.green;
+		button.isEnabled = true;
+		UIEventListener.Get(this.gameObject).onClick += RequestSpawn;
 	}
 	//To be called by timer in powerspawn
 	void EnableActivation(PowerSpawn spawn){
-		activationEnabled = true;
-		keyLabel.color = Color.green;
+		EnableActivation();
+	}
+
+	void RequestSpawn(GameObject go){
+		if(activationEnabled){
+			wasSpawned = true;
+			powerKey(linkedSpawn, this.gameObject);
+		}
 	}
 
 	// Check for key press and call event .
 	void Update () {
 		if(activationEnabled && Input.GetKeyDown(keyText)){
-            wasSpawned = true;
 			print("Pressed " + keyText + ", try to spawn that power");
+			wasSpawned = true;
 			powerKey(linkedSpawn, this.gameObject);
 		}
 	}
