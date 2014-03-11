@@ -395,10 +395,15 @@ public class PlacementUI : MonoBehaviour {
 		//remove 1 from quanitity, disable button if == 0
 			//info.GetComponent<UIButton>().isEnabled = false;
 
+		//Remove button event listener, (so that we can use button as a trigger later)
+		UIEventListener.Get(info.gameObject).onClick  -= PowerButtonClick;
+
+
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
 		                           info.transform.position, Quaternion.identity) as GameObject;
+
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
 		activePower.GetComponent<Collider2D>().isTrigger = true;
@@ -615,14 +620,14 @@ public class PlacementUI : MonoBehaviour {
 	private void GridEnabled(bool state){
 		powerButtonsEnabled = state;
         foreach(UIButton button in buttons){
-			//if a power is out, dont re-enable its button
-			if(button.GetComponent<PowerSlot>().associatedPower.quantity > 0)
+			//if a power is out, dont re-enable its button (unless in activation mode)
+			if(button.GetComponent<PowerSlot>().associatedPower.quantity > 0 || button.GetComponent<PowerSlot>().activationMode)
 				button.isEnabled = state;
 		}
 	}
 
 	//TODO: play an animation that tells players they can now use their powers.
-	//This function pauses animations for  powers and destroyes any unplaced instances.
+	//This function pauses animations for powers and destroyes any unplaced instances.
 	public void DisableEditing(){
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);

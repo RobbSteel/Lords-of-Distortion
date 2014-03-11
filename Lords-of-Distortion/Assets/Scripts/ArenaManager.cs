@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 10f; 
+	const float PLACEMENT_TIME = 12f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -47,7 +47,7 @@ public class ArenaManager : MonoBehaviour {
         sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
 		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
-		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 10f);
+		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
 	}
@@ -372,7 +372,7 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.ColorizeAll();
 
 			placementUI.delayedTraps.Clear();
-			hudTools.DisplayText ("Activation of traps now enabled");
+			hudTools.DisplayText ("Activation of traps enabled");
 
 			//also bring back power placement
 			placementUI.SwitchToLive(false);
