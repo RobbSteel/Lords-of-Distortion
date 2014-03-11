@@ -42,7 +42,7 @@ public class Melee : MonoBehaviour {
 	void Update ()
 	{
 		//this.GetComponent<BoxCollider2D>().enabled = false;
-		if (meleeTimer <= 0 && !myhook.hookthrown) {
+		if (meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
 			// If the fire button is pressed...
 			//print("maggot");
 			if (Input.GetButtonDown ("Fire3") && !controller.stunned && networkController.isOwner) {

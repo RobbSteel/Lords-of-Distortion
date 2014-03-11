@@ -44,6 +44,7 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void NotifyBeginTime(float time){
 		beginTime = time;
+        sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
 		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 10f);
@@ -313,8 +314,10 @@ public class ArenaManager : MonoBehaviour {
 	bool trapsEnabled = false;
 
 	void Update () {
+        float currentTime = TimeManager.instance.time;
 
-		float currentTime = TimeManager.instance.time;
+       // if (currentTime >= beginTime)
+            
 
 		if(sentMyPowers == false && currentTime >= beginTime){
             placementUI.DisableEditing();
@@ -353,6 +356,7 @@ public class ArenaManager : MonoBehaviour {
 
 		if(!playersFreed){
 			hudTools.DisplayText("Get Ready");
+            sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
 			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
