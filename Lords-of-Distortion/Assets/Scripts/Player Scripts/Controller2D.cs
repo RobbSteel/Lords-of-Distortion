@@ -187,7 +187,10 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            transform.parent = other.transform;
+            if (myHook.hookthrown)
+                transform.parent = null;
+            else
+                transform.parent = other.transform;
         }
         
 	}
@@ -200,7 +203,10 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            transform.parent = other.transform;
+            if (myHook.hookthrown)
+                transform.parent = null;
+            else
+                transform.parent = other.transform;
         }
 
 		if (other.gameObject.tag == "Power")
