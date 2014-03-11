@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class PlayerStatus : MonoBehaviour {
-	
 
 	//varible to adjust stunbar & stun
 	public float maxStun = 100f;
@@ -43,13 +42,14 @@ public class PlayerStatus : MonoBehaviour {
 	private bool horizontalPressedUp;		//tracks horizontal keyup
 	private bool horizontalPressedDown;		//tracks horizontal keydown
 	private int horizontalMoveCheck;		//tracks horizontal current key
-
+    private PSinfo info;
+    private List<NetworkPlayer> players;
     //public UISprite shieldIcon;
     
 
 	void Awake(){
         //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
-		recoverRate = 10f;
+    	recoverRate = 10f;
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
@@ -57,7 +57,8 @@ public class PlayerStatus : MonoBehaviour {
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
 	*/
-
+        info = GameObject.Find("PSInfo").GetComponent<PSinfo>();
+        players = info.players;
 		MashIcon = (GameObject)Instantiate (Resources.Load ("MashAlertIcon"));
 		MashIcon.SetActive (false);
 
@@ -259,10 +260,29 @@ public class PlayerStatus : MonoBehaviour {
 		
 		HitFeedback();
 
-		}
-		
+    }
 
-	
+    
+    [RPC]
+    void NotifyVisualStun()
+    {
+        foreach(NetworkPlayer nplayer in players)
+        { 
+            if (info.GetPlayerGameObject(nplayer).GetComponent<Controller2D>().stunned)
+                info.GetPlayerGameObject(nplayer).GetComponent<Controller2D>().anim.SetTrigger("stunned");
+        }
+    }
+
+    [RPC]
+    void NotifyVisualUnstun()
+    {
+        foreach (NetworkPlayer nplayer in players)
+        {
+            if (!info.GetPlayerGameObject(nplayer).GetComponent<Controller2D>().stunned)
+                info.GetPlayerGameObject(nplayer).GetComponent<Controller2D>().anim.SetTrigger("unstunned");
+        }
+    }
+    
 	//allows other objects to appliy a specific amount of damage
 	public void TakeDamage( float dmgTaken ){
 		//Don't worry about lag compensation for now and just notify all other of the stun bar being raised.
@@ -295,12 +315,12 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.SetTrigger("stunned");
+        networkView.RPC("NotifyVisualStun", RPCMode.Others);
 		audio.Play ();
 	}
 	
 	public void Stun( float newRecoverRate ){
-
-		playerControl.stunned = true;
+        playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		recoverRate = newRecoverRate;
 	}
@@ -322,11 +342,12 @@ public class PlayerStatus : MonoBehaviour {
 	}
 
 	public void UnStun(){
-		playerControl.snared = false;
+        playerControl.snared = false;
 		playerControl.stunned = false;
 		TurnOffMashAlert();
 		playerControl.anim.SetTrigger("unstunned");
-		currentStunMeter = 0;
+        networkView.RPC("NotifyVisualUnstun", RPCMode.Others);
+        currentStunMeter = 0;
 		playerControl.anim.enabled = true;
 		playerControl.deathOnHit = false;
 	}
