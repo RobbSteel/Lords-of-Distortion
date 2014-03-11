@@ -250,7 +250,7 @@ public class PlayerStatus : MonoBehaviour {
 			punchParticles.transform.localScale = new Vector3(-1,1,1);
 		}
 
-//		punchEffect.Play();
+		punchEffect.Play();
 	}
 	
 	
