@@ -211,7 +211,7 @@ public class Hook : MonoBehaviour {
 
 
 	public void DestroyHookPossible(){
-		if(networkController.isOwner){
+		if(Network.isServer){
 			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 			DestroyHook();
 		}
@@ -233,7 +233,7 @@ public class Hook : MonoBehaviour {
 
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
-		if(distance < 3){
+		if(distance < .1f){
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}
