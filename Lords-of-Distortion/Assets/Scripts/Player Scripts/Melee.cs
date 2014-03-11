@@ -70,6 +70,7 @@ public class Melee : MonoBehaviour {
 		meleeObject.GetComponent<BoxCollider2D>().enabled = true;
 		controller.Snare();
 		anim.SetTrigger ("Melee");
+		AudioSource.PlayClipAtPoint( controller.meleeSfx , transform.position);
 		meleeTimer =  coolDownTimer;
 	}
 
