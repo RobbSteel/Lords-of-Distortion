@@ -305,13 +305,18 @@ public class PlacementUI : MonoBehaviour {
         }
     }
 */
+	bool reEnabledButtons = false;
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
         //UpdateTriggerColor();
-        if (live)
+        if (deadScreen)
         {
             timer -= Time.deltaTime;
             deadLordBtnRed.fillAmount = timer / 3.5f;
+			if(timer <= 0f && !reEnabledButtons){
+				GridEnabled(true);
+				reEnabledButtons = true;
+			}
         }
 
 		//Advance armament time for delayed powers.
@@ -365,6 +370,7 @@ public class PlacementUI : MonoBehaviour {
 			}
             // Uncomment the timer to set restrictions on how often players place powers while dead.
 			else if(timer <= 0.0f){
+
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
@@ -396,7 +402,8 @@ public class PlacementUI : MonoBehaviour {
 			//info.GetComponent<UIButton>().isEnabled = false;
 
 		//Remove button event listener, (so that we can use button as a trigger later)
-		UIEventListener.Get(info.gameObject).onClick  -= PowerButtonClick;
+		if(!deadScreen)
+			UIEventListener.Get(info.gameObject).onClick  -= PowerButtonClick;
 
 
 		activePowerType = info.associatedPower.type;
@@ -425,7 +432,14 @@ public class PlacementUI : MonoBehaviour {
 		activePower.AddComponent<MouseFollow>();
         activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
+		if(deadScreen){
+
+			timer = 3.5f;
+			reEnabledButtons = false;
+		}
+
 		GridEnabled(false);
+
 	}
 
 	private void LivePlacement(PowerSpawn spawn){
@@ -497,7 +511,7 @@ public class PlacementUI : MonoBehaviour {
 
 	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
-        timer = 3.5f;
+        
 		Destroy(activePower.GetComponent<MouseFollow>());
 		PowerSpawn spawn = null;
 
@@ -552,12 +566,14 @@ public class PlacementUI : MonoBehaviour {
 					Destroy(activePower);
 					spawnNow(spawn, gameObject);
 				}
-				else
+				else{
 					LivePlacement(spawn);
+				}
 			}
 
 			state = PlacementState.Default;
-			GridEnabled(true);
+			if(!deadScreen || !live) //dont renable buttons if in dead screen unless timer is up
+				GridEnabled(true);
 		}
 
 	}
@@ -607,12 +623,14 @@ public class PlacementUI : MonoBehaviour {
 				Destroy(activePower);
 				spawnNow(spawn, gameObject);
 			}
-			else
+			else{
 				LivePlacement(spawn);
+			}
 		}
 		//Return buttons to normal
 		state = PlacementState.Default;
-		GridEnabled(true);
+		if(!deadScreen || !live)
+			GridEnabled(true);
 	}
 
 
