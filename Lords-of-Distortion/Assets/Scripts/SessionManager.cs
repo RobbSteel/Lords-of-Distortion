@@ -188,7 +188,6 @@ public class SessionManager : MonoBehaviour {
 	public int SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
 		List<NetworkPlayer> players = gameInfo.players;
-		print ("There are " + gameInfo.players.Count);
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player

@@ -198,7 +198,7 @@ public class Hook : MonoBehaviour {
 		going = false;
 		if(hookscript != null){
 			if(hookscript.affectedPlayerC2D != null){
-				hookscript.affectedPlayerC2D.FreeFromSnare();
+				hookscript.affectedPlayerC2D.UnHooked();
 				hookscript.affectedPlayerC2D = null;
 			}
 			hookscript.playerhooked = false;
@@ -211,7 +211,7 @@ public class Hook : MonoBehaviour {
 
 
 	public void DestroyHookPossible(){
-		if(networkController.isOwner){
+		if(Network.isServer){
 			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 			DestroyHook();
 		}
@@ -233,7 +233,7 @@ public class Hook : MonoBehaviour {
 
 		var distance = Vector3.Distance(player.transform.position, transform.position);
 		//This needs to be put somehwere else, but for now it'll do.
-		if(distance < 3){
+		if(distance < .1f){
 			if(!networkController.isOwner){
 				hookscript.affectedPlayerC2D.FreeFromSnare();
 			}

@@ -21,6 +21,7 @@ public class Controller2D : MonoBehaviour {
 	public bool stunned;
     public bool meleeStunned;
 	public bool snared = false;
+	public bool hooked = false;
 	public bool deathOnHit;
 	public bool canJump;
 	public bool hasbomb;
@@ -54,10 +55,24 @@ public class Controller2D : MonoBehaviour {
 	public void Snare(){
 		snared = true;
 	}
+
+	public void Hooked(){
+
+		hooked = true;
+		rigidbody2D.gravityScale = 0;
+	}
+
+	public void UnHooked(){
+
+		hooked = false;
+		rigidbody2D.gravityScale = 1;
+	}
 	//private StunBar stunScript;
 
 	public void FreeFromSnare(){
 		snared = false;
+
+
 	}
 
 	void Awake(){
@@ -74,16 +89,21 @@ public class Controller2D : MonoBehaviour {
 	void Update () {
 		if(!DEBUG && !networkController.isOwner)
 			return;
+		if(!hooked){
+
 		Jump();
 		stoppedJump = Input.GetButtonUp("Jump");
         if(snared)
             rigidbody2D.gravityScale = 1;
         if (meleeStunned && grounded)
             status.UnStun();
+		}
 	}
 	
 	float previousY = 0f;
 	void FixedUpdate(){
+
+		if(!hooked){
 		IsGrounded();
 		if(!DEBUG && !networkController.isOwner)
 			return;
@@ -93,7 +113,9 @@ public class Controller2D : MonoBehaviour {
 		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
 		if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
 			//print ("started falling");
+			if(snared){
 			rigidbody2D.gravityScale = 1.8f;
+			}
 		}
 
 		//Remove knockback when you compose yourself.
@@ -121,7 +143,9 @@ public class Controller2D : MonoBehaviour {
 			jumpRequested = false;
 		}
 		previousY = rigidbody2D.velocity.y;
-	}
+	
+		}
+}
 
 	private void Jump(){
 		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
