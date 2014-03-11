@@ -64,7 +64,7 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			anim.SetTrigger("Hooked");
 			hooked = true;
-			//AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
+			AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
 
 
 		}
@@ -86,7 +86,7 @@ public class HookHit : MonoBehaviour {
 				targetPosition = transform.position;
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				playerhooked = true; 
-				//AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
+				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
 
 
 				shooter.GetComponent<Hook>().HitPlayerLocal(transform.position, affectedPlayerNC.theOwner);
