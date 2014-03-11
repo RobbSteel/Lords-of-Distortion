@@ -25,6 +25,7 @@ public class Controller2D : MonoBehaviour {
 	public bool deathOnHit;
 	public bool canJump;
 	public bool hasbomb;
+    public bool locked;
 	bool stoppedJump;
 	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
@@ -36,10 +37,6 @@ public class Controller2D : MonoBehaviour {
 	public AudioClip meleeHitSfx;
 	public AudioClip deathSfx;
 	public AudioClip jumpSfx;
-
-
-	
-
 
 	NetworkController networkController;
 	PlayerStatus status;
@@ -56,6 +53,16 @@ public class Controller2D : MonoBehaviour {
 		snared = true;
 	}
 
+    	public void LockMovement()
+   	 {
+        	locked = true;
+    	}
+
+   	 public void UnlockMovement()
+   	 {
+        	locked = false;
+    	}
+    
 	public void Hooked(){
 
 		hooked = true;
@@ -80,6 +87,7 @@ public class Controller2D : MonoBehaviour {
 		stunned = false;
         meleeStunned = false;
 		canJump = true;
+        locked = false;
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
@@ -89,9 +97,9 @@ public class Controller2D : MonoBehaviour {
 	void Update () {
 		if(!DEBUG && !networkController.isOwner)
 			return;
-		if(!hooked){
+		if(!hooked && !locked){
 
-		Jump();
+		    Jump();
 		stoppedJump = Input.GetButtonUp("Jump");
         if(snared)
             rigidbody2D.gravityScale = 1;
@@ -108,7 +116,8 @@ public class Controller2D : MonoBehaviour {
 		if(!DEBUG && !networkController.isOwner)
 			return;
 
-		MovePlayer();
+        if(!locked)
+		    MovePlayer();
 
 		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
 		if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
@@ -148,7 +157,7 @@ public class Controller2D : MonoBehaviour {
 }
 
 	private void Jump(){
-		if(!snared &&  !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
+		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
 			jumpRequested = true;
 		}
 	}
