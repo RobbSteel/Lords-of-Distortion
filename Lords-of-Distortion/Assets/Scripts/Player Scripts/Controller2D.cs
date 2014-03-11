@@ -296,7 +296,7 @@ public class Controller2D : MonoBehaviour {
 
 
 	public void Die(){
-		if(dead == false){
+		if(networkController.isOwner && !dead){
 
 			dead = true;
 			snared = true;
@@ -308,7 +308,6 @@ public class Controller2D : MonoBehaviour {
 			var deadlordscript = deadlord.GetComponent<DeadLord>();
 			deadlordscript.isDead = true;
 			*/
-			Debug.Log ("I died again");
 
 			//Here we call whatever events are subscribed to us.
 			if(onDeath != null)
@@ -318,10 +317,10 @@ public class Controller2D : MonoBehaviour {
 			status.DestroyMashIcon();
 			//play death animation.
 			anim.SetTrigger("Die");
+
             GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
             GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			//We don't need the next line any more
-			//networkController.instanceManager.KillPlayer(gameObject);
 		}
 	}
 
