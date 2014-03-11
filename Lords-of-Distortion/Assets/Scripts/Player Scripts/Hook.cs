@@ -198,7 +198,7 @@ public class Hook : MonoBehaviour {
 		going = false;
 		if(hookscript != null){
 			if(hookscript.affectedPlayerC2D != null){
-				hookscript.affectedPlayerC2D.FreeFromSnare();
+				hookscript.affectedPlayerC2D.UnHooked();
 				hookscript.affectedPlayerC2D = null;
 			}
 			hookscript.playerhooked = false;

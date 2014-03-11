@@ -81,7 +81,7 @@ public class HookHit : MonoBehaviour {
 				NetworkController  affectedPlayerNC = hookedPlayer.GetComponent<NetworkController>();
 			    
 				affectedPlayerC2D = hookedPlayer.GetComponent<Controller2D>();
-				affectedPlayerC2D.Snare();
+				affectedPlayerC2D.Hooked();
 				rigidbody2D.velocity = Vector2.zero;
 				targetPosition = transform.position;
 				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
