@@ -164,6 +164,11 @@ public class PlacementUI : MonoBehaviour {
 		boardsByType[type].RemoveChild();
 		boardsByType.Remove(type);
 		inventoryPowers.Remove(type);
+		//Switch to random power.
+		if(deadScreen){
+			Resupply();
+			GridEnabled(false);
+		}
 	}
 
 	//Enable text label and set a key
@@ -188,11 +193,12 @@ public class PlacementUI : MonoBehaviour {
 			Resupply();
 			Resupply();
 
+			/*Unlimited powers.
 			foreach(var inventoryPower in inventoryPowers){
-				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
 				inventoryPower.Value.infinite = true;
 			}
+			*/
 		}
 		//TODO: destroy untriggered trapss
 		GridEnabled(true);
@@ -564,7 +570,7 @@ public class PlacementUI : MonoBehaviour {
 			if(live){
 				if(deadScreen){
 					Destroy(activePower);
-					spawnNow(spawn, gameObject);
+					spawnNow(spawn, boardsByType[activePowerType].currentPower.gameObject);
 				}
 				else{
 					LivePlacement(spawn);
@@ -621,7 +627,7 @@ public class PlacementUI : MonoBehaviour {
 		if(live){
 			if(deadScreen){
 				Destroy(activePower);
-				spawnNow(spawn, gameObject);
+				spawnNow(spawn, boardsByType[activePowerType].currentPower.gameObject);
 			}
 			else{
 				LivePlacement(spawn);

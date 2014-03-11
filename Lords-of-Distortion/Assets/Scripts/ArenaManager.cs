@@ -33,12 +33,6 @@ public class ArenaManager : MonoBehaviour {
 
 
 	private HUDTools hudTools;
-	/*
-     * Commenting out LordSpawnManager and other relating parts
-     * as we are not using it anymore 
-     */
-	LordSpawnManager lordsSpawnManager;
-
     PlacementUI placementUI;
 
 	[RPC]
@@ -266,15 +260,12 @@ public class ArenaManager : MonoBehaviour {
             //Remove from your inventory and  disable button 
             placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
-				Vector3 offscreen = uiElement.transform.position;
-				offscreen.y -= 400f;
-				TweenPosition.Begin(uiElement, 1f, offscreen);
-
 				PowerSlot powerSlot = uiElement.GetComponent<PowerSlot>();
 				powerSlot.enabled = false;
 				//remove from grid if power is not infinite.
 				if(!powerSlot.associatedPower.infinite)
 					placementUI.RemoveFromInventory(powerSlot.associatedPower.type);
+					
 			}
 		}
 	}
