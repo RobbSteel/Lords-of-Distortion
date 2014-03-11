@@ -9,7 +9,8 @@ public class TransferExplosive : Power
 		public float timer = 8;
 		public GameObject playerstuck = null;
 		public bool stickready = true;
-		public float stickytimer = 2;
+		const float TRANSFER_WAIT = 1f;
+		public float stickytimer = TRANSFER_WAIT;
 		public bool firststick = true;
 		bool sentRPC = false;
 		bool exploded = false;
@@ -62,11 +63,11 @@ public class TransferExplosive : Power
 						//No need to confirm getting stuck if you're the server.
 						if (Network.isServer) {
 								
-				if(GameObject.Find("CollectData") != null){
-					GA.API.Design.NewEvent("Players Stuck", player.transform.position);
-				}
+								if (GameObject.Find ("CollectData") != null) {
+										GA.API.Design.NewEvent ("Players Stuck", player.transform.position);
+								}
 
-								GA.API.Design.NewEvent("Player Stuck", player.transform.position);
+								GA.API.Design.NewEvent ("Player Stuck", player.transform.position);
 								networkView.RPC ("AttachToPlayer", RPCMode.Others, Network.player, firststick);
 								//do this second so that firstick isnt changed until the end.
 								AttachToPlayer (Network.player, firststick);
@@ -76,9 +77,9 @@ public class TransferExplosive : Power
 								//Those with lower ping at a disadvantage (since their message gets there first)
 								// but its probably not important for now.
 								
-				if(GameObject.Find("CollectData") != null){
-					GA.API.Design.NewEvent("Bomb Transfers", player.transform.position);
-				}
+								if (GameObject.Find ("CollectData") != null) {
+										GA.API.Design.NewEvent ("Bomb Transfers", player.transform.position);
+								}
 
 
 								print ("Entered bomb");
@@ -109,8 +110,8 @@ public class TransferExplosive : Power
 						//var bombExpo = Instantiate (Resources.Load ("BombE"), transform.position, Quaternion.identity) as GameObject;
 						//Destroy (gameObject);
 
-			var bombanim = gameObject.GetComponent<Animator>();
-			bombanim.enabled = true;
+						var bombanim = gameObject.GetComponent<Animator> ();
+						bombanim.enabled = true;
 				
 				}
 				
@@ -132,7 +133,7 @@ public class TransferExplosive : Power
 				
 								if (stickytimer <= 0) {
 					
-										stickytimer = 2;
+										stickytimer = TRANSFER_WAIT;
 										stickready = true;
 								}
 						}
