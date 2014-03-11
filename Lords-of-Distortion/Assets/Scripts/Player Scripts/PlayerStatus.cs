@@ -181,6 +181,7 @@ public class PlayerStatus : MonoBehaviour {
 			knockBackPending = false;
 			//hitMarkSprites.enabled = false;
 			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
+            rigidbody2D.velocity = new Vector2(0f, 0f);
             rigidbody2D.AddForce(velocityChange);
             //rigidbody2D.AddForce(sideForce);
 		}
