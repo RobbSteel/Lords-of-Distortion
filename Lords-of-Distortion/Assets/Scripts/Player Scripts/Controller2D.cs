@@ -53,24 +53,22 @@ public class Controller2D : MonoBehaviour {
 		snared = true;
 	}
 
-    	public void LockMovement()
-   	 {
-        	locked = true;
-    	}
+    public void LockMovement()
+   	{
+        locked = true;
+    }
 
-   	 public void UnlockMovement()
-   	 {
-        	locked = false;
-    	}
+   	public void UnlockMovement()
+   	{
+        locked = false;
+    }
     
 	public void Hooked(){
-
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
 	}
 
 	public void UnHooked(){
-
 		hooked = false;
 		rigidbody2D.gravityScale = 1;
 	}
