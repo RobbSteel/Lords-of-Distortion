@@ -9,7 +9,9 @@ public class countdown : MonoBehaviour {
 	public float powerPlaceTimer;
 	public float fightCountdown;
 	public float postmatchtimer;
+	public float lastmantimer;
 	public float matchTime = 30f;
+	public Vector3 centerscreen;
 	private bool once = false;
 	public int CurrentTimer;
 	public ArenaManager arenaManager;
@@ -32,9 +34,9 @@ public class countdown : MonoBehaviour {
 		//float screenWidth = Screen.width;
 		//screenPos.x -= (screenWidth / 2.0f);
 		//screenPos.y -= (screenHeight / 2.0f);
-		Vector3 centerScreenPosition = screenPos;
-		Debug.Log( "Center Pos:" + centerScreenPosition );
-		this.transform.position = centerScreenPosition;
+		centerscreen = screenPos;
+		Debug.Log( "Center Pos:" + centerscreen );
+		this.transform.position = centerscreen;
 		Debug.Log( "Default Pos:" + defaultTimerPosition );
 		
 	}
@@ -45,6 +47,7 @@ public class countdown : MonoBehaviour {
 		PlacementTimer();
 		FightCountDownTimer();
 		MatchStartTimer();
+		KillLastPlayer();
 		MatchEndTimer();
 		
 	}
@@ -78,16 +81,46 @@ public class countdown : MonoBehaviour {
 
 			if(arenaManager.finishgame == true){
 				print ("got here hello");
-				resetTimer (5);
+				this.transform.localPosition = new Vector2(0, 350);
+				resetTimer (postmatchtimer);
+			}
+
+			if(arenaManager.lastman == true){
+				this.transform.localPosition = new Vector2(0, 350);
+				resetTimer (lastmantimer);
 			}
 
 		}
 	}
 
+	void KillLastPlayer(){
+
+		if(CurrentTimer == 3){
+
+			myTimer -= Time.deltaTime;
+			 
+			if(arenaManager.finishgame == true){
+				print ("last player died");
+				this.transform.localPosition = new Vector2(0, 350);
+				resetTimer(postmatchtimer);
+			}
+
+			if(myTimer <= 0){
+
+
+					print ("player won");
+					resetTimer (postmatchtimer);
+
+				
+			}
+		}
+	}
+
+
 	//Counts down 5 seconds after final player death and then loads the next level.
 	void MatchEndTimer(){
 		
-		if(CurrentTimer == 3){
+		if(CurrentTimer == 4){
 			myTimer -= Time.deltaTime;
 
 			if(myTimer <= 0){

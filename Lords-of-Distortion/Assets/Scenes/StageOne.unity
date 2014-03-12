@@ -2087,7 +2087,9 @@ MonoBehaviour:
   powerPlaceTimer: 0
   fightCountdown: 0
   postmatchtimer: 0
+  lastmantimer: 0
   matchTime: 30
+  centerscreen: {x: 0, y: 0, z: 0}
   CurrentTimer: 0
   arenaManager: {fileID: 1038793230}
 --- !u!114 &232454371
@@ -6152,46 +6154,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!1001 &838553814
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -10.2274284
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -1.19130886
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -.137939453
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-  m_RootGameObject: {fileID: 2097708141}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &841130788
 GameObject:
   m_ObjectHideFlags: 0
@@ -7220,8 +7182,11 @@ MonoBehaviour:
   - {fileID: 1275668511}
   - {fileID: 1618300449}
   finishgame: 0
+  lastman: 0
   lordScreenUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
+  showonce: 0
+  showonce2: 0
 --- !u!148 &1038793231
 NetworkView:
   m_ObjectHideFlags: 0
@@ -12054,32 +12019,6 @@ MonoBehaviour:
   callWhenFinished: 
   from: {x: 0, y: -606.099915, z: 0}
   to: {x: 0, y: -700.099915, z: 0}
---- !u!1 &2097708141
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-  m_PrefabInternal: {fileID: 838553814}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 2097708142}
-  m_Layer: 0
-  m_Name: CollectData
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2097708142
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
-  m_PrefabInternal: {fileID: 838553814}
-  m_GameObject: {fileID: 2097708141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.2274284, y: -1.19130886, z: -.137939453}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
 --- !u!1 &2104451153
 GameObject:
   m_ObjectHideFlags: 0

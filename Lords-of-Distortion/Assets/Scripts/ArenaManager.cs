@@ -9,6 +9,7 @@ public class ArenaManager : MonoBehaviour {
 	const float PLACEMENT_TIME = 12f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
+	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
 	TrapFountainManager fountainManager; 
 
@@ -16,6 +17,8 @@ public class ArenaManager : MonoBehaviour {
 	private List<Vector3> playerSpawnVectors;
 
 	public bool finishgame = false;
+	public bool lastman = false;
+
 	
 	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
 	List<NetworkPlayer> playersReady;
@@ -34,6 +37,8 @@ public class ArenaManager : MonoBehaviour {
 
 	private HUDTools hudTools;
     PlacementUI placementUI;
+	public bool showonce;
+	public bool showonce2;
 
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -52,11 +57,19 @@ public class ArenaManager : MonoBehaviour {
 		deadPlayerStats.score += CalculateScore();
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
+
+		if(livePlayerCount == 1){
+			print("Finish him!");
+			lastman = true;
+		}
+
 		if(livePlayerCount == 0){
 			print ("No more players");
 			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
 			finishgame = true;
 		}
+		var managername = gameObject.name;
+		networkView.RPC ("SynchronizePhases", RPCMode.Others, lastman, finishgame, managername);
 	}
 	
 	//Called only on the server.
@@ -75,6 +88,15 @@ public class ArenaManager : MonoBehaviour {
 		deadPlayerStats.score = score;
 	}
 	
+	//Makes sure that all players are transitioning phases together, such as Lastman standing or game finished
+	[RPC]
+	void SynchronizePhases(bool lastplayer, bool gamefinal, string managename){
+		var tempmanager = GameObject.Find(managename);
+		var tempscript = tempmanager.GetComponent<ArenaManager>();
+		tempscript.finishgame = gamefinal;
+		tempscript.lastman = lastplayer;
+
+	}
 	//Called locally on every client including server when the player you control dies.
 	void LostPlayer(GameObject deadPlayer){
 		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
@@ -371,8 +393,18 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.ShowTriggersInitial();
 			trapsEnabled = true;
 		}
-		
 
+		if(lastman && !finishgame && !showonce){
+
+			hudTools.DisplayText ("Defeat the final player!");
+			showonce = true;
+		}
+
+		if(finishgame && !showonce2){
+
+			hudTools.DisplayText ("Game Finish!");
+			showonce2 = true;
+		}
 		//send traps placed in live mode
 		if(placementUI.delayedTraps.Count > 0 && placementUI.live){
 			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
@@ -396,6 +428,7 @@ public class ArenaManager : MonoBehaviour {
 		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
 		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
 		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
+		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
 	}
 	
 	private void SetUpLordScreenTween(){
