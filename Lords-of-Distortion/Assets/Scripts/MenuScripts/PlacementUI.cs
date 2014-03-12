@@ -167,6 +167,7 @@ public class PlacementUI : MonoBehaviour {
 		//Switch to random power.
 		if(deadScreen){
 			Resupply();
+
 			GridEnabled(false);
 		}
 	}
@@ -186,6 +187,13 @@ public class PlacementUI : MonoBehaviour {
 		live = true;
 
 		if(infinitePowers){
+			///Destroy untriggered powers
+			for(int i = allTraps.Count -1; i >= 0; i--){
+				RemoveFromInventory(allTraps[i].type);
+				DestroyUIPower(allTraps[i]);
+			}
+			
+
 			//Only limit placement if the player is dead and has infinite powers.
 			deadScreen = true;
 
@@ -439,13 +447,10 @@ public class PlacementUI : MonoBehaviour {
         activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
 		if(deadScreen){
-
 			timer = 3.5f;
 			reEnabledButtons = false;
 		}
-
 		GridEnabled(false);
-
 	}
 
 	private void LivePlacement(PowerSpawn spawn){
@@ -460,7 +465,6 @@ public class PlacementUI : MonoBehaviour {
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;
-
 	}
 	
 	void ChangeParticleColor(GameObject power, Color color){
