@@ -20,7 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
-	
+	private Animator animator;
 
 	NetworkController networkController;
 	Controller2D  controller2D;
@@ -28,7 +28,7 @@ public class Hook : MonoBehaviour {
 	void Start () {
 		networkController = GetComponent<NetworkController>();
 		controller2D = GetComponent<Controller2D>();
-	
+		animator = GetComponent<Animator>();
 	}
 	
 	void ShootHookLocal(Vector3 target){
@@ -244,6 +244,8 @@ public class Hook : MonoBehaviour {
 	NetworkPlayer hitPlayer;
 	[RPC]
 	void HitPlayer( Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+		//TODO: make this animation appear on all players screens
+		animator.SetTrigger("Hooked");
 		print ("Hit by "  + info.networkView.viewID);
 		print ("My id is " + networkView.viewID);
 		go.transform.position = playerLocation;
@@ -257,6 +259,7 @@ public class Hook : MonoBehaviour {
 
 	//to be called by hookhit
 	public void HitPlayerLocal(Vector3 playerLocation, NetworkPlayer hitPlayer){
+		animator.SetTrigger("Hooked");
 		targetLocation = playerLocation;
 		this.hitPlayer = hitPlayer;
 	}
