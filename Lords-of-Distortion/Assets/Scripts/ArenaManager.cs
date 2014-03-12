@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 10f; 
+	const float PLACEMENT_TIME = 12f; 
 	const float FIGHT_COUNT_DOWN_TIME = 5f;
 	const float POST_MATCH_TIME = 5f;
 	SessionManager sessionManager;
@@ -33,12 +33,6 @@ public class ArenaManager : MonoBehaviour {
 
 
 	private HUDTools hudTools;
-	/*
-     * Commenting out LordSpawnManager and other relating parts
-     * as we are not using it anymore 
-     */
-	LordSpawnManager lordsSpawnManager;
-
     PlacementUI placementUI;
 
 	[RPC]
@@ -47,7 +41,7 @@ public class ArenaManager : MonoBehaviour {
         sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
 		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
-		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 10f);
+		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
 	}
@@ -266,15 +260,12 @@ public class ArenaManager : MonoBehaviour {
             //Remove from your inventory and  disable button 
             placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
-				Vector3 offscreen = uiElement.transform.position;
-				offscreen.y -= 400f;
-				TweenPosition.Begin(uiElement, 1f, offscreen);
-
 				PowerSlot powerSlot = uiElement.GetComponent<PowerSlot>();
 				powerSlot.enabled = false;
 				//remove from grid if power is not infinite.
 				if(!powerSlot.associatedPower.infinite)
 					placementUI.RemoveFromInventory(powerSlot.associatedPower.type);
+					
 			}
 		}
 	}
@@ -372,7 +363,7 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.ColorizeAll();
 
 			placementUI.delayedTraps.Clear();
-			hudTools.DisplayText ("Activation of traps now enabled");
+			hudTools.DisplayText ("Activation of traps enabled");
 
 			//also bring back power placement
 			placementUI.SwitchToLive(false);

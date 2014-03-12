@@ -135,7 +135,7 @@ public class Controller2D : MonoBehaviour {
 		if (jumpRequested) {
 			// set the Jump animator trigger parameter
 			anim.SetTrigger("Jump");
-			AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
+			//AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
 			//Add a vertical force to player
 			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 

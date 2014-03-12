@@ -164,6 +164,12 @@ public class PlacementUI : MonoBehaviour {
 		boardsByType[type].RemoveChild();
 		boardsByType.Remove(type);
 		inventoryPowers.Remove(type);
+		//Switch to random power.
+		if(deadScreen){
+			Resupply();
+
+			GridEnabled(false);
+		}
 	}
 
 	//Enable text label and set a key
@@ -181,6 +187,13 @@ public class PlacementUI : MonoBehaviour {
 		live = true;
 
 		if(infinitePowers){
+			///Destroy untriggered powers
+			for(int i = allTraps.Count -1; i >= 0; i--){
+				RemoveFromInventory(allTraps[i].type);
+				DestroyUIPower(allTraps[i]);
+			}
+			
+
 			//Only limit placement if the player is dead and has infinite powers.
 			deadScreen = true;
 
@@ -188,11 +201,12 @@ public class PlacementUI : MonoBehaviour {
 			Resupply();
 			Resupply();
 
+			/*Unlimited powers.
 			foreach(var inventoryPower in inventoryPowers){
-				//Unlimited powers.
 				inventoryPower.Value.quantity = int.MaxValue;
 				inventoryPower.Value.infinite = true;
 			}
+			*/
 		}
 		//TODO: destroy untriggered trapss
 		GridEnabled(true);
@@ -305,13 +319,18 @@ public class PlacementUI : MonoBehaviour {
         }
     }
 */
+	bool reEnabledButtons = false;
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
         //UpdateTriggerColor();
-        if (live)
+        if (deadScreen)
         {
             timer -= Time.deltaTime;
             deadLordBtnRed.fillAmount = timer / 3.5f;
+			if(timer <= 0f && !reEnabledButtons){
+				GridEnabled(true);
+				reEnabledButtons = true;
+			}
         }
 
 		//Advance armament time for delayed powers.
@@ -365,6 +384,7 @@ public class PlacementUI : MonoBehaviour {
 			}
             // Uncomment the timer to set restrictions on how often players place powers while dead.
 			else if(timer <= 0.0f){
+
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
 			}
@@ -395,10 +415,16 @@ public class PlacementUI : MonoBehaviour {
 		//remove 1 from quanitity, disable button if == 0
 			//info.GetComponent<UIButton>().isEnabled = false;
 
+		//Remove button event listener, (so that we can use button as a trigger later)
+		if(!deadScreen)
+			UIEventListener.Get(info.gameObject).onClick  -= PowerButtonClick;
+
+
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (prefabs.list[(int)activePowerType],
 		                           info.transform.position, Quaternion.identity) as GameObject;
+
 		Destroy (activePower.GetComponent<Power>());
 		Destroy (activePower.rigidbody2D);
 		activePower.GetComponent<Collider2D>().isTrigger = true;
@@ -420,6 +446,10 @@ public class PlacementUI : MonoBehaviour {
 		activePower.AddComponent<MouseFollow>();
         activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
+		if(deadScreen){
+			timer = 3.5f;
+			reEnabledButtons = false;
+		}
 		GridEnabled(false);
 	}
 
@@ -435,7 +465,6 @@ public class PlacementUI : MonoBehaviour {
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;
-
 	}
 	
 	void ChangeParticleColor(GameObject power, Color color){
@@ -492,7 +521,7 @@ public class PlacementUI : MonoBehaviour {
 
 	//Sets down the power and stores it as a power spawn. 
 	private void PlacePower(){
-        timer = 3.5f;
+        
 		Destroy(activePower.GetComponent<MouseFollow>());
 		PowerSpawn spawn = null;
 
@@ -545,14 +574,16 @@ public class PlacementUI : MonoBehaviour {
 			if(live){
 				if(deadScreen){
 					Destroy(activePower);
-					spawnNow(spawn, gameObject);
+					spawnNow(spawn, boardsByType[activePowerType].currentPower.gameObject);
 				}
-				else
+				else{
 					LivePlacement(spawn);
+				}
 			}
 
 			state = PlacementState.Default;
-			GridEnabled(true);
+			if(!deadScreen || !live) //dont renable buttons if in dead screen unless timer is up
+				GridEnabled(true);
 		}
 
 	}
@@ -600,14 +631,16 @@ public class PlacementUI : MonoBehaviour {
 		if(live){
 			if(deadScreen){
 				Destroy(activePower);
-				spawnNow(spawn, gameObject);
+				spawnNow(spawn, boardsByType[activePowerType].currentPower.gameObject);
 			}
-			else
+			else{
 				LivePlacement(spawn);
+			}
 		}
 		//Return buttons to normal
 		state = PlacementState.Default;
-		GridEnabled(true);
+		if(!deadScreen || !live)
+			GridEnabled(true);
 	}
 
 
@@ -615,14 +648,14 @@ public class PlacementUI : MonoBehaviour {
 	private void GridEnabled(bool state){
 		powerButtonsEnabled = state;
         foreach(UIButton button in buttons){
-			//if a power is out, dont re-enable its button
-			if(button.GetComponent<PowerSlot>().associatedPower.quantity > 0)
+			//if a power is out, dont re-enable its button (unless in activation mode)
+			if(button.GetComponent<PowerSlot>().associatedPower.quantity > 0 || button.GetComponent<PowerSlot>().activationMode)
 				button.isEnabled = state;
 		}
 	}
 
 	//TODO: play an animation that tells players they can now use their powers.
-	//This function pauses animations for  powers and destroyes any unplaced instances.
+	//This function pauses animations for powers and destroyes any unplaced instances.
 	public void DisableEditing(){
 		if(dottedLineInstance != null){
 			Destroy(dottedLineInstance);

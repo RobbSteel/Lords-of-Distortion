@@ -6,13 +6,17 @@ public class FrozenEffect : MonoBehaviour {
 	public Controller2D checkStun;
 	private bool setupEffect;
 
+
 	// Use this for initialization
 	void Start () {
 		setupEffect = false;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
+		if(checkStun != null){
+			transform.position = Vector2.MoveTowards(transform.position, checkStun.transform.position, 10);
+		}
 		DestroyEffect();
 	}
 
@@ -20,7 +24,7 @@ public class FrozenEffect : MonoBehaviour {
 		if (checkStun != null) {
 			Setup();
 			if (!checkStun.stunned) {
-				Destroy (this.gameObject);
+				Destroy(this.gameObject);
 			}
 		} 
 	}

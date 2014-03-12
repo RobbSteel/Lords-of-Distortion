@@ -19,7 +19,7 @@ public class GravityField : Power {
 		//float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		//transform.rotation = Quaternion.AngleAxis(angle-90f, Vector3.forward);
 		//need to play audio clip here because audio would play during placement mode
-		//audio.Play ();
+		audio.Play ();
 		//if(triggered)
      	Destroy(gameObject, 6f);
 
