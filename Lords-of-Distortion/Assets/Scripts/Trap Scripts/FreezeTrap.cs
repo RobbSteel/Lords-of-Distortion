@@ -8,6 +8,7 @@ public class FreezeTrap : Power {
 	private GameObject frozenEffect;
 	private Controller2D frozenplayer;
 	private GameObject currentplayer;
+	private bool used = false;
 
 	void Awake(){
 
@@ -43,10 +44,11 @@ public class FreezeTrap : Power {
 
 
 		//to keep from duplicating the effect since we had 2 colliders 
-		if (!controller.transform.FindChild ("FrozenEffect(Clone)")) {
+		if ( !used ) {
 			if(GameObject.Find("CollectData") != null){
 				GA.API.Design.NewEvent("Times Frozen", player.transform.position);
 			}
+			used = true;
 			frozenEffect = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),player.transform.position, Quaternion.identity);
 			frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
 			frozenplayer = controller;
