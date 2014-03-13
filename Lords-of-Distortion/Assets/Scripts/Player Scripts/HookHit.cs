@@ -88,7 +88,7 @@ public class HookHit : MonoBehaviour {
 				playerhooked = true; 
 				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
 
-
+				animator.SetTrigger("Hooked");
 				shooter.GetComponent<Hook>().HitPlayerLocal(transform.position, affectedPlayerNC.theOwner);
 
 

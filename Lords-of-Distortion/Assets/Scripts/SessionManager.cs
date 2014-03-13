@@ -39,6 +39,7 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = -1;
 		levelPrefix = 0;
 		arenaIndex = -1;// lobby is -1
+
 	}
 	
 	//NetworkController myPlayer;
@@ -48,6 +49,8 @@ public class SessionManager : MonoBehaviour {
 	//The client requests that the server do the following.
 	[RPC]
 	void RequestLocalSpawn( string username, NetworkMessageInfo info){
+		//re-enable buffered rpc sending
+		//Network.SetSendingEnabled(info.sender, SETUP, true);
 		NetworkPlayer original = info.sender;
 		++playerCounter;
 		ConfirmLocalSpawn (playerCounter, username, original);
@@ -92,12 +95,12 @@ public class SessionManager : MonoBehaviour {
 		gameInfo.AddPlayer(original, options, stats);
 		
 		if(original == Network.player){
-			Debug.Log ("My spawn " + original + " " +  playerCounter);
 			//do this at the end so that options are available to the player
 			SpawnPlayer(transform.position);
 		}
 	}
-	
+
+	//TODO: Instead of having buffered calls, send rpcs when new player joins.
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
@@ -113,14 +116,18 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnConnectedToServer()
 	{
-		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
-		timemanager.SyncTimes();
+
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
-		//we could also have a custom functions like "Ready" 
+		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager.SyncTimes();
 	}
-	
+	void OnPlayerConnected(NetworkPlayer player) {
+		//Dont send anything to this player until he loads this stage
+		//Network.SetSendingEnabled(player, SETUP, false);
+	}
+
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
@@ -136,14 +143,16 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
-		/* Remember to fix this */
-		Network.RemoveRPCs(player);
-		Network.DestroyPlayerObjects(player);
-		gameInfo.RemovePlayer(player);
-		--playerCounter;
+		if(gameInfo.players.Contains(player)){
+			/* Remember to fix this */
+			Network.RemoveRPCs(player);
+			Network.DestroyPlayerObjects(player);
+			gameInfo.RemovePlayer(player);
+			--playerCounter;
 
-		networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
-		//Network.Destroy(myPlayer.gameObject);
+			networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
+			//Network.Destroy(myPlayer.gameObject);
+		}
 	}
 	
 	[RPC]
@@ -169,6 +178,13 @@ public class SessionManager : MonoBehaviour {
 	
 	//load level now takes a bool to indicate whether the score scene should be loaded.
 	public void LoadNextLevel(bool scorescreen){
+
+		if(Network.isServer){
+			//set update rate back to normal after were in game
+			if(arenaIndex == -1)
+				MasterServer.updateRate = 60;
+		}
+
 		string level;
 
 		if(scorescreen){
@@ -218,6 +234,10 @@ public class SessionManager : MonoBehaviour {
 	void OnNetworkLoadedLevel(){
 		if(arenaIndex == -1){
 			if(Network.isServer){
+
+				Network.RemoveRPCsInGroup(SETUP);
+				Network.RemoveRPCsInGroup(GAMEPLAY);
+
 				List<Vector3> tempLocations = new List<Vector3>();
 				tempLocations.Add(transform.position);
 				tempLocations.Add(transform.position);
