@@ -412,6 +412,7 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		if(finishgame && !showonce4 && lastman && !lastmanvictory){
+			networkView.RPC("VengeanceMode", RPCMode.Others);
 			hudTools.DisplayText ("Vengeance!");
 			showonce4 = true;
 		}
@@ -438,7 +439,15 @@ public class ArenaManager : MonoBehaviour {
 			SpawnTimedTraps(currentTime);
 
 	}
-	
+
+	[RPC]
+	public void VengeanceMode(){
+
+		hudTools.DisplayText ("Vengeance!");
+
+	}
+
+
 	private void SetUpTimer(){
 		timer = GameObject.Find("timer");
 		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
