@@ -23,6 +23,7 @@ public class countdown : MonoBehaviour {
 	void Awake(){
 		
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+
 	}
 
 	void Start(){
@@ -106,8 +107,9 @@ public class countdown : MonoBehaviour {
 			}
 
 			if(myTimer <= 0){
-
-
+			
+					arenaManager.finishgame = true;
+				arenaManager.lastmanvictory = true;
 					print ("player won");
 					resetTimer (postmatchtimer);
 
@@ -119,12 +121,22 @@ public class countdown : MonoBehaviour {
 
 	//Counts down 5 seconds after final player death and then loads the next level.
 	void MatchEndTimer(){
-		
+
 		if(CurrentTimer == 4){
 			myTimer -= Time.deltaTime;
 
-			if(myTimer <= 0){
+			if(myTimer <= .2){
+				if(GameObject.FindGameObjectWithTag("Player") != null){
+					var tempplayer = GameObject.FindGameObjectWithTag("Player");
+					var tempscript = tempplayer.GetComponent<Controller2D>();
+					tempscript.Die();
+					print ("MERCY");
+				}
 
+			}
+
+			if(myTimer <= 0){
+			
 				if(Network.isServer && !once){
 					once = true;
 					sessionManager.LoadNextLevel(true);
