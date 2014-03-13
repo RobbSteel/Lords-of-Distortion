@@ -15,7 +15,7 @@ public class HookHit : MonoBehaviour {
 	public NetworkController networkController;
 	public Controller2D affectedPlayerC2D;
 	public Vector3 targetPosition;
-	public Animator anim;
+	public Animator animator;
 
 	public AudioClip hookHitSfx;
 	public AudioClip hookWallHitSfx;
@@ -29,7 +29,7 @@ public class HookHit : MonoBehaviour {
 		lr.material = rope;
 		lr.sortingLayerName = "Player";
 		lr.sortingOrder = 1;
-		anim = GetComponent<Animator>();
+		animator = GetComponent<Animator>();
 	}
 
 
@@ -62,7 +62,7 @@ public class HookHit : MonoBehaviour {
 			}
 			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
-			anim.SetTrigger("Hooked");
+			animator.SetTrigger("Hooked");
 			hooked = true;
 			AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
 
@@ -88,10 +88,9 @@ public class HookHit : MonoBehaviour {
 				playerhooked = true; 
 				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
 
-
+				animator.SetTrigger("Hooked");
 				shooter.GetComponent<Hook>().HitPlayerLocal(transform.position, affectedPlayerNC.theOwner);
-				//TODO: make this animation appear on all players screens
-				anim.SetTrigger("Hooked");
+
 
 			}
 		}

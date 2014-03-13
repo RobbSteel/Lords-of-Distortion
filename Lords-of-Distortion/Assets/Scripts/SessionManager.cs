@@ -8,7 +8,7 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[3]{"StageOne", "StageOne-Two", "StageOne-Three"}; //an array of arenas
+	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
 	public PSinfo gameInfo;
 	
 	public bool finishedLoading = false;
@@ -39,6 +39,7 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = -1;
 		levelPrefix = 0;
 		arenaIndex = -1;// lobby is -1
+
 	}
 	
 	//NetworkController myPlayer;
@@ -48,6 +49,8 @@ public class SessionManager : MonoBehaviour {
 	//The client requests that the server do the following.
 	[RPC]
 	void RequestLocalSpawn( string username, NetworkMessageInfo info){
+		//re-enable buffered rpc sending
+		//Network.SetSendingEnabled(info.sender, SETUP, true);
 		NetworkPlayer original = info.sender;
 		++playerCounter;
 		ConfirmLocalSpawn (playerCounter, username, original);
@@ -92,18 +95,19 @@ public class SessionManager : MonoBehaviour {
 		gameInfo.AddPlayer(original, options, stats);
 		
 		if(original == Network.player){
-			Debug.Log ("My spawn " + original + " " +  playerCounter);
 			//do this at the end so that options are available to the player
 			SpawnPlayer(transform.position);
 		}
 	}
-	
+
+	//TODO: Instead of having buffered calls, send rpcs when new player joins.
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
 		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
 		timemanager.SyncTimes();
 		++playerCounter;
+
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, gameInfo.playername, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
 		ConfirmLocalSpawn (playerCounter, gameInfo.playername, Network.player);
@@ -112,14 +116,18 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnConnectedToServer()
 	{
-		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
-		timemanager.SyncTimes();
+
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
-		//we could also have a custom functions like "Ready" 
+		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager.SyncTimes();
 	}
-	
+	void OnPlayerConnected(NetworkPlayer player) {
+		//Dont send anything to this player until he loads this stage
+		//Network.SetSendingEnabled(player, SETUP, false);
+	}
+
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
 		Application.LoadLevel(offlineLevel);
@@ -127,13 +135,24 @@ public class SessionManager : MonoBehaviour {
 		Destroy (this.gameObject);
 		Destroy (gameInfo.gameObject);
 	}
+
+	[RPC]
+	void PlayerDisconnected(NetworkPlayer player){
+		gameInfo.RemovePlayer(player);
+		--playerCounter;
+	}
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
-		/* Remember to fix this */
-		Network.RemoveRPCs(player);
-		Network.DestroyPlayerObjects(player);
-		gameInfo.RemovePlayer(player);
-		//Network.Destroy(myPlayer.gameObject);
+		if(gameInfo.players.Contains(player)){
+			/* Remember to fix this */
+			Network.RemoveRPCs(player);
+			Network.DestroyPlayerObjects(player);
+			gameInfo.RemovePlayer(player);
+			--playerCounter;
+
+			networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
+			//Network.Destroy(myPlayer.gameObject);
+		}
 	}
 	
 	[RPC]
@@ -159,6 +178,13 @@ public class SessionManager : MonoBehaviour {
 	
 	//load level now takes a bool to indicate whether the score scene should be loaded.
 	public void LoadNextLevel(bool scorescreen){
+
+		if(Network.isServer){
+			//set update rate back to normal after were in game
+			if(arenaIndex == -1)
+				MasterServer.updateRate = 60;
+		}
+
 		string level;
 
 		if(scorescreen){
@@ -174,7 +200,7 @@ public class SessionManager : MonoBehaviour {
 			}
 		}
 		
-		if(roundsplayed == 3 && scorescreen){
+		if(roundsplayed == 4 && scorescreen){
 			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;
@@ -208,6 +234,10 @@ public class SessionManager : MonoBehaviour {
 	void OnNetworkLoadedLevel(){
 		if(arenaIndex == -1){
 			if(Network.isServer){
+
+				Network.RemoveRPCsInGroup(SETUP);
+				Network.RemoveRPCsInGroup(GAMEPLAY);
+
 				List<Vector3> tempLocations = new List<Vector3>();
 				tempLocations.Add(transform.position);
 				tempLocations.Add(transform.position);

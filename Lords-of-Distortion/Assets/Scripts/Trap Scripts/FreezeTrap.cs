@@ -8,6 +8,9 @@ public class FreezeTrap : Power {
 	private GameObject frozenEffect;
 	private Controller2D frozenplayer;
 	private GameObject currentplayer;
+	private bool used = false;
+
+	public GameObject frozenEffectPrefab;
 
 	void Awake(){
 
@@ -15,10 +18,10 @@ public class FreezeTrap : Power {
 
 	void Start(){
 		trapDuration = 1.5f;
+		Destroy(gameObject, trapDuration );
 	}
 
 	void Update(){
-		Destroy(gameObject, trapDuration );
 
 	}
 
@@ -27,7 +30,7 @@ public class FreezeTrap : Power {
 	void FreezeFollow(NetworkPlayer player){
 
 		GameObject playerObject = SessionManager.instance.gameInfo.GetPlayerGameObject (player);
-		var tempfreeze = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),playerObject.transform.position, Quaternion.identity);
+		var tempfreeze = (GameObject)Instantiate(frozenEffectPrefab ,playerObject.transform.position, Quaternion.identity);
 		var playercontroller = playerObject.GetComponent<Controller2D>();
 		applyDmg = playercontroller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
@@ -43,10 +46,11 @@ public class FreezeTrap : Power {
 
 
 		//to keep from duplicating the effect since we had 2 colliders 
-		if (!controller.transform.FindChild ("FrozenEffect(Clone)")) {
+		if ( !used ) {
 			if(GameObject.Find("CollectData") != null){
 				GA.API.Design.NewEvent("Times Frozen", player.transform.position);
 			}
+			used = true;
 			frozenEffect = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),player.transform.position, Quaternion.identity);
 			frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
 			frozenplayer = controller;

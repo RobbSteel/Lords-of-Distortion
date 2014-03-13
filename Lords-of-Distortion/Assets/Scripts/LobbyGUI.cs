@@ -8,7 +8,7 @@ public class LobbyGUI : MonoBehaviour {
 	private const string typeName = "Distorton";
 	private const string gameName = "Test";
 	bool wantConnection = false;
-	private HostData[] hostList;
+	bool wantToStartGame = false;
 	public PSinfo infoscript;
 	public Transform sessionManagerPrefab;
 	SessionManager sessionManager;
@@ -27,12 +27,26 @@ public class LobbyGUI : MonoBehaviour {
     {
         Network.RemoveRPCsInGroup(0);
         Network.RemoveRPCsInGroup(1);
-        sessionManager.LoadNextLevel(false);
+
+		Network.maxConnections = 0;
+		//Tell master server we are in game.
+
+		MasterServer.UnregisterHost();
+		//reregister host with new comment
+		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
+		sessionManager.LoadNextLevel(false);
     }
+
+	void Update(){
+
+	}
+
 
     public void DisconnectButton(GameObject go)
     {
         Network.Disconnect(200);
+		if(Network.isServer)
+			MasterServer.UnregisterHost();
         wantConnection = false;
     }
 
@@ -40,24 +54,24 @@ public class LobbyGUI : MonoBehaviour {
     {
 		var information = GameObject.Find("PSInfo");
 		infoscript = information.GetComponent<PSinfo>();
-		hostList = MasterServer.PollHostList();
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action
 			if(infoscript.choice == "Host")
             {
 				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
-				MasterServer.RegisterHost(typeName, infoscript.servername);
+				MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
 			} 
             else if(infoscript.choice == "Find")
             {
-                Network.Connect(hostList[infoscript.servernumb]);
+                Network.Connect(infoscript.chosenHost);
             }
 		}
 
         if (Network.peerType == NetworkPeerType.Server)
         {
-            GameObject playBtn = (GameObject)Instantiate(Resources.Load("Play"));
+			MasterServer.updateRate = 2;
+            GameObject playBtn = (GameObject)Instantiate(Resources.Load("PlayButton"));
             
             playBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
             playBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
@@ -75,10 +89,28 @@ public class LobbyGUI : MonoBehaviour {
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
 
 	}
-	
-	void OnMasterServerEvent(MasterServerEvent msEvent)
-	{
-		if (msEvent == MasterServerEvent.HostListReceived)
-			hostList = MasterServer.PollHostList();
+
+	void OnNetworkLoadedLevel(){
+		//remove all rpcs
+		if(Network.isServer){
+
+			//Tell master server that we are no longer in game.
+			Network.maxConnections = 3;
+			MasterServer.UnregisterHost();
+			MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+		}
 	}
+
+	//bug: this is only called on first registration
+	void OnMasterServerEvent(MasterServerEvent msEvent){
+		print ("did something");
+		//Dont want to load level until we are sure that the host has been registered with new comment
+		if(msEvent == MasterServerEvent.RegistrationSucceeded){
+
+			if(wantToStartGame){
+				sessionManager.LoadNextLevel(false);
+			}
+		}
+	}
+
 }
