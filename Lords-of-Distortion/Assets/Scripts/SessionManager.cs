@@ -8,7 +8,7 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[3]{"StageOne", "StageOne-Two", "StageOne-Three"}; //an array of arenas
+	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
 	public PSinfo gameInfo;
 	
 	public bool finishedLoading = false;
@@ -174,7 +174,7 @@ public class SessionManager : MonoBehaviour {
 			}
 		}
 		
-		if(roundsplayed == 3 && scorescreen){
+		if(roundsplayed == 4 && scorescreen){
 			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;
