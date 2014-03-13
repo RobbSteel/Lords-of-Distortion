@@ -104,6 +104,7 @@ public class SessionManager : MonoBehaviour {
 		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
 		timemanager.SyncTimes();
 		++playerCounter;
+
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, gameInfo.playername, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
 		ConfirmLocalSpawn (playerCounter, gameInfo.playername, Network.player);
@@ -127,12 +128,21 @@ public class SessionManager : MonoBehaviour {
 		Destroy (this.gameObject);
 		Destroy (gameInfo.gameObject);
 	}
+
+	[RPC]
+	void PlayerDisconnected(NetworkPlayer player){
+		gameInfo.RemovePlayer(player);
+		--playerCounter;
+	}
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
 		/* Remember to fix this */
 		Network.RemoveRPCs(player);
 		Network.DestroyPlayerObjects(player);
 		gameInfo.RemovePlayer(player);
+		--playerCounter;
+
+		networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
 		//Network.Destroy(myPlayer.gameObject);
 	}
 	
