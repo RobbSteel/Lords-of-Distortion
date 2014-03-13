@@ -8,7 +8,7 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[1]{"StageOne"};//, "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
+	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
 	public PSinfo gameInfo;
 	
 	public bool finishedLoading = false;
@@ -234,6 +234,7 @@ public class SessionManager : MonoBehaviour {
 	void OnNetworkLoadedLevel(){
 		if(arenaIndex == -1){
 			if(Network.isServer){
+
 				Network.RemoveRPCsInGroup(SETUP);
 				Network.RemoveRPCsInGroup(GAMEPLAY);
 
