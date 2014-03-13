@@ -9,16 +9,18 @@ public class FreezeTrap : Power {
 	private Controller2D frozenplayer;
 	private GameObject currentplayer;
 
+	public GameObject frozenEffectPrefab;
+
 	void Awake(){
 
 	}
 
 	void Start(){
 		trapDuration = 1.5f;
+		Destroy(gameObject, trapDuration );
 	}
 
 	void Update(){
-		Destroy(gameObject, trapDuration );
 
 	}
 
@@ -27,7 +29,7 @@ public class FreezeTrap : Power {
 	void FreezeFollow(NetworkPlayer player){
 
 		GameObject playerObject = SessionManager.instance.gameInfo.GetPlayerGameObject (player);
-		var tempfreeze = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),playerObject.transform.position, Quaternion.identity);
+		var tempfreeze = (GameObject)Instantiate(frozenEffectPrefab ,playerObject.transform.position, Quaternion.identity);
 		var playercontroller = playerObject.GetComponent<Controller2D>();
 		applyDmg = playercontroller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
@@ -47,7 +49,7 @@ public class FreezeTrap : Power {
 			if(GameObject.Find("CollectData") != null){
 				GA.API.Design.NewEvent("Times Frozen", player.transform.position);
 			}
-			frozenEffect = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),player.transform.position, Quaternion.identity);
+			frozenEffect = (GameObject)Instantiate(frozenEffectPrefab, player.transform.position, Quaternion.identity);
 			frozenEffect.GetComponent<FrozenEffect> ().checkStun = controller;
 			frozenplayer = controller;
 			currentplayer = player;
