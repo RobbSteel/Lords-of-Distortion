@@ -245,7 +245,7 @@ public class Hook : MonoBehaviour {
 	[RPC]
 	void HitPlayer( Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
 		//TODO: make this animation appear on all players screens
-		animator.SetTrigger("Hooked");
+		hookscript.animator.SetTrigger("Hooked");
 		print ("Hit by "  + info.networkView.viewID);
 		print ("My id is " + networkView.viewID);
 		go.transform.position = playerLocation;
@@ -259,7 +259,6 @@ public class Hook : MonoBehaviour {
 
 	//to be called by hookhit
 	public void HitPlayerLocal(Vector3 playerLocation, NetworkPlayer hitPlayer){
-		animator.SetTrigger("Hooked");
 		targetLocation = playerLocation;
 		this.hitPlayer = hitPlayer;
 	}

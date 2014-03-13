@@ -7,7 +7,7 @@ public class PSinfo : MonoBehaviour {
 	public string playername;
 	public string servername;
 	public string choice;
-	public int servernumb;
+	public HostData chosenHost;
 	public int score = 0;
 	public int playernumb;
 
