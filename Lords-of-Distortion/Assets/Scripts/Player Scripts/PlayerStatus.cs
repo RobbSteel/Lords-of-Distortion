@@ -153,7 +153,8 @@ public class PlayerStatus : MonoBehaviour {
 	void Update () {
 		RegenBar();
 		//UpdateHealthBar();
-		CheckIfStunned();
+		if(GetComponent<NetworkController>().isOwner)
+			CheckIfStunned();
 		//UpdateStunBarPosition();
 	}
 	
@@ -165,10 +166,10 @@ public class PlayerStatus : MonoBehaviour {
 	private void ApplyDamage(float dmgTaken){
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
-			if (currentStunMeter >= maxStun)
-
+			if (currentStunMeter >= maxStun){
 				GA.API.Design.NewEvent("Smoke Stuns", transform.position);
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
+			}
 		}
 	}
 	
@@ -179,8 +180,10 @@ public class PlayerStatus : MonoBehaviour {
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
 			knockBackPending = false;
+            
 			//hitMarkSprites.enabled = false;
 			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
+            
             rigidbody2D.velocity = new Vector2(0f, 0f);
             rigidbody2D.AddForce(velocityChange);
             //rigidbody2D.AddForce(sideForce);
@@ -191,7 +194,7 @@ public class PlayerStatus : MonoBehaviour {
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
         rigidbody2D.AddForce(upForce);
-		sideForce = new Vector2(7f * flip, 7f);
+        sideForce = new Vector2(7f * flip, 7f);
         velocityChange = (sideForce * rigidbody2D.mass / Time.fixedDeltaTime);
         knockBackPending = true;
 	}
@@ -273,10 +276,9 @@ public class PlayerStatus : MonoBehaviour {
 	
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
-
-
-		print ("got hit");
-		networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide);
+		//doesnt work(clients cant rpc each other directly)
+		//networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
+		networkView.RPC ("NotifyHit", RPCMode.Others, fromLeftSide);
 	}
 	
 	//checks if player is stun and then applies stunRecover
@@ -305,12 +307,12 @@ public class PlayerStatus : MonoBehaviour {
 		recoverRate = newRecoverRate;
 	}
 
-    public void MeleeStun()
+    /*public void MeleeStun()
     {
         playerControl.meleeStunned = true;
         playerControl.snared = true;
         currentStunMeter = maxStun;
-    }
+    }*/
 
 	public void Frozen(){
 
@@ -320,9 +322,17 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.deathOnHit = true;
 
 	}
+	
+
+	[RPC]
+	void RemoveStunRemote(){
+		UnStun();
+	}
 
 	public void UnStun(){
-		playerControl.snared = false;
+		networkView.RPC("RemoveStunRemote", RPCMode.Others);
+		//playerControl.snared = false;
+        //playerControl.meleeStunned = false;
 		playerControl.stunned = false;
 		TurnOffMashAlert();
 		playerControl.anim.SetTrigger("unstunned");

@@ -41,12 +41,14 @@ public class Controller2D : MonoBehaviour {
 	NetworkController networkController;
 	PlayerStatus status;
 	Hook myHook;
+    float knockbackTimer = 0f;
 
 	public bool knockedBack = false;
 	
 	public void KnockBack(){
 		knockedBack = true;
 		snared = true;
+        meleeStunned = true;
 	}
 
 	public void Snare(){
@@ -76,8 +78,6 @@ public class Controller2D : MonoBehaviour {
 
 	public void FreeFromSnare(){
 		snared = false;
-
-
 	}
 
 	void Awake(){
@@ -98,58 +98,67 @@ public class Controller2D : MonoBehaviour {
 		if(!hooked && !locked){
 
 		    Jump();
-		stoppedJump = Input.GetButtonUp("Jump");
-        if(snared)
-            rigidbody2D.gravityScale = 1;
-        if (meleeStunned && grounded)
-            status.UnStun();
-		}
+		    stoppedJump = Input.GetButtonUp("Jump");
+            if(snared)
+            { 
+                rigidbody2D.gravityScale = 1;
+            }
+            if(meleeStunned)
+            {
+                knockbackTimer += Time.deltaTime;
+                if(knockbackTimer > 2)
+                {
+                    knockbackTimer = 0;
+                    FreeFromSnare();
+                }
+            }
+        }		
 	}
 	
 	float previousY = 0f;
 	void FixedUpdate(){
 
 		if(!hooked){
-		IsGrounded();
-		if(!DEBUG && !networkController.isOwner)
-			return;
+		    IsGrounded();
+		    if(!DEBUG && !networkController.isOwner)
+			    return;
 
-        if(!locked)
-		    MovePlayer();
+            if(!locked)
+		        MovePlayer();
 
-		//Increase gravity scale when jump is at its peak or when user lets go of jump button.
-		if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
-			//print ("started falling");
-			if(snared){
-			rigidbody2D.gravityScale = 1.8f;
-			}
-		}
+		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
+		    if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
+			    //print ("started falling");
+			    if(snared){
+			        rigidbody2D.gravityScale = 1.8f;
+			    }
+		    }
 
-		//Remove knockback when you compose yourself.
-		if(grounded && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
-			knockedBack = false;
-			FreeFromSnare();
-		}
+		    //Remove knockback when you compose yourself.
+		    if(grounded && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
+			    knockedBack = false;
+			    FreeFromSnare();
+		    }
 
-		// If player jumps
-		if (jumpRequested) {
-			// set the Jump animator trigger parameter
-			anim.SetTrigger("Jump");
-			//AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
-			//Add a vertical force to player
-			//rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+		    // If player jumps
+		    if (jumpRequested) {
+			    // set the Jump animator trigger parameter
+			    anim.SetTrigger("Jump");
+			    //AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
+			    //Add a vertical force to player
+			    //rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 
-			//Incase you were walking down a slope, rest gravity before jumping
-			rigidbody2D.gravityScale = 1f;
+			    //Incase you were walking down a slope, rest gravity before jumping
+			    rigidbody2D.gravityScale = 1f;
 
-			//I think setting velocity feels better.
-			rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
-			inAir = true;
+			    //I think setting velocity feels better.
+			    rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
+			    inAir = true;
 
-			// player can't jump again until jump conditions from Update are satisfied
-			jumpRequested = false;
-		}
-		previousY = rigidbody2D.velocity.y;
+			    // player can't jump again until jump conditions from Update are satisfied
+			    jumpRequested = false;
+		    }
+		    previousY = rigidbody2D.velocity.y;
 	
 		}
 }
