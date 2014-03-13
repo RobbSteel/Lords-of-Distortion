@@ -180,8 +180,10 @@ public class PlayerStatus : MonoBehaviour {
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
 			knockBackPending = false;
+            
 			//hitMarkSprites.enabled = false;
 			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
+            
             rigidbody2D.velocity = new Vector2(0f, 0f);
             rigidbody2D.AddForce(velocityChange);
             //rigidbody2D.AddForce(sideForce);
@@ -192,7 +194,7 @@ public class PlayerStatus : MonoBehaviour {
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
         rigidbody2D.AddForce(upForce);
-		sideForce = new Vector2(7f * flip, 7f);
+        sideForce = new Vector2(7f * flip, 7f);
         velocityChange = (sideForce * rigidbody2D.mass / Time.fixedDeltaTime);
         knockBackPending = true;
 	}
@@ -305,12 +307,12 @@ public class PlayerStatus : MonoBehaviour {
 		recoverRate = newRecoverRate;
 	}
 
-    public void MeleeStun()
+    /*public void MeleeStun()
     {
         playerControl.meleeStunned = true;
         playerControl.snared = true;
         currentStunMeter = maxStun;
-    }
+    }*/
 
 	public void Frozen(){
 
@@ -329,7 +331,8 @@ public class PlayerStatus : MonoBehaviour {
 
 	public void UnStun(){
 		networkView.RPC("RemoveStunRemote", RPCMode.Others);
-		playerControl.snared = false;
+		//playerControl.snared = false;
+        //playerControl.meleeStunned = false;
 		playerControl.stunned = false;
 		TurnOffMashAlert();
 		playerControl.anim.SetTrigger("unstunned");
