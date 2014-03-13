@@ -111,7 +111,7 @@ GameObject:
   - 212: {fileID: 46423115}
   - 61: {fileID: 46423114}
   - 114: {fileID: 46423113}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -530,7 +530,7 @@ GameObject:
   - 212: {fileID: 277825821}
   - 61: {fileID: 277825820}
   - 114: {fileID: 277825819}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -1271,6 +1271,46 @@ Transform:
   - {fileID: 1001138831}
   - {fileID: 536218948}
   m_Father: {fileID: 384421517}
+--- !u!1001 &646089674
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -24.8088703
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -10.1730537
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -.137939453
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+  m_RootGameObject: {fileID: 2108178976}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &646343823
 GameObject:
   m_ObjectHideFlags: 0
@@ -3081,7 +3121,7 @@ GameObject:
   - 212: {fileID: 1260352788}
   - 61: {fileID: 1260352787}
   - 114: {fileID: 1260352786}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -3161,7 +3201,7 @@ GameObject:
   - 212: {fileID: 1308556312}
   - 61: {fileID: 1308556311}
   - 114: {fileID: 1308556310}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -3376,6 +3416,9 @@ MonoBehaviour:
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   showonce: 0
   showonce2: 0
+  showonce3: 0
+  showonce4: 0
+  lastmanvictory: 0
 --- !u!4 &1318985894
 Transform:
   m_ObjectHideFlags: 0
@@ -4434,7 +4477,7 @@ GameObject:
   - 212: {fileID: 1860407035}
   - 61: {fileID: 1860407034}
   - 114: {fileID: 1860407033}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -4671,7 +4714,7 @@ GameObject:
   - 212: {fileID: 1905466537}
   - 61: {fileID: 1905466536}
   - 114: {fileID: 1905466535}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Power
   m_Icon: {fileID: -196007500, guid: 0000000000000000d000000000000000, type: 0}
@@ -5188,6 +5231,32 @@ Transform:
   - {fileID: 809778044}
   - {fileID: 1188514008}
   - {fileID: 104167363}
+  m_Father: {fileID: 0}
+--- !u!1 &2108178976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+  m_PrefabInternal: {fileID: 646089674}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2108178977}
+  m_Layer: 0
+  m_Name: CollectData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2108178977
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 26b58a7cbb4f18f40aa19b81890713e3, type: 2}
+  m_PrefabInternal: {fileID: 646089674}
+  m_GameObject: {fileID: 2108178976}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.8088703, y: -10.1730537, z: -.137939453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
   m_Father: {fileID: 0}
 --- !u!1 &2112416591
 GameObject:
