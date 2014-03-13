@@ -28,6 +28,8 @@ public class Melee : MonoBehaviour {
 	public float coolDownTimer = 0.5f;
 	public float damageDealt = 15f;
 
+	public bool meleeing = false;
+
 	void Awake()
 	{
 		// Setting up the references.
@@ -60,7 +62,7 @@ public class Melee : MonoBehaviour {
 	}
 
 	private void startMelee(){
-
+		meleeing = true;
 		if(GameObject.Find("CollectData") != null){
 		GA.API.Design.NewEvent("Melee Attack", transform.position);
 		}
@@ -72,12 +74,15 @@ public class Melee : MonoBehaviour {
 		anim.SetTrigger ("Melee");
 		AudioSource.PlayClipAtPoint( controller.meleeSfx , transform.position);
 		meleeTimer =  coolDownTimer;
+
+
 	}
 
 	//Called by animator when the animation is done. Previously the collider was sticking around.
 	public void StopMelee(){
 		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
 		controller.FreeFromSnare();
+		meleeing = false;
 	}
 
 
