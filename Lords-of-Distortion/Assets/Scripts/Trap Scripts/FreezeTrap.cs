@@ -10,16 +10,18 @@ public class FreezeTrap : Power {
 	private GameObject currentplayer;
 	private bool used = false;
 
+	public GameObject frozenEffectPrefab;
+
 	void Awake(){
 
 	}
 
 	void Start(){
 		trapDuration = 1.5f;
+		Destroy(gameObject, trapDuration );
 	}
 
 	void Update(){
-		Destroy(gameObject, trapDuration );
 
 	}
 
@@ -28,7 +30,7 @@ public class FreezeTrap : Power {
 	void FreezeFollow(NetworkPlayer player){
 
 		GameObject playerObject = SessionManager.instance.gameInfo.GetPlayerGameObject (player);
-		var tempfreeze = (GameObject)Instantiate(Resources.Load ("FrozenEffect"),playerObject.transform.position, Quaternion.identity);
+		var tempfreeze = (GameObject)Instantiate(frozenEffectPrefab ,playerObject.transform.position, Quaternion.identity);
 		var playercontroller = playerObject.GetComponent<Controller2D>();
 		applyDmg = playercontroller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
