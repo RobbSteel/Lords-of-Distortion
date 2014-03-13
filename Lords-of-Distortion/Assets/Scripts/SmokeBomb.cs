@@ -20,7 +20,7 @@ public class SmokeBomb : Power {
 	// Use this for initialization
 	void Start () 
     {
-        Destroy(gameObject, 6f);
+        Destroy(gameObject, 15f);
 		//smoke.enableEmission = false;
 	}
 	

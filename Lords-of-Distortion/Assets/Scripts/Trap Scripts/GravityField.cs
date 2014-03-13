@@ -21,7 +21,7 @@ public class GravityField : Power {
 		//need to play audio clip here because audio would play during placement mode
 		audio.Play ();
 		//if(triggered)
-     	Destroy(gameObject, 6f);
+     	Destroy(gameObject, 15f);
 
     }
 	void Update(){
