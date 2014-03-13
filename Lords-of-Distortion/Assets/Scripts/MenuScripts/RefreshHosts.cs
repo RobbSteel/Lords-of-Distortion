@@ -11,15 +11,14 @@ public class RefreshHosts : MonoBehaviour {
 	private float refreshtime = 0;
 	// Use this for initialization
 	void Start () {
-	
 	}
 
 
-void OnClick(){
+	void OnClick(){
+		MasterServer.ClearHostList();
+		MasterServer.RequestHostList(typeName);
 
-	MasterServer.RequestHostList(typeName);
-
-	if(hostList != null){
+		if(hostList != null){
 
 
 			var oldlabels = GameObject.FindGameObjectsWithTag("ServerLabel");
@@ -69,9 +68,9 @@ void OnClick(){
 				server.depth = 1;
 				numbofplayers.depth = 1;
 			
+			}
 		}
 	}
-}
 
 	void OnMasterServerEvent(MasterServerEvent msEvent)
 	{
@@ -86,8 +85,8 @@ void OnClick(){
 
 
 		if(refreshtime < 0){
-
-		MasterServer.RequestHostList(typeName);
+			MasterServer.ClearHostList();
+			MasterServer.RequestHostList(typeName);
 		
 		if(hostList != null){
 			
