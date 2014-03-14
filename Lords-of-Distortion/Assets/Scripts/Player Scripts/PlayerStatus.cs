@@ -297,7 +297,6 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.SetTrigger("stunned");
-		audio.Play ();
 	}
 	
 	public void Stun( float newRecoverRate ){
