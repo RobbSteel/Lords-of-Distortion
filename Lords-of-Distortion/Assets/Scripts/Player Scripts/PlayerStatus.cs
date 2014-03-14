@@ -331,7 +331,7 @@ public class PlayerStatus : MonoBehaviour {
 
 	public void UnStun(){
 		networkView.RPC("RemoveStunRemote", RPCMode.Others);
-		//playerControl.snared = false;
+		playerControl.snared = false;
         //playerControl.meleeStunned = false;
 		playerControl.stunned = false;
 		TurnOffMashAlert();
