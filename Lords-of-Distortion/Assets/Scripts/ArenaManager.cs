@@ -337,8 +337,9 @@ public class ArenaManager : MonoBehaviour {
 
 		//Check to see if you are the last man standing
 		if(livePlayerCount == 1 && finishgame && !showonce3){
+			networkView.RPC ("LastManVictory", RPCMode.Others);
 			lastmanvictory = true;
-			hudTools.DisplayText ("Last Player Wins!");
+			hudTools.DisplayText ("Last Player has Survived!");
 			showonce3 = true;
 		}
 		
@@ -445,6 +446,12 @@ public class ArenaManager : MonoBehaviour {
 
 		hudTools.DisplayText ("Vengeance!");
 
+	}
+
+	[RPC]
+	public void LastManVictory(){
+		this.lastmanvictory = true;
+		hudTools.DisplayText("Last Player has Survived!");
 	}
 
 	private void SetUpTimer(){
