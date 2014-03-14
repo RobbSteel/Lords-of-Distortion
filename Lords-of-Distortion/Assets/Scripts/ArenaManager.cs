@@ -279,7 +279,7 @@ public class ArenaManager : MonoBehaviour {
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
-			if(spawn.type == PowerType.EXPLOSIVE){
+			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
@@ -337,8 +337,9 @@ public class ArenaManager : MonoBehaviour {
 
 		//Check to see if you are the last man standing
 		if(livePlayerCount == 1 && finishgame && !showonce3){
+			networkView.RPC ("LastManVictory", RPCMode.Others);
 			lastmanvictory = true;
-			hudTools.DisplayText ("Last Player Wins!");
+			hudTools.DisplayText ("Last Player has Survived!");
 			showonce3 = true;
 		}
 		
@@ -412,6 +413,7 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		if(finishgame && !showonce4 && lastman && !lastmanvictory){
+			networkView.RPC("VengeanceMode", RPCMode.Others);
 			hudTools.DisplayText ("Vengeance!");
 			showonce4 = true;
 		}
@@ -438,7 +440,20 @@ public class ArenaManager : MonoBehaviour {
 			SpawnTimedTraps(currentTime);
 
 	}
-	
+
+	[RPC]
+	public void VengeanceMode(){
+
+		hudTools.DisplayText ("Vengeance!");
+
+	}
+
+	[RPC]
+	public void LastManVictory(){
+		this.lastmanvictory = true;
+		hudTools.DisplayText("Last Player has Survived!");
+	}
+
 	private void SetUpTimer(){
 		timer = GameObject.Find("timer");
 		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
