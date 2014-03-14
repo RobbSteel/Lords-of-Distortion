@@ -14,6 +14,7 @@ GameObject:
   - 95: {fileID: 9500000}
   - 111: {fileID: 11100000}
   - 50: {fileID: 5000000}
+  - 148: {fileID: 14800000}
   m_Layer: 9
   m_Name: fireball
   m_TagString: Power
@@ -214,6 +215,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275fc5543f4e43c48a8b9ce3c3b559e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!148 &14800000
+NetworkView:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 400000}
+  m_ViewID:
+    m_ID: 0
+    m_Type: 0
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1

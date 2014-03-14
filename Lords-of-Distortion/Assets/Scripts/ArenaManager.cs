@@ -279,7 +279,7 @@ public class ArenaManager : MonoBehaviour {
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
-			if(spawn.type == PowerType.EXPLOSIVE){
+			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
@@ -446,7 +446,6 @@ public class ArenaManager : MonoBehaviour {
 		hudTools.DisplayText ("Vengeance!");
 
 	}
-
 
 	private void SetUpTimer(){
 		timer = GameObject.Find("timer");
