@@ -2153,6 +2153,46 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!1001 &234258817
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 352498039}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -1.54999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -.360000014
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+  m_RootGameObject: {fileID: 426818306}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &234889911
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,9 +2863,11 @@ GameObject:
   - 4: {fileID: 320816614}
   - 212: {fileID: 320816616}
   - 61: {fileID: 320816615}
+  - 61: {fileID: 320816618}
+  - 61: {fileID: 320816617}
   m_Layer: 0
   m_Name: flower_middle
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2852,7 +2894,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -4.76837158e-07, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &320816616
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2877,6 +2919,30 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &320816617
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 468492554}
+  m_GameObject: {fileID: 320816613}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
+--- !u!61 &320816618
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 468492554}
+  m_GameObject: {fileID: 320816613}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!1 &352498038
 GameObject:
   m_ObjectHideFlags: 0
@@ -2906,11 +2972,11 @@ Transform:
   - {fileID: 1852860689}
   - {fileID: 1619602938}
   - {fileID: 2065992946}
+  - {fileID: 426818307}
   - {fileID: 1363518154}
   - {fileID: 320816614}
   - {fileID: 1494980935}
   - {fileID: 1596657783}
-  - {fileID: 426818307}
   - {fileID: 1289123829}
   - {fileID: 512637245}
   - {fileID: 878885467}
@@ -3308,16 +3374,18 @@ Prefab:
 --- !u!1 &426818306
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-  m_PrefabInternal: {fileID: 1057426933}
+  m_PrefabParentObject: {fileID: 100000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+  m_PrefabInternal: {fileID: 234258817}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 426818307}
   - 212: {fileID: 426818309}
   - 61: {fileID: 426818308}
+  - 61: {fileID: 426818311}
+  - 61: {fileID: 426818310}
   m_Layer: 0
   m_Name: flower_middle
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3325,8 +3393,8 @@ GameObject:
 --- !u!4 &426818307
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-  m_PrefabInternal: {fileID: 1057426933}
+  m_PrefabParentObject: {fileID: 400000, guid: 171b620bd4b13ec4ca0db7a9af680bec, type: 2}
+  m_PrefabInternal: {fileID: 234258817}
   m_GameObject: {fileID: 426818306}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.54999995, y: -.360000014, z: 0}
@@ -3336,9 +3404,9 @@ Transform:
 --- !u!61 &426818308
 BoxCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100000, guid: b35dc9e6d6f2bb043a85838007948462,
+  m_PrefabParentObject: {fileID: 6100002, guid: 171b620bd4b13ec4ca0db7a9af680bec,
     type: 2}
-  m_PrefabInternal: {fileID: 1057426933}
+  m_PrefabInternal: {fileID: 234258817}
   m_GameObject: {fileID: 426818306}
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
@@ -3348,9 +3416,9 @@ BoxCollider2D:
 --- !u!212 &426818309
 SpriteRenderer:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 21200000, guid: b35dc9e6d6f2bb043a85838007948462,
+  m_PrefabParentObject: {fileID: 21200000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
     type: 2}
-  m_PrefabInternal: {fileID: 1057426933}
+  m_PrefabInternal: {fileID: 234258817}
   m_GameObject: {fileID: 426818306}
   m_Enabled: 1
   m_CastShadows: 0
@@ -3369,6 +3437,30 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &426818310
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 234258817}
+  m_GameObject: {fileID: 426818306}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
+--- !u!61 &426818311
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 234258817}
+  m_GameObject: {fileID: 426818306}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!1001 &462380219
 Prefab:
   m_ObjectHideFlags: 0
@@ -3593,9 +3685,10 @@ GameObject:
   - 212: {fileID: 512637244}
   - 61: {fileID: 512637243}
   - 61: {fileID: 512637242}
+  - 61: {fileID: 512637246}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3608,10 +3701,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 776603247}
   m_GameObject: {fileID: 512637241}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &512637243
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3620,10 +3713,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 776603247}
   m_GameObject: {fileID: 512637241}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &512637244
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3659,6 +3752,18 @@ Transform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 352498039}
+--- !u!61 &512637246
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 776603247}
+  m_GameObject: {fileID: 512637241}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &543653664
 GameObject:
   m_ObjectHideFlags: 0
@@ -6351,9 +6456,10 @@ GameObject:
   - 212: {fileID: 878885470}
   - 61: {fileID: 878885469}
   - 61: {fileID: 878885468}
+  - 61: {fileID: 878885471}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6377,10 +6483,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1587935206}
   m_GameObject: {fileID: 878885466}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &878885469
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6389,10 +6495,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1587935206}
   m_GameObject: {fileID: 878885466}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &878885470
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6417,6 +6523,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &878885471
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1587935206}
+  m_GameObject: {fileID: 878885466}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &899891224
 GameObject:
   m_ObjectHideFlags: 0
@@ -7265,50 +7383,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextPrefab: {fileID: 11400004, guid: 23be67396af99e54eab302b862007366, type: 2}
---- !u!1001 &1057426933
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 352498039}
-    m_Modifications:
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -1.54999995
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -.360000014
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-      propertyPath: m_Name
-      value: flower_middle
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: b35dc9e6d6f2bb043a85838007948462, type: 2}
-  m_RootGameObject: {fileID: 426818306}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &1120786451
 GameObject:
   m_ObjectHideFlags: 0
@@ -7922,9 +7996,10 @@ GameObject:
   - 212: {fileID: 1260520503}
   - 61: {fileID: 1260520502}
   - 61: {fileID: 1260520501}
+  - 61: {fileID: 1260520504}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7950,8 +8025,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1260520502
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7963,7 +8038,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1260520503
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7988,6 +8063,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1260520504
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 478375719}
+  m_GameObject: {fileID: 1260520499}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1275668510
 GameObject:
   m_ObjectHideFlags: 0
@@ -8025,9 +8112,10 @@ GameObject:
   - 212: {fileID: 1289123832}
   - 61: {fileID: 1289123830}
   - 61: {fileID: 1289123831}
+  - 61: {fileID: 1289123833}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8051,10 +8139,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 408412014}
   m_GameObject: {fileID: 1289123828}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!61 &1289123831
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8063,10 +8151,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 408412014}
   m_GameObject: {fileID: 1289123828}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!212 &1289123832
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8091,6 +8179,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1289123833
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 408412014}
+  m_GameObject: {fileID: 1289123828}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1328274035
 GameObject:
   m_ObjectHideFlags: 0
@@ -8276,9 +8376,12 @@ GameObject:
   - 4: {fileID: 1363518154}
   - 212: {fileID: 1363518156}
   - 61: {fileID: 1363518155}
+  - 61: {fileID: 1363518159}
+  - 61: {fileID: 1363518158}
+  - 61: {fileID: 1363518157}
   m_Layer: 0
   m_Name: flower_middle
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8305,7 +8408,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -4.76837158e-07, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1363518156
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8330,6 +8433,41 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1363518157
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1363518153}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .155000001}
+  m_Center: {x: .649999976, y: .180000007}
+--- !u!61 &1363518158
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 417575771}
+  m_GameObject: {fileID: 1363518153}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
+--- !u!61 &1363518159
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 417575771}
+  m_GameObject: {fileID: 1363518153}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!1 &1366212382
 GameObject:
   m_ObjectHideFlags: 0
@@ -9137,9 +9275,11 @@ GameObject:
   - 4: {fileID: 1494980935}
   - 212: {fileID: 1494980937}
   - 61: {fileID: 1494980936}
+  - 61: {fileID: 1494980939}
+  - 61: {fileID: 1494980938}
   m_Layer: 0
   m_Name: flower_middle
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9166,7 +9306,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -4.76837158e-07, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1494980937
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9191,6 +9331,30 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1494980938
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 555225898}
+  m_GameObject: {fileID: 1494980934}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
+--- !u!61 &1494980939
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 555225898}
+  m_GameObject: {fileID: 1494980934}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!1 &1495132858
 GameObject:
   m_ObjectHideFlags: 0
@@ -9588,9 +9752,11 @@ GameObject:
   - 4: {fileID: 1596657783}
   - 212: {fileID: 1596657785}
   - 61: {fileID: 1596657784}
+  - 61: {fileID: 1596657787}
+  - 61: {fileID: 1596657786}
   m_Layer: 0
   m_Name: flower_middle
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9617,7 +9783,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -4.76837158e-07, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1596657785
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9642,6 +9808,30 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1596657786
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100000, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1038529911}
+  m_GameObject: {fileID: 1596657782}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
+--- !u!61 &1596657787
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1038529911}
+  m_GameObject: {fileID: 1596657782}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!1 &1606346137
 GameObject:
   m_ObjectHideFlags: 0
@@ -9910,9 +10100,10 @@ GameObject:
   - 212: {fileID: 1619602941}
   - 61: {fileID: 1619602940}
   - 61: {fileID: 1619602939}
+  - 61: {fileID: 1619602942}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9938,8 +10129,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1619602940
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9951,7 +10142,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1619602941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9976,6 +10167,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1619602942
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1465885484}
+  m_GameObject: {fileID: 1619602937}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1621219034
 GameObject:
   m_ObjectHideFlags: 0
@@ -10263,9 +10466,10 @@ GameObject:
   - 212: {fileID: 1700805898}
   - 61: {fileID: 1700805897}
   - 61: {fileID: 1700805896}
+  - 61: {fileID: 1700805899}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10289,10 +10493,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1714963413}
   m_GameObject: {fileID: 1700805894}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1700805897
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10301,10 +10505,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1714963413}
   m_GameObject: {fileID: 1700805894}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1700805898
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10329,6 +10533,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1700805899
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1714963413}
+  m_GameObject: {fileID: 1700805894}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &1714963413
 Prefab:
   m_ObjectHideFlags: 0
@@ -11002,9 +11218,10 @@ GameObject:
   - 212: {fileID: 1852860688}
   - 61: {fileID: 1852860687}
   - 61: {fileID: 1852860686}
+  - 61: {fileID: 1852860690}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11019,8 +11236,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1852860687
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11032,7 +11249,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1852860688
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11068,6 +11285,18 @@ Transform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 352498039}
+--- !u!61 &1852860690
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1166639050}
+  m_GameObject: {fileID: 1852860685}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1856669279
 GameObject:
   m_ObjectHideFlags: 0
@@ -11705,9 +11934,10 @@ GameObject:
   - 212: {fileID: 2065992949}
   - 61: {fileID: 2065992948}
   - 61: {fileID: 2065992947}
+  - 61: {fileID: 2065992950}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11733,8 +11963,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &2065992948
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11746,7 +11976,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &2065992949
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11771,6 +12001,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &2065992950
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 2067994070}
+  m_GameObject: {fileID: 2065992945}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &2067994070
 Prefab:
   m_ObjectHideFlags: 0
