@@ -129,9 +129,7 @@ public class Controller2D : MonoBehaviour {
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
 		    if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
 			    //print ("started falling");
-			    if(snared){
-			        rigidbody2D.gravityScale = 1.8f;
-			    }
+			    rigidbody2D.gravityScale = 1.8f;
 		    }
 
 		    //Remove knockback when you compose yourself.
