@@ -2779,7 +2779,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.0469656, y: -1.72521996, z: .0048828125}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1215565880}
   m_Father: {fileID: 2142364274}
 --- !u!61 &1163177067
 BoxCollider2D:
@@ -3009,12 +3010,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1215565879}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -5.20428371, y: -2.0612669, z: 0}
-  m_LocalScale: {x: .75, y: .75, z: 1}
+  m_LocalPosition: {x: -7.50083303, y: -.224031299, z: -.0048828125}
+  m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children:
   - {fileID: 277825818}
   - {fileID: 1905466534}
-  m_Father: {fileID: 2142364274}
+  m_Father: {fileID: 1163177066}
 --- !u!1001 &1226554624
 Prefab:
   m_ObjectHideFlags: 0
@@ -3781,7 +3782,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.38984489, y: -1.72521996, z: .0048828125}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2009528788}
   m_Father: {fileID: 1796160042}
 --- !u!61 &1583149001
 BoxCollider2D:
@@ -4385,7 +4387,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1583149000}
-  - {fileID: 2009528788}
   m_Father: {fileID: 384421517}
 --- !u!1001 &1830864188
 Prefab:
@@ -5278,12 +5279,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2009528787}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
-  m_LocalPosition: {x: -17.6323357, y: -2.06126642, z: 0}
-  m_LocalScale: {x: .75, y: .75, z: 1}
+  m_LocalPosition: {x: -7.49499416, y: -.224030972, z: -.0048828125}
+  m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children:
   - {fileID: 1860407032}
   - {fileID: 1308556309}
-  m_Father: {fileID: 1796160042}
+  m_Father: {fileID: 1583149000}
 --- !u!1 &2060981795
 GameObject:
   m_ObjectHideFlags: 0
@@ -5402,5 +5403,4 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1163177066}
-  - {fileID: 1215565880}
   m_Father: {fileID: 384421517}
