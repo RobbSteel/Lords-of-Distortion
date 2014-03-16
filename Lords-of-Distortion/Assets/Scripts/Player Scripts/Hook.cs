@@ -33,6 +33,7 @@ public class Hook : MonoBehaviour {
 	
 	void ShootHookLocal(Vector3 target){
 		mousePos = target;
+
 		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
 		going = true;
 		hookscript = go.GetComponent<HookHit>();
@@ -287,6 +288,7 @@ public class Hook : MonoBehaviour {
 
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
+		transform.rigidbody2D.velocity = Vector2.zero;
 		transform.rigidbody2D.gravityScale = 0;
 		var distance = Vector2.Distance(transform.position, go.transform.position);
 
