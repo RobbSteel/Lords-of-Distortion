@@ -3607,9 +3607,10 @@ GameObject:
   - 212: {fileID: 244252573}
   - 61: {fileID: 244252572}
   - 61: {fileID: 244252571}
+  - 61: {fileID: 244252574}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3635,8 +3636,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &244252572
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3648,7 +3649,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &244252573
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3673,6 +3674,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &244252574
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 986781406}
+  m_GameObject: {fileID: 244252569}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &245857351
 GameObject:
   m_ObjectHideFlags: 0
@@ -4483,9 +4496,10 @@ GameObject:
   - 212: {fileID: 376125323}
   - 61: {fileID: 376125322}
   - 61: {fileID: 376125321}
+  - 61: {fileID: 376125324}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4509,10 +4523,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 431915047}
   m_GameObject: {fileID: 376125319}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &376125322
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4521,10 +4535,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 431915047}
   m_GameObject: {fileID: 376125319}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &376125323
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4549,6 +4563,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &376125324
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 431915047}
+  m_GameObject: {fileID: 376125319}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &376329898
 Prefab:
   m_ObjectHideFlags: 0
@@ -7724,9 +7750,10 @@ GameObject:
   - 212: {fileID: 949432021}
   - 61: {fileID: 949432020}
   - 61: {fileID: 949432019}
+  - 61: {fileID: 949432022}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7752,8 +7779,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &949432020
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7765,7 +7792,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &949432021
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7790,6 +7817,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &949432022
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1497861036}
+  m_GameObject: {fileID: 949432017}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &960205043
 Prefab:
   m_ObjectHideFlags: 0
@@ -8235,9 +8274,10 @@ GameObject:
   - 212: {fileID: 1050883261}
   - 61: {fileID: 1050883260}
   - 61: {fileID: 1050883259}
+  - 61: {fileID: 1050883262}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8261,10 +8301,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1625159662}
   m_GameObject: {fileID: 1050883257}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1050883260
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8273,10 +8313,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1625159662}
   m_GameObject: {fileID: 1050883257}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1050883261
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8301,6 +8341,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1050883262
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1625159662}
+  m_GameObject: {fileID: 1050883257}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &1060360164
 Prefab:
   m_ObjectHideFlags: 0
@@ -8408,9 +8460,10 @@ GameObject:
   - 212: {fileID: 1197969960}
   - 61: {fileID: 1197969959}
   - 61: {fileID: 1197969958}
+  - 61: {fileID: 1197969961}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8436,8 +8489,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1197969959
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8449,7 +8502,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1197969960
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8474,6 +8527,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1197969961
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1400645317}
+  m_GameObject: {fileID: 1197969956}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1203284095
 GameObject:
   m_ObjectHideFlags: 0
@@ -10396,9 +10461,10 @@ GameObject:
   - 212: {fileID: 1314390862}
   - 61: {fileID: 1314390861}
   - 61: {fileID: 1314390860}
+  - 61: {fileID: 1314390863}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10424,8 +10490,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1314390861
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10437,7 +10503,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1314390862
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10462,6 +10528,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1314390863
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1257326877}
+  m_GameObject: {fileID: 1314390858}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1321265617
 GameObject:
   m_ObjectHideFlags: 0
@@ -10644,9 +10722,10 @@ GameObject:
   - 212: {fileID: 1357539372}
   - 61: {fileID: 1357539371}
   - 61: {fileID: 1357539370}
+  - 61: {fileID: 1357539373}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10670,10 +10749,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 679621678}
   m_GameObject: {fileID: 1357539368}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1357539371
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10682,10 +10761,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 679621678}
   m_GameObject: {fileID: 1357539368}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1357539372
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10710,6 +10789,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1357539373
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 679621678}
+  m_GameObject: {fileID: 1357539368}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1358089133
 GameObject:
   m_ObjectHideFlags: 0
@@ -11834,9 +11925,10 @@ GameObject:
   - 212: {fileID: 1505414125}
   - 61: {fileID: 1505414124}
   - 61: {fileID: 1505414123}
+  - 61: {fileID: 1505414126}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11862,8 +11954,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1505414124
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11875,7 +11967,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1505414125
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11900,6 +11992,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1505414126
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1733542376}
+  m_GameObject: {fileID: 1505414121}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &1531822931
 Prefab:
   m_ObjectHideFlags: 0
@@ -12853,9 +12957,10 @@ GameObject:
   - 212: {fileID: 1640872266}
   - 61: {fileID: 1640872265}
   - 61: {fileID: 1640872264}
+  - 61: {fileID: 1640872267}
   m_Layer: 0
   m_Name: flower_leftEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12881,8 +12986,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: -.600000024, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1640872265
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12894,7 +12999,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: .0799999982, y: .180000007}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1640872266
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12919,6 +13024,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1640872267
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0effc1eab7eafd343a6416f49ded6fc7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1386594110}
+  m_GameObject: {fileID: 1640872262}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1001 &1649724482
 Prefab:
   m_ObjectHideFlags: 0
@@ -12970,9 +13087,10 @@ GameObject:
   - 212: {fileID: 1654836706}
   - 61: {fileID: 1654836705}
   - 61: {fileID: 1654836704}
+  - 61: {fileID: 1654836707}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12996,10 +13114,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 210134067}
   m_GameObject: {fileID: 1654836702}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1654836705
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13008,10 +13126,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 210134067}
   m_GameObject: {fileID: 1654836702}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1654836706
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13036,6 +13154,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1654836707
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 210134067}
+  m_GameObject: {fileID: 1654836702}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1657971211
 GameObject:
   m_ObjectHideFlags: 0
@@ -13127,9 +13257,10 @@ GameObject:
   - 212: {fileID: 1663726549}
   - 61: {fileID: 1663726548}
   - 61: {fileID: 1663726547}
+  - 61: {fileID: 1663726550}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13153,10 +13284,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 627965113}
   m_GameObject: {fileID: 1663726545}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1663726548
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13165,10 +13296,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 627965113}
   m_GameObject: {fileID: 1663726545}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1663726549
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13193,6 +13324,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1663726550
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 627965113}
+  m_GameObject: {fileID: 1663726545}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1664644263
 GameObject:
   m_ObjectHideFlags: 0
@@ -15406,9 +15549,10 @@ GameObject:
   - 212: {fileID: 1810847664}
   - 61: {fileID: 1810847663}
   - 61: {fileID: 1810847662}
+  - 61: {fileID: 1810847665}
   m_Layer: 0
   m_Name: flower_rightEnd
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15432,10 +15576,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1292588001}
   m_GameObject: {fileID: 1810847660}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: .150000006}
-  m_Center: {x: -.0500000007, y: .180000007}
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
 --- !u!61 &1810847663
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15444,10 +15588,10 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1292588001}
   m_GameObject: {fileID: 1810847660}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .100000001, y: .155000001}
-  m_Center: {x: .600000024, y: .180000007}
+  m_Size: {x: 1.27999997, y: .150000006}
+  m_Center: {x: 0, y: .180000007}
 --- !u!212 &1810847664
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15472,6 +15616,18 @@ SpriteRenderer:
   m_SortingLayerID: 1448056335
   m_Sprite: {fileID: 21300000, guid: 6e63acd7b769c6047b6a9ddd42fe7668, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &1810847665
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: da95cb602a106674aad24240701f374b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1292588001}
+  m_GameObject: {fileID: 1810847660}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: -.649999976, y: .180000007}
 --- !u!1 &1843822253
 GameObject:
   m_ObjectHideFlags: 0

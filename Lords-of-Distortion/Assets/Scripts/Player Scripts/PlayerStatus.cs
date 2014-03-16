@@ -297,7 +297,6 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.SetTrigger("stunned");
-		audio.Play ();
 	}
 	
 	public void Stun( float newRecoverRate ){
@@ -326,19 +325,24 @@ public class PlayerStatus : MonoBehaviour {
 
 	[RPC]
 	void RemoveStunRemote(){
-		UnStun();
+		UnStunSimple();
 	}
 
-	public void UnStun(){
-		networkView.RPC("RemoveStunRemote", RPCMode.Others);
+	public void UnStunSimple(){
 		playerControl.snared = false;
-        //playerControl.meleeStunned = false;
+		//playerControl.meleeStunned = false;
 		playerControl.stunned = false;
 		TurnOffMashAlert();
 		playerControl.anim.SetTrigger("unstunned");
 		currentStunMeter = 0;
 		playerControl.anim.enabled = true;
 		playerControl.deathOnHit = false;
+	}
+	
+	public void UnStun(){
+
+		networkView.RPC("RemoveStunRemote", RPCMode.Others);
+		UnStunSimple();
 	}
 	
 	//Only runs if your stun bar is injured

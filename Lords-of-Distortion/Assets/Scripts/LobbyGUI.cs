@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class LobbyGUI : MonoBehaviour {
-	
-	public string connectionIP = "127.0.0.1";
+
 	public int connectionPort = 25001;
 	private const string typeName = "Distorton";
 	private const string gameName = "Test";
@@ -95,7 +94,7 @@ public class LobbyGUI : MonoBehaviour {
 		if(Network.isServer){
 
 			//Tell master server that we are no longer in game.
-			Network.maxConnections = 3;
+			Network.maxConnections = 4;
 			MasterServer.UnregisterHost();
 			MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
 		}
