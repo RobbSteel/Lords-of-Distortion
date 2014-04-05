@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HookGate : Power {
+public class PowerHook : Power {
 
-	void Start(){
-		float angle = Mathf.Atan2(spawnInfo.direction.y, spawnInfo.direction.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-	}
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-
+		controller.Die();
 	}
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)
@@ -20,7 +16,8 @@ public class HookGate : Power {
 
 	public override void PowerActionExit (GameObject player, Controller2D controller)
 	{
-			
+
 	}
+
 
 }

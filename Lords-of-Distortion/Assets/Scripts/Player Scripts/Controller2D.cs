@@ -217,7 +217,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead || !networkController.isOwner)
 			return;
 		
-		if (other.gameObject.tag == "Power")
+		if (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
