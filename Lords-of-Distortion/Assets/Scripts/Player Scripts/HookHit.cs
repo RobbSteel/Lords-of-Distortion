@@ -57,7 +57,12 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
-		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
+
+		if(col.gameObject.tag == "HookGate"){
+			renderer.material.color = Color.red;
+		}
+
+		else if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
 			if(!OFFLINE){
 				if(GameObject.Find("CollectData") != null){
 					GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
@@ -73,7 +78,7 @@ public class HookHit : MonoBehaviour {
 
 		}
 
-		if(col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
+		else if(col.gameObject != shooter && destroyed != true){
 
 			if(Network.isServer){
 
