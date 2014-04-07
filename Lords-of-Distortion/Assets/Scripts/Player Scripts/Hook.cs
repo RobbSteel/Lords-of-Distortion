@@ -14,7 +14,7 @@ public class Hook : MonoBehaviour {
 
 	private GameObject go;
 	public  GameObject hook;
-
+	public bool OFFLINE;
 	
 	public float hooktimer = 0;
 	public float chainspawner = 1;
@@ -81,8 +81,11 @@ public class Hook : MonoBehaviour {
 					going = false;
 					hookpull = true;
 					//If the server got hit it doesnt need to send this.
-					if(hitPlayer != Network.player)
-						networkView.RPC ("PullPlayer", hitPlayer); 
+					if(!OFFLINE){
+						if(hitPlayer != Network.player)
+							networkView.RPC ("PullPlayer", hitPlayer); 
+					}
+
 				}
 			}
 		}
@@ -101,17 +104,21 @@ public class Hook : MonoBehaviour {
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
 				AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
-				if(GameObject.Find("CollectData") != null){
-					GA.API.Design.NewEvent("Hook Shot", mouseClick);
+
+
+
+				if(!OFFLINE){
+					if(GameObject.Find("CollectData") != null){
+						GA.API.Design.NewEvent("Hook Shot", mouseClick);
+					}
+
+					if(Network.isServer)
+						networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
+					
+					else
+						networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
 				}
 
-
-
-				if(Network.isServer)
-					networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
-
-				else
-					networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
 
 				ShootHookLocal(mouseClick);
 			}
@@ -212,10 +219,16 @@ public class Hook : MonoBehaviour {
 
 
 	public void DestroyHookPossible(){
-		if(Network.isServer){
-			networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
+		if(!OFFLINE){
+			if(Network.isServer){
+				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
+				DestroyHook();
+			}
+		}
+		else {
 			DestroyHook();
 		}
+
 	}
 
 	//Player pulling opponent to himself

@@ -31,6 +31,7 @@ public class PowerSlot : MonoBehaviour {
         }
 		powerIcon = GetComponent<UI2DSprite>();
 		powerIcon.sprite2D = sprite;
+		//powerIcon.width = powerIcon.calc
 	}
 
 	public void SetSpawn(PowerSpawn linkedSpawn){
