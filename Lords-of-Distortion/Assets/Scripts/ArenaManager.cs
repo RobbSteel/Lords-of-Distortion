@@ -15,6 +15,7 @@ public class ArenaManager : MonoBehaviour {
 	PointTracker pointTracker;
 	public List<Transform> spawnPositions;
 	private List<Vector3> playerSpawnVectors;
+	public List<GameObject> platformlist;
 
 	public bool finishgame = false;
 	public bool lastman = false;
@@ -163,8 +164,16 @@ public class ArenaManager : MonoBehaviour {
 		powersSynchronized = true;
 	}
 
+	void FindPlatforms(){
+
+		var arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
+		for(int i = 0; i < arenaplatforms.Length; i++){
+			platformlist.Add(arenaplatforms[i]);
+		}
+	}
 
 	void Awake(){
+		FindPlatforms();
 		beginTime = float.PositiveInfinity;
 		SetUpLordScreenTween();
 		SetUpTimer();
@@ -422,6 +431,10 @@ public class ArenaManager : MonoBehaviour {
 			SpawnTimedTraps(currentTime);
 
 	}
+
+
+
+
 
 	[RPC]
 	public void VengeanceMode(){
