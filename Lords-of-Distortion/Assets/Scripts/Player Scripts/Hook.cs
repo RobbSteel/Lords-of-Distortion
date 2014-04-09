@@ -98,7 +98,8 @@ public class Hook : MonoBehaviour {
 		speed = speed / 4;
 
 		//Get input from user and set cooldown to avoid repeated use.
-		if(hooktimer <= 0){
+        //previously hooktimer <= 0
+		if(!hookthrown){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
