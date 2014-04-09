@@ -25,16 +25,20 @@ public class PlagueScript : Power
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
-        player.rigidbody2D.drag += 15;
-        playerGO = player;
+        if (player.rigidbody2D.drag == 0)
+        {
+            player.rigidbody2D.drag += 15;
+            playerGO = player;
+        }
     }
 
     public override void PowerActionStay(GameObject player, Controller2D controller)
     {
         timer += Time.deltaTime;
+
         if (timer > timeTilDrag)
         {
-            player.rigidbody2D.drag += 5;
+            player.rigidbody2D.drag += 10;
             timer = 0;
             
             if (playerGO.rigidbody2D.drag > 50)
