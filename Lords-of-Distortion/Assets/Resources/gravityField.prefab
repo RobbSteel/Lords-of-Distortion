@@ -66,9 +66,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.85516453, y: 1.24632502, z: 0}
-  m_LocalScale: {x: .702080309, y: .702080727, z: 2}
+  m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: -4.25013399, y: -3.12234569, z: 0}
+  m_LocalScale: {x: -1.10000002, y: 1.05999994, z: 2}
   m_Children:
   - {fileID: 400004}
   m_Father: {fileID: 0}
@@ -173,7 +173,7 @@ Animator:
   m_GameObject: {fileID: 100000}
   m_Enabled: 0
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 11287ffead5d3e044ac3b0ca686251f0, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
@@ -186,7 +186,7 @@ Animation:
   m_GameObject: {fileID: 100000}
   m_Enabled: 0
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 7cf9efd815a885449b36cd9306b4e183, type: 2}
+  m_Animation: {fileID: 0}
   m_Animations: []
   m_WrapMode: 0
   m_PlayAutomatically: 1
@@ -203,6 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3bd5348401380439129b62e9ac1c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   triggered: 0
 --- !u!114 &11400002
 MonoBehaviour:
@@ -2522,10 +2523,10 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 5
-    radius: .100000001
-    angle: 80
-    length: 5
+    type: 8
+    radius: .00999999978
+    angle: 45.2999992
+    length: 2.50999999
     boxX: .200000003
     boxY: 2
     boxZ: .200000003
@@ -2536,7 +2537,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 100
+      scalar: 350
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3446,7 +3447,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_SortMode: 0
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
