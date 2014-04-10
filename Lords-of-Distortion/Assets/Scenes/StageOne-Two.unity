@@ -2670,7 +2670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &174743234
 Transform:
   m_ObjectHideFlags: 0
@@ -3554,6 +3554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc74b1aaac63aae40a56bb3bc8ce225d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   movingSpike: 0
   durationOfTween: .5
   delay: 2.04999995
@@ -4137,6 +4138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc74b1aaac63aae40a56bb3bc8ce225d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   movingSpike: 0
   durationOfTween: .5
   delay: 2.04999995
@@ -5983,7 +5985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalingStyle: 0
+  scalingStyle: 1
   manualHeight: 720
   minimumHeight: 720
   maximumHeight: 1536
@@ -6216,7 +6218,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 2023633787}
   m_GameObject: {fileID: 1178833893}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4aaa9744b9fbf44687ca1539dabfb5f, type: 3}
   m_Name: 
@@ -7138,6 +7140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc74b1aaac63aae40a56bb3bc8ce225d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   movingSpike: 0
   durationOfTween: .5
   delay: 2.04999995
@@ -7305,6 +7308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc74b1aaac63aae40a56bb3bc8ce225d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   movingSpike: 0
   durationOfTween: .5
   delay: 2.04999995
@@ -7718,6 +7722,7 @@ GameObject:
   - 114: {fileID: 1779164189}
   - 114: {fileID: 1779164188}
   - 114: {fileID: 1779164193}
+  - 114: {fileID: 1779164194}
   m_Layer: 0
   m_Name: ArenaTwo
   m_TagString: Untagged
@@ -7745,6 +7750,9 @@ MonoBehaviour:
   - {fileID: 100000, guid: b0bfe78a6e8b4744a8b806d6381a3301, type: 2}
   - {fileID: 100000, guid: a7396905615ee79439f9e25e31b15434, type: 2}
   - {fileID: 100002, guid: 7e0b659d989623f45ac62d4e837d0dc1, type: 2}
+  - {fileID: 100000, guid: 47839959c09bc5b4e802192850c3a39d, type: 2}
+  - {fileID: 100000, guid: 5714feed25a0789429841ad095d32272, type: 2}
+  - {fileID: 100000, guid: 7e6c255855139b94ab41c8b702212ac9, type: 2}
 --- !u!114 &1779164189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7769,6 +7777,9 @@ MonoBehaviour:
   transferSprite: {fileID: 21300000, guid: 404e6c301e281af4292c196c4d6142fb, type: 3}
   boulderSprite: {fileID: 21300000, guid: a57dcb846ec882449adbccd6bcd142c2, type: 3}
   freezeSprite: {fileID: 21300000, guid: 64dc660f72f22f84194eb3b468025555, type: 3}
+  gateSprite: {fileID: 21300000, guid: f24f3a3d5efd66b4485357995a06ef96, type: 3}
+  plagueSprite: {fileID: 21300000, guid: 08cff3241d203934d9a714618f163fff, type: 3}
+  electricSprite: {fileID: 21300000, guid: 855a62a2a7b2a894c90ef59926f74b59, type: 3}
   allTrapsGO: []
   slots: []
   dummyInv: []
@@ -7804,6 +7815,7 @@ MonoBehaviour:
   - {fileID: 574205344}
   - {fileID: 1485814812}
   - {fileID: 495799539}
+  platformlist: []
   finishgame: 0
   lastman: 0
   lordScreenUI: {fileID: 0}
@@ -7837,6 +7849,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextPrefab: {fileID: 11400004, guid: 23be67396af99e54eab302b862007366, type: 2}
+--- !u!114 &1779164194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: 1cf086565db8363468564a6d7a5b892e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1267151732}
+  m_GameObject: {fileID: 1779164187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32ded55dd762dce4da2e018f37f345c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1819185891
 GameObject:
   m_ObjectHideFlags: 0
