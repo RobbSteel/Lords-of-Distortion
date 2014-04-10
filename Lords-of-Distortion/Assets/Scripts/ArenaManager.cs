@@ -26,7 +26,6 @@ public class ArenaManager : MonoBehaviour {
 	
 	float beginTime;
 	int? livePlayerCount;
-	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
@@ -37,6 +36,7 @@ public class ArenaManager : MonoBehaviour {
 
 
 	private HUDTools hudTools;
+	public GameObject placementRootPrefab;
     PlacementUI placementUI;
 	public bool showonce;
 	public bool showonce2;
@@ -96,7 +96,6 @@ public class ArenaManager : MonoBehaviour {
 		//brign up the dead player placement screen.
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
-		PlayMenuTween(false);
 
 	}
 	
@@ -175,8 +174,7 @@ public class ArenaManager : MonoBehaviour {
 	void Awake(){
 		FindPlatforms();
 		beginTime = float.PositiveInfinity;
-		SetUpLordScreenTween();
-		SetUpTimer();
+	
 		playerSpawnVectors = new List<Vector3>();
 
 		foreach(Transform location in spawnPositions){
@@ -187,9 +185,14 @@ public class ArenaManager : MonoBehaviour {
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
-		placementUI = GetComponent<PlacementUI>();
 		powerPrefabs = GetComponent<PowerPrefabs>();
+		GameObject placementRoot = Instantiate(placementRootPrefab, 
+		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
+		placementUI = placementRoot.GetComponent<PlacementUI>();
+		placementUI.Initialize(powerPrefabs);
+
 		pointTracker = GetComponent<PointTracker>();
+		SetUpTimer();
 	}
 	
 	// Use this for initialization
@@ -453,19 +456,6 @@ public class ArenaManager : MonoBehaviour {
 		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
 		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
 		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
-	}
-	
-	private void SetUpLordScreenTween(){
-        lordScreenUI = GameObject.Find("PlacementRoot").transform.Find("Container").gameObject;
-	}
-	
-	//plays lords spawn menu tween and deactives the menu
-	private void PlayMenuTween(bool forward){
-		if(forward)
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayForward();
-		else
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayReverse();
-		Debug.Log("played tween");
 	}
 
 
