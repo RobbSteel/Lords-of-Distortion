@@ -318,7 +318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &154608331
 Transform:
   m_ObjectHideFlags: 0
@@ -1467,7 +1467,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 264011461}
   - 114: {fileID: 264011462}
-  - 114: {fileID: 264011463}
   m_Layer: 9
   m_Name: UI-Back
   m_TagString: Untagged
@@ -1538,19 +1537,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
---- !u!114 &264011463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400022, guid: de633e9308bb12643ab67f203e715024,
-    type: 2}
-  m_PrefabInternal: {fileID: 1472024737}
-  m_GameObject: {fileID: 264011460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4aaa9744b9fbf44687ca1539dabfb5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookCDBtnRed: {fileID: 111437752}
 --- !u!1 &273739277
 GameObject:
   m_ObjectHideFlags: 0
@@ -4266,6 +4252,10 @@ Prefab:
     - target: {fileID: 11400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: scalingStyle
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: de633e9308bb12643ab67f203e715024, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de633e9308bb12643ab67f203e715024, type: 2}

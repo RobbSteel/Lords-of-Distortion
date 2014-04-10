@@ -4,7 +4,8 @@ using System.Collections;
 public class GravityField : Power {
 
 	//public float force = 500f;
-	public bool triggered; 
+	public bool triggered;
+    private GameObject playerGO;
 
 	ParticleSystem wind; 
 
@@ -41,7 +42,8 @@ public class GravityField : Power {
 
 		}
 		// CHANGE GRAVITY OF PLAYER
-		player.rigidbody2D.gravityScale = -3;
+        player.rigidbody2D.gravityScale = -3;
+        playerGO = player;
 	}
 
     public override void PowerActionStay(GameObject player, Controller2D controller)
@@ -57,8 +59,7 @@ public class GravityField : Power {
   
     void OnDestroy()
     {
-        GameObject user = GameObject.FindGameObjectWithTag("Player");
-        if (user != null)
-            user.rigidbody2D.gravityScale = 1;
+        if (playerGO != null)
+            playerGO.rigidbody2D.gravityScale = 1.8f;
     }
 }

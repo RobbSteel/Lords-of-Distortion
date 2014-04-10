@@ -338,8 +338,12 @@ public class PlacementUI : MonoBehaviour {
 		activePower = Instantiate (powerPrefabs.list[(int)activePowerType],
 		                           info.transform.position, Quaternion.identity) as GameObject;
 
+        if(activePowerType == PowerType.GRAVITY)
+        {
+            Destroy(activePower.GetComponent<GravityFieldMover>());
+        }
 		Destroy (activePower.GetComponent<Power>());
-		Destroy (activePower.rigidbody2D);
+        Destroy (activePower.rigidbody2D);
 		activePower.GetComponent<Collider2D>().isTrigger = true;
 		activePower.tag = "UIPower";
 
