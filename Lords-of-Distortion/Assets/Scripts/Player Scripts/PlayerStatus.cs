@@ -364,9 +364,7 @@ public class PlayerStatus : MonoBehaviour {
 			}
 		}
 	}
-	
-	
-	
+
 	
 	
 	//Ondestroy delete Stunbar Ui

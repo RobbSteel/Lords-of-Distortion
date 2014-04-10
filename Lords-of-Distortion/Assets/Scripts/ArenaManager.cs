@@ -6,8 +6,8 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 12f; 
-	const float FIGHT_COUNT_DOWN_TIME = 5f;
+	const float PLACEMENT_TIME = 2f; 
+	const float FIGHT_COUNT_DOWN_TIME = 2f;
 	const float POST_MATCH_TIME = 5f;
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
@@ -264,7 +264,6 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
-
         float currentTime = TimeManager.instance.time;
 		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
