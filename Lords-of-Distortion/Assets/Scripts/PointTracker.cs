@@ -5,10 +5,14 @@ public class PointTracker : MonoBehaviour{
 
 	PSinfo psInfo;
 	public int? livePlayerCount;
+	HUDTools hudTools;
+
+
 
 	void Awake(){
 		SessionManager sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		psInfo = sessionManager.gameInfo;
+		hudTools = GetComponent<HUDTools>();
 	}
 
 
@@ -31,6 +35,20 @@ public class PointTracker : MonoBehaviour{
 		PlayerStats deadPlayerStats = psInfo.GetPlayerStats(playerToScore);
 		deadPlayerStats.score = score;
 	}
+
+	[RPC]
+	void DisplayPoints(int points, NetworkPlayer player){
+		//TODO: what if the player who got the points dies before this?
+		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
+	}
+
+	//NOTE: should be called from playerdied, make public for testing
+	public void GivePoints(int points, NetworkPlayer player){
+
+		networkView.RPC("DisplayPoints", RPCMode.Others, points, player);
+		DisplayPoints(points, player);
+	}
+
 
 	//Makes sure that all players are transitioning phases together, such as Lastman standing or game finished
 	[RPC]

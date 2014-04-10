@@ -38,6 +38,7 @@ public class HUDTools : MonoBehaviour {
 		label.text = text;
 		StartCoroutine(FadeInOut(label, displayTime));
 	}
+	
 
 	public void ShowPoints(int points, GameObject player)
 	{
@@ -45,9 +46,10 @@ public class HUDTools : MonoBehaviour {
 	
 		UILabel label = (UILabel)Instantiate(PointTextPrefab, Vector3.zero, PointTextPrefab.transform.rotation);
 
-		label.text = points.ToString();
+		label.text = "+" + points.ToString();
 		UIFollowTarget followTarget = label.GetComponent<UIFollowTarget>();
 		followTarget.Target = player.transform;
+		//TODO: if a player already is showing points, put above those.
 		followTarget.offset.y = 50f;
 
 		StartCoroutine(FadeInOut(label, displayTime));

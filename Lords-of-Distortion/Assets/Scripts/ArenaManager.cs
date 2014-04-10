@@ -264,6 +264,8 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
+
+		pointTracker.GivePoints(1, Network.player);
         float currentTime = TimeManager.instance.time;
 		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {

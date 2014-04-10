@@ -9,7 +9,7 @@ public class UIFollowTarget : MonoBehaviour {
 	void Update(){
 		if(Target == null)
 			this.enabled = false;
-		// Convert the position from world to screen so we know where to poistion it
+		// Convert the position from world to screen so we know where to position it
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(Target.position);
 		
 		// need to remove half the width and half the height since our NGUI 0, 0 is in the middle of the screen
