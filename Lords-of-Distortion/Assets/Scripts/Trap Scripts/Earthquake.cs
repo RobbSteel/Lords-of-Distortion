@@ -4,10 +4,10 @@ using System.Collections;
 public class Earthquake : Power {
 
 	public float risetime;
-
 	// Use this for initialization
 	void Start () {
 		risetime = 0;
+		Destroy(gameObject, 10);
 	}
 	
 	// Update is called once per frame
@@ -15,12 +15,12 @@ public class Earthquake : Power {
 	
 		if(risetime <= 0){
 
-			transform.Translate(Vector3.down);
+			transform.Translate(Vector3.down * 8 * Time.deltaTime);
 
 		} else {
 
 
-			transform.Translate (Vector3.up);
+			transform.Translate (Vector3.up * 1 * Time.deltaTime);
 			risetime -= Time.deltaTime;
 		}
 
@@ -34,11 +34,7 @@ public class Earthquake : Power {
 		}
 		
 		controller.Die ();
-		
-		//transform.Translate(Vector3.down * movementSpeed * Time.deltaTime);
-		//var player = GameObject.FindWithTag("Player");
-		//GameObject user = GameObject.FindGameObjectWithTag("Player");
-		// player.rigidbody.AddForce(Vector3.up * 10);
+
 	}
 	public override void PowerActionStay (GameObject player, Controller2D controller)
 	{
@@ -52,20 +48,34 @@ public class Earthquake : Power {
 	void OnTriggerEnter2D(Collider2D col)
 	{
 
-		risetime = 3;
 		//if (col.gameObject.CompareTag ("killplatform")) {
-		if(col.gameObject.tag =="killplatform"){
+		if(col.transform.tag =="killplatform"){
 
-			var players = GameObject.FindGameObjectsWithTag("player");
+			if(risetime <= 0){
+				risetime = 2;
+			}
 
-			for(int i = 0; i < players.Length; i++){
+			var players = GameObject.FindGameObjectsWithTag("Player");
 
-				var currplayer = players[i];
-				var networkscript = currplayer.GetComponent<NetworkController>();
-				if(networkscript.isOwner){
+			if(players.Length > 0){
+			
+					for(int i = 0; i < players.Length; i++){
 
-					currplayer.rigidbody2D.AddForce(Vector3.up * 400);
-				}
+						var currplayer = players[i];
+						var networkscript = currplayer.GetComponent<NetworkController>();
+						var controller = currplayer.GetComponent<Controller2D>();
+							
+								if(networkscript.isOwner){
+								
+									if(controller.grounded){
+										if (GameObject.Find ("CollectData") != null) {
+											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
+										}
+									
+										currplayer.rigidbody2D.AddForce(Vector3.up * 1100);
+									}
+								}
+					}
 			}
 		}
 	}
