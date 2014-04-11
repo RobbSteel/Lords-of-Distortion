@@ -72,7 +72,7 @@ public class Earthquake : Power {
 											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
 										}
 									
-										currplayer.rigidbody2D.AddForce(Vector3.up * 1100);
+										currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
 									}
 								}
 					}
