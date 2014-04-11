@@ -12,9 +12,10 @@ public class ArenaManager : MonoBehaviour {
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
 	TrapFountainManager fountainManager; 
-
+	PointTracker pointTracker;
 	public List<Transform> spawnPositions;
 	private List<Vector3> playerSpawnVectors;
+	public List<GameObject> platformlist;
 
 	public bool finishgame = false;
 	public bool lastman = false;
@@ -25,7 +26,6 @@ public class ArenaManager : MonoBehaviour {
 	
 	float beginTime;
 	int? livePlayerCount;
-	public GameObject lordScreenUI;  //lordScreen ref for tweening
 	private bool played;
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
@@ -36,6 +36,7 @@ public class ArenaManager : MonoBehaviour {
 
 
 	private HUDTools hudTools;
+	public GameObject placementRootPrefab;
     PlacementUI placementUI;
 	public bool showonce;
 	public bool showonce2;
@@ -68,14 +69,8 @@ public class ArenaManager : MonoBehaviour {
 			finishgame = true;
 		}
 
-		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(player);
-		deadPlayerStats.score += CalculateScore();
-		//Tell everyone this player's scores.
-		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
+		pointTracker.PlayerDied(player);
 
-	
-		var managername = gameObject.name;
-		networkView.RPC ("SynchronizePhases", RPCMode.Others, lastman, finishgame, managername);
 	}
 	
 	//Called only on the server.
@@ -86,23 +81,9 @@ public class ArenaManager : MonoBehaviour {
 			ServerDeathHandler(info.sender);
 		}
 	}
-	
-	
-	[RPC]
-	void SynchronizeScores(int score, NetworkPlayer playerToScore){
-		PlayerStats deadPlayerStats = sessionManager.gameInfo.GetPlayerStats(playerToScore);
-		deadPlayerStats.score = score;
-	}
-	
-	//Makes sure that all players are transitioning phases together, such as Lastman standing or game finished
-	[RPC]
-	void SynchronizePhases(bool lastplayer, bool gamefinal, string managename){
-		var tempmanager = GameObject.Find(managename);
-		var tempscript = tempmanager.GetComponent<ArenaManager>();
-		tempscript.finishgame = gamefinal;
-		tempscript.lastman = lastplayer;
 
-	}
+	
+
 	//Called locally on every client including server when the player you control dies.
 	void LostPlayer(GameObject deadPlayer){
 		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
@@ -115,7 +96,6 @@ public class ArenaManager : MonoBehaviour {
 		//brign up the dead player placement screen.
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
-		PlayMenuTween(false);
 
 	}
 	
@@ -183,11 +163,18 @@ public class ArenaManager : MonoBehaviour {
 		powersSynchronized = true;
 	}
 
+	void FindPlatforms(){
+
+		var arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
+		for(int i = 0; i < arenaplatforms.Length; i++){
+			platformlist.Add(arenaplatforms[i]);
+		}
+	}
 
 	void Awake(){
+		FindPlatforms();
 		beginTime = float.PositiveInfinity;
-		SetUpLordScreenTween();
-		SetUpTimer();
+	
 		playerSpawnVectors = new List<Vector3>();
 
 		foreach(Transform location in spawnPositions){
@@ -198,8 +185,14 @@ public class ArenaManager : MonoBehaviour {
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
-		placementUI = GetComponent<PlacementUI>();
 		powerPrefabs = GetComponent<PowerPrefabs>();
+		GameObject placementRoot = Instantiate(placementRootPrefab, 
+		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
+		placementUI = placementRoot.GetComponent<PlacementUI>();
+		placementUI.Initialize(powerPrefabs);
+
+		pointTracker = GetComponent<PointTracker>();
+		SetUpTimer();
 	}
 	
 	// Use this for initialization
@@ -245,6 +238,7 @@ public class ArenaManager : MonoBehaviour {
 
 			//spawn players immediately
 			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
+			pointTracker.livePlayerCount = livePlayerCount;
 			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			hudTools.DisplayText ("You may place initial traps");
@@ -441,11 +435,13 @@ public class ArenaManager : MonoBehaviour {
 
 	}
 
+
+
+
+
 	[RPC]
 	public void VengeanceMode(){
-
 		hudTools.DisplayText ("Vengeance!");
-
 	}
 
 	[RPC]
@@ -461,47 +457,8 @@ public class ArenaManager : MonoBehaviour {
 		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
 		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
 	}
-	
-	private void SetUpLordScreenTween(){
-        lordScreenUI = GameObject.Find("PlacementRoot").transform.Find("Container").gameObject;
-	}
-	
-	//plays lords spawn menu tween and deactives the menu
-	private void PlayMenuTween(bool forward){
-		if(forward)
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayForward();
-		else
-			lordScreenUI.gameObject.GetComponent<TweenPosition>().PlayReverse();
-		Debug.Log("played tween");
-	}
 
-	//Calculates score based on the number of players remaining when you die, saves it in PSinfo
-	public int CalculateScore(){
-		
-		int score = 0;
-		
-		if(livePlayerCount == 0 && !lastmanvictory){
-			
-			score += 10;
-			
-		} else if(livePlayerCount == 1){
-			
-			score += 8;
-		
-		} else if(lastmanvictory){
-			score += 12;
 
-		} else if(livePlayerCount == 2){
-			
-			score += 6;
-			
-		} else if(livePlayerCount == 3){
-			
-			score += 4;
-		}
-		
-		return score;
-	}
 
     public float getBeginTime()
     {
