@@ -81,6 +81,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
+
 		deathOnHit = false;
 		stunned = false;
         meleeStunned = false;

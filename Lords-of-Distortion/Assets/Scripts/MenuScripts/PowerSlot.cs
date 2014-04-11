@@ -52,14 +52,18 @@ public class PowerSlot : MonoBehaviour {
 		activationMode = true;
 		keyLabel.color = Color.green;
 		button.isEnabled = true;
-		UIEventListener.Get(this.gameObject).onClick += RequestSpawn;
+		UIEventListener.Get(this.gameObject).onPress += RequestSpawn;
 	}
 	//To be called by timer in powerspawn
 	void EnableActivation(PowerSpawn spawn){
 		EnableActivation();
 	}
 
-	void RequestSpawn(GameObject go){
+	void RequestSpawn(GameObject go, bool isDown){
+		if(isDown){
+			return;
+		}
+
 		if(activationEnabled){
 			wasSpawned = true;
 			powerKey(linkedSpawn, this.gameObject);

@@ -14,7 +14,7 @@ public class JoinServer : MonoBehaviour {
 		infoscript = information.GetComponent<PSinfo>();
 	}
 
-	void OnClick(){
+	void OnPress(){
 
 		print (hostList[servernumber].comment);
 		if(hostList[servernumber].comment == "InProgress"){

@@ -13,7 +13,7 @@ public class Host : MonoBehaviour {
 	
 	}
 
-	void OnClick(){
+	void OnPress(){
 
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name" || playerscript.gameName == "" || playerscript.gameName == "Server Name"){
 			
