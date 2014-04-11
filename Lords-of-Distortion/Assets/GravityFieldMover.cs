@@ -3,12 +3,11 @@ using System.Collections;
 
 public class GravityFieldMover : MonoBehaviour
 {
-    
-
     public float speed;
     public bool wait;
     public float startAt;
     public float pauseFor;
+    private float travelTime = 3.0f;
 
     IEnumerator Start()
     {
@@ -21,12 +20,15 @@ public class GravityFieldMover : MonoBehaviour
         {
             yield return new WaitForSeconds(startAt);
         }
+        yield return StartCoroutine(MoveObject(transform, transform.position, pointA.transform.position, travelTime));
         while (true)
         {
-            yield return StartCoroutine(MoveObject(transform, pointA.transform.position, pointB.transform.position, 3.0f));
-            yield return StartCoroutine(MoveObject(transform, pointB.transform.position, pointA.transform.position, 3.0f));
+            yield return StartCoroutine(MoveObject(transform, pointA.transform.position, pointB.transform.position, travelTime));
+            travelTime -= 0.4f;
+            yield return StartCoroutine(MoveObject(transform, pointB.transform.position, pointA.transform.position, travelTime));
             if (wait)
                 yield return new WaitForSeconds(pauseFor);
+            travelTime -= 0.4f;
         }
     }
 

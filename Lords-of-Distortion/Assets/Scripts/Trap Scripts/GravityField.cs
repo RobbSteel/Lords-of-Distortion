@@ -23,7 +23,7 @@ public class GravityField : Power {
 		audio.Play ();
 		//if(triggered)
      	Destroy(gameObject, 15f);
-
+        Destroy(GetComponent<GravityFieldIndicators>());
     }
 	void Update(){
 		//if(triggered)
