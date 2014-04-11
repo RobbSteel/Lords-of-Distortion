@@ -14,7 +14,7 @@ public class RefreshHosts : MonoBehaviour {
 	}
 
 
-	void OnClick(){
+	void OnPress(){
 		MasterServer.ClearHostList();
 		MasterServer.RequestHostList(typeName);
 

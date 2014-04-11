@@ -12,7 +12,7 @@ public class FindGames : MonoBehaviour {
 		//print(playerscript.playerName);
 	}
 
-	void OnClick(){
+	void OnPress(){
 
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name"){
 
