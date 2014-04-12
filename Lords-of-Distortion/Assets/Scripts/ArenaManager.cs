@@ -73,24 +73,28 @@ public class ArenaManager : MonoBehaviour {
 		pointTracker.PlayerDied(player);
 
 	}
-	
-	//Called only on the server.
-	[RPC]
-	void NotifyServerOfDeath(NetworkMessageInfo info){
-
+	//Tells additional players to destroy clone.
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID){
 		if(Network.isServer){
 			livePlayerCount--;
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
-				if(player != info.sender && player != Network.player){
-					networkView.RPC ("DestroyPlayerClone", player, info.sender);
+				if(player != deadPlayerID && player != Network.player){
+					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID);
 				}
 			}
 			//also destroy player on server
-			DestroyPlayerClone(info.sender);
-			 //Explicitly pass our network player id
-			ServerDeathHandler(info.sender);
+			DestroyPlayerClone(deadPlayerID);
+			//Explicitly pass our network player id
+			ServerDeathHandler(deadPlayerID);
 		}
+	}
+
+	//Called only on the server. 
+	[RPC]
+	void NotifyServerOfDeath(NetworkMessageInfo info){
+		//Converts networked message to local function call
+		NotifyOthersOfDeath(info.sender);
 	}
 
 
@@ -106,15 +110,14 @@ public class ArenaManager : MonoBehaviour {
 	void LostPlayer(GameObject deadPlayer){
 
 		if(Network.isServer){
-			livePlayerCount--;
-			ServerDeathHandler(Network.player);
+			NotifyOthersOfDeath(deadPlayer);
 		}
 
 		else {
 			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server);
 		}
 
-		//brign up the dead player placement screen.
+		//bring up the dead player placement screen.
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}
