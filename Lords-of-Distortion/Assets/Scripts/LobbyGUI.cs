@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class LobbyGUI : MonoBehaviour {
@@ -8,7 +8,7 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	bool wantToStartGame = false;
-	public PSinfo infoscript;
+	public PSInfo infoscript;
 	public Transform sessionManagerPrefab;
 	SessionManager sessionManager;
 
@@ -52,7 +52,7 @@ public class LobbyGUI : MonoBehaviour {
 	void Start()
     {
 		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PSinfo>();
+		infoscript = information.GetComponent<PSInfo>();
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ScoreDisplay : MonoBehaviour {
@@ -11,7 +11,7 @@ public class ScoreDisplay : MonoBehaviour {
 	public int winningscore = 0;
 	public int winningplayer = 0;
 
-	PSinfo infoscript;
+	PSInfo infoscript;
 
 
 	// Use this for initialization
@@ -27,7 +27,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-		infoscript = sessionManager.gameInfo;
+		infoscript = sessionManager.psInfo;
 		var listed = infoscript.players;
 		print(listed);
 		print(listed.Count);

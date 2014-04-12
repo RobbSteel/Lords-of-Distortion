@@ -47,15 +47,16 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void NotifyBeginTime(float time){
 		beginTime = time;
-        sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
-		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
+        sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
+		sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
 	}
 	
-	
+
+	//TODO: calculate scores somehrwere here
 	void ServerDeathHandler(NetworkPlayer player){
 
 		if(livePlayerCount == 1 && !finishgame){
@@ -75,28 +76,47 @@ public class ArenaManager : MonoBehaviour {
 	
 	//Called only on the server.
 	[RPC]
-	void NotifyPlayerDied(NetworkMessageInfo info){
-		livePlayerCount--;
+	void NotifyServerOfDeath(NetworkMessageInfo info){
+
 		if(Network.isServer){
+			livePlayerCount--;
+			//Nofify everyone but dead player
+			foreach(NetworkPlayer player in sessionManager.psInfo.players){
+				if(player != info.sender && player != Network.player){
+					networkView.RPC ("DestroyPlayerClone", player, info.sender);
+				}
+			}
+			//also destroy player on server
+			DestroyPlayerClone(info.sender);
+			 //Explicitly pass our network player id
 			ServerDeathHandler(info.sender);
 		}
 	}
 
-	
 
-	//Called locally on every client including server when the player you control dies.
+	//Called on clients not controlling the player who just died.
+	[RPC]
+	void DestroyPlayerClone(NetworkPlayer deadPlayerID){
+		print ("he dead");
+		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
+		deadPlayer.GetComponent<Controller2D>().DieSimple();
+	}
+
+	//Called only on the client where the player died.
 	void LostPlayer(GameObject deadPlayer){
-		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
-		livePlayerCount--;
+
 		if(Network.isServer){
+			livePlayerCount--;
 			ServerDeathHandler(Network.player);
 		}
-		sessionManager.KillPlayer(deadPlayer);
+
+		else {
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server);
+		}
 
 		//brign up the dead player placement screen.
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
-
 	}
 	
 	/*Clients request this fucntion on the server for every power. After that the server tells every
@@ -131,7 +151,7 @@ public class ArenaManager : MonoBehaviour {
 
 	//Once server has all the spawn info from the other players, send it out.
 	private void CheckIfAllSynchronized(){
-		if(playersReady.Count == sessionManager.gameInfo.players.Count){
+		if(playersReady.Count == sessionManager.psInfo.players.Count){
 			foreach(PowerSpawn power in allTimedSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 false, (int)power.type, power.position, power.spawnTime, power.GetLocalID());
@@ -146,7 +166,7 @@ public class ArenaManager : MonoBehaviour {
 	void SentAllMyPowers(NetworkMessageInfo info){
 		playersReady.Add(info.sender);
 		CheckIfAllSynchronized();
-		print ("Server received power spawn from " + sessionManager.gameInfo.GetPlayerOptions(info.sender).username);
+		print ("Server received power spawn from " + sessionManager.psInfo.GetPlayerOptions(info.sender).username);
 	}
 	
 	void SentAllMyPowers(){
@@ -198,7 +218,7 @@ public class ArenaManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//this wont print because finishedloading is only true once all the start functions are called
-		//in every object of the scnene.
+		//in every object of the scene.
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready");
 	}
@@ -208,7 +228,8 @@ public class ArenaManager : MonoBehaviour {
 		//add our function as an event to player
 		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
          *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
-		Controller2D.onDeath += LostPlayer;
+
+		Controller2D.onDeath += LostPlayer; //consider making this non static
 		PowerSlot.powerKey += SpawnTriggerPower;
 		placementUI.spawnNow += SpawnTriggerPower;
 	}
@@ -376,8 +397,8 @@ public class ArenaManager : MonoBehaviour {
 
 		if(!playersFreed){
 			hudTools.DisplayText("Get Ready");
-            sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
-			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
+            sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
+			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
 

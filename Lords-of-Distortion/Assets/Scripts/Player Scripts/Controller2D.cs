@@ -30,7 +30,7 @@ public class Controller2D : MonoBehaviour {
 	public bool inAir = true;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
-
+	public GameObject DeathSpirit;
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
 	public AudioClip meleeSfx;
@@ -351,7 +351,40 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
+	public void DieSimple(){
+		if(!networkController.isOwner && !dead){
+			dead = true;
+			anim.SetTrigger("Die");
+		}
+	}
+
 	void OnDisable(){
 		myHook.DestroyHookPossible();
 	}
+
+	/*
+	 * Sequence of events:
+	 * Die or DieSimple is called
+	 * Death animation triggers and finishes playing 
+	 * Death spirit is instantiated
+	 * Player object is destroyed
+	 */
+
+
+	//Called when death animation finishes playing.
+	public void DestroyPlayer()
+	{
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
+		Destroy (gameObject);
+	}
+
+	void OnDestroy(){
+		if(!DEBUG){
+			if(Network.isServer){
+				//blocks any lingering rpc calls
+				//Network.RemoveRPCs(networkView.viewID);
+			}
+		}
+	}
+
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PointTracker : MonoBehaviour{
 
-	PSinfo psInfo;
+	PSInfo psInfo;
 	public int? livePlayerCount;
 	HUDTools hudTools;
 
@@ -11,7 +11,7 @@ public class PointTracker : MonoBehaviour{
 
 	void Awake(){
 		SessionManager sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-		psInfo = sessionManager.gameInfo;
+		psInfo = sessionManager.psInfo;
 		hudTools = GetComponent<HUDTools>();
 	}
 
@@ -23,8 +23,7 @@ public class PointTracker : MonoBehaviour{
 		deadPlayerStats.score += CalculateScore();
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
-		
-		
+
 		//var managername = gameObject.name;
 		//networkView.RPC ("SynchronizePhases", RPCMode.Others, lastman, finishgame, managername);
 	}

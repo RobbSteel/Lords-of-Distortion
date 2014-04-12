@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -6,12 +6,12 @@ public class JoinServer : MonoBehaviour {
 
 	public int servernumber;
 	public HostData[] hostList;
-	public PSinfo infoscript;
+	public PSInfo infoscript;
 
 	// Use this for initialization
 	void Start () {
 		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PSinfo>();
+		infoscript = information.GetComponent<PSInfo>();
 	}
 
 	void OnPress(){

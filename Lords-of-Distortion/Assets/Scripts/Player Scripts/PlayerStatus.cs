@@ -53,10 +53,11 @@ public class PlayerStatus : MonoBehaviour {
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
+
 		/*
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
-	*/
+		*/
 
 		MashIcon = (GameObject)Instantiate (Resources.Load ("MashAlertIcon"));
 		MashIcon.SetActive (false);
@@ -276,7 +277,7 @@ public class PlayerStatus : MonoBehaviour {
 	
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
-		//doesnt work(clients cant rpc each other directly)
+		//Note, the following doesnt work(clients cant rpc each other directly)
 		//networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
 		networkView.RPC ("NotifyHit", RPCMode.Others, fromLeftSide);
 	}

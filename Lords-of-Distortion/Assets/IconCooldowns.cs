@@ -1,16 +1,16 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class IconCooldowns : MonoBehaviour {
 
-    PSinfo infoscript;
+    PSInfo infoscript;
     private float timer = 0;
     public UISprite hookCDBtnRed;
 
     void Start()
     {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PSinfo>();
+        infoscript = GameObject.Find("PSInfo").GetComponent<PSInfo>();
     }	
     
 	// Update is called once per frame

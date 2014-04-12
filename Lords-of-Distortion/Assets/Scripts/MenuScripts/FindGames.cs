@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FindGames : MonoBehaviour {
 
 	GameObject mainscript;
 	public MainGui playerscript;
-	public PSinfo infoscript;
+	public PSInfo infoscript;
 	
 	// Update is called once per frame
 	void Update () {

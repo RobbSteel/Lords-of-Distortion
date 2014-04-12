@@ -63,8 +63,9 @@ public class Melee : MonoBehaviour {
 
 	private void startMelee(){
 		meleeing = true;
+
 		if(GameObject.Find("CollectData") != null){
-		GA.API.Design.NewEvent("Melee Attack", transform.position);
+			GA.API.Design.NewEvent("Melee Attack", transform.position);
 		}
 
 		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
