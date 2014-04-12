@@ -43,6 +43,7 @@ GameObject:
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400006}
   - 54: {fileID: 5400000}
+  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: PlacementRoot
   m_TagString: Untagged
@@ -646,6 +647,37 @@ MonoBehaviour:
   callWhenFinished: 
   from: {x: 0, y: 0, z: 0}
   to: {x: 0, y: -806.099915, z: 0}
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b553db432fa70094e91e8bda56724e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PowerBoard: {fileID: 100000, guid: 508fb569d1dc8d046995dde67b6f2547, type: 2}
+  PowerSlot: {fileID: 100002, guid: ed8199170f0cd8b4aa0f2d7050335bb5, type: 2}
+  dottedLine: {fileID: 100000, guid: 67ab9307cfe46c341b5d51b6477ebd6c, type: 2}
+  TriggerGrid: {fileID: 11400004}
+  glueSprite: {fileID: 21300000, guid: 9a6b54d7363a55341a80b6b5f927c7fb, type: 3}
+  smokeSprite: {fileID: 21300000, guid: 53f61e39828aed740a9ebab3b82838db, type: 3}
+  inkSprite: {fileID: 21300000, guid: e2525bcb63077d84db05442c131873ca, type: 3}
+  windSprite: {fileID: 21300000, guid: cb29c9a55e9669e4294426887b11e194, type: 3}
+  transferSprite: {fileID: 21300000, guid: 404e6c301e281af4292c196c4d6142fb, type: 3}
+  boulderSprite: {fileID: 21300000, guid: a57dcb846ec882449adbccd6bcd142c2, type: 3}
+  freezeSprite: {fileID: 21300000, guid: 64dc660f72f22f84194eb3b468025555, type: 3}
+  gateSprite: {fileID: 21300000, guid: f24f3a3d5efd66b4485357995a06ef96, type: 3}
+  plagueSprite: {fileID: 21300000, guid: 08cff3241d203934d9a714618f163fff, type: 3}
+  electricSprite: {fileID: 21300000, guid: 855a62a2a7b2a894c90ef59926f74b59, type: 3}
+  earthSprite: {fileID: 21300000, guid: 202829d5c5c916b4c8e66fa3cb6d3384, type: 3}
+  allTrapsGO: []
+  slots: []
+  dummyInv: []
+  deadLordBtnRed: {fileID: 11400026}
+  live: 0
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1

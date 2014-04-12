@@ -43,6 +43,8 @@ public class Controller2D : MonoBehaviour {
 	Hook myHook;
     float knockbackTimer = 0f;
 
+    private float resetGravityTimer = 0f;
+
 	public bool knockedBack = false;
 	
 	public void KnockBack(){
@@ -81,6 +83,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
+
 		deathOnHit = false;
 		stunned = false;
         meleeStunned = false;
@@ -117,6 +120,16 @@ public class Controller2D : MonoBehaviour {
 	
 	float previousY = 0f;
 	void FixedUpdate(){
+
+        if(rigidbody2D.gravityScale < 0)
+        {
+            resetGravityTimer += Time.deltaTime;
+            if(resetGravityTimer >= 1)
+            {
+                rigidbody2D.gravityScale = 1;
+                resetGravityTimer = 0;
+            }
+        }
 
 		if(!hooked){
 		    IsGrounded();

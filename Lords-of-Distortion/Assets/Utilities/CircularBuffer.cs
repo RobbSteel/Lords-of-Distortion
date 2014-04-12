@@ -8,10 +8,14 @@ using System.Collections.Generic;
 
 public class CircularBuffer<T> : IEnumerable<T>
 {
-
+	/*
+	 * Head = oldest element (head of queue)
+	 * Tail = newerst element (tail of queue)
+	 */ 
 	private int Head;
 	private int Tail;
 	public int Count {get; private set;}
+
 
 	T[] buffer;
 
