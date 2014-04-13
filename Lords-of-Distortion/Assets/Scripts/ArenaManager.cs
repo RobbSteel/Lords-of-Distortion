@@ -110,7 +110,7 @@ public class ArenaManager : MonoBehaviour {
 	void LostPlayer(GameObject deadPlayer){
 
 		if(Network.isServer){
-			NotifyOthersOfDeath(deadPlayer);
+			NotifyOthersOfDeath(Network.player);
 		}
 
 		else {
