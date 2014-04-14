@@ -4,6 +4,7 @@ using System.Collections;
 public class Earthquake : Power {
 
 	public float risetime;
+	public GameObject groundshatter;
 	// Use this for initialization
 	void Start () {
 		risetime = 0;
@@ -50,7 +51,7 @@ public class Earthquake : Power {
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
 		if(col.transform.tag =="killplatform"){
-
+			Instantiate(groundshatter, transform.position, transform.rotation);
 			if(risetime <= 0){
 				risetime = 2;
 			}
@@ -68,11 +69,13 @@ public class Earthquake : Power {
 								if(networkscript.isOwner){
 								
 									if(controller.grounded){
+							Instantiate(groundshatter, currplayer.transform.position, currplayer.transform.rotation);
 										if (GameObject.Find ("CollectData") != null) {
 											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
 										}
 									
-										currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
+							    
+								currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
 									}
 								}
 					}
