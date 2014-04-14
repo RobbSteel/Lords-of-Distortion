@@ -60,7 +60,12 @@ public class HookHit : MonoBehaviour {
 
 		if(col.gameObject.tag == "HookGate" & !poweredUp){
 			renderer.material.color = Color.red;
-			gameObject.AddComponent<PowerHook>();
+			//Added powerhook component and copy info from respective hook gate
+			HookGate hookGate = col.gameObject.GetComponent<HookGate>();
+			PowerHook pH = gameObject.AddComponent<PowerHook>();
+			pH.spawnInfo = new PowerSpawn(hookGate.spawnInfo);
+			//just change the type on the fly
+			pH.spawnInfo.type = PowerType.POWERHOOK;
 			gameObject.tag = "PowerHook";
 			poweredUp = true;
 			return;

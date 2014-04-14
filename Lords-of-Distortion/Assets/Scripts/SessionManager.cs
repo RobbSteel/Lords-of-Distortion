@@ -20,26 +20,28 @@ public class SessionManager : MonoBehaviour {
 	//public TimeManager timeManager;
 	
 	String offlineLevel = "MainMenu";
-	
-	public static bool instanceExists = false;
-	public static SessionManager instance;
-	
-	
+
+	public static SessionManager Instance;
+
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 	public TimeManager timemanager;
 	
 	void Awake(){
+
+		if(Instance != null && Instance != this){
+			Destroy(gameObject);
+			return;
+		}
+
+		Instance = this;
 		DontDestroyOnLoad(this);
-		instanceExists = true;
-		instance = this;
 		var information = GameObject.Find("PSInfo");
 		psInfo = information.GetComponent<PSInfo>();
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
 		arenaIndex = -1;// lobby is -1
-
 	}
 	
 	//NetworkController myPlayer;
@@ -246,10 +248,6 @@ public class SessionManager : MonoBehaviour {
 				SpawnPlayers(tempLocations);
 			}
 		}
-	}
-	
-	void OnDestroy(){
-		instanceExists = false;
 	}
 }
 

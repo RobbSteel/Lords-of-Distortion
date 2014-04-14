@@ -121,8 +121,20 @@ public class ArenaManager : MonoBehaviour {
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}
+
+	void HandlePlayerEvent(){
+
+	}
+
+
+	//Can be called by affected client or server, so specifing networkplayer is important
+	void PlayerEventOccured(NetworkPlayer player, PlayerEvent playerEvent){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
+		stats.AddEvent(playerEvent);
+		print("event happened");
+	}
 	
-	/*Clients request this fucntion on the server for every power. After that the server tells every
+	/*Clients request this function on the server for every power. After that the server tells every
      other player*/
 	
 	[RPC]
@@ -233,6 +245,7 @@ public class ArenaManager : MonoBehaviour {
          *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
 
 		Controller2D.onDeath += LostPlayer; //consider making this non static
+		Controller2D.eventAction += PlayerEventOccured;
 		PowerSlot.powerKey += SpawnTriggerPower;
 		placementUI.spawnNow += SpawnTriggerPower;
 	}
@@ -240,6 +253,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
+		Controller2D.eventAction -= PlayerEventOccured;
 		PowerSlot.powerKey -= SpawnTriggerPower;
 		placementUI.spawnNow -= SpawnTriggerPower;
 	}

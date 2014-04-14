@@ -28,8 +28,13 @@ public class Controller2D : MonoBehaviour {
     public bool locked;
 	bool stoppedJump;
 	public bool inAir = true;
+	/*--------Events-----------*/
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
+
+	public delegate void PlayerAffected(NetworkPlayer player, PlayerEvent playerEvent);
+	public static event PlayerAffected eventAction;
+
 	public GameObject DeathSpirit;
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
@@ -224,16 +229,48 @@ public class Controller2D : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
+	//Generates an event and calls function if one exists
+	void GenerateEvent(Power power){
+
+		PlayerEvent playerEvent = null;
+
+		if(power.spawnInfo != null){
+			playerEvent = new PlayerEvent(power.spawnInfo.type, 
+			                                          TimeManager.instance.time, power.spawnInfo.owner);
+		}
+		else{
+			//Gotta be spikes
+			playerEvent = new PlayerEvent(PowerType.SPIKES, TimeManager.instance.time);
+		}
+
+		if(eventAction != null){
+			eventAction(networkController.theOwner, playerEvent);
+		}
+
+	}
+
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		if(dead || !networkController.isOwner)
 			return;
 		
-		if (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook")
+		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
+			GenerateEvent(power);
+		}
+
+		else if(other.gameObject.tag == "PowerHook"){
+			//ignore our own hook.
+			if(other.gameObject.GetComponent<HookHit>().shooter == gameObject)
+				return;
+
+			Power power = other.gameObject.GetComponent<Power>();
+			power.PowerActionEnter(gameObject, this);
+			GenerateEvent(power);
+
 		}
 
         if (other.gameObject.tag == "movingPlatform")
@@ -301,6 +338,7 @@ public class Controller2D : MonoBehaviour {
 		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
+
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
@@ -349,6 +387,7 @@ public class Controller2D : MonoBehaviour {
             GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			//We don't need the next line any more
 		}
+
 	}
 
 	public void DieSimple(){
@@ -361,6 +400,7 @@ public class Controller2D : MonoBehaviour {
 	void OnDisable(){
 		myHook.DestroyHookPossible();
 	}
+
 
 	/*
 	 * Sequence of events:

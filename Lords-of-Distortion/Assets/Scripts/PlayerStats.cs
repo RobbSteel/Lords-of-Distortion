@@ -8,7 +8,7 @@ public class PlayerStats {
 
 	public float timeOfDeath = -1f;
 
-	// always stores 3 events
+	//can only store 3 events
 	private CircularBuffer<PlayerEvent> playerEvents =  new CircularBuffer<PlayerEvent>(3);
 
 	public PlayerStats(){

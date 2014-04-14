@@ -14,7 +14,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Awake(){
 		//Important
-		if(!SessionManager.instanceExists){
+		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
 			sessionManager = manager.GetComponent<SessionManager>();
 		}

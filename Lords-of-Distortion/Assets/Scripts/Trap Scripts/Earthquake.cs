@@ -59,26 +59,24 @@ public class Earthquake : Power {
 
 			if(players.Length > 0){
 			
-					for(int i = 0; i < players.Length; i++){
+				for(int i = 0; i < players.Length; i++){
 
-						var currplayer = players[i];
-						var networkscript = currplayer.GetComponent<NetworkController>();
-						var controller = currplayer.GetComponent<Controller2D>();
+					var currplayer = players[i];
+					var networkscript = currplayer.GetComponent<NetworkController>();
+					var controller = currplayer.GetComponent<Controller2D>();
 							
-								if(networkscript.isOwner){
-								
-									if(controller.grounded){
-										if (GameObject.Find ("CollectData") != null) {
-											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
-										}
-									
-										currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
-									}
-								}
+					if(networkscript.isOwner){
+							
+						if(controller.grounded){
+							if (GameObject.Find ("CollectData") != null) {
+								GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
+							}
+						
+							currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
+						}
 					}
+				}
 			}
 		}
 	}
-
-
 }

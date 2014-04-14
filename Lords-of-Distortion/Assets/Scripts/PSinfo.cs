@@ -17,7 +17,7 @@ public class PSInfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
 	public List<NetworkPlayer> players;
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
-
+	
 	void Awake () {
 		DontDestroyOnLoad(this);
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();

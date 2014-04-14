@@ -24,10 +24,11 @@ public enum PowerType{
 	UNDEFINED
 }
 
+//http://msdn.microsoft.com/en-us/library/bb383974.aspx
 public static class PowerTypeExtensions{
 
 	private static List<PowerType> powersRequiringDirection;
-	private static List<PowerType> psuedoPowers;
+	private static List<PowerType> psuedoPowers = new List<PowerType>();
 
 	public static List<PowerType> powersActive;
 	public static List<PowerType> powersPassive;
@@ -102,6 +103,17 @@ public class PowerSpawn : PriorityQueueNode {
 
 	public PowerSpawn(){
 		type = PowerType.UNDEFINED;
+		localID = powersCreated++;
+	}
+
+	//returns a copy
+	public PowerSpawn(PowerSpawn original){
+		type = original.type;
+		spawnTime = original.spawnTime;
+		position = original.position;
+		direction = original.direction;
+		owner = original.owner;
+
 		localID = powersCreated++;
 	}
 

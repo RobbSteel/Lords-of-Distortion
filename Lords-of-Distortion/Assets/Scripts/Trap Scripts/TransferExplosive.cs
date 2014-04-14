@@ -38,7 +38,7 @@ public class TransferExplosive : Power
 						//set hasbomb of previous player to false
 						playerstuck.GetComponent<Controller2D> ().hasbomb = false;
 				}
-				GameObject playerObject = SessionManager.instance.psInfo.GetPlayerGameObject (player);
+				GameObject playerObject = SessionManager.Instance.psInfo.GetPlayerGameObject (player);
 				playerstuck = playerObject;
 				playerObject.GetComponent<Controller2D> ().hasbomb = true;
 
