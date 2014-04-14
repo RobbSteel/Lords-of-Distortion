@@ -122,8 +122,7 @@ public class PlayerStatus : MonoBehaviour {
 			if( horizontalPressedDown ){
 				horizontalPressedDown = false;
 			}
-		}
-		
+		}	
 	}
 	
 	//Updates StunBar UI and tints color relative to danger

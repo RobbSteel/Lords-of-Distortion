@@ -15,9 +15,71 @@ public enum PowerType{
 	ELECTRIC,
 	PLAGUE,
 	EARTH,
+	//NON Powers
+	MELEE,
+	SPIKES,
+	HOOK,
+	//Special Cases
+	POWERHOOK,
 	UNDEFINED
 }
 
+public static class PowerTypeExtensions{
+
+	private static List<PowerType> powersRequiringDirection;
+	private static List<PowerType> psuedoPowers;
+
+	public static List<PowerType> powersActive;
+	public static List<PowerType> powersPassive;
+
+	//The static constructor called automatically
+	static PowerTypeExtensions(){
+		powersRequiringDirection = new List<PowerType>();
+		powersRequiringDirection.Add(PowerType.FIREBALL);
+		powersRequiringDirection.Add(PowerType.BOULDER);
+		powersRequiringDirection.Add(PowerType.GATE);
+		//powersRequiringDirection.Add(PowerType.GRAVITY);
+		
+		powersActive = new List<PowerType>();
+		powersActive.Add(PowerType.FIREBALL);
+		powersActive.Add(PowerType.ELECTRIC);
+		
+		//powersActive.Add(PowerType.EXPLOSIVE);
+		//powersActive.Add(PowerType.BOULDER);
+		
+		powersPassive = new List<PowerType>();
+		// powersPassive.Add(PowerType.GRAVITY);
+		powersPassive.Add(PowerType.EARTH);
+		//powersPassive.Add(PowerType.SMOKE);
+		//powersPassive.Add (PowerType.PLAGUE);
+		//powersPassive.Add(PowerType.FREEZE);
+		//powersPassive.Add(PowerType.GATE);
+
+		psuedoPowers.Add(PowerType.MELEE);
+		psuedoPowers.Add(PowerType.SPIKES);
+		psuedoPowers.Add(PowerType.HOOK);
+	}
+
+	public static bool TypeRequiresDirection(this PowerType type){
+		return powersRequiringDirection.Contains(type);
+	}
+	
+	public static bool TypeIsActive(this PowerType type){
+		return powersActive.Contains(type);
+	}
+	
+	public static bool TypeIsPassive(this PowerType type){
+		return powersPassive.Contains(type);
+	}
+
+	public static bool IsPsuedoPower(this PowerType type){
+		return psuedoPowers.Contains(type);
+	}
+
+}
+
+
+//Note this class also extends powertype
 public class PowerSpawn : PriorityQueueNode {
 
 	public delegate void Timer(PowerSpawn powerSpawn);
@@ -37,46 +99,6 @@ public class PowerSpawn : PriorityQueueNode {
 
 	//Not guaranteed to be unique.
 	private int localID;
-
-	private static List<PowerType> powersRequiringDirection;
-    public static List<PowerType> powersActive;
-    public static List<PowerType> powersPassive;
-
-	public static bool TypeRequiresDirection(PowerType type){
-		return powersRequiringDirection.Contains(type);
-	}
-
-    public static bool TypeIsActive(PowerType type){
-        return powersActive.Contains(type);
-    }
-
-    public static bool TypeIsPassive(PowerType type){
-        return powersPassive.Contains(type);
-    }
-
-	//The static constructor called automatically
-	static PowerSpawn(){
-		powersRequiringDirection = new List<PowerType>();
-		powersRequiringDirection.Add(PowerType.FIREBALL);
-		powersRequiringDirection.Add(PowerType.BOULDER);
-		powersRequiringDirection.Add(PowerType.GATE);
-		//powersRequiringDirection.Add(PowerType.GRAVITY);
-
-        powersActive = new List<PowerType>();
-        powersActive.Add(PowerType.FIREBALL);
-		powersActive.Add(PowerType.ELECTRIC);
-
-        //powersActive.Add(PowerType.EXPLOSIVE);
-		//powersActive.Add(PowerType.BOULDER);
-	
-        powersPassive = new List<PowerType>();
-       // powersPassive.Add(PowerType.GRAVITY);
-		powersPassive.Add(PowerType.EARTH);
-       // powersPassive.Add(PowerType.SMOKE);
-		//powersPassive.Add (PowerType.PLAGUE);
-        //powersPassive.Add(PowerType.FREEZE);
-		//powersPassive.Add(PowerType.GATE);
-	}
 
 	public PowerSpawn(){
 		type = PowerType.UNDEFINED;
@@ -108,6 +130,4 @@ public class PowerSpawn : PriorityQueueNode {
 			calledEvent = true;
 		}
 	}
-
-
 }
