@@ -139,7 +139,7 @@ public class Hook : MonoBehaviour {
 		
 			if(hittimer > 0){
 
-			pullingplayer(speed);
+				pullingplayer(speed);
 			
 			} else {
 
