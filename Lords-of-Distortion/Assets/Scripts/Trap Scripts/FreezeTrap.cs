@@ -17,7 +17,7 @@ public class FreezeTrap : Power {
 	}
 
 	void Start(){
-		trapDuration = 1.5f;
+		trapDuration = 3f;
 		Destroy(gameObject, trapDuration );
 	}
 
@@ -40,6 +40,7 @@ public class FreezeTrap : Power {
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
+        player.rigidbody2D.drag = 25;
 		applyDmg = controller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
 
@@ -62,11 +63,11 @@ public class FreezeTrap : Power {
 	}
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller){
-
+        player.rigidbody2D.drag = 25;
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
-
+        player.rigidbody2D.drag = 0;
 	}
 	
 	void OnDestroy(){
