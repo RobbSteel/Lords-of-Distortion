@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class NetworkController : MonoBehaviour {
 	public bool DEBUG;
@@ -30,14 +31,16 @@ public class NetworkController : MonoBehaviour {
 	 */
 	struct State{
 		public Vector3 position;
+		public Vector3 velocity;
 		public bool facingRight;
 		public bool inAir;
-		public float remoteTime; //the time of this state on the client
+		public double remoteTime; //the time of this state on the client
 		public float localTime;  //the time we received a copy of this state.
 		public State(Vector3 position, bool facingRight){
 			this.position = position;
+			this.velocity = Vector3.zero;
 			this.facingRight = facingRight;
-			this.remoteTime = float.NaN;
+			this.remoteTime = double.NaN;
 			this.localTime = float.NaN;
 			this.inAir = false;
 		}
@@ -88,7 +91,7 @@ public class NetworkController : MonoBehaviour {
 
 	void Awake() {
 		controller2D = GetComponent<Controller2D>();
-		states = new CircularBuffer<State>(4);
+		states = new CircularBuffer<State>(10);
 	}
 
 	void Start () {
@@ -125,15 +128,90 @@ public class NetworkController : MonoBehaviour {
 
 	Vector3 estimatedVelocity;
 	Vector3 latestPosition;
+
+	State latestState;
+
+	double interpolationDelay = 0.10;
+	float maxExtrapolation = .25f;
+	float interpolations = 0f;
+	float updates = 0f;
+	public float interpolationPercentage;
 	void Update () {
+
 		if (isOwner)
 			return;
+		updates++;
+
+		//The time we would like to see the other player. Were are seeing where they were in the past
+		double simulationTime = Network.time - interpolationDelay;
+
+
+		//Check to see if we have something newer than our desired simulation time,
+		//so we can interpolate. This also implies that there is a state which has a time further
+		//in the past than our desired sim time, because we collected states until our desired state
+		//came up.
+		if(states.Count > 1 && states.ReadNewest().remoteTime > simulationTime){
+			int i = states.Count - 1;
+			foreach(State state in states.Reverse<State>()){
+
+				//Look for state that is (interpolation delay + 1 packet delay) in the past
+				//If we don't have something that old, use the oldest state possible.
+
+				if(state.remoteTime <= simulationTime || i == 0){
+					//get a state 1 newer than what we have
+					State newerState = states.GetByIndex(i + 1);
+					State olderState = state;
+
+					double interval = newerState.remoteTime - olderState.remoteTime;
+					//Because packets dont match up perfectly with frames, interpolate a certain amount
+					//of time past the last packet.
+					double timePassed = simulationTime - olderState.remoteTime;
+
+					transform.position = Vector3.Lerp(olderState.position, newerState.position,
+					                                  (float)(timePassed/interval));
+					//flip player if necessary
+					if(newerState.facingRight != controller2D.facingRight)
+						controller2D.Flip();
+
+					//If player is in air, play jump animation, otherwise play ground animation.
+					if(newerState.inAir)
+						controller2D.anim.SetTrigger("Jump");
+
+					float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
+					controller2D.anim.SetFloat( "Speed", unit);
+
+					interpolations++;
+
+					return;
+				}
+				i--;
+
+			}
+		}
+
+		else {
+			State latest = states.ReadNewest();
+
+			float extrapolationLength = (float)(simulationTime - latest.remoteTime);
+			// Don't extrapolate for more than 250 ms
+			if (extrapolationLength < maxExtrapolation)
+			{
+				transform.position = latest.position + latest.velocity * extrapolationLength;
+				rigidbody2D.velocity = latest.velocity;
+			}
+
+			interpolationPercentage = interpolations/updates  * 100f;
+
+			//print ("Interpolating " + (interpolations/updates  * 100f)+  "% of the time.");
+		}
+/*
 
 		if(canInterpolate){
 			currentSmooth += Time.deltaTime;
 			//if we go past these two states, try to move to next one.
 			if(currentSmooth >= interval){
 				//Delete oldest state since we don't need it.
+		
 				states.DiscardOldest();
 
 				//Case 1: We still have states we can interpolate between
@@ -144,12 +222,14 @@ public class NetworkController : MonoBehaviour {
 				//Case 2: We're out, need to switch to prediction.
 				else {
 					Debug.Log("Packets missed or arriving slow. Switching to extrapolation.");
+					latestState = states.ReadOldest();
 					latestPosition = states.ReadOldest().position;
-					states.DiscardOldest();
-					currentSmooth = 0f;
+					//The amount of time weve overshot
+					currentSmooth = (float)Network.time - latestState.remoteTime;
 					interval = float.PositiveInfinity;
 					canInterpolate = false;
 					canExtrapolate = true;
+
 				}
 			}
 		}
@@ -208,7 +288,9 @@ public class NetworkController : MonoBehaviour {
 				//transform.position = Vector3.Lerp(oldState.position, newState.position, currentSmooth/(currentSmooth));
 			}
 		}
+		*/
 	}
+
 
 	//typically only called by the death animation finishing
 	public void DestroyPlayer(){
@@ -223,21 +305,27 @@ public class NetworkController : MonoBehaviour {
 		if(!DEBUG)
 			instanceManager.gameInfo.playerObjects.Remove(theOwner);
 	}
+
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
 
 		Vector3 syncPosition = Vector3.zero;
-		bool syncFacing = false;
+		Vector3 syncVelocity = Vector3.zero;
+		bool syncFacingRight = false;
 		bool syncInAir = false;
 		if (stream.isWriting)
 		{
 			//if we have control over this entity, send out our positions to everyone else.
 			syncPosition = transform.position;
-			syncFacing = controller2D.facingRight;
+			syncVelocity = rigidbody2D.velocity;
+
 			syncInAir = controller2D.inAir;
+			syncFacingRight = controller2D.facingRight;
 
 			stream.Serialize(ref syncPosition.x);
 			stream.Serialize(ref syncPosition.y);
-			stream.Serialize(ref syncFacing);
+			stream.Serialize(ref syncVelocity.x);
+			stream.Serialize(ref syncVelocity.y);
+			stream.Serialize(ref syncFacingRight);
 			stream.Serialize(ref syncInAir);
 		}
 
@@ -261,16 +349,20 @@ public class NetworkController : MonoBehaviour {
 			
 	
 			//Write syncrhronized values to a state.
-			float xPosition = 0f;
-			float yPosition = 0f;
-			stream.Serialize(ref xPosition);
-			stream.Serialize(ref yPosition);
-			syncPosition = new Vector3(xPosition, yPosition, 0f);
-			stream.Serialize(ref syncFacing);
+			stream.Serialize(ref syncPosition.x);
+			stream.Serialize(ref syncPosition.y);
+
+			stream.Serialize(ref syncVelocity.x);
+			stream.Serialize(ref syncVelocity.y);
+
+			stream.Serialize(ref syncFacingRight);
 			stream.Serialize(ref syncInAir);
-			State state = new State(syncPosition, syncFacing);
+
+
+			State state = new State(syncPosition, syncFacingRight);
+			state.velocity = syncVelocity;
 			state.inAir = syncInAir;
-			state.remoteTime = (float)info.timestamp;
+			state.remoteTime = info.timestamp;
 			state.localTime = (float)Network.time;
 			states.Add(state); //if we advanced buffer manually, then count < maxsize
 			//print ("----- " + state.remoteTime);
@@ -278,8 +370,12 @@ public class NetworkController : MonoBehaviour {
 				rigidbody2D.isKinematic = true;
 				canInterpolate = true;
 				//in case we were extrapolating
-				canExtrapolate = false;
-				currentSmooth = 0f;
+				if(canExtrapolate){
+					//remove oldest state from the buffer since we dont need it
+					canExtrapolate = false;
+					currentSmooth = (float)(Network.time - latestState.remoteTime);
+					states.DiscardOldest();
+				}
 			}
 		}
 	}

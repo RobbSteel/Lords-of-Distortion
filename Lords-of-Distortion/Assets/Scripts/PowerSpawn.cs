@@ -14,6 +14,7 @@ public enum PowerType{
 	GATE,
 	ELECTRIC,
 	PLAGUE,
+	EARTH,
 	UNDEFINED
 }
 
@@ -64,11 +65,13 @@ public class PowerSpawn : PriorityQueueNode {
         powersActive = new List<PowerType>();
         powersActive.Add(PowerType.FIREBALL);
 		powersActive.Add(PowerType.ELECTRIC);
+
         //powersActive.Add(PowerType.EXPLOSIVE);
 		//powersActive.Add(PowerType.BOULDER);
 	
         powersPassive = new List<PowerType>();
-        powersPassive.Add(PowerType.GRAVITY);
+       // powersPassive.Add(PowerType.GRAVITY);
+		powersPassive.Add(PowerType.EARTH);
        // powersPassive.Add(PowerType.SMOKE);
 		//powersPassive.Add (PowerType.PLAGUE);
         //powersPassive.Add(PowerType.FREEZE);

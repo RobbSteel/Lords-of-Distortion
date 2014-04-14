@@ -32,6 +32,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite gateSprite;
 	public Sprite plagueSprite;
 	public Sprite electricSprite;
+	public Sprite earthSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	private Dictionary<PowerType, PowerBoard> boardsByType = new Dictionary<PowerType, PowerBoard>();
@@ -101,6 +102,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add(PowerType.GATE, gateSprite);
 		icons.Add (PowerType.ELECTRIC, electricSprite);
 		icons.Add (PowerType.PLAGUE, plagueSprite);
+		icons.Add (PowerType.EARTH, earthSprite);
 		/*Hard code some powers for now*/
 		/*
          * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
@@ -154,7 +156,7 @@ public class PlacementUI : MonoBehaviour {
 				slots.Add(slot);
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				buttons.Add(slot.GetComponent<UIButton>());
-				UIEventListener.Get(slot).onClick  += PowerButtonClick;
+				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
 				PowerBoard boardReference = null;
 				boardsByType.TryGetValue(associatedPower.type, out boardReference);
@@ -280,7 +282,10 @@ public class PlacementUI : MonoBehaviour {
 
 
 	/*The button that was pressed is passed in as a GameObject*/
-	public void PowerButtonClick(GameObject sender){
+	public void PowerButtonClick(GameObject sender, bool isDown){
+		if(isDown)
+			return;
+
 		PowerSlot activeInfo = sender.GetComponent<PowerSlot>();
 		//Checks if we still have any left before doing anything.
 		if (state != PlacementState.MovingPower && !live)
@@ -330,7 +335,7 @@ public class PlacementUI : MonoBehaviour {
 
 		//Remove button event listener, (so that we can use button as a trigger later)
 		if(!deadScreen)
-			UIEventListener.Get(info.gameObject).onClick  -= PowerButtonClick;
+			UIEventListener.Get(info.gameObject).onPress  -= PowerButtonClick;
 
 
 		activePowerType = info.associatedPower.type;
