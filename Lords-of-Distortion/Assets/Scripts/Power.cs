@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class Power : MonoBehaviour {
 	
 	public PowerSpawn spawnInfo;
+	public bool OFFLINE;
 
 	public delegate void TrapTriggered(Power power);
 	public event TrapTriggered onTrapTrigger;

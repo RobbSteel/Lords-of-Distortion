@@ -23,6 +23,7 @@ public class countdown : MonoBehaviour {
 	void Awake(){
 		
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		arenaManager = GameObject.FindWithTag("ArenaManager").GetComponent<ArenaManager>();
 
 	}
 

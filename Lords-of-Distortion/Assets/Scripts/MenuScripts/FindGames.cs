@@ -9,10 +9,10 @@ public class FindGames : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(playerscript.playerName);
+		//print(playerscript.playerName);
 	}
 
-	void OnClick(){
+	void OnPress(){
 
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name"){
 

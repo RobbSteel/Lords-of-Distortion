@@ -20,6 +20,8 @@ public class HookHit : MonoBehaviour {
 	public AudioClip hookHitSfx;
 	public AudioClip hookWallHitSfx;
 
+	public bool OFFLINE;
+	bool poweredUp = false;
 	void Awake(){
 
 		destroyed = false;
@@ -55,21 +57,32 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
+
+		if(col.gameObject.tag == "HookGate" & !poweredUp){
+			renderer.material.color = Color.red;
+			gameObject.AddComponent<PowerHook>();
+			gameObject.tag = "PowerHook";
+			poweredUp = true;
+			return;
+		}
+
+
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
 
-			if(GameObject.Find("CollectData") != null){
-				GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
+			if(!OFFLINE){
+				if(GameObject.Find("CollectData") != null){
+					GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
+				}
 			}
+
 			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			hooked = true;
 			AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
-
-
 		}
 
-		if(col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
+		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
 
 			if(Network.isServer){
 
@@ -84,7 +97,8 @@ public class HookHit : MonoBehaviour {
 				affectedPlayerC2D.Hooked();
 				rigidbody2D.velocity = Vector2.zero;
 				targetPosition = transform.position;
-				shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
+				if(!OFFLINE)
+					shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position, affectedPlayerNC.theOwner);
 				playerhooked = true; 
 				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
 

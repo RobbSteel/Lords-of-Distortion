@@ -11,12 +11,14 @@ GameObject:
   - 212: {fileID: 21200000}
   - 111: {fileID: 11100000}
   - 95: {fileID: 9500000}
-  - 61: {fileID: 6100000}
   - 114: {fileID: 11400000}
   - 198: {fileID: 19800004}
   - 199: {fileID: 19900004}
   - 114: {fileID: 11400008}
   - 82: {fileID: 8200000}
+  - 61: {fileID: 6100000}
+  - 114: {fileID: 11400006}
+  - 114: {fileID: 11400010}
   m_Layer: 9
   m_Name: gravityField
   m_TagString: Power
@@ -67,8 +69,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.85516453, y: 1.24632502, z: 0}
-  m_LocalScale: {x: .702080309, y: .702080727, z: 2}
+  m_LocalPosition: {x: -4.03363752, y: -.966661215, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
   m_Father: {fileID: 0}
@@ -104,8 +106,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 1.63, y: 3.23000002}
-  m_Center: {x: -.769999981, y: .689999998}
+  m_Size: {x: 1.96000004, y: 3.72000003}
+  m_Center: {x: -1, y: 1.80999994}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -173,7 +175,7 @@ Animator:
   m_GameObject: {fileID: 100000}
   m_Enabled: 0
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 11287ffead5d3e044ac3b0ca686251f0, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
@@ -186,7 +188,7 @@ Animation:
   m_GameObject: {fileID: 100000}
   m_Enabled: 0
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 7cf9efd815a885449b36cd9306b4e183, type: 2}
+  m_Animation: {fileID: 0}
   m_Animations: []
   m_WrapMode: 0
   m_PlayAutomatically: 1
@@ -203,6 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3bd5348401380439129b62e9ac1c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
   triggered: 0
 --- !u!114 &11400002
 MonoBehaviour:
@@ -228,6 +231,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnlyDeactivate: 0
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb99599871a1ba408b23efed9df4db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  wait: 0
+  startAt: 0
+  pauseFor: 0
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -240,6 +258,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnlyDeactivate: 0
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25568012a84de346bfc829e73ad526d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -1489,8 +1518,8 @@ ParticleSystem:
     radius: .100000001
     angle: 80
     length: 5
-    boxX: .200000003
-    boxY: 2
+    boxX: 0
+    boxY: .647754192
     boxZ: .200000003
     placementMode: 0
     m_Mesh: {fileID: 0}
@@ -2331,7 +2360,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1.60000002
+      scalar: 2.88000011
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2346,7 +2375,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .875
+          value: .815972149
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -2486,7 +2515,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .5
+          value: .49999997
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -2516,19 +2545,19 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
       minMaxState: 3
-    gravityModifier: 0
+    gravityModifier: -.0500000007
     inheritVelocity: 0
     maxNumParticles: 1000
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 5
-    radius: .100000001
-    angle: 80
-    length: 5
-    boxX: .200000003
-    boxY: 2
-    boxZ: .200000003
+    type: 9
+    radius: .00999999978
+    angle: 28.1599998
+    length: .289999992
+    boxX: 0
+    boxY: 1.67322016
+    boxZ: 0
     placementMode: 0
     m_Mesh: {fileID: 0}
     randomDirection: 0
@@ -2536,7 +2565,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 100
+      scalar: 350
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3446,7 +3475,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_SortMode: 0
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
