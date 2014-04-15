@@ -20,6 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
+    private float currentDrag;
 	private Animator animator;
 
 	NetworkController networkController;
@@ -96,11 +97,11 @@ public class Hook : MonoBehaviour {
 	
 		float speed = 1.0f;
 		speed = speed / 4;
-
+        currentDrag = controller2D.rigidbody2D.drag;
 		//Get input from user and set cooldown to avoid repeated use.
         //previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked){
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
