@@ -9,6 +9,7 @@ public class FreezeTrap : Power {
 	private Controller2D frozenplayer;
 	private GameObject currentplayer;
 	private bool used = false;
+    private bool freezeExplosionActivated = false;
 
 	public GameObject frozenEffectPrefab;
 
@@ -20,6 +21,16 @@ public class FreezeTrap : Power {
 	void Update()
     {
         trapDuration += Time.deltaTime;
+        if(trapDuration > 2.2)
+        {
+            if(!freezeExplosionActivated)
+            {
+                GetComponent<CircleCollider2D>().radius = 1.25f;
+                GameObject freezeExplosion = (GameObject)Instantiate(Resources.Load("FreezeExplode"));
+                freezeExplosion.transform.position = transform.position;
+                freezeExplosionActivated = true;
+            }
+        }
 	}
 
 	[RPC]
@@ -37,7 +48,7 @@ public class FreezeTrap : Power {
 	public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
         applyDmg = controller.GetComponent<PlayerStatus>();
-        if (trapDuration > 3)
+        if (trapDuration > 2.4)
         {
             if (!used)
             {
@@ -55,7 +66,7 @@ public class FreezeTrap : Power {
         }
         else
         { 
-            player.rigidbody2D.drag = 35;
+            player.rigidbody2D.drag = 45;
         }
 
 		if(GameObject.Find("CollectData") != null){
@@ -67,7 +78,7 @@ public class FreezeTrap : Power {
 	public override void PowerActionStay(GameObject player, Controller2D controller)
     {
         applyDmg = controller.GetComponent<PlayerStatus>();
-        if (trapDuration > 3)
+        if (trapDuration > 2.4)
         {
             if(!used)
             {
@@ -85,7 +96,7 @@ public class FreezeTrap : Power {
         }
         else
         {
-            player.rigidbody2D.drag = 35;
+            player.rigidbody2D.drag = 45;
         }
 	}
 	
