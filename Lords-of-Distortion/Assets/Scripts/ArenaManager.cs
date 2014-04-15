@@ -273,7 +273,7 @@ public class ArenaManager : MonoBehaviour {
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
-			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE){
+			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE || spawn.type == PowerType.EARTH){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
