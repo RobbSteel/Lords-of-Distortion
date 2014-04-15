@@ -75,7 +75,6 @@ public class HookHit : MonoBehaviour {
 				}
 			}
 
-			//print ("hello");
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			hooked = true;
