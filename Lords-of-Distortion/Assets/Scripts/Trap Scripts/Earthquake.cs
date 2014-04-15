@@ -72,6 +72,7 @@ public class Earthquake : Power {
 
 						var currplayer = players[i];
 						var networkscript = currplayer.GetComponent<NetworkController>();
+					    var playerstatus = currplayer.GetComponent<PlayerStatus>();
 						var controller = currplayer.GetComponent<Controller2D>();
 							
 								if(networkscript.isOwner){
@@ -83,7 +84,7 @@ public class Earthquake : Power {
 											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
 										}
 									
-							    
+							    playerstatus.TakeDamage(100.0f);
 								currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
 									}
 								}

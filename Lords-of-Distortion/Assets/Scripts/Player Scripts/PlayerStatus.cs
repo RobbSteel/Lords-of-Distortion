@@ -167,7 +167,7 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun){
-				GA.API.Design.NewEvent("Smoke Stuns", transform.position);
+
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
 			}
 		}

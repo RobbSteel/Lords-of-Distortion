@@ -60,20 +60,21 @@ public class PowerSpawn : PriorityQueueNode {
 		powersRequiringDirection.Add(PowerType.FIREBALL);
 		powersRequiringDirection.Add(PowerType.BOULDER);
 		powersRequiringDirection.Add(PowerType.GATE);
-		//powersRequiringDirection.Add(PowerType.GRAVITY);
+
 
         powersActive = new List<PowerType>();
         powersActive.Add(PowerType.FIREBALL);
 	    powersActive.Add(PowerType.ELECTRIC);
         powersActive.Add(PowerType.EXPLOSIVE);
 	    powersActive.Add(PowerType.BOULDER);
+		powersActive.Add(PowerType.PLAGUE);
 	
         powersPassive = new List<PowerType>();
         //powersPassive.Add(PowerType.GRAVITY);
         //powersPassive.Add(PowerType.SMOKE);
-	    //powersPassive.Add (PowerType.PLAGUE);
 	    //powersPassive.Add(PowerType.GATE);
-        powersPassive.Add(PowerType.FREEZE);
+        //powersPassive.Add(PowerType.FREEZE);
+		powersPassive.Add(PowerType.EARTH);
 	}
 
 	public PowerSpawn(){
