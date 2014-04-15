@@ -80,7 +80,6 @@ public static class PowerTypeExtensions{
 }
 
 
-//Note this class also extends powertype
 public class PowerSpawn : PriorityQueueNode {
 
 	public delegate void Timer(PowerSpawn powerSpawn);

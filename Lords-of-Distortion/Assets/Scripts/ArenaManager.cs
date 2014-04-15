@@ -122,16 +122,35 @@ public class ArenaManager : MonoBehaviour {
 		placementUI.enabled = true;
 	}
 
-	void HandlePlayerEvent(){
+	//Server should do calculations of who to give points to.
+	void HandlePlayerEvent(NetworkPlayer player, PlayerEvent playerEvent){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
+		stats.AddEvent(playerEvent);
 
+		print(playerEvent.PowerType + " happened");
 	}
 
+	[RPC]
+	void NotifyServerOfEvent(int type, float timeOfContact, NetworkMessageInfo info)
+	{
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		HandlePlayerEvent(info.sender, playerEvent);
+	}
 
 	//Can be called by affected client or server, so specifing networkplayer is important
 	void PlayerEventOccured(NetworkPlayer player, PlayerEvent playerEvent){
-		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
-		stats.AddEvent(playerEvent);
-		print("event happened");
+
+		if(Network.isServer)
+		{
+			HandlePlayerEvent(player, playerEvent);
+		}
+
+		else {
+			//Maybe we want local copy for some reason.
+			PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
+			stats.AddEvent(playerEvent);
+			networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
+		}
 	}
 	
 	/*Clients request this function on the server for every power. After that the server tells every
@@ -161,8 +180,7 @@ public class ArenaManager : MonoBehaviour {
 			                 requested.position, requested.spawnTime, requested.GetLocalID());
 		}
 	}
-
-
+	
 
 	//Once server has all the spawn info from the other players, send it out.
 	private void CheckIfAllSynchronized(){

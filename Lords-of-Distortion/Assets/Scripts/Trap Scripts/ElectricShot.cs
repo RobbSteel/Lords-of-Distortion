@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class ElectricShot : Power {
-	
-	public Vector3 direction;
+
 	private float speed = 3;
 	
 	
@@ -16,7 +15,7 @@ public class ElectricShot : Power {
 	// Update is called once per frame
 	void Update () {
 		
-		transform.Translate((direction) * (Time.deltaTime * speed)); 
+		transform.Translate((spawnInfo.direction) * (Time.deltaTime * speed)); 
 		
 	}
 
