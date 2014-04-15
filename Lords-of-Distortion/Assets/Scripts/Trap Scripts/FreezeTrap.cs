@@ -15,6 +15,7 @@ public class FreezeTrap : Power {
 
 	void Start()
     {
+        GetComponent<ParticleSystem>().loop = false;
 		Destroy(gameObject, 4);
 	}
 
@@ -29,6 +30,13 @@ public class FreezeTrap : Power {
                 GameObject freezeExplosion = (GameObject)Instantiate(Resources.Load("FreezeExplode"));
                 freezeExplosion.transform.position = transform.position;
                 freezeExplosionActivated = true;
+            }
+            if(freezeExplosionActivated)
+            {
+                if(trapDuration > 2.5)
+                {
+                    GetComponent<CircleCollider2D>().radius = 0f;
+                }
             }
         }
 	}
