@@ -46,6 +46,14 @@ public class Earthquake : Power {
 		
 	}
 
+	[RPC]
+	void QuakeParticle(Vector3 location, Quaternion rotate){
+
+		Instantiate(groundshatter, location, rotate);
+
+	}
+
+
 	void OnTriggerEnter2D(Collider2D col)
 	{
 
@@ -70,6 +78,7 @@ public class Earthquake : Power {
 								
 									if(controller.grounded){
 							Instantiate(groundshatter, currplayer.transform.position, currplayer.transform.rotation);
+							networkView.RPC("QuakeParticle", RPCMode.Others, currplayer.transform.position, currplayer.transform.rotation);
 										if (GameObject.Find ("CollectData") != null) {
 											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
 										}
