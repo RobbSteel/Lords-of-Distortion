@@ -126,7 +126,6 @@ public class ArenaManager : MonoBehaviour {
 	void HandlePlayerEvent(NetworkPlayer player, PlayerEvent playerEvent){
 		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
 		stats.AddEvent(playerEvent);
-
 		print(playerEvent.PowerType + " happened");
 	}
 
@@ -323,14 +322,13 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
-
 		pointTracker.GivePoints(1, Network.player);
         float currentTime = TimeManager.instance.time;
 		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
-			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE){
+			if(spawn.type.PowerRequiresNetworking()){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
@@ -385,7 +383,6 @@ public class ArenaManager : MonoBehaviour {
 
 	void Update () {
         float currentTime = TimeManager.instance.time;
-
 		//Check to see if you are the last man standing
 		if(livePlayerCount == 1 && finishgame && !showonce3){
 			networkView.RPC ("LastManVictory", RPCMode.Others);
@@ -393,12 +390,10 @@ public class ArenaManager : MonoBehaviour {
 			hudTools.DisplayText ("Last Player has Survived!");
 			showonce3 = true;
 		}
-		
 
 		if(sentMyPowers == false && currentTime >= beginTime){
             placementUI.DisableEditing();
 			placementUI.Disable();
-
 
 			/*
 			 * Don't tween away powers
@@ -489,12 +484,7 @@ public class ArenaManager : MonoBehaviour {
 		//Spawn one timed trap per frame, locally.
 		if(trapsEnabled)
 			SpawnTimedTraps(currentTime);
-
 	}
-
-
-
-
 
 	[RPC]
 	public void VengeanceMode(){

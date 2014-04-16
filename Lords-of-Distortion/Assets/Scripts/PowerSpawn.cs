@@ -33,6 +33,9 @@ public static class PowerTypeExtensions{
 	public static List<PowerType> powersActive;
 	public static List<PowerType> powersPassive;
 
+	public static List<PowerType> powersWithNetworking;
+
+
 	//The static constructor called automatically
 	static PowerTypeExtensions(){
 		powersRequiringDirection = new List<PowerType>();
@@ -59,6 +62,11 @@ public static class PowerTypeExtensions{
 		psuedoPowers.Add(PowerType.MELEE);
 		psuedoPowers.Add(PowerType.SPIKES);
 		psuedoPowers.Add(PowerType.HOOK);
+
+		powersWithNetworking.Add(PowerType.FIREBALL);
+		powersWithNetworking.Add(PowerType.EXPLOSIVE);
+		powersWithNetworking.Add(PowerType.FREEZE);
+		powersWithNetworking.Add(PowerType.EARTH);
 	}
 
 	public static bool TypeRequiresDirection(this PowerType type){
@@ -75,6 +83,10 @@ public static class PowerTypeExtensions{
 
 	public static bool IsPsuedoPower(this PowerType type){
 		return psuedoPowers.Contains(type);
+	}
+
+	public static bool PowerRequiresNetworking(this PowerType type){
+		return powersWithNetworking.Contains(type);
 	}
 
 }
