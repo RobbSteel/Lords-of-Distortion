@@ -16,7 +16,7 @@ public class FreezeTrap : Power {
 	void Start()
     {
         GetComponent<ParticleSystem>().loop = false;
-		Destroy(gameObject, 4);
+		Destroy(gameObject, 3);
 	}
 
 	void Update()
