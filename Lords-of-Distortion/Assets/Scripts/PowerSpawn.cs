@@ -53,7 +53,7 @@ public static class PowerTypeExtensions{
 		//powersActive.Add(PowerType.BOULDER);
 		
 		powersPassive = new List<PowerType>();
-		// powersPassive.Add(PowerType.GRAVITY);
+		powersPassive.Add(PowerType.GRAVITY);
 		powersPassive.Add(PowerType.EARTH);
 		//powersPassive.Add(PowerType.SMOKE);
 		//powersPassive.Add (PowerType.PLAGUE);
