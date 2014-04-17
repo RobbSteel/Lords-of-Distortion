@@ -13,7 +13,7 @@ public class BlastRadius : Power {
 
 
 
-		controller.Die();
+		controller.Die(DeathType.FIRE);
 			
 	}
 	
