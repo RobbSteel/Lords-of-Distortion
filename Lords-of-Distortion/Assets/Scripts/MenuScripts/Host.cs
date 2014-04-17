@@ -5,7 +5,7 @@ public class Host : MonoBehaviour {
 
 	//public GameObject mainscript;
 	public MainGui playerscript;
-	public PSInfo infoscript;
+	public PlayerServerInfo infoscript;
 
 
 	// Use this for initialization

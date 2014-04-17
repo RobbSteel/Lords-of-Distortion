@@ -11,7 +11,7 @@ public class ScoreDisplay : MonoBehaviour {
 	public float winningscore = 0;
 	public int winningplayer = 0;
 
-	PSInfo infoscript;
+	PlayerServerInfo infoscript;
 
 
 	// Use this for initialization

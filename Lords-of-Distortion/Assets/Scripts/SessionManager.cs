@@ -9,7 +9,7 @@ public class SessionManager : MonoBehaviour {
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
 	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
-	public PSInfo psInfo;
+	public PlayerServerInfo psInfo;
 	
 	public bool finishedLoading = false;
 	public const int GAMEPLAY = 0;
@@ -37,7 +37,7 @@ public class SessionManager : MonoBehaviour {
 		Instance = this;
 		DontDestroyOnLoad(this);
 		var information = GameObject.Find("PSInfo");
-		psInfo = information.GetComponent<PSInfo>();
+		psInfo = information.GetComponent<PlayerServerInfo>();
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
