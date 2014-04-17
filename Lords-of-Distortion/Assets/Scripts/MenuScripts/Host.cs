@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Host : MonoBehaviour {
 
 	//public GameObject mainscript;
 	public MainGui playerscript;
-	public PSinfo infoscript;
+	public PlayerServerInfo infoscript;
 
 
 	// Use this for initialization

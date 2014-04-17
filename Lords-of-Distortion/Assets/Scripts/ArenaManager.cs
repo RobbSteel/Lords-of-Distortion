@@ -6,8 +6,8 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 12f; 
-	const float FIGHT_COUNT_DOWN_TIME = 5f;
+	const float PLACEMENT_TIME = 2f; 
+	const float FIGHT_COUNT_DOWN_TIME = 2f;
 	const float POST_MATCH_TIME = 5f;
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
@@ -47,8 +47,8 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void NotifyBeginTime(float time){
 		beginTime = time;
-        sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
-		sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
+        sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
+		sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
@@ -57,6 +57,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	
 	void ServerDeathHandler(NetworkPlayer player){
+		livePlayerCount--;
 
 		if(livePlayerCount == 1 && !finishgame){
 			print("Finish him!");
@@ -70,36 +71,132 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		pointTracker.PlayerDied(player);
-
 	}
-	
-	//Called only on the server.
+
+	//Tells additional players to destroy clone.
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath){
+		if(Network.isServer){
+			//Store the time of death on server
+			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
+			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = adjustedTime;
+			
+			//Nofify everyone but dead player
+			foreach(NetworkPlayer player in sessionManager.psInfo.players){
+				if(player != deadPlayerID && player != Network.player){
+					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID);
+				}
+			}
+			//also destroy player on server
+			DestroyPlayerClone(deadPlayerID);
+			//Explicitly pass our network player id
+			ServerDeathHandler(deadPlayerID);
+		}
+	}
+
+	//Called only on the server. 
 	[RPC]
-	void NotifyPlayerDied(NetworkMessageInfo info){
-		livePlayerCount--;
-		if(Network.isServer){
-			ServerDeathHandler(info.sender);
-		}
+	void NotifyServerOfDeath(NetworkMessageInfo info){
+		//Converts networked message to local function call
+		NotifyOthersOfDeath(info.sender, (float)info.timestamp);
 	}
 
-	
 
-	//Called locally on every client including server when the player you control dies.
+	//Called on clients not controlling the player who just died.
+	[RPC]
+	void DestroyPlayerClone(NetworkPlayer deadPlayerID){
+		print ("he dead");
+		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
+		deadPlayer.GetComponent<Controller2D>().DieSimple();
+	}
+
+	//Called only on the client where the player died.
 	void LostPlayer(GameObject deadPlayer){
-		networkView.RPC ("NotifyPlayerDied", RPCMode.Others);
-		livePlayerCount--;
-		if(Network.isServer){
-			ServerDeathHandler(Network.player);
-		}
-		sessionManager.KillPlayer(deadPlayer);
 
-		//brign up the dead player placement screen.
+		if(Network.isServer){
+			NotifyOthersOfDeath(Network.player, (float)Network.time);
+		}
+
+		else {
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server);
+		}
+
+		//bring up the dead player placement screen.
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
+	}
+
+	//Server should do calculations of who to give points to.
+	void HandlePlayerEvent(NetworkPlayer affected, PlayerEvent playerEvent){
+		print(playerEvent.PowerType + " happened");
+
+		if(playerEvent.Attacker != null){
+			print ("Attacked by " + playerEvent.Attacker.Value);
+			networkView.RPC("SynchEvent", RPCMode.Others, (int)playerEvent.PowerType, 
+		                playerEvent.TimeOfContact, playerEvent.Attacker, affected);
+		}
+		else {
+			networkView.RPC("SimpleSynchEvent", RPCMode.Others, (int)playerEvent.PowerType, 
+			                playerEvent.TimeOfContact, affected);
+		}
+
+		//Add locally to server's client
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		stats.AddEvent(playerEvent);
 
 	}
+
+	//Synch event with other players, just for the score screen.
+	[RPC]
+	void SynchEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkPlayer affected){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact, attacker);
+		stats.AddEvent(playerEvent);
+	}
+
+	[RPC]
+	void SimpleSynchEvent(int type, float timeOfContact, NetworkPlayer affected){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		stats.AddEvent(playerEvent);
+	}
+
 	
-	/*Clients request this fucntion on the server for every power. After that the server tells every
+	//for powers without attacker
+	[RPC]
+	void SimpleNotifyServerOfEvent(int type, float timeOfContact, NetworkMessageInfo info)
+	{
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		HandlePlayerEvent(info.sender, playerEvent);
+
+	}
+
+	[RPC]
+	void NotifyServerOfEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkMessageInfo info){
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		playerEvent.Attacker = attacker;
+		HandlePlayerEvent(info.sender, playerEvent);
+	}
+
+	//Can be called by affected client or server, so specifing networkplayer is important
+	void PlayerEventOccured(NetworkPlayer player, PlayerEvent playerEvent){
+
+		if(Network.isServer)
+		{
+			HandlePlayerEvent(player, playerEvent);
+		}
+
+		else {
+			if(playerEvent.Attacker != null){
+				networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact, playerEvent.Attacker);
+			}
+
+			else{
+				networkView.RPC ("SimpleNotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
+			}
+		}
+	}
+	
+	/*Clients request this function on the server for every power. After that the server tells every
      other player*/
 	
 	[RPC]
@@ -126,12 +223,11 @@ public class ArenaManager : MonoBehaviour {
 			                 requested.position, requested.spawnTime, requested.GetLocalID());
 		}
 	}
-
-
+	
 
 	//Once server has all the spawn info from the other players, send it out.
 	private void CheckIfAllSynchronized(){
-		if(playersReady.Count == sessionManager.gameInfo.players.Count){
+		if(playersReady.Count == sessionManager.psInfo.players.Count){
 			foreach(PowerSpawn power in allTimedSpawns){
 				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Others,
 				                 false, (int)power.type, power.position, power.spawnTime, power.GetLocalID());
@@ -146,7 +242,7 @@ public class ArenaManager : MonoBehaviour {
 	void SentAllMyPowers(NetworkMessageInfo info){
 		playersReady.Add(info.sender);
 		CheckIfAllSynchronized();
-		print ("Server received power spawn from " + sessionManager.gameInfo.GetPlayerOptions(info.sender).username);
+		print ("Server received power spawn from " + sessionManager.psInfo.GetPlayerOptions(info.sender).username);
 	}
 	
 	void SentAllMyPowers(){
@@ -183,8 +279,8 @@ public class ArenaManager : MonoBehaviour {
 		hudTools = GetComponent<HUDTools>();
 		playersReady = new List<NetworkPlayer>();
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
-		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
+
+
 		powerPrefabs = GetComponent<PowerPrefabs>();
 		GameObject placementRoot = Instantiate(placementRootPrefab, 
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
@@ -197,8 +293,14 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		sessionManager = SessionManager.Instance;
+		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
+		//reset death timers and stuff.
+		sessionManager.psInfo.LevelReset();
+
 		//this wont print because finishedloading is only true once all the start functions are called
-		//in every object of the scnene.
+		//in every object of the scene.
+
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready");
 	}
@@ -208,7 +310,9 @@ public class ArenaManager : MonoBehaviour {
 		//add our function as an event to player
 		/*http://unity3d.com/learn/tutorials/modules/intermediate/scripting/delegates
          *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
-		Controller2D.onDeath += LostPlayer;
+
+		Controller2D.onDeath += LostPlayer; //consider making this non static
+		PlayerStatus.eventAction += PlayerEventOccured;
 		PowerSlot.powerKey += SpawnTriggerPower;
 		placementUI.spawnNow += SpawnTriggerPower;
 	}
@@ -216,6 +320,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
+		PlayerStatus.eventAction -= PlayerEventOccured;
 		PowerSlot.powerKey -= SpawnTriggerPower;
 		placementUI.spawnNow -= SpawnTriggerPower;
 	}
@@ -267,17 +372,19 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
-
         float currentTime = TimeManager.instance.time;
 		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
+			spawn.owner = Network.player;
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
-			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE || spawn.type == PowerType.EARTH){
+			if(spawn.type.PowerRequiresNetworking()){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID);
+			//Call this function locally on and remotely
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
+			                Network.player);
 			SpawnPowerLocally(spawn, newViewID);
             //Remove from your inventory and  disable button 
             placementUI.DestroyUIPower(spawn);
@@ -294,7 +401,7 @@ public class ArenaManager : MonoBehaviour {
 
 	//http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html
 	//http://docs.unity3d.com/Documentation/ScriptReference/Coroutine.html
-	//Spawn a warning sign, wait 1.5 seconds, then spawn power. All of these are done locally on every client.
+	//Spawn a warning sign, wait .7 seconds, then spawn power. All of these are done locally on every client.
 	IEnumerator YieldThenPower(PowerSpawn spawn, NetworkViewID optionalViewID)
     {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, spawn.position, Quaternion.identity);
@@ -310,11 +417,13 @@ public class ArenaManager : MonoBehaviour {
 
 	//this function converts parameters into a powerspawn object
 	[RPC]
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID){
+	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
+	                       NetworkPlayer owner){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
 		requestedSpawn.direction = direction;
+		requestedSpawn.owner  = owner;
 		SpawnPowerLocally(requestedSpawn, optionalViewID);
 	}
 
@@ -328,7 +437,6 @@ public class ArenaManager : MonoBehaviour {
 
 	void Update () {
         float currentTime = TimeManager.instance.time;
-
 		//Check to see if you are the last man standing
 		if(livePlayerCount == 1 && finishgame && !showonce3){
 			networkView.RPC ("LastManVictory", RPCMode.Others);
@@ -336,12 +444,10 @@ public class ArenaManager : MonoBehaviour {
 			hudTools.DisplayText ("Last Player has Survived!");
 			showonce3 = true;
 		}
-		
 
 		if(sentMyPowers == false && currentTime >= beginTime){
             placementUI.DisableEditing();
 			placementUI.Disable();
-
 
 			/*
 			 * Don't tween away powers
@@ -375,8 +481,8 @@ public class ArenaManager : MonoBehaviour {
 
 		if(!playersFreed){
 			hudTools.DisplayText("Get Ready");
-            sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
-			sessionManager.gameInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
+            sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
+			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
 			playersFreed = true;
 		}
 
@@ -432,12 +538,7 @@ public class ArenaManager : MonoBehaviour {
 		//Spawn one timed trap per frame, locally.
 		if(trapsEnabled)
 			SpawnTimedTraps(currentTime);
-
 	}
-
-
-
-
 
 	[RPC]
 	public void VengeanceMode(){

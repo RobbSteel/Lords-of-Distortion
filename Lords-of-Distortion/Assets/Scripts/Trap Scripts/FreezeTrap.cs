@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FreezeTrap : Power {
@@ -42,9 +42,9 @@ public class FreezeTrap : Power {
 	}
 
 	[RPC]
-	void FreezeFollow(NetworkPlayer player)
-    {
-		GameObject playerObject = SessionManager.instance.gameInfo.GetPlayerGameObject (player);
+	void FreezeFollow(NetworkPlayer player){
+
+		GameObject playerObject = SessionManager.Instance.psInfo.GetPlayerGameObject (player);
 		var tempfreeze = (GameObject)Instantiate(frozenEffectPrefab ,playerObject.transform.position, Quaternion.identity);
 		var playercontroller = playerObject.GetComponent<Controller2D>();
 		applyDmg = playercontroller.GetComponent<PlayerStatus> ();

@@ -488,7 +488,7 @@ public class PlacementUI : MonoBehaviour {
 
 
 		//Either go back to default state or require setting a direction.
-		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
+		if(activePowerType.TypeRequiresDirection()){
 			state = PlacementState.ChangingDirection;
 			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
             activePower.AddComponent<powerRotate>();
@@ -656,14 +656,14 @@ public class PlacementUI : MonoBehaviour {
 
     public PowerType RandomActivePower()
     {
-        int thisOne = Random.Range(0, PowerSpawn.powersActive.Count);
-        return PowerSpawn.powersActive[thisOne];
+		int thisOne = Random.Range(0, PowerTypeExtensions.powersActive.Count);
+		return PowerTypeExtensions.powersActive[thisOne];
     }
 
     public PowerType RandomPassivePower()
     {
-        int thisOne = Random.Range(0, PowerSpawn.powersPassive.Count);
-        return PowerSpawn.powersPassive[thisOne];
+		int thisOne = Random.Range(0, PowerTypeExtensions.powersPassive.Count);
+		return PowerTypeExtensions.powersPassive[thisOne];
     }
 
     public PowerType RandomPower()

@@ -35,6 +35,10 @@ public class TimeManager : MonoBehaviour {
 	void Update () {
 		time = (float)Network.time + deltaTime;
 	}
+	//convert network time value to this synched time
+	public float NetworkToSynched(float networkTime){
+		return networkTime + deltaTime;
+	}
 
 	[RPC]
 	void GetServerTime(NetworkMessageInfo info){
@@ -48,4 +52,5 @@ public class TimeManager : MonoBehaviour {
 		deltaTime = serverTime - (float)info.timestamp; 
 		Debug.Log("Delta " + deltaTime + "  serverTime =  " + serverTime.ToString()); 
 	}
+
 }

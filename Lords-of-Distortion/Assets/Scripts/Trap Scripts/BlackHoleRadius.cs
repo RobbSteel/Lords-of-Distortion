@@ -12,14 +12,12 @@ public class BlackHoleRadius : Power
 	void Start () 
 	{
 		Destroy(gameObject, 15f);
-		BHForce = 0.22f;
+		BHForce = 0.175f;
 	}
 	void Update(){
 	}
 	
 	void FixedUpdate(){
-
-		
 		if (entered) {
             if(playerGO != null)
 			    move2BH(BHForce);
@@ -44,7 +42,7 @@ public class BlackHoleRadius : Power
 	//Moves the player to black hole center
 	void move2BH(float speed){
 		var distance = Vector2.Distance(playerGO.transform.position, transform.position);
-		Debug.Log (distance);
+		//Debug.Log (distance);
 		if (distance > 0.1) {
 			GameObject.FindGameObjectWithTag ("Player").transform.position = Vector2.MoveTowards (GameObject.FindGameObjectWithTag ("Player").transform.position, transform.position, BHForce/distance);
 		} else 

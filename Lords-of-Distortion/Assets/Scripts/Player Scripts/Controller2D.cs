@@ -28,9 +28,12 @@ public class Controller2D : MonoBehaviour {
     public bool locked;
 	bool stoppedJump;
 	public bool inAir = true;
+	/*--------Events-----------*/
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
+
+	public GameObject DeathSpirit;
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
 	public AudioClip meleeSfx;
@@ -224,15 +227,29 @@ public class Controller2D : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
+
+
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		if(dead || !networkController.isOwner)
 			return;
 		
-		if (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook")
+		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+			status.GenerateEvent(power);
+			power.PowerActionEnter(gameObject, this);
+
+		}
+
+		else if(other.gameObject.tag == "PowerHook"){
+			//ignore our own hook.
+			if(other.gameObject.GetComponent<HookHit>().shooter == gameObject)
+				return;
+
+			Power power = other.gameObject.GetComponent<Power>();
+			status.GenerateEvent(power);
 			power.PowerActionEnter(gameObject, this);
 		}
 
@@ -301,10 +318,13 @@ public class Controller2D : MonoBehaviour {
 		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
+
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+			status.GenerateEvent(power);
 			power.PowerActionEnter(gameObject, this);
+			
 		}
 	}
 
@@ -349,9 +369,44 @@ public class Controller2D : MonoBehaviour {
             GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			//We don't need the next line any more
 		}
+
+	}
+
+	public void DieSimple(){
+		if(!networkController.isOwner && !dead){
+			dead = true;
+			anim.SetTrigger("Die");
+		}
 	}
 
 	void OnDisable(){
 		myHook.DestroyHookPossible();
 	}
+
+
+	/*
+	 * Sequence of events:
+	 * Die or DieSimple is called
+	 * Death animation triggers and finishes playing 
+	 * Death spirit is instantiated
+	 * Player object is destroyed
+	 */
+
+
+	//Called when death animation finishes playing.
+	public void DestroyPlayer()
+	{
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
+		Destroy (gameObject);
+	}
+
+	void OnDestroy(){
+		if(!DEBUG){
+			if(Network.isServer){
+				//blocks any lingering rpc calls
+				//Network.RemoveRPCs(networkView.viewID);
+			}
+		}
+	}
+
 }

@@ -1,13 +1,36 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+
 
 public class PlayerStats {
-	public int deaths;
-	public int kills;
-	public int score;
+	public int deaths = 0;
+	public int kills = 0;
+	public float score = 0f;
+
+	public float timeOfDeath = float.PositiveInfinity;
+
+	//can only store 3 events
+	public CircularBuffer<PlayerEvent> playerEvents =  new CircularBuffer<PlayerEvent>(2);
 
 	public PlayerStats(){
-		deaths = 0;
-		kills = 0;
+
 	}
+
+	public void LevelReset(){
+		timeOfDeath = float.PositiveInfinity;
+		playerEvents = new CircularBuffer<PlayerEvent>(2);
+	}
+
+	public void AddEvent(PlayerEvent playerEvent){
+		playerEvents.Add(playerEvent);
+	}
+
+	//returns move that killed player usually
+	public PlayerEvent LastEvent(){
+		return playerEvents.ReadNewest();
+	}
+
+	
 }
+
+
+
