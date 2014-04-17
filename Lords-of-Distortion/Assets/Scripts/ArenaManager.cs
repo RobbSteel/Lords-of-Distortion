@@ -55,8 +55,7 @@ public class ArenaManager : MonoBehaviour {
 		fountainManager.placementUI = placementUI;
 	}
 	
-
-	//TODO: calculate scores somehrwere here
+	
 	void ServerDeathHandler(NetworkPlayer player){
 		livePlayerCount--;
 
@@ -72,13 +71,15 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		pointTracker.PlayerDied(player);
-
 	}
 
 	//Tells additional players to destroy clone.
-	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID){
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath){
 		if(Network.isServer){
-
+			//Store the time of death on server
+			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
+			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = adjustedTime;
+			
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
@@ -96,7 +97,7 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void NotifyServerOfDeath(NetworkMessageInfo info){
 		//Converts networked message to local function call
-		NotifyOthersOfDeath(info.sender);
+		NotifyOthersOfDeath(info.sender, (float)info.timestamp);
 	}
 
 
@@ -112,7 +113,7 @@ public class ArenaManager : MonoBehaviour {
 	void LostPlayer(GameObject deadPlayer){
 
 		if(Network.isServer){
-			NotifyOthersOfDeath(Network.player);
+			NotifyOthersOfDeath(Network.player, (float)Network.time);
 		}
 
 		else {
@@ -129,6 +130,9 @@ public class ArenaManager : MonoBehaviour {
 		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
 		stats.AddEvent(playerEvent);
 		print(playerEvent.PowerType + " happened");
+		if(playerEvent.Attacker != null){
+			print ("Attacked by " + playerEvent.Attacker.Value);
+		}
 	}
 
 	[RPC]
@@ -250,8 +254,8 @@ public class ArenaManager : MonoBehaviour {
 		hudTools = GetComponent<HUDTools>();
 		playersReady = new List<NetworkPlayer>();
 		allTimedSpawns = new HeapPriorityQueue<PowerSpawn>(30);
-		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
+
+
 		powerPrefabs = GetComponent<PowerPrefabs>();
 		GameObject placementRoot = Instantiate(placementRootPrefab, 
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
@@ -264,8 +268,14 @@ public class ArenaManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		sessionManager = SessionManager.Instance;
+		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
+		//reset death timers and stuff.
+		sessionManager.psInfo.LevelReset();
+
 		//this wont print because finishedloading is only true once all the start functions are called
 		//in every object of the scene.
+
 		if(sessionManager.finishedLoading)
 			Debug.Log("ready");
 	}

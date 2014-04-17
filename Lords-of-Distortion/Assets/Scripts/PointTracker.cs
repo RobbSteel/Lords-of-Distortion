@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PointTracker : MonoBehaviour{
 
@@ -16,15 +17,42 @@ public class PointTracker : MonoBehaviour{
 	}
 
 
+	float timeApart = 2.0f;
 
 	public void PlayerDied(NetworkPlayer player){
-		
+
 		PlayerStats deadPlayerStats = psInfo.GetPlayerStats(player);
 		deadPlayerStats.score += CalculateScore();
-		NetworkPlayer? attacker = deadPlayerStats.LastEvent().Attacker;
-		if(attacker != null && attacker.Value != player){
-			GivePoints(1, deadPlayerStats.LastEvent().Attacker.Value);
+
+		//There is guaranteed to be an event that happened before the player died.
+		//But there is no guarantee of an attacker killing the player.
+		PlayerEvent lastEvent = deadPlayerStats.LastEvent();
+		float validTime = lastEvent.TimeOfContact;
+
+		CircularBuffer<PlayerEvent> events = deadPlayerStats.playerEvents;
+		//traverse from newest to oldest
+		foreach(PlayerEvent playerEvent in events.Reverse<PlayerEvent>()){
+			if(playerEvent.TimeOfContact >= validTime - timeApart){
+
+				//Event happened close enough to combo with other event or kill player
+				validTime = playerEvent.TimeOfContact;
+				NetworkPlayer? attacker = playerEvent.Attacker;
+				//Check if the event involved an attacker, so we give points
+				if(attacker!= null && attacker.Value != player){
+					PlayerStats attackerStats = psInfo.GetPlayerStats(attacker.Value);
+
+					if(attackerStats.timeOfDeath <= playerEvent.TimeOfContact){
+						//Attacking player died before the event happened, so give half point.
+						GivePoints(0.5f, attacker.Value);
+					}
+					else {
+						//Give full point
+						GivePoints(1f, attacker.Value);
+					}
+				}
+			}
 		}
+
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
 
@@ -40,13 +68,13 @@ public class PointTracker : MonoBehaviour{
 	}
 
 	[RPC]
-	void DisplayPoints(int points, NetworkPlayer player){
+	void DisplayPoints(float points, NetworkPlayer player){
 		//TODO: what if the player who got the points dies before this?
 		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
 	}
 
 	//NOTE: should be called from playerdied, make public for testing
-	public void GivePoints(int points, NetworkPlayer player){
+	public void GivePoints(float points, NetworkPlayer player){
 
 		networkView.RPC("DisplayPoints", RPCMode.Others, points, player);
 		DisplayPoints(points, player);

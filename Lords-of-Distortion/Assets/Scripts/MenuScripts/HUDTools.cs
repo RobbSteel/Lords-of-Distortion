@@ -40,7 +40,7 @@ public class HUDTools : MonoBehaviour {
 	}
 	
 
-	public void ShowPoints(int points, GameObject player)
+	public void ShowPoints(float points, GameObject player)
 	{
 		float displayTime = 1.0f;
 	

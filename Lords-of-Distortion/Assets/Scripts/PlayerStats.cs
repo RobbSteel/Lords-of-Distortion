@@ -6,13 +6,18 @@ public class PlayerStats {
 	public int kills = 0;
 	public int score = 0;
 
-	public float timeOfDeath = -1f;
+	public float timeOfDeath = float.PositiveInfinity;
 
 	//can only store 3 events
-	private CircularBuffer<PlayerEvent> playerEvents =  new CircularBuffer<PlayerEvent>(3);
+	public CircularBuffer<PlayerEvent> playerEvents =  new CircularBuffer<PlayerEvent>(3);
 
 	public PlayerStats(){
 
+	}
+
+	public void LevelReset(){
+		timeOfDeath = float.PositiveInfinity;
+		playerEvents = new CircularBuffer<PlayerEvent>(3);
 	}
 
 	public void AddEvent(PlayerEvent playerEvent){
@@ -23,6 +28,7 @@ public class PlayerStats {
 	public PlayerEvent LastEvent(){
 		return playerEvents.ReadNewest();
 	}
+
 	
 }
 
