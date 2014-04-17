@@ -351,35 +351,6 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-	public void DieByFire(){
-		if(networkController.isOwner && !dead){
-			
-			dead = true;
-			snared = true;
-			collider2D.enabled = false;
-			
-			/*Upon Death, tell the DeadLord Script that the player is dead by setting
-			the boolean to true*
-			var deadlord = GameObject.Find("DeadLordsScreen");
-			var deadlordscript = deadlord.GetComponent<DeadLord>();
-			deadlordscript.isDead = true;
-			*/
-			
-			//Here we call whatever events are subscribed to us.
-			if(onDeath != null)
-				onDeath(gameObject);
-			
-			//Remove MashIcon from PlayerStatus Script
-			status.DestroyMashIcon();
-			//play death animation.
-			anim.SetTrigger("FireDeath");
-			
-			GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
-			GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
-			//We don't need the next line any more
-		}
-	}
-
 	void OnDisable(){
 		myHook.DestroyHookPossible();
 	}
