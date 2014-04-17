@@ -13,6 +13,11 @@ public class PlagueScript : Power
         Destroy(gameObject, 15f);
 	}
 
+    void OnDestroy()
+    {
+        status.insidePlague = false;
+    }
+
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
         status = player.GetComponent<PlayerStatus>();
