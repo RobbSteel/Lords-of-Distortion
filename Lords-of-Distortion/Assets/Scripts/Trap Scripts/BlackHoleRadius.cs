@@ -44,7 +44,7 @@ public class BlackHoleRadius : Power
 		var distance = Vector2.Distance(playerGO.transform.position, transform.position);
 		//Debug.Log (distance);
 		if (distance > 0.1) {
-			GameObject.FindGameObjectWithTag ("Player").transform.position = Vector2.MoveTowards (GameObject.FindGameObjectWithTag ("Player").transform.position, transform.position, BHForce/distance);
+			playerGO.transform.position = Vector2.MoveTowards (playerGO.transform.position, transform.position, BHForce/distance);
 		} else 
 			entered = false;
 	}
