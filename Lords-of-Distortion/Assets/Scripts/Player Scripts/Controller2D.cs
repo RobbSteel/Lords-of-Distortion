@@ -369,7 +369,14 @@ public class Controller2D : MonoBehaviour {
 			//Remove MashIcon from PlayerStatus Script
 			status.DestroyMashIcon();
 			//play death animation.
-			anim.SetTrigger("Die");
+			switch(deathType){
+			case DeathType.FIRE:
+				anim.SetTrigger("FireDeath");
+				break;
+			default:
+				anim.SetTrigger("Die");
+				break;
+			}
 
             GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
             GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
