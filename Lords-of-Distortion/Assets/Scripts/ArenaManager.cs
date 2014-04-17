@@ -58,6 +58,7 @@ public class ArenaManager : MonoBehaviour {
 
 	//TODO: calculate scores somehrwere here
 	void ServerDeathHandler(NetworkPlayer player){
+		livePlayerCount--;
 
 		if(livePlayerCount == 1 && !finishgame){
 			print("Finish him!");
@@ -77,7 +78,7 @@ public class ArenaManager : MonoBehaviour {
 	//Tells additional players to destroy clone.
 	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID){
 		if(Network.isServer){
-			livePlayerCount--;
+
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
@@ -276,7 +277,7 @@ public class ArenaManager : MonoBehaviour {
          *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
 
 		Controller2D.onDeath += LostPlayer; //consider making this non static
-		Controller2D.eventAction += PlayerEventOccured;
+		PlayerStatus.eventAction += PlayerEventOccured;
 		PowerSlot.powerKey += SpawnTriggerPower;
 		placementUI.spawnNow += SpawnTriggerPower;
 	}
@@ -284,7 +285,7 @@ public class ArenaManager : MonoBehaviour {
 	
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
-		Controller2D.eventAction -= PlayerEventOccured;
+		PlayerStatus.eventAction -= PlayerEventOccured;
 		PowerSlot.powerKey -= SpawnTriggerPower;
 		placementUI.spawnNow -= SpawnTriggerPower;
 	}
@@ -365,7 +366,7 @@ public class ArenaManager : MonoBehaviour {
 
 	//http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html
 	//http://docs.unity3d.com/Documentation/ScriptReference/Coroutine.html
-	//Spawn a warning sign, wait 1.5 seconds, then spawn power. All of these are done locally on every client.
+	//Spawn a warning sign, wait .7 seconds, then spawn power. All of these are done locally on every client.
 	IEnumerator YieldThenPower(PowerSpawn spawn, NetworkViewID optionalViewID)
     {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, spawn.position, Quaternion.identity);

@@ -32,8 +32,6 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
 
-	public delegate void PlayerAffected(NetworkPlayer player, PlayerEvent playerEvent);
-	public static event PlayerAffected eventAction;
 
 	public GameObject DeathSpirit;
 	//Player Audio Clips  --
@@ -229,26 +227,7 @@ public class Controller2D : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
-	//Generates an event and calls function if one exists
-	void GenerateEvent(Power power){
 
-		PlayerEvent playerEvent = null;
-
-		if(power.spawnInfo != null){
-			playerEvent = new PlayerEvent(power.spawnInfo.type, 
-			                                          TimeManager.instance.time, power.spawnInfo.owner);
-			playerEvent.Attacker = power.spawnInfo.owner;
-		}
-		else{
-			//Gotta be spikes
-			playerEvent = new PlayerEvent(PowerType.SPIKES, TimeManager.instance.time);
-		}
-
-		if(eventAction != null){
-			eventAction(networkController.theOwner, playerEvent);
-		}
-
-	}
 
 	//checks for collisions on impact and apply's powers on player 
 	void OnTriggerEnter2D(Collider2D other)
@@ -259,7 +238,7 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			GenerateEvent(power);
+			status.GenerateEvent(power);
 			power.PowerActionEnter(gameObject, this);
 
 		}
@@ -270,7 +249,7 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 			Power power = other.gameObject.GetComponent<Power>();
-			GenerateEvent(power);
+			status.GenerateEvent(power);
 			power.PowerActionEnter(gameObject, this);
 		}
 
@@ -343,7 +322,9 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+			status.GenerateEvent(power);
 			power.PowerActionEnter(gameObject, this);
+			
 		}
 	}
 

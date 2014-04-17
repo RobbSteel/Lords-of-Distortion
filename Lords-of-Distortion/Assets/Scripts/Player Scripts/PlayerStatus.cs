@@ -44,8 +44,12 @@ public class PlayerStatus : MonoBehaviour {
 	private bool horizontalPressedDown;		//tracks horizontal keydown
 	private int horizontalMoveCheck;		//tracks horizontal current key
 
+	private NetworkController networkController;
     //public UISprite shieldIcon;
-    
+
+	public delegate void PlayerAffected(NetworkPlayer player, PlayerEvent playerEvent);
+	public static event PlayerAffected eventAction;
+
 
 	void Awake(){
         //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
@@ -70,6 +74,7 @@ public class PlayerStatus : MonoBehaviour {
 	}
 	
 	void Start(){
+		networkController = GetComponent<NetworkController>();
 		hitMarkSprites.enabled = false;
 	}
 
@@ -200,8 +205,8 @@ public class PlayerStatus : MonoBehaviour {
 	}
 	
 	
-	[RPC]
-	void NotifyHit(bool fromLeftSide){
+
+	void TakeHit(bool fromLeftSide, NetworkPlayer attacker){
 
 		if(!GetComponent<NetworkController>().isOwner)
 			return;
@@ -214,6 +219,7 @@ public class PlayerStatus : MonoBehaviour {
 		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
+		GenerateEvent(PowerType.MELEE, TimeManager.instance.time, attacker);
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
 
@@ -235,12 +241,7 @@ public class PlayerStatus : MonoBehaviour {
 			BeginKnockBack(flip);
 	
 	}
-	
-	
-	public void ThirdMarkSound(){
-		//Wait a little and then play bell sound.
-	}
-	
+
 	
 	public void HitFeedback(){
 //		audio.Play (); 
@@ -262,7 +263,7 @@ public class PlayerStatus : MonoBehaviour {
 		
 		HitFeedback();
 
-		}
+	}
 		
 
 	
@@ -273,12 +274,38 @@ public class PlayerStatus : MonoBehaviour {
 		networkView.RPC("NotifyDamageTaken", RPCMode.Others, dmgTaken);
 		ApplyDamage(dmgTaken);
 	}
-	
+
+	[RPC]
+	void NotifyPlayerOfHit(bool fromLeftSide, NetworkPlayer attacker){
+		TakeHit(fromLeftSide, attacker);
+	}
+
+	//Notify server that you hit a player (this can include server player)
+	[RPC]
+	void NotifyServerOfHit(bool fromLeftSide, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+		if(hitPlayer == Network.player){
+			TakeHit(fromLeftSide, info.sender);
+		}
+		else{
+			//RPC the player that got hit directly
+			networkView.RPC("NotifyPlayerOfHit", hitPlayer,  fromLeftSide, info.sender);
+		}
+	}
+
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
 		//Note, the following doesnt work(clients cant rpc each other directly)
-		//networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
-		networkView.RPC ("NotifyHit", RPCMode.Others, fromLeftSide);
+		//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
+		//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
+		NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController>().theOwner;
+		if(Network.isServer){
+			//RPC player we hit directly
+			networkView.RPC("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
+		}
+		else {
+			//tell server we hit player
+			networkView.RPC("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
+		}
 	}
 	
 	//checks if player is stun and then applies stunRecover
@@ -372,5 +399,31 @@ public class PlayerStatus : MonoBehaviour {
 		Destroy( MashIcon );
 		Destroy( UI );
 	}
-	
+
+	//Generates an event and calls function if one exists
+	public void GenerateEvent(Power power){
+		
+		PlayerEvent playerEvent = null;
+		
+		if(power.spawnInfo != null){
+			playerEvent = new PlayerEvent(power.spawnInfo.type, 
+			                              TimeManager.instance.time, power.spawnInfo.owner);
+			playerEvent.Attacker = power.spawnInfo.owner;
+		}
+		else{
+			//Gotta be spikes
+			playerEvent = new PlayerEvent(PowerType.SPIKES, TimeManager.instance.time);
+		}
+		
+		if(eventAction != null){
+			eventAction(networkController.theOwner, playerEvent);
+		}
+	}
+
+	public void GenerateEvent(PowerType type, float time, NetworkPlayer attacker){
+		PlayerEvent playerEvent = new PlayerEvent(type, time, attacker);
+		if(eventAction != null){
+			eventAction(networkController.theOwner, playerEvent);
+		}
+	}
 } 
