@@ -44,6 +44,8 @@ public class ArenaManager : MonoBehaviour {
 	public bool showonce4;
 	public bool lastmanvictory = false;
 
+	List<NetworkPlayer> livePlayers;
+
 	[RPC]
 	void NotifyBeginTime(float time){
 		beginTime = time;
@@ -58,11 +60,8 @@ public class ArenaManager : MonoBehaviour {
 	
 	void ServerDeathHandler(NetworkPlayer player){
 		livePlayerCount--;
+		livePlayers.Remove(player);
 
-		if(livePlayerCount == 1 && !finishgame){
-			print("Finish him!");
-			lastman = true;
-		} 
 		
 		if(livePlayerCount == 0){
 			print ("No more players");
@@ -71,6 +70,13 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		pointTracker.PlayerDied(player);
+
+		if(livePlayerCount == 1 && !finishgame){
+			print("Finish him!");
+			lastman = true;
+			//Get the last live player and pass to point tracker.
+			pointTracker.LastManStanding(livePlayers[0]);
+		} 
 	}
 
 	//Tells additional players to destroy clone.
@@ -341,9 +347,10 @@ public class ArenaManager : MonoBehaviour {
 		//TimeManager.instance.SyncTimes();
 		if(Network.isServer){
 
-			//spawn players immediately
-			livePlayerCount = sessionManager.SpawnPlayers(playerSpawnVectors);
-			pointTracker.livePlayerCount = livePlayerCount;
+			//spawn players immediately. gets
+			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
+			livePlayerCount = livePlayers.Count;
+
 			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			hudTools.DisplayText ("You may place initial traps");

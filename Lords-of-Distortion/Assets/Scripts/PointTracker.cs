@@ -5,9 +5,32 @@ using System.Linq;
 public class PointTracker : MonoBehaviour{
 
 	PlayerServerInfo psInfo;
-	public int? livePlayerCount;
 	HUDTools hudTools;
+
 	
+	class PointTimer{
+		public float pointDelay = 3f;
+		public float timeLeft = 0f;
+		public NetworkPlayer player;
+		public float pointValue = .5f;
+
+		public PointTimer(NetworkPlayer player, float pointDelay){
+			this.player = player;
+			this.pointDelay = pointDelay;
+			timeLeft = pointDelay;
+		}
+		
+		public void TickTimer(float timePassed){
+			timeLeft -= timePassed;
+		}
+		
+		public void ResetTimer(){
+			timeLeft = pointDelay;
+		}
+	}
+
+	PointTimer lastPlayerTimer = null;
+
 	void Awake(){
 		SessionManager sessionManager = SessionManager.Instance;
 		psInfo = sessionManager.psInfo;
@@ -30,7 +53,6 @@ public class PointTracker : MonoBehaviour{
 		//traverse from newest to oldest
 		foreach(PlayerEvent playerEvent in events.Reverse<PlayerEvent>()){
 			if(playerEvent.TimeOfContact >= validTime - timeApart){
-
 				//Event happened close enough to combo with other event or kill player
 				validTime = playerEvent.TimeOfContact;
 				NetworkPlayer? attacker = playerEvent.Attacker;
@@ -55,6 +77,21 @@ public class PointTracker : MonoBehaviour{
 	}
 
 
+	public void LastManStanding(NetworkPlayer lastMan){ 
+		lastPlayerTimer = new PointTimer(lastMan, 3f);
+	}
+
+	void Update(){
+		//If timer reaches 0, reset and give points to player.
+		if(lastPlayerTimer != null){
+			lastPlayerTimer.TickTimer(Time.deltaTime);
+			if(lastPlayerTimer.timeLeft <= 0){
+				lastPlayerTimer.ResetTimer();
+				GivePoints(lastPlayerTimer.pointValue, lastPlayerTimer.player);
+			}
+		}
+	}
+
 	[RPC]
 	void SynchPoints(float points, NetworkPlayer player){
 		PlayerStats playerStats = psInfo.GetPlayerStats(player);
@@ -64,7 +101,7 @@ public class PointTracker : MonoBehaviour{
 	}
 
 	//NOTE: should be called from playerdied, make public for testing
-	public void GivePoints(float points, NetworkPlayer player){
+	void GivePoints(float points, NetworkPlayer player){
 		networkView.RPC("SynchPoints", RPCMode.Others, points, player);
 		SynchPoints(points, player);
 	}

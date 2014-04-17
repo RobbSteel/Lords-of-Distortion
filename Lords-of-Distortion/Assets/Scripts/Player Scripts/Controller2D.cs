@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+public enum DeathType{
+	CRUSH,
+	FIRE
+}
+
 public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool facingRight;
@@ -342,7 +348,7 @@ public class Controller2D : MonoBehaviour {
 
 
 
-	public void Die(){
+	public void Die(DeathType deathType = DeathType.CRUSH){
 		if(networkController.isOwner && !dead){
 
 			dead = true;

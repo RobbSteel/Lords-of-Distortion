@@ -213,7 +213,8 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	//this function should be called by the server arena manager.
-	public int SpawnPlayers(List<Vector3> spawnLocations){
+	//Returns a copy of the list of live players
+	public List<NetworkPlayer> SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
 		List<NetworkPlayer> players = psInfo.players;
 		foreach(NetworkPlayer player in players){
@@ -228,8 +229,7 @@ public class SessionManager : MonoBehaviour {
 			}
 			i++;
 		}
-		//in 5 seconds begin the round.
-		return players.Count;
+		return new List<NetworkPlayer>(players);
 	}
 	
 	//called when we re-enter this scene after a game is over.
