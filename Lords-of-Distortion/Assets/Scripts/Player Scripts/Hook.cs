@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Hook : MonoBehaviour {
@@ -265,7 +265,7 @@ public class Hook : MonoBehaviour {
 		print ("Hit by "  + info.networkView.viewID);
 		print ("My id is " + networkView.viewID);
 		go.transform.position = playerLocation;
-		hookscript.hookedPlayer = networkController.instanceManager.gameInfo.GetPlayerGameObject(hitPlayer);
+		hookscript.hookedPlayer = networkController.instanceManager.psInfo.GetPlayerGameObject(hitPlayer);
 		hookscript.affectedPlayerC2D = hookscript.hookedPlayer.GetComponent<Controller2D>();
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;

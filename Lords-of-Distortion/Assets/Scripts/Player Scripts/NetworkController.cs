@@ -14,7 +14,6 @@ public class NetworkController : MonoBehaviour {
 
 	private float width;
 
-	public GameObject DeathSpirit;
 
 	//A buffer of states. Not sure if a circular buffer is the best data structure at this point.
 	private CircularBuffer<State> states;
@@ -67,10 +66,10 @@ public class NetworkController : MonoBehaviour {
 		//we should have created a local playeroptions by now
 		if(!DEBUG){
 			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-			PlayerOptions playerOptions = instanceManager.gameInfo.GetPlayerOptions(theOwner);
+			PlayerOptions playerOptions = instanceManager.psInfo.GetPlayerOptions(theOwner);
 			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
-			if(instanceManager.gameInfo.GetPlayerGameObject(theOwner) == null)
-				instanceManager.gameInfo.AddPlayerGameObject(theOwner, gameObject);
+			if(instanceManager.psInfo.GetPlayerGameObject(theOwner) == null)
+				instanceManager.psInfo.AddPlayerGameObject(theOwner, gameObject);
 			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
 			switch(playerOptions.style){
 
@@ -292,18 +291,10 @@ public class NetworkController : MonoBehaviour {
 	}
 
 
-	//typically only called by the death animation finishing
-	public void DestroyPlayer(){
-		if (isOwner){
-			Instantiate(DeathSpirit, transform.position, transform.rotation);
-			Network.Destroy (gameObject);
-		}
-	}
-
 	void OnDestroy(){
 		//remove self from dictionary since gameobject will be invalid.
 		if(!DEBUG)
-			instanceManager.gameInfo.playerObjects.Remove(theOwner);
+			instanceManager.psInfo.playerObjects.Remove(theOwner);
 	}
 
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){

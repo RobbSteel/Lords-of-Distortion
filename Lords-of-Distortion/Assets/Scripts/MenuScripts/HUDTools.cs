@@ -4,6 +4,9 @@ using System.Collections;
 public class HUDTools : MonoBehaviour {
 	public UILabel TextPrefab;
 
+	public UILabel PointTextPrefab;
+
+	public UIFont scoreFont;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +15,7 @@ public class HUDTools : MonoBehaviour {
 
 
 	IEnumerator FadeInOut(UILabel label, float time) {
-		NGUITools.AddChild(label.gameObject);
+		//NGUITools.AddChild(label.gameObject);
 		TweenAlpha tween = label.GetComponent<TweenAlpha>();
 		tween.PlayForward();
 		yield return new WaitForSeconds(time);
@@ -33,6 +36,22 @@ public class HUDTools : MonoBehaviour {
 	public void DisplayText(string text, float displayTime = 1.8f){
 		UILabel label = (UILabel)Instantiate(TextPrefab, TextPrefab.transform.position, TextPrefab.transform.rotation);
 		label.text = text;
+		StartCoroutine(FadeInOut(label, displayTime));
+	}
+	
+
+	public void ShowPoints(float points, GameObject player)
+	{
+		float displayTime = 1.0f;
+	
+		UILabel label = (UILabel)Instantiate(PointTextPrefab, Vector3.zero, PointTextPrefab.transform.rotation);
+
+		label.text = "+" + points.ToString();
+		UIFollowTarget followTarget = label.GetComponent<UIFollowTarget>();
+		followTarget.Target = player.transform;
+		//TODO: if a player already is showing points, put above those.
+		followTarget.offset.y = 50f;
+
 		StartCoroutine(FadeInOut(label, displayTime));
 	}
 }

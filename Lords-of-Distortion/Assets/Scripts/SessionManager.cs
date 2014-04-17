@@ -9,7 +9,7 @@ public class SessionManager : MonoBehaviour {
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
 	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
-	public PSinfo gameInfo;
+	public PlayerServerInfo psInfo;
 	
 	public bool finishedLoading = false;
 	public const int GAMEPLAY = 0;
@@ -20,26 +20,28 @@ public class SessionManager : MonoBehaviour {
 	//public TimeManager timeManager;
 	
 	String offlineLevel = "MainMenu";
-	
-	public static bool instanceExists = false;
-	public static SessionManager instance;
-	
-	
+
+	public static SessionManager Instance;
+
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
 	public TimeManager timemanager;
 	
 	void Awake(){
+
+		if(Instance != null && Instance != this){
+			Destroy(gameObject);
+			return;
+		}
+
+		Instance = this;
 		DontDestroyOnLoad(this);
-		instanceExists = true;
-		instance = this;
 		var information = GameObject.Find("PSInfo");
-		gameInfo = information.GetComponent<PSinfo>();
+		psInfo = information.GetComponent<PlayerServerInfo>();
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
 		arenaIndex = -1;// lobby is -1
-
 	}
 	
 	//NetworkController myPlayer;
@@ -89,10 +91,10 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
-		gameInfo.playernumb = playerNumber;
+		psInfo.playernumb = playerNumber;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
-		gameInfo.AddPlayer(original, options, stats);
+		psInfo.AddPlayer(original, options, stats);
 		
 		if(original == Network.player){
 			//do this at the end so that options are available to the player
@@ -108,9 +110,9 @@ public class SessionManager : MonoBehaviour {
 		timemanager.SyncTimes();
 		++playerCounter;
 
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, gameInfo.playername, Network.player);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, psInfo.playername, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
-		ConfirmLocalSpawn (playerCounter, gameInfo.playername, Network.player);
+		ConfirmLocalSpawn (playerCounter, psInfo.playername, Network.player);
 		//SpawnPlayer(transform.position);
 	}
 	
@@ -119,7 +121,7 @@ public class SessionManager : MonoBehaviour {
 
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
-		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, gameInfo.playername);
+		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, psInfo.playername);
 		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
 		timemanager.SyncTimes();
 	}
@@ -133,21 +135,21 @@ public class SessionManager : MonoBehaviour {
 		Application.LoadLevel(offlineLevel);
 		Destroy (TimeManager.instance.gameObject);
 		Destroy (this.gameObject);
-		Destroy (gameInfo.gameObject);
+		Destroy (psInfo.gameObject);
 	}
 
 	[RPC]
 	void PlayerDisconnected(NetworkPlayer player){
-		gameInfo.RemovePlayer(player);
+		psInfo.RemovePlayer(player);
 		--playerCounter;
 	}
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
-		if(gameInfo.players.Contains(player)){
+		if(psInfo.players.Contains(player)){
 			/* Remember to fix this */
 			Network.RemoveRPCs(player);
 			Network.DestroyPlayerObjects(player);
-			gameInfo.RemovePlayer(player);
+			psInfo.RemovePlayer(player);
 			--playerCounter;
 
 			networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
@@ -211,9 +213,10 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	//this function should be called by the server arena manager.
-	public int SpawnPlayers(List<Vector3> spawnLocations){
+	//Returns a copy of the list of live players
+	public List<NetworkPlayer> SpawnPlayers(List<Vector3> spawnLocations){
 		int i = 0;
-		List<NetworkPlayer> players = gameInfo.players;
+		List<NetworkPlayer> players = psInfo.players;
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player
@@ -226,15 +229,14 @@ public class SessionManager : MonoBehaviour {
 			}
 			i++;
 		}
-		//in 5 seconds begin the round.
-		return players.Count;
+		return new List<NetworkPlayer>(players);
 	}
 	
 	//called when we re-enter this scene after a game is over.
 	void OnNetworkLoadedLevel(){
+
 		if(arenaIndex == -1){
 			if(Network.isServer){
-
 				Network.RemoveRPCsInGroup(SETUP);
 				Network.RemoveRPCsInGroup(GAMEPLAY);
 
@@ -246,32 +248,6 @@ public class SessionManager : MonoBehaviour {
 				SpawnPlayers(tempLocations);
 			}
 		}
-	}
-
-	//Called only by the client of the player who died.
-	public void KillPlayer(GameObject playerObject){
-		print ("My name is " + gameInfo.GetPlayerOptions(Network.player).username);
-		networkView.RPC ("Died", RPCMode.Others, Network.player); //Explicitly pass our network player id
-		PlayerStats stats = gameInfo.GetPlayerStats(Network.player);
-		stats.deaths += 1;
-	}
-	
-	[RPC]
-	void Died(NetworkPlayer deadPlayerKey){
-		PlayerStats stats = gameInfo.GetPlayerStats(deadPlayerKey);
-		stats.deaths += 1;
-
-		GameObject deadPlayer = gameInfo.GetPlayerGameObject(deadPlayerKey);
-		//TODO: delay this animation from playing until player reaches spot where he died
-		//(using a simple timer and lag calculation)
-
-		//once you learn that a player has died, play his death animation.
-		deadPlayer.GetComponent<Controller2D>().anim.SetTrigger("Die");
-		Instantiate(DeathSpirit, deadPlayer.transform.position, transform.rotation);
-	}
-	
-	void OnDestroy(){
-		instanceExists = false;
 	}
 }
 

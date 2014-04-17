@@ -65,30 +65,30 @@ public class Earthquake : Power {
 			}
 
 			var players = GameObject.FindGameObjectsWithTag("Player");
-
 			if(players.Length > 0){
-			
-					for(int i = 0; i < players.Length; i++){
 
-						var currplayer = players[i];
-						var networkscript = currplayer.GetComponent<NetworkController>();
-					    var playerstatus = currplayer.GetComponent<PlayerStatus>();
-						var controller = currplayer.GetComponent<Controller2D>();
+				for(int i = 0; i < players.Length; i++){
+
+					var currplayer = players[i];
+					var networkscript = currplayer.GetComponent<NetworkController>();
+					var playerstatus = currplayer.GetComponent<PlayerStatus>();
+					var controller = currplayer.GetComponent<Controller2D>();
 							
-								if(networkscript.isOwner){
+					if(networkscript.isOwner){
 								
-									if(controller.grounded){
+						if(controller.grounded){
 							Instantiate(groundshatter, currplayer.transform.position, currplayer.transform.rotation);
 							networkView.RPC("QuakeParticle", RPCMode.Others, currplayer.transform.position, currplayer.transform.rotation);
-										if (GameObject.Find ("CollectData") != null) {
-											GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
-										}
-									
-							    playerstatus.TakeDamage(100.0f);
-								currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
-									}
-								}
+							if (GameObject.Find ("CollectData") != null) {
+								GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
+							}
+
+							playerstatus.TakeDamage(100.0f);
+							playerstatus.GenerateEvent(this);
+							currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
+						}
 					}
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class LobbyGUI : MonoBehaviour {
@@ -8,13 +8,13 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	bool wantToStartGame = false;
-	public PSinfo infoscript;
+	public PlayerServerInfo infoscript;
 	public Transform sessionManagerPrefab;
 	SessionManager sessionManager;
 
 	void Awake(){
 		//Important
-		if(!SessionManager.instanceExists){
+		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
 			sessionManager = manager.GetComponent<SessionManager>();
 		}
@@ -52,7 +52,7 @@ public class LobbyGUI : MonoBehaviour {
 	void Start()
     {
 		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PSinfo>();
+		infoscript = information.GetComponent<PlayerServerInfo>();
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action

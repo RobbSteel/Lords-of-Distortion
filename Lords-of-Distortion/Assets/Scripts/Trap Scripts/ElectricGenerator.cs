@@ -52,33 +52,28 @@ public class ElectricGenerator : Power {
 			
 		}
 		
-		
-		
-		
-		
 	}
-	
+
+	void CreateShot (Vector3 direction){
+		var ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
+		ElectricShot shot = ElectricityShot.GetComponent<ElectricShot>();
+		shot.spawnInfo = new PowerSpawn(this.spawnInfo);
+		spawnInfo.direction = direction;
+	}
+
 	void plusformation(){
 		
 		//Shot 1 - Up
-		var ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		var shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(0,1,0);
+		CreateShot (new Vector3(0,1,0));
 		
 		//Shot 2 - Down
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(0,-1,0);
+		CreateShot (new Vector3(0,-1,0));
 		
 		//Shot 3 - Left
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(-1,0,0);
+		CreateShot (new Vector3(-1,0,0));
 		
 		//Shot 4 - Right
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(1,0,0);
+		CreateShot (new Vector3(1,0,0));
 		
 		
 	}
@@ -86,24 +81,16 @@ public class ElectricGenerator : Power {
 	void xformation(){
 		
 		//Shot 1 - UpperRight
-		var ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		var shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(1,1,0);
+		CreateShot (new Vector3(1, 1, 0));
 		
 		//Shot 2 - UpperLeft
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(-1,1,0);
+		CreateShot (new Vector3(-1, 1,0));
 		
 		//Shot 3 - LowerLeft
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(-1,-1,0);
+		CreateShot (new Vector3(-1,-1,0));
 		
 		//Shot 4 - LowerRight
-		ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
-		shotscript = ElectricityShot.GetComponent<ElectricShot>();
-		shotscript.direction = new Vector3(1,-1,0);
+		CreateShot (new Vector3(1,-1,0));
 		
 		
 	}
@@ -111,7 +98,6 @@ public class ElectricGenerator : Power {
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		
 		controller.Die();
 	}
 	

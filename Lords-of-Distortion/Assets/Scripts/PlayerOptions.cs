@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerOptions{
+
 	public enum CharacterStyle
 	{
 		DEFAULT = 0, RED, GREEN, BLUE, YELLOW
@@ -23,5 +24,4 @@ public class PlayerOptions{
 	public PlayerOptions(){
 		style = CharacterStyle.DEFAULT;
 	}
-
 }

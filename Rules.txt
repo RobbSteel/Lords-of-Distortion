@@ -9,3 +9,19 @@ This can be done with melee attacks and sometimes the hook. Smacking a player in
 If you combo correctly, you can get up to 2 points for a kill.
 
 While you can still get points for killing players after you died, values will be halved.
+
+
+Algorithmn
+Event latest
+float timeChain = latest.time;
+
+foreach event in remainingEvents
+	if(event.time >= timeChain - TIME_LIMIT{
+		timeChain = event.time
+		if(event.hasOwner)
+			GivePointsToOwner
+}
+
+GivePointsToOwner(point, owner):
+
+if(owner.wasDead)
