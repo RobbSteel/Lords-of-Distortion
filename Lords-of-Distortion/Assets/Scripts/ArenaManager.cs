@@ -126,20 +126,48 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	//Server should do calculations of who to give points to.
-	void HandlePlayerEvent(NetworkPlayer player, PlayerEvent playerEvent){
-		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
-		stats.AddEvent(playerEvent);
+	void HandlePlayerEvent(NetworkPlayer affected, PlayerEvent playerEvent){
 		print(playerEvent.PowerType + " happened");
+
 		if(playerEvent.Attacker != null){
 			print ("Attacked by " + playerEvent.Attacker.Value);
+			networkView.RPC("SynchEvent", RPCMode.Others, (int)playerEvent.PowerType, 
+		                playerEvent.TimeOfContact, playerEvent.Attacker, affected);
 		}
+		else {
+			networkView.RPC("SimpleSynchEvent", RPCMode.Others, (int)playerEvent.PowerType, 
+			                playerEvent.TimeOfContact, affected);
+		}
+
+		//Add locally to server's client
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		stats.AddEvent(playerEvent);
+
 	}
 
+	//Synch event with other players, just for the score screen.
+	[RPC]
+	void SynchEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkPlayer affected){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact, attacker);
+		stats.AddEvent(playerEvent);
+	}
+
+	[RPC]
+	void SimpleSynchEvent(int type, float timeOfContact, NetworkPlayer affected){
+		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		stats.AddEvent(playerEvent);
+	}
+
+	
+	//for powers without attacker
 	[RPC]
 	void SimpleNotifyServerOfEvent(int type, float timeOfContact, NetworkMessageInfo info)
 	{
 		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
 		HandlePlayerEvent(info.sender, playerEvent);
+
 	}
 
 	[RPC]
@@ -158,9 +186,6 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		else {
-			//Maybe we want local copy for some reason.
-			PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
-			stats.AddEvent(playerEvent);
 			if(playerEvent.Attacker != null){
 				networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact, playerEvent.Attacker);
 			}

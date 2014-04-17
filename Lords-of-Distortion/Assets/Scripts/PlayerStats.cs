@@ -4,7 +4,7 @@
 public class PlayerStats {
 	public int deaths = 0;
 	public int kills = 0;
-	public int score = 0;
+	public float score = 0f;
 
 	public float timeOfDeath = float.PositiveInfinity;
 

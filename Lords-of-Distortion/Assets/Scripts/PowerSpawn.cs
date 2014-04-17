@@ -15,6 +15,7 @@ public enum PowerType{
 	ELECTRIC,
 	PLAGUE,
 	EARTH,
+	HOLE,
 	//NON Powers
 	MELEE,
 	SPIKES,
@@ -47,7 +48,7 @@ public static class PowerTypeExtensions{
 		powersActive = new List<PowerType>();
 		powersActive.Add(PowerType.FIREBALL);
 		powersActive.Add(PowerType.ELECTRIC);
-		
+		powersActive.Add(PowerType.HOLE);
 		//powersActive.Add(PowerType.EXPLOSIVE);
 		//powersActive.Add(PowerType.BOULDER);
 		

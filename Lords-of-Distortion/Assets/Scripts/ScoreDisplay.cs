@@ -8,7 +8,7 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject PlayerDisplay;
 	SessionManager sessionManager;
 	public float timeleft = 5;
-	public int winningscore = 0;
+	public float winningscore = 0;
 	public int winningplayer = 0;
 
 	PSInfo infoscript;
@@ -76,7 +76,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//This happens for every game where victory isnt being declared
-	void RoundFinish(int score, string playername, int playernumber, GameObject playerpose){
+	void RoundFinish(float score, string playername, int playernumber, GameObject playerpose){
 
 		print ("gettting local");
 		var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
@@ -106,7 +106,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//This declares a winner
-	void MatchFinish(int score, string playername, int playernumber, GameObject playerpose){
+	void MatchFinish(float score, string playername, int playernumber, GameObject playerpose){
 
 		print("Got to winnings");
 		var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
@@ -156,7 +156,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(int score, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
+	void ShowScoresLocally(float score, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
 
 		string color = "white";
 
