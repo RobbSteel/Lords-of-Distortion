@@ -4,7 +4,7 @@ using System.Linq;
 
 public class PointTracker : MonoBehaviour{
 
-	PSInfo psInfo;
+	PlayerServerInfo psInfo;
 	HUDTools hudTools;
 
 	

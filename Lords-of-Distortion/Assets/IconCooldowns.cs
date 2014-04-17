@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class IconCooldowns : MonoBehaviour {
 
-    PSInfo infoscript;
+    PlayerServerInfo infoscript;
     private float timer = 0;
     public UISprite hookCDBtnRed;
 
     void Start()
     {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PSInfo>();
+        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
     }	
     
 	// Update is called once per frame

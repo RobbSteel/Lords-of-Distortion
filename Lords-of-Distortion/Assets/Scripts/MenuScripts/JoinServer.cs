@@ -6,12 +6,12 @@ public class JoinServer : MonoBehaviour {
 
 	public int servernumber;
 	public HostData[] hostList;
-	public PSInfo infoscript;
+	public PlayerServerInfo infoscript;
 
 	// Use this for initialization
 	void Start () {
 		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PSInfo>();
+		infoscript = information.GetComponent<PlayerServerInfo>();
 	}
 
 	void OnPress(){

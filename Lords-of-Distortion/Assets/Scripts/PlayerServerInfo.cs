@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PSInfo : MonoBehaviour {
+public class PlayerServerInfo : MonoBehaviour {
 	
 	public string playername;
 	public string servername;

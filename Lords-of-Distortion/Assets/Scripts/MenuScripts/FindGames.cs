@@ -5,7 +5,7 @@ public class FindGames : MonoBehaviour {
 
 	GameObject mainscript;
 	public MainGui playerscript;
-	public PSInfo infoscript;
+	public PlayerServerInfo infoscript;
 	
 	// Update is called once per frame
 	void Update () {
