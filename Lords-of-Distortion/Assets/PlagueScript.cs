@@ -42,7 +42,7 @@ public class PlagueScript : Power
 				if (GameObject.Find ("CollectData") != null) {
 					GA.API.Design.NewEvent ("Plague Deaths", player.transform.position);
 				}
-				controller.Die();
+				controller.Die(DeathType.PLAGUE);
             }
         }
     }

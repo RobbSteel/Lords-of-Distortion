@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: DeathByFire
+  m_Name: DeathByPlague
   serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
@@ -18,54 +18,36 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .0769230798
-      value: {fileID: 21300002, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .15384616
-      value: {fileID: 21300004, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .230769232
-      value: {fileID: 21300006, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .307692319
-      value: {fileID: 21300008, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .384615391
-      value: {fileID: 21300010, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .461538464
-      value: {fileID: 21300012, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .538461566
-      value: {fileID: 21300014, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .615384638
-      value: {fileID: 21300016, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .692307711
       value: {fileID: 21300018, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .769230783
+    - time: .100000001
       value: {fileID: 21300028, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .846153855
+    - time: .200000003
       value: {fileID: 21300026, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: .923076928
+    - time: .300000012
       value: {fileID: 21300024, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1
+    - time: .400000006
       value: {fileID: 21300022, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.07692313
+    - time: .5
       value: {fileID: 21300020, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.15384614
+    - time: .600000024
       value: {fileID: 21300030, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.23076928
+    - time: .699999988
       value: {fileID: 21300032, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.30769229
+    - time: .800000012
       value: {fileID: 21300034, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.38461542
+    - time: .899999976
       value: {fileID: 21300036, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.46153843
+    - time: 1
       value: {fileID: 21300038, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.53846157
+    - time: 1.10000002
       value: {fileID: 21300040, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
-    - time: 1.61538458
+    - time: 1.20000005
       value: {fileID: 21300042, guid: 7c003b0f31a57754aab2db46fe72d49a, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 13
+  m_SampleRate: 10
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -73,12 +55,12 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1.69230771
+    m_StopTime: 1.30000007
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
-    m_LoopTime: 0
-    m_LoopBlend: 0
+    m_LoopTime: 1
+    m_LoopBlend: 1
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
     m_LoopBlendPositionXZ: 0
@@ -90,7 +72,7 @@ AnimationClip:
   m_EditorCurves: []
   m_EulerEditorCurves: []
   m_Events:
-  - time: 1.61538458
+  - time: 1.20000005
     functionName: DestroyPlayer
     data: 
     objectReferenceParameter: {fileID: 0}

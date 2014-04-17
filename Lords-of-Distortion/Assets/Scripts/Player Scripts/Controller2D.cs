@@ -4,7 +4,8 @@ using System.Collections;
 
 public enum DeathType{
 	CRUSH,
-	FIRE
+	FIRE,
+	PLAGUE
 }
 
 public class Controller2D : MonoBehaviour {
@@ -372,6 +373,9 @@ public class Controller2D : MonoBehaviour {
 			switch(deathType){
 			case DeathType.FIRE:
 				anim.SetTrigger("FireDeath");
+				break;
+			case DeathType.PLAGUE:
+				anim.SetTrigger("PlagueDeath");
 				break;
 			default:
 				anim.SetTrigger("Die");
