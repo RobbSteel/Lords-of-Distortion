@@ -237,6 +237,7 @@ public class Controller2D : MonoBehaviour {
 		if(power.spawnInfo != null){
 			playerEvent = new PlayerEvent(power.spawnInfo.type, 
 			                                          TimeManager.instance.time, power.spawnInfo.owner);
+			playerEvent.Attacker = power.spawnInfo.owner;
 		}
 		else{
 			//Gotta be spikes
@@ -258,8 +259,9 @@ public class Controller2D : MonoBehaviour {
 		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerActionEnter(gameObject, this);
 			GenerateEvent(power);
+			power.PowerActionEnter(gameObject, this);
+
 		}
 
 		else if(other.gameObject.tag == "PowerHook"){
@@ -268,9 +270,8 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 			Power power = other.gameObject.GetComponent<Power>();
-			power.PowerActionEnter(gameObject, this);
 			GenerateEvent(power);
-
+			power.PowerActionEnter(gameObject, this);
 		}
 
         if (other.gameObject.tag == "movingPlatform")

@@ -10,7 +10,7 @@ public class PointTracker : MonoBehaviour{
 
 
 	void Awake(){
-		SessionManager sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+		SessionManager sessionManager = SessionManager.Instance;
 		psInfo = sessionManager.psInfo;
 		hudTools = GetComponent<HUDTools>();
 	}
@@ -21,6 +21,10 @@ public class PointTracker : MonoBehaviour{
 		
 		PlayerStats deadPlayerStats = psInfo.GetPlayerStats(player);
 		deadPlayerStats.score += CalculateScore();
+		NetworkPlayer? attacker = deadPlayerStats.LastEvent().Attacker;
+		if(attacker != null && attacker.Value != player){
+			GivePoints(1, deadPlayerStats.LastEvent().Attacker.Value);
+		}
 		//Tell everyone this player's scores.
 		networkView.RPC("SynchronizeScores", RPCMode.Others, deadPlayerStats.score, player);
 

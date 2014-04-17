@@ -33,7 +33,7 @@ public static class PowerTypeExtensions{
 	public static List<PowerType> powersActive;
 	public static List<PowerType> powersPassive;
 
-	public static List<PowerType> powersWithNetworking;
+	public static List<PowerType> powersWithNetworking = new List<PowerType>();
 
 
 	//The static constructor called automatically

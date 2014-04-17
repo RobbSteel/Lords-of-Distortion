@@ -73,6 +73,7 @@ public class ArenaManager : MonoBehaviour {
 		pointTracker.PlayerDied(player);
 
 	}
+
 	//Tells additional players to destroy clone.
 	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID){
 		if(Network.isServer){
@@ -130,9 +131,16 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	[RPC]
-	void NotifyServerOfEvent(int type, float timeOfContact, NetworkMessageInfo info)
+	void SimpleNotifyServerOfEvent(int type, float timeOfContact, NetworkMessageInfo info)
 	{
 		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		HandlePlayerEvent(info.sender, playerEvent);
+	}
+
+	[RPC]
+	void NotifyServerOfEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkMessageInfo info){
+		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
+		playerEvent.Attacker = attacker;
 		HandlePlayerEvent(info.sender, playerEvent);
 	}
 
@@ -148,7 +156,13 @@ public class ArenaManager : MonoBehaviour {
 			//Maybe we want local copy for some reason.
 			PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(player);
 			stats.AddEvent(playerEvent);
-			networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
+			if(playerEvent.Attacker != null){
+				networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact, playerEvent.Attacker);
+			}
+
+			else{
+				networkView.RPC ("SimpleNotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
+			}
 		}
 	}
 	
@@ -322,17 +336,19 @@ public class ArenaManager : MonoBehaviour {
 
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
-		pointTracker.GivePoints(1, Network.player);
         float currentTime = TimeManager.instance.time;
 		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
         {
+			spawn.owner = Network.player;
 			//unitiliazed
 			NetworkViewID newViewID = default(NetworkViewID);
 			if(spawn.type.PowerRequiresNetworking()){
 				//Needs a viewID so that bombs can RPC each other.
 				newViewID = Network.AllocateViewID();
 			}
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID);
+			//Call this function locally on and remotely
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
+			                Network.player);
 			SpawnPowerLocally(spawn, newViewID);
             //Remove from your inventory and  disable button 
             placementUI.DestroyUIPower(spawn);
@@ -365,11 +381,13 @@ public class ArenaManager : MonoBehaviour {
 
 	//this function converts parameters into a powerspawn object
 	[RPC]
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID){
+	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
+	                       NetworkPlayer owner){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
 		requestedSpawn.direction = direction;
+		requestedSpawn.owner  = owner;
 		SpawnPowerLocally(requestedSpawn, optionalViewID);
 	}
 
