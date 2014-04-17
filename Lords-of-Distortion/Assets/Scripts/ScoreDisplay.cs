@@ -120,7 +120,7 @@ public class ScoreDisplay : MonoBehaviour {
 		playertext.text = playername;
 		//killstext.text = "+" + kills;
 		//assiststext.text = "+" + assists;
-		//favortext.text = "+" + favor;
+		favortext.text = "+" + score;
 		
 		
 	}
