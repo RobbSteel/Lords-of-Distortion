@@ -6,6 +6,10 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject ScoreLabel;
 	public GameObject PlayerLabel;
 	public GameObject PlayerDisplay;
+	public GameObject KillLabel;
+	public GameObject AssistLabel;
+	public GameObject WinLabel;
+	public GameObject FavorLabel;
 	SessionManager sessionManager;
 	public float timeleft = 5;
 	public float winningscore = 0;
@@ -79,80 +83,48 @@ public class ScoreDisplay : MonoBehaviour {
 	void RoundFinish(float score, string playername, int playernumber, GameObject playerpose){
 
 		print ("gettting local");
-		var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
+		//var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
 		var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
-		
-		scorelabel.transform.parent = GameObject.Find("UI Root").transform;
+		var killlabel = (GameObject)Instantiate(KillLabel, new Vector2(0,0), transform.rotation);
+		var assistlabel = (GameObject)Instantiate(AssistLabel, new Vector2(0,0), transform.rotation);
+		var favorlabel = (GameObject)Instantiate(FavorLabel, new Vector2(0,0), transform.rotation);
+
+		//scorelabel.transform.parent = GameObject.Find("UI Root").transform;
 		playerlabel.transform.parent = GameObject.Find("UI Root").transform;
 		playerpose.transform.parent = GameObject.Find ("UI Root").transform;
-		
-		scorelabel.transform.localScale = new Vector3(1, 1, 1);
+		killlabel.transform.parent = GameObject.Find("UI Root").transform;
+		assistlabel.transform.parent = GameObject.Find("UI Root").transform;
+		favorlabel.transform.parent = GameObject.Find("UI Root").transform;
+
+
+		//scorelabel.transform.localScale = new Vector3(1, 1, 1);
 		playerlabel.transform.localScale = new Vector3(1, 1, 1);
 		playerpose.transform.localScale = new Vector3(100,100,1);
+		assistlabel.transform.localScale = new Vector3(1,1,1);
+		favorlabel.transform.localScale = new Vector3(1,1,1);
+		killlabel.transform.localScale = new Vector3(1,1,1);
+
+		playerlabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
+		//playerlabel.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
+		playerpose.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
+		assistlabel.transform.localPosition = new Vector2(100, 350+(-150*playernumber));
+		killlabel.transform.localPosition = new Vector2(0, 350+(-150*playernumber));
+		favorlabel.transform.localPosition = new Vector2(500, 350+(-150*playernumber));
 		
-		scorelabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
-		playerlabel.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
-		playerpose.transform.localPosition = new Vector2(0, 350+(-150*playernumber));
-		
-		print (infoscript.playernumb);
-		
-		
-		var scoretext = scorelabel.GetComponent<UILabel>();
+		//var scoretext = scorelabel.GetComponent<UILabel>();
 		var playertext = playerlabel.GetComponent<UILabel>();
-		scoretext.text = score.ToString() + " points";
+		var killstext = killlabel.GetComponent<UILabel>();
+		var assiststext = assistlabel.GetComponent<UILabel>();
+		var favortext = favorlabel.GetComponent<UILabel>();
+		//scoretext.text = score.ToString() + " points";
 		playertext.text = playername;
+		//killstext.text = "+" + kills;
+		//assiststext.text = "+" + assists;
+		//favortext.text = "+" + favor;
 		
 		
 	}
 
-	//This declares a winner
-	void MatchFinish(float score, string playername, int playernumber, GameObject playerpose){
-
-		print("Got to winnings");
-		var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
-		var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
-		
-		
-		scorelabel.transform.parent = GameObject.Find("UI Root").transform;
-		playerlabel.transform.parent = GameObject.Find("UI Root").transform;
-		playerpose.transform.parent = GameObject.Find ("UI Root").transform;
-		
-		scorelabel.transform.localScale = new Vector3(1, 1, 1);
-		playerlabel.transform.localScale = new Vector3(1, 1, 1);
-		playerpose.transform.localScale = new Vector3(100,100,1);
-		
-		//This one prints winner
-		if(playernumber == (winningplayer + 1)){
-			var winnerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
-			winnerlabel.transform.parent = GameObject.Find ("UI Root").transform;
-			winnerlabel.transform.localScale = new Vector3(1, 1, 1);
-			
-			scorelabel.transform.localPosition = new Vector2(200, -100);
-			playerlabel.transform.localPosition = new Vector2(450, -100);
-			winnerlabel.transform.localPosition = new Vector2(325, 0);
-			playerpose.transform.localPosition = new Vector2(325, 150);
-			
-			var wintext = winnerlabel.GetComponent<UILabel>();
-			wintext.text = "Winner!";
-			
-		} else {
-			//This one prints losers
-			scorelabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
-			playerlabel.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
-			playerpose.transform.localPosition = new Vector2(0, 350+(-150*playernumber));
-		}
-		
-		print (infoscript.playernumb);
-		
-		
-		var scoretext = scorelabel.GetComponent<UILabel>();
-		var playertext = playerlabel.GetComponent<UILabel>();
-		
-		scoretext.text = score.ToString() + " points";
-		playertext.text = playername;
-		
-
-	}
 
 
 	//Displays the labels with score and player info
@@ -176,7 +148,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 		if(sessionManager.matchfinish){
 		
-			 MatchFinish(score, playername, playernumber, playerpose);
+			 //MatchFinish(score, playername, playernumber, playerpose);
 		  }else{
 
 			 RoundFinish(score,playername, playernumber, playerpose);
