@@ -698,7 +698,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 264011461}
   - 114: {fileID: 264011462}
-  - 114: {fileID: 264011463}
   m_Layer: 9
   m_Name: UI-Back
   m_TagString: Untagged
@@ -769,19 +768,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
---- !u!114 &264011463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400022, guid: de633e9308bb12643ab67f203e715024,
-    type: 2}
-  m_PrefabInternal: {fileID: 1472024737}
-  m_GameObject: {fileID: 264011460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4aaa9744b9fbf44687ca1539dabfb5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookCDBtnRed: {fileID: 111437752}
 --- !u!1 &273739277
 GameObject:
   m_ObjectHideFlags: 0
@@ -4556,7 +4542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalingStyle: 0
+  scalingStyle: 1
   manualHeight: 720
   minimumHeight: 320
   maximumHeight: 1536
@@ -4568,7 +4554,7 @@ Transform:
   m_GameObject: {fileID: 1187518633}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
+  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 1052230084}
   - {fileID: 1086890401}
@@ -6193,7 +6179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaeed33fc91534f48bc3cbb5d7bba818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionIP: 127.0.0.1
   connectionPort: 25001
   infoscript: {fileID: 0}
   sessionManagerPrefab: {fileID: 400000, guid: c79f913312239db4eab4647dc5c4d47b, type: 2}
@@ -6615,15 +6600,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00416666688
+      value: .00277777785
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00416666688
+      value: .00277777785
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00416666688
+      value: .00277777785
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_IsActive
@@ -9432,6 +9417,7 @@ MonoBehaviour:
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
+  OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
   pushpull: 0
@@ -9465,6 +9451,7 @@ MonoBehaviour:
   instanceManager: {fileID: 0}
   isOwner: 1
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+  interpolationPercentage: 0
 --- !u!114 &2106744477
 MonoBehaviour:
   m_ObjectHideFlags: 0

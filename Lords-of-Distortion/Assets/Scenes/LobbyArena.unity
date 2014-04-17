@@ -318,7 +318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &154608331
 Transform:
   m_ObjectHideFlags: 0
@@ -1467,6 +1467,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 264011461}
   - 114: {fileID: 264011462}
+  - 114: {fileID: 264011463}
   m_Layer: 9
   m_Name: UI-Back
   m_TagString: Untagged
@@ -1537,6 +1538,19 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
+--- !u!114 &264011463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400022, guid: de633e9308bb12643ab67f203e715024,
+    type: 2}
+  m_PrefabInternal: {fileID: 1472024737}
+  m_GameObject: {fileID: 264011460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4aaa9744b9fbf44687ca1539dabfb5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hookCDBtnRed: {fileID: 111437752}
 --- !u!1 &273739277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2574,7 +2588,7 @@ GameObject:
   - 61: {fileID: 927761309}
   - 61: {fileID: 927761310}
   - 61: {fileID: 927761311}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Gem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2774,7 +2788,7 @@ GameObject:
   - 4: {fileID: 981649728}
   - 212: {fileID: 981649730}
   - 61: {fileID: 981649729}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: floor-long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2975,6 +2989,10 @@ Prefab:
     - target: {fileID: 6100002, guid: 47abd8336301eef4f925acb61bab9a6f, type: 2}
       propertyPath: m_Center.x
       value: .0997804031
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 47abd8336301eef4f925acb61bab9a6f, type: 2}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47abd8336301eef4f925acb61bab9a6f, type: 2}
@@ -3435,7 +3453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalingStyle: 1
+  scalingStyle: 0
   manualHeight: 720
   minimumHeight: 320
   maximumHeight: 1536
@@ -3447,7 +3465,7 @@ Transform:
   m_GameObject: {fileID: 1187518633}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .00537634408, y: .00537634408, z: .00537634408}
   m_Children:
   - {fileID: 1052230084}
   - {fileID: 1086890401}
@@ -3463,7 +3481,7 @@ GameObject:
   - 4: {fileID: 1190224902}
   - 212: {fileID: 1190224904}
   - 61: {fileID: 1190224903}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: floor-long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3764,6 +3782,10 @@ Prefab:
     - target: {fileID: 6100000, guid: 68722fc00c45ada4fb2295a001b7adaf, type: 2}
       propertyPath: m_Size.y
       value: .436519802
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 68722fc00c45ada4fb2295a001b7adaf, type: 2}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 68722fc00c45ada4fb2295a001b7adaf, type: 2}
@@ -4235,25 +4257,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00277777785
+      value: .00537634408
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00277777785
+      value: .00537634408
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00277777785
+      value: .00537634408
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: de633e9308bb12643ab67f203e715024, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400012, guid: de633e9308bb12643ab67f203e715024, type: 2}
-      propertyPath: scalingStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100018, guid: de633e9308bb12643ab67f203e715024, type: 2}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -4344,6 +4358,10 @@ Prefab:
       propertyPath: m_Center.y
       value: .370000005
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
   m_RootGameObject: {fileID: 1190224901}
@@ -4357,7 +4375,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1596642552}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: floors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6294,7 +6312,7 @@ GameObject:
   - 212: {fileID: 1876162427}
   - 61: {fileID: 1876162426}
   - 61: {fileID: 1876162425}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: floor-rightEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6371,7 +6389,7 @@ GameObject:
   - 212: {fileID: 2049942357}
   - 61: {fileID: 2049942356}
   - 61: {fileID: 2049942355}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: floor-leftEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6822,6 +6840,10 @@ Prefab:
     - target: {fileID: 6100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
       propertyPath: m_Center.y
       value: .370000005
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}

@@ -23,6 +23,11 @@ public class ElectricShot : Power {
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
 
+		if (GameObject.Find ("CollectData") != null) {
+			GA.API.Design.NewEvent ("Electricity Kills", player.transform.position);
+		}
+
+
 		controller.Die();
 	}
 	

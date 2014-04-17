@@ -16,6 +16,10 @@ public class PlayerStatus : MonoBehaviour {
 	public float UIoffsetY;
 	public float recoverRate;
 
+    //variables for Plague
+    private float plagueTimer = 0f;
+    public bool insidePlague = false;
+
 	//Metrics for death
 	public float timegrav;
 	public float timesmoke;
@@ -172,14 +176,27 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun){
-				GA.API.Design.NewEvent("Smoke Stuns", transform.position);
+
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
 			}
 		}
 	}
 	
+    private void UpdateDrag()
+    {
+        if(!insidePlague)
+        {
+            plagueTimer += Time.deltaTime;
+            if(plagueTimer > 1)
+            {
+                plagueTimer = 0;
+                playerControl.rigidbody2D.drag -= 10f;
+            }
+        }
+    }
 	
 	void FixedUpdate(){
+        UpdateDrag();
 		//push the character sideways
 		if(knockBackPending){
 			//player should be in air by now, so disable movement
