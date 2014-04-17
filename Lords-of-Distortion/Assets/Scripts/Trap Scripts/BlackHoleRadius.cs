@@ -12,7 +12,7 @@ public class BlackHoleRadius : Power
 	void Start () 
 	{
 		Destroy(gameObject, 15f);
-		BHForce = 0.22f;
+		BHForce = 0.175f;
 	}
 	void Update(){
 	}
