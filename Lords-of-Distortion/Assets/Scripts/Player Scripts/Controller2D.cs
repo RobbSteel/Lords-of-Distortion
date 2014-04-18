@@ -28,8 +28,10 @@ public class Controller2D : MonoBehaviour {
     public bool locked;
 	bool stoppedJump;
 	public bool inAir = true;
+	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO);
 	public static event DieAction onDeath; 
+
 
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
@@ -83,7 +85,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
-
+		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
         meleeStunned = false;
@@ -230,7 +232,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead || !networkController.isOwner)
 			return;
 		
-		if (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook")
+		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
@@ -260,7 +262,7 @@ public class Controller2D : MonoBehaviour {
                 transform.parent = other.transform;
         }
 
-		if (other.gameObject.tag == "Power")
+		if (!powerInvulnerable && other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionStay(gameObject, this);
@@ -273,7 +275,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead)
 			return;
 		
-		if (other.gameObject.tag == "Power")
+		if (!powerInvulnerable && other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);
@@ -289,7 +291,7 @@ public class Controller2D : MonoBehaviour {
 	void OnCollisionStay2D(Collision2D col ) {
 		if(dead)
 			return;
-        if (col.gameObject.tag == "Power"){
+        if (!powerInvulnerable && col.gameObject.tag == "Power"){
 			Power power = col.gameObject.GetComponent<Power>();
 			power.PowerActionStay(gameObject, this);
 		}
@@ -301,7 +303,7 @@ public class Controller2D : MonoBehaviour {
 		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
-		if (other.gameObject.tag == "Power")
+		if (!powerInvulnerable && other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionEnter(gameObject, this);
@@ -313,7 +315,7 @@ public class Controller2D : MonoBehaviour {
         if (dead)
             return;
 		
-        if (other.gameObject.tag == "Power")
+        if (!powerInvulnerable && other.gameObject.tag == "Power")
         {
             Power power = other.gameObject.GetComponent<Power>();
             power.PowerActionExit(gameObject, this);

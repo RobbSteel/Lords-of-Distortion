@@ -9,10 +9,12 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
+  - 61: {fileID: 6100000}
   - 114: {fileID: 11400000}
-  - 58: {fileID: 5800000}
-  m_Layer: 9
-  m_Name: defection shield
+  - 111: {fileID: 11100000}
+  - 95: {fileID: 9500000}
+  m_Layer: 14
+  m_Name: IceSpike
   m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,22 +26,50 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.93892491, y: -2.29478383, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 8.74227766e-08, y: -3.82137093e-15, z: 1, w: 4.37113883e-08}
+  m_LocalPosition: {x: .00999999978, y: -.146546364, z: 0}
+  m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!58 &5800000
-CircleCollider2D:
+--- !u!61 &6100000
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Radius: 2.74666667
-  m_Center: {x: 0, y: 0}
+  m_IsTrigger: 0
+  m_Size: {x: 1.25, y: 1.24000001}
+  m_Center: {x: .150000006, y: -.0799999982}
+--- !u!95 &9500000
+Animator:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 366d8dad5d0dc8e47b4a55c547e1722c, type: 2}
+  m_CullingMode: 0
+  m_ApplyRootMotion: 1
+  m_AnimatePhysics: 0
+  m_HasTransformHierarchy: 1
+--- !u!111 &11100000
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4829abd0ac785df4cb145b9774a41358, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -48,15 +78,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4433ef46596d45d4c8f8a121a34f9e29, type: 3}
+  m_Script: {fileID: 11500000, guid: cc74b1aaac63aae40a56bb3bc8ce225d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OFFLINE: 0
-  insideExplosionRange: 0
-  timer: 0
-  defectionTimer: 100
-  defectionHitTimeReduction: 2
-  defectionAnimationLength: 0
+  movingSpike: 0
+  durationOfTween: .5
+  delay: 2.04999995
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -75,10 +103,10 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
-  m_Sprite: {fileID: 21300000, guid: 9f167143553604e43b39082d24714f91, type: 3}
+  m_SortingLayer: 2
+  m_SortingOrder: -1
+  m_SortingLayerID: 1448056335
+  m_Sprite: {fileID: 21300000, guid: 909865fd406fc31419e27bb6bd0199c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
