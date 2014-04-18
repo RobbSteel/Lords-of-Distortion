@@ -2000,7 +2000,7 @@ GameObject:
   - 61: {fileID: 234889914}
   m_Layer: 17
   m_Name: floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2780,19 +2780,19 @@ Transform:
   m_LocalPosition: {x: .0146519393, y: .119999997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1619602938}
-  - {fileID: 2065992946}
-  - {fileID: 1260520500}
   - {fileID: 1852860689}
-  - {fileID: 1596657783}
+  - {fileID: 1619602938}
+  - {fileID: 1260520500}
+  - {fileID: 2065992946}
   - {fileID: 426818307}
-  - {fileID: 1363518154}
   - {fileID: 320816614}
   - {fileID: 1494980935}
-  - {fileID: 1700805895}
+  - {fileID: 1363518154}
+  - {fileID: 1596657783}
+  - {fileID: 1289123829}
   - {fileID: 512637245}
   - {fileID: 878885467}
-  - {fileID: 1289123829}
+  - {fileID: 1700805895}
   m_Father: {fileID: 944498507}
 --- !u!1 &353578576
 GameObject:
@@ -6260,7 +6260,7 @@ GameObject:
   - 61: {fileID: 957572111}
   m_Layer: 17
   m_Name: LargePlatform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7169,7 +7169,7 @@ GameObject:
   - 61: {fileID: 1221192844}
   m_Layer: 17
   m_Name: floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7952,6 +7952,18 @@ Prefab:
     - target: {fileID: 100004, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
       propertyPath: m_Layer
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
