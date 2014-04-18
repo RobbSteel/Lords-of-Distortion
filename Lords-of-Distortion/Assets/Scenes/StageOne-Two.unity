@@ -1226,7 +1226,7 @@ GameObject:
   - 61: {fileID: 48806462}
   - 61: {fileID: 48806461}
   - 61: {fileID: 48806465}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_rightEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -2945,7 +2945,7 @@ GameObject:
   - 61: {fileID: 259817551}
   - 61: {fileID: 259817550}
   - 61: {fileID: 259817553}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_rightEnd
   m_TagString: movingPlatform
   m_Icon: {fileID: 0}
@@ -3808,9 +3808,9 @@ GameObject:
   - 4: {fileID: 795595576}
   - 212: {fileID: 795595575}
   - 61: {fileID: 795595574}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5374,7 +5374,7 @@ GameObject:
   - 61: {fileID: 1100758531}
   - 61: {fileID: 1100758530}
   - 61: {fileID: 1100758533}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_leftEnd
   m_TagString: movingPlatform
   m_Icon: {fileID: 0}
@@ -5842,7 +5842,7 @@ GameObject:
   - 61: {fileID: 1411841092}
   - 61: {fileID: 1411841091}
   - 61: {fileID: 1411841094}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_rightEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -6073,6 +6073,22 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c3ddffd54ad1aa3458976b1a261a7575, type: 2}
   m_RootGameObject: {fileID: 1013218473}
@@ -6090,7 +6106,7 @@ GameObject:
   - 61: {fileID: 1468400946}
   - 61: {fileID: 1468400945}
   - 61: {fileID: 1468400948}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_leftEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -6709,7 +6725,7 @@ GameObject:
   - 61: {fileID: 1644196335}
   - 61: {fileID: 1644196334}
   - 61: {fileID: 1644196337}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_leftEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -6870,7 +6886,7 @@ GameObject:
   - 61: {fileID: 1737856645}
   - 61: {fileID: 1737856644}
   - 61: {fileID: 1737856647}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_leftEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -6992,6 +7008,8 @@ MonoBehaviour:
   - {fileID: 100000, guid: 47839959c09bc5b4e802192850c3a39d, type: 2}
   - {fileID: 100000, guid: 5714feed25a0789429841ad095d32272, type: 2}
   - {fileID: 100000, guid: 7e6c255855139b94ab41c8b702212ac9, type: 2}
+  - {fileID: 100000, guid: 8b00768c197448c438dc444a2d59c667, type: 2}
+  - {fileID: 100004, guid: 1a6a28209911f5b4d8f5aaa21afefcd4, type: 2}
 --- !u!114 &1779164189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7068,6 +7086,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextPrefab: {fileID: 11400004, guid: 23be67396af99e54eab302b862007366, type: 2}
+  PointTextPrefab: {fileID: 11400004, guid: 9b7b75174c442cb4ba64aecce0c6db11, type: 2}
+  scoreFont: {fileID: 0}
 --- !u!1001 &1842222417
 Prefab:
   m_ObjectHideFlags: 0
@@ -7189,7 +7209,7 @@ GameObject:
   - 61: {fileID: 1888597015}
   - 61: {fileID: 1888597014}
   - 61: {fileID: 1888597017}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: flower_rightEnd
   m_TagString: killplatform
   m_Icon: {fileID: 0}
@@ -8760,9 +8780,9 @@ GameObject:
   - 4: {fileID: 2071625733}
   - 212: {fileID: 2071625735}
   - 61: {fileID: 2071625734}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8826,7 +8846,8 @@ GameObject:
   - 61: {fileID: 2097220147}
   - 61: {fileID: 2097220150}
   - 61: {fileID: 2097220149}
-  m_Layer: 0
+  - 61: {fileID: 2097220151}
+  m_Layer: 17
   m_Name: flower_middle
   m_TagString: movingPlatform
   m_Icon: {fileID: 0}
@@ -8904,4 +8925,16 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
   m_IsTrigger: 0
   m_Size: {x: .100000001, y: .150000006}
+  m_Center: {x: .649999976, y: .180000007}
+--- !u!61 &2097220151
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100006, guid: 171b620bd4b13ec4ca0db7a9af680bec,
+    type: 2}
+  m_PrefabInternal: {fileID: 254780422}
+  m_GameObject: {fileID: 2097220145}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 92920e80d7ed46e4cbc3d4c12133c1d6, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .100000001, y: .155000001}
   m_Center: {x: .649999976, y: .180000007}

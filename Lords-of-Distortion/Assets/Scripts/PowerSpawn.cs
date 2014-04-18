@@ -51,14 +51,14 @@ public static class PowerTypeExtensions{
 		powersActive.Add(PowerType.HOLE);
 		powersActive.Add(PowerType.EXPLOSIVE);
 		powersActive.Add(PowerType.BOULDER);
-		
+        powersActive.Add(PowerType.PLAGUE);
+
 		powersPassive = new List<PowerType>();
-		//powersPassive.Add(PowerType.GRAVITY);
+		powersPassive.Add(PowerType.GRAVITY);
 		powersPassive.Add(PowerType.EARTH);
-		//powersPassive.Add(PowerType.SMOKE);
-		//powersPassive.Add (PowerType.PLAGUE);
-		//powersPassive.Add(PowerType.FREEZE);
-		//powersPassive.Add(PowerType.GATE);
+		powersPassive.Add(PowerType.SMOKE);
+		powersPassive.Add(PowerType.FREEZE);
+		powersPassive.Add(PowerType.GATE);
 
 		psuedoPowers.Add(PowerType.MELEE);
 		psuedoPowers.Add(PowerType.SPIKES);
