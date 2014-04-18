@@ -16,6 +16,10 @@ public class PlayerStatus : MonoBehaviour {
 	public float UIoffsetY;
 	public float recoverRate;
 
+    //variables for Plague
+    private float plagueTimer = 0f;
+    public bool insidePlague = false;
+
 	//Metrics for death
 	public float timegrav;
 	public float timesmoke;
@@ -44,8 +48,12 @@ public class PlayerStatus : MonoBehaviour {
 	private bool horizontalPressedDown;		//tracks horizontal keydown
 	private int horizontalMoveCheck;		//tracks horizontal current key
 
+	private NetworkController networkController;
     //public UISprite shieldIcon;
-    
+
+	public delegate void PlayerAffected(NetworkPlayer player, PlayerEvent playerEvent);
+	public static event PlayerAffected eventAction;
+
 
 	void Awake(){
         //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
@@ -53,10 +61,11 @@ public class PlayerStatus : MonoBehaviour {
 		horizontalPressedUp = false;
 		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
+
 		/*
 		UI = (GameObject)Instantiate( Resources.Load( "StunBar" ) );
 		stunBarUI = UI.GetComponent<UISlider>();
-	*/
+		*/
 
 		MashIcon = (GameObject)Instantiate (Resources.Load ("MashAlertIcon"));
 		MashIcon.SetActive (false);
@@ -69,6 +78,7 @@ public class PlayerStatus : MonoBehaviour {
 	}
 	
 	void Start(){
+		networkController = GetComponent<NetworkController>();
 		hitMarkSprites.enabled = false;
 	}
 
@@ -121,8 +131,7 @@ public class PlayerStatus : MonoBehaviour {
 			if( horizontalPressedDown ){
 				horizontalPressedDown = false;
 			}
-		}
-		
+		}	
 	}
 	
 	//Updates StunBar UI and tints color relative to danger
@@ -167,14 +176,27 @@ public class PlayerStatus : MonoBehaviour {
 		if (!playerControl.stunned) {
 			currentStunMeter += dmgTaken;
 			if (currentStunMeter >= maxStun){
-				GA.API.Design.NewEvent("Smoke Stuns", transform.position);
+
 				Stun(); //this will only matter if called on the client which controls the player to be stunned
 			}
 		}
 	}
 	
+    private void UpdateDrag()
+    {
+        if(!insidePlague)
+        {
+            plagueTimer += Time.deltaTime;
+            if(plagueTimer > 1)
+            {
+                plagueTimer = 0;
+                playerControl.rigidbody2D.drag -= 10f;
+            }
+        }
+    }
 	
 	void FixedUpdate(){
+        UpdateDrag();
 		//push the character sideways
 		if(knockBackPending){
 			//player should be in air by now, so disable movement
@@ -200,8 +222,8 @@ public class PlayerStatus : MonoBehaviour {
 	}
 	
 	
-	[RPC]
-	void NotifyHit(bool fromLeftSide){
+
+	void TakeHit(bool fromLeftSide, NetworkPlayer attacker){
 
 		if(!GetComponent<NetworkController>().isOwner)
 			return;
@@ -214,6 +236,7 @@ public class PlayerStatus : MonoBehaviour {
 		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
+		GenerateEvent(PowerType.MELEE, TimeManager.instance.time, attacker);
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
 
@@ -235,12 +258,7 @@ public class PlayerStatus : MonoBehaviour {
 			BeginKnockBack(flip);
 	
 	}
-	
-	
-	public void ThirdMarkSound(){
-		//Wait a little and then play bell sound.
-	}
-	
+
 	
 	public void HitFeedback(){
 //		audio.Play (); 
@@ -262,7 +280,7 @@ public class PlayerStatus : MonoBehaviour {
 		
 		HitFeedback();
 
-		}
+	}
 		
 
 	
@@ -273,12 +291,38 @@ public class PlayerStatus : MonoBehaviour {
 		networkView.RPC("NotifyDamageTaken", RPCMode.Others, dmgTaken);
 		ApplyDamage(dmgTaken);
 	}
-	
+
+	[RPC]
+	void NotifyPlayerOfHit(bool fromLeftSide, NetworkPlayer attacker){
+		TakeHit(fromLeftSide, attacker);
+	}
+
+	//Notify server that you hit a player (this can include server player)
+	[RPC]
+	void NotifyServerOfHit(bool fromLeftSide, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+		if(hitPlayer == Network.player){
+			TakeHit(fromLeftSide, info.sender);
+		}
+		else{
+			//RPC the player that got hit directly
+			networkView.RPC("NotifyPlayerOfHit", hitPlayer,  fromLeftSide, info.sender);
+		}
+	}
+
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
-		//doesnt work(clients cant rpc each other directly)
-		//networkView.RPC ("NotifyHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
-		networkView.RPC ("NotifyHit", RPCMode.Others, fromLeftSide);
+		//Note, the following doesnt work(clients cant rpc each other directly)
+		//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
+		//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
+		NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController>().theOwner;
+		if(Network.isServer){
+			//RPC player we hit directly
+			networkView.RPC("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
+		}
+		else {
+			//tell server we hit player
+			networkView.RPC("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
+		}
 	}
 	
 	//checks if player is stun and then applies stunRecover
@@ -364,9 +408,7 @@ public class PlayerStatus : MonoBehaviour {
 			}
 		}
 	}
-	
-	
-	
+
 	
 	
 	//Ondestroy delete Stunbar Ui
@@ -374,5 +416,31 @@ public class PlayerStatus : MonoBehaviour {
 		Destroy( MashIcon );
 		Destroy( UI );
 	}
-	
+
+	//Generates an event and calls function if one exists
+	public void GenerateEvent(Power power){
+		
+		PlayerEvent playerEvent = null;
+		
+		if(power.spawnInfo != null){
+			playerEvent = new PlayerEvent(power.spawnInfo.type, 
+			                              TimeManager.instance.time, power.spawnInfo.owner);
+			playerEvent.Attacker = power.spawnInfo.owner;
+		}
+		else{
+			//Gotta be spikes
+			playerEvent = new PlayerEvent(PowerType.SPIKES, TimeManager.instance.time);
+		}
+		
+		if(eventAction != null){
+			eventAction(networkController.theOwner, playerEvent);
+		}
+	}
+
+	public void GenerateEvent(PowerType type, float time, NetworkPlayer attacker){
+		PlayerEvent playerEvent = new PlayerEvent(type, time, attacker);
+		if(eventAction != null){
+			eventAction(networkController.theOwner, playerEvent);
+		}
+	}
 } 

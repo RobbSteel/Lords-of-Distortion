@@ -33,6 +33,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite plagueSprite;
 	public Sprite electricSprite;
 	public Sprite earthSprite;
+	public Sprite blackholeSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	private Dictionary<PowerType, PowerBoard> boardsByType = new Dictionary<PowerType, PowerBoard>();
@@ -103,6 +104,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add (PowerType.ELECTRIC, electricSprite);
 		icons.Add (PowerType.PLAGUE, plagueSprite);
 		icons.Add (PowerType.EARTH, earthSprite);
+		icons.Add (PowerType.HOLE, blackholeSprite);
 		/*Hard code some powers for now*/
 		/*
          * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));
@@ -327,6 +329,36 @@ public class PlacementUI : MonoBehaviour {
 		return false;
 	}
 
+    private void ManipulateActivePower(GameObject activePower)
+    {
+        if (activePowerType == PowerType.GRAVITY)
+        {
+            Destroy(activePower.GetComponent<GravityFieldMover>());
+        }
+        Destroy(activePower.GetComponent<Power>());
+
+        Destroy(activePower.rigidbody2D);
+        activePower.GetComponent<Collider2D>().isTrigger = true;
+        activePower.tag = "UIPower";
+
+        foreach (Transform child in activePower.transform)
+        {
+            if(child.GetComponent<Power>() != null)
+                Destroy(child.GetComponent<Power>());
+            if (child.GetComponent<Collider2D>() != null)
+                Destroy(child.GetComponent<Collider2D>());
+            if (child.GetComponent<BoxCollider2D>() != null)
+                Destroy(child.GetComponent<BoxCollider2D>());
+            if (child.GetComponent<CircleCollider2D>() != null)
+                Destroy(child.GetComponent<CircleCollider2D>());
+        }
+
+        Color uiColor = new Color(.5f, 0f, 0f);
+        uiColor.a = .6f;
+        activePower.renderer.material.color = uiColor;
+        ChangeParticleColor(activePower, uiColor);
+    }
+
 	/*Take a power prefab and strip it down to the visuals. .*/
 	private void SpawnPowerVisual(PowerSlot info){
 
@@ -343,23 +375,9 @@ public class PlacementUI : MonoBehaviour {
 		activePower = Instantiate (powerPrefabs.list[(int)activePowerType],
 		                           info.transform.position, Quaternion.identity) as GameObject;
 
-        if(activePowerType == PowerType.GRAVITY)
-        {
-            Destroy(activePower.GetComponent<GravityFieldMover>());
-        }
-		Destroy (activePower.GetComponent<Power>());
-        Destroy (activePower.rigidbody2D);
-		activePower.GetComponent<Collider2D>().isTrigger = true;
-		activePower.tag = "UIPower";
-
-
-		Color uiColor = new Color(.5f, 0f, 0f);
-		uiColor.a = .6f;
-		activePower.renderer.material.color = uiColor;
-		ChangeParticleColor(activePower, uiColor);
+        ManipulateActivePower(activePower);
 
 		//power.GetComponent<ParticleSystem>().startColor;
-		
 	}
 
 	//Adds a mouseFollower to the current power.
@@ -408,11 +426,11 @@ public class PlacementUI : MonoBehaviour {
 			particleSystem.startColor = color;
 		}
 
-
-		if(power.GetComponentInChildren<ParticleSystem>() != null){
-			power.GetComponentInChildren<ParticleSystem>().startColor = color;
-		}
-
+        foreach(Transform child in power.transform)
+        {
+            if (child.GetComponent<ParticleSystem>() != null)
+                child.particleSystem.startColor = color;
+        }
 	}
 
 	private void KillMovement(GameObject power){
@@ -427,11 +445,11 @@ public class PlacementUI : MonoBehaviour {
 			power.GetComponent<ParticleSystem>().Pause();
 		}
 		
-		if(power.GetComponentInChildren<ParticleSystem>() != null){
-			//print ("Particle Attempt");
-			//pause movement of system.
-			power.GetComponentInChildren<ParticleSystem>().Pause();
-		}
+        foreach(Transform child in power.transform)
+        {
+            if (child.GetComponent<ParticleSystem>() != null)
+                child.particleSystem.Pause();
+        }
 	}
 
 
@@ -486,7 +504,7 @@ public class PlacementUI : MonoBehaviour {
 
 
 		//Either go back to default state or require setting a direction.
-		if(PowerSpawn.TypeRequiresDirection(activePowerType)){
+		if(activePowerType.TypeRequiresDirection()){
 			state = PlacementState.ChangingDirection;
 			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
             activePower.AddComponent<powerRotate>();
@@ -654,14 +672,14 @@ public class PlacementUI : MonoBehaviour {
 
     public PowerType RandomActivePower()
     {
-        int thisOne = Random.Range(0, PowerSpawn.powersActive.Count);
-        return PowerSpawn.powersActive[thisOne];
+		int thisOne = Random.Range(0, PowerTypeExtensions.powersActive.Count);
+		return PowerTypeExtensions.powersActive[thisOne];
     }
 
     public PowerType RandomPassivePower()
     {
-        int thisOne = Random.Range(0, PowerSpawn.powersPassive.Count);
-        return PowerSpawn.powersPassive[thisOne];
+		int thisOne = Random.Range(0, PowerTypeExtensions.powersPassive.Count);
+		return PowerTypeExtensions.powersPassive[thisOne];
     }
 
     public PowerType RandomPower()

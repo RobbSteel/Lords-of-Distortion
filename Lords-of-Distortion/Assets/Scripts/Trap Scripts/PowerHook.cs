@@ -6,7 +6,13 @@ public class PowerHook : Power {
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		controller.Die();
+		if(gameObject.GetComponent<HookHit>().shooter != player){
+
+			if (GameObject.Find ("CollectData") != null) {
+				GA.API.Design.NewEvent ("Empowered Hook Kills", player.transform.position);
+			}
+			controller.Die();
+		}
 	}
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)

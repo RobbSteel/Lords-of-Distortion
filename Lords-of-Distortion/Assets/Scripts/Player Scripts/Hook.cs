@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Hook : MonoBehaviour {
@@ -20,6 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
+    private float currentDrag;
 	private Animator animator;
 
 	NetworkController networkController;
@@ -96,11 +97,11 @@ public class Hook : MonoBehaviour {
 	
 		float speed = 1.0f;
 		speed = speed / 4;
-
+        currentDrag = controller2D.rigidbody2D.drag;
 		//Get input from user and set cooldown to avoid repeated use.
         //previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked){
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
@@ -139,7 +140,7 @@ public class Hook : MonoBehaviour {
 		
 			if(hittimer > 0){
 
-			pullingplayer(speed);
+				pullingplayer(speed);
 			
 			} else {
 
@@ -264,7 +265,7 @@ public class Hook : MonoBehaviour {
 		print ("Hit by "  + info.networkView.viewID);
 		print ("My id is " + networkView.viewID);
 		go.transform.position = playerLocation;
-		hookscript.hookedPlayer = networkController.instanceManager.gameInfo.GetPlayerGameObject(hitPlayer);
+		hookscript.hookedPlayer = networkController.instanceManager.psInfo.GetPlayerGameObject(hitPlayer);
 		hookscript.affectedPlayerC2D = hookscript.hookedPlayer.GetComponent<Controller2D>();
 		targetLocation = playerLocation;
 		hookscript.targetPosition = playerLocation;

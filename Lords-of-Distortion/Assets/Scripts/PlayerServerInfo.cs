@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PSinfo : MonoBehaviour {
+public class PlayerServerInfo : MonoBehaviour {
 	
 	public string playername;
 	public string servername;
@@ -17,13 +17,18 @@ public class PSinfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
 	public List<NetworkPlayer> players;
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
-
+	
 	void Awake () {
 		DontDestroyOnLoad(this);
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
 		players= new List<NetworkPlayer>();
 		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
+	}
+	public void LevelReset(){
+		foreach(var stats in playerStats){
+			stats.Value.LevelReset();
+		}
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){
