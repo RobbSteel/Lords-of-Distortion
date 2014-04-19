@@ -6,7 +6,7 @@ public class PointTracker : MonoBehaviour{
 
 	PlayerServerInfo psInfo;
 	HUDTools hudTools;
-
+	ScoreUI scoreUI;
 	
 	class PointTimer{
 		public float pointDelay = 3f;
@@ -37,6 +37,9 @@ public class PointTracker : MonoBehaviour{
 		hudTools = GetComponent<HUDTools>();
 	}
 
+	public void Initialize(ScoreUI scoreUI){
+		this.scoreUI = scoreUI;
+	}
 
 	float timeApart = 2.0f;
 
@@ -104,6 +107,7 @@ public class PointTracker : MonoBehaviour{
 		playerStats.AddToScore(points);
 		//TODO: what if the player who got the points dies before this?
 		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
+		scoreUI.Refresh();
 	}
 
 	//NOTE: should be called from playerdied, make public for testing

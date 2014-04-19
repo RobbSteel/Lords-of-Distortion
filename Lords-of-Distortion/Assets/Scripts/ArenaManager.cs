@@ -274,6 +274,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
+		sessionManager = SessionManager.Instance;
 		FindPlatforms();
 		beginTime = float.PositiveInfinity;
 	
@@ -293,13 +294,17 @@ public class ArenaManager : MonoBehaviour {
 		placementUI = placementRoot.GetComponent<PlacementUI>();
 		placementUI.Initialize(powerPrefabs);
 
+		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
+		scoreUI.Initialize(sessionManager.psInfo);
+
 		pointTracker = GetComponent<PointTracker>();
+		pointTracker.Initialize(scoreUI);
 		SetUpTimer();
 	}
 	
 	// Use this for initialization
 	void Start () {
-		sessionManager = SessionManager.Instance;
+
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
 		//reset death timers and stuff.
 		sessionManager.psInfo.LevelReset();
