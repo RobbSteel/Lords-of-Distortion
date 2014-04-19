@@ -35,7 +35,7 @@ public class ScoreDisplay : MonoBehaviour {
 		var listed = infoscript.players;
 		print(listed);
 		print(listed.Count);
-		print(infoscript.GetPlayerStats(listed[0]).score);
+		print(infoscript.GetPlayerStats(listed[0]).roundScore);
 
 
 
@@ -44,7 +44,7 @@ public class ScoreDisplay : MonoBehaviour {
 			print ("calculate winnings");
 			for(int v = 0; v < listed.Count; v++){
 
-				var score = infoscript.GetPlayerStats(listed[v]).score;
+				var score = infoscript.GetPlayerStats(listed[v]).roundScore;
 						if(score > winningscore){
 							winningscore = score;
 							winningplayer = v;
@@ -57,7 +57,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 		for(int i = 0; i < listed.Count; i++){
 
-			var score = infoscript.GetPlayerStats(listed[i]).score;
+			var score = infoscript.GetPlayerStats(listed[i]).roundScore;
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playercolor = infoscript.GetPlayerOptions(listed[i]).style;
 			print(playercolor);
@@ -71,7 +71,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 			for(int z = 0; z < listed.Count; z++){
 				sessionManager.matchfinish = false;
-				infoscript.GetPlayerStats(listed[z]).score = 0;
+				infoscript.GetPlayerStats(listed[z]).roundScore = 0;
 			}
 
 		}

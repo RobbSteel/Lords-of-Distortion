@@ -101,7 +101,7 @@ public class PointTracker : MonoBehaviour{
 	[RPC]
 	void SynchPoints(float points, NetworkPlayer player){
 		PlayerStats playerStats = psInfo.GetPlayerStats(player);
-		playerStats.score += points;
+		playerStats.AddToScore(points);
 		//TODO: what if the player who got the points dies before this?
 		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
 	}
