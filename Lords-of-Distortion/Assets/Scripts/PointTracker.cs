@@ -42,6 +42,12 @@ public class PointTracker : MonoBehaviour{
 
 	public void PlayerDied(NetworkPlayer player){
 
+		//We've now lost the final player
+		if(lastPlayerTimer != null){
+			if(player == lastPlayerTimer.player)
+				lastPlayerTimer = null;
+		}
+
 		PlayerStats deadPlayerStats = psInfo.GetPlayerStats(player);
 
 		//There is guaranteed to be an event that happened before the player died.

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HUDTools : MonoBehaviour {
 	public UILabel TextPrefab;
+	public GameObject heartParticles;
 
 	public UILabel PointTextPrefab;
 
@@ -49,6 +50,8 @@ public class HUDTools : MonoBehaviour {
 		label.text = "+" + points.ToString();
 		UIFollowTarget followTarget = label.GetComponent<UIFollowTarget>();
 		followTarget.Target = player.transform;
+
+		Instantiate(heartParticles, player.transform.position, Quaternion.identity);
 		//TODO: if a player already is showing points, put above those.
 		followTarget.offset.y = 50f;
 
