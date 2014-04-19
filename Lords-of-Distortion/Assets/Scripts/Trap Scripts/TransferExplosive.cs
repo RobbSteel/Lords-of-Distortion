@@ -8,13 +8,13 @@ public class TransferExplosive : Power
 	
 		public float timer = 8;
 		public GameObject playerstuck = null;
+	public GameObject explosionPrefab;
 		public bool stickready = true;
 		const float TRANSFER_WAIT = 1f;
 		public float stickytimer = TRANSFER_WAIT;
 		public bool firststick = true;
 		bool sentRPC = false;
 		bool exploded = false;
-		GameObject explode;
 
 		[RPC]
 		void IThinkIGotStuck (NetworkMessageInfo info)
@@ -119,11 +119,11 @@ public class TransferExplosive : Power
 				//Blow up if the time is out
 				if (timer <= 0 && !exploded) {
 	
-					explode = Instantiate (Resources.Load ("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
-                    Vector3 charMarkLoc = transform.position;
+					GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+			Vector3 charMarkLoc = transform.position;
                     charMarkLoc.z = 1.4f;
 					var charmark = Instantiate (Resources.Load ("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
-					Destroy (explode, 0.8f);
 					Destroy (gameObject);
             
 				} else {
