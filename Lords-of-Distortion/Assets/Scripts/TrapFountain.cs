@@ -5,6 +5,7 @@ public class TrapFountain : MonoBehaviour {
 
 	public GameObject fountainParticles;
 	public GameObject getPowerParticles;
+	public bool tutorialUse;
 	ParticleSystem getPowerPSystem;
 	
 	bool used = false;
@@ -20,7 +21,8 @@ public class TrapFountain : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		Destroy(gameObject, 6f);
+		if( !tutorialUse )
+			Destroy(gameObject, 6f);
 	}
 
 

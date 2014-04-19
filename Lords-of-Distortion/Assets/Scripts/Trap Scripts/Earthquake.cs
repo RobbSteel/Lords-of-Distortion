@@ -5,10 +5,11 @@ public class Earthquake : Power {
 
 	public float risetime;
 	public GameObject groundshatter;
+	public int reps = 0;
 	// Use this for initialization
 	void Start () {
 		risetime = 0;
-		Destroy(gameObject, 10);
+		//Destroy(gameObject, 10);
 	}
 	
 	// Update is called once per frame
@@ -21,7 +22,7 @@ public class Earthquake : Power {
 		} else {
 
 
-			transform.Translate (Vector3.up * 1 * Time.deltaTime);
+			transform.Translate (Vector3.up * 0.5f * Time.deltaTime);
 			risetime -= Time.deltaTime;
 		}
 
@@ -57,12 +58,16 @@ public class Earthquake : Power {
 	void OnTriggerEnter2D(Collider2D col)
 	{
 
+
 		//if (col.gameObject.CompareTag ("killplatform")) {
-		if(col.transform.tag =="killplatform"){
-			Instantiate(groundshatter, transform.position, transform.rotation);
+		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground"){
+
 			if(risetime <= 0){
-				risetime = 2;
-			}
+				Instantiate(groundshatter, transform.position, transform.rotation);
+				reps += 1;
+				risetime = 3;
+
+			
 
 			var players = GameObject.FindGameObjectsWithTag("Player");
 			if(players.Length > 0){
@@ -90,6 +95,12 @@ public class Earthquake : Power {
 					}
 				}
 			}
+				if(reps == 3){
+					
+					Destroy(gameObject);
+				}
+			
+		  }
 		}
 	}
 

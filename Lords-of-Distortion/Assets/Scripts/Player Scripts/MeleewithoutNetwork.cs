@@ -46,7 +46,7 @@ public class MeleewithoutNetwork : MonoBehaviour {
 		if (meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
 			// If the fire button is pressed...
 			//print("maggot");
-			if (Input.GetButtonDown ("Fire3") && !controller.stunned) {
+			if (Input.GetButtonDown ("Melee") && !controller.stunned) {
 				startMelee ();
 			}
 		}

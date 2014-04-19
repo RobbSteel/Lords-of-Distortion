@@ -119,10 +119,12 @@ public class TransferExplosive : Power
 				//Blow up if the time is out
 				if (timer <= 0 && !exploded) {
 	
-						explode = Instantiate (Resources.Load ("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
-						var charmark = Instantiate (Resources.Load ("Charmark"), transform.position, Quaternion.identity) as GameObject;
-						Destroy (explode, 0.8f);
-						Destroy (gameObject);
+					explode = Instantiate (Resources.Load ("BombExplosion"), transform.position, Quaternion.identity) as GameObject;
+                    Vector3 charMarkLoc = transform.position;
+                    charMarkLoc.z = 1.4f;
+					var charmark = Instantiate (Resources.Load ("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+					Destroy (explode, 0.8f);
+					Destroy (gameObject);
             
 				} else {
 						//Debug.Log ("Bomb ELSE~~~~~");

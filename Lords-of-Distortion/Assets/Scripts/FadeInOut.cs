@@ -37,6 +37,20 @@ public class FadeInOut : MonoBehaviour {
 		fadeDir = 1;
 	}
 
+	void setBlack(){
+		fadeDir = 1;
+		GUI.color = Vector4.one;
+		Rect rec = new Rect(0, 0, Screen.width, Screen.height);
+
+	}
+
+	void setClear(){
+		fadeDir = -1;
+		GUI.color = Vector4.zero;
+		Rect rec = new Rect(0, 0, Screen.width, Screen.height);
+
+	}
+
 	// Use this for initialization
 	void Start () {
 		alpha = 0;

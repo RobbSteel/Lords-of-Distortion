@@ -15,7 +15,8 @@ public class PlagueScript : Power
 
     void OnDestroy()
     {
-        status.insidePlague = false;
+        if(status != null)
+            status.insidePlague = false;
     }
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
@@ -24,7 +25,7 @@ public class PlagueScript : Power
         status.insidePlague = true;
         if (player.rigidbody2D.drag == 0)
         {
-            player.rigidbody2D.drag += 15;
+            player.rigidbody2D.drag += 25;
         }
     }
 
@@ -34,7 +35,7 @@ public class PlagueScript : Power
         status.insidePlague = true;
         if (timer > timeTilDrag)
         {
-            player.rigidbody2D.drag += 10;
+            player.rigidbody2D.drag += 12f;
             timer = 0;
             
             if (player.rigidbody2D.drag > 50)
@@ -42,7 +43,7 @@ public class PlagueScript : Power
 				if (GameObject.Find ("CollectData") != null) {
 					GA.API.Design.NewEvent ("Plague Deaths", player.transform.position);
 				}
-				controller.Die();
+				controller.Die(DeathType.PLAGUE);
             }
         }
     }

@@ -45,16 +45,20 @@ public class DefectionShield : Power {
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
 		insideExplosionRange = true;
 		target = player;
+		controller.powerInvulnerable = true;
 	}
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller){
 		insideExplosionRange = true;
+		controller.powerInvulnerable = true;
 		target = player;
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
 		insideExplosionRange = false;
 		target = null;
+		controller.powerInvulnerable = false;
+
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
@@ -67,8 +71,9 @@ public class DefectionShield : Power {
 	void OnTriggerStay2D(Collider2D col){
 		if(col.transform.tag == "Power"){
 			//col.enabled = false;
-			DefectionSheildHit();
 			Destroy( col.gameObject );
+			DefectionSheildHit();
+
 		} 
 	}
 
