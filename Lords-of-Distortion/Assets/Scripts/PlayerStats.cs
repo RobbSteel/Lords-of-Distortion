@@ -37,7 +37,7 @@ public class PlayerStats {
 		return playerEvents.ReadNewest();
 	}
 
-	public bool isAlive(){
+	public bool isDead(){
 		return timeOfDeath < float.PositiveInfinity;
 	}
 	

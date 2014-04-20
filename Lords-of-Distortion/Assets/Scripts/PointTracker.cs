@@ -105,9 +105,14 @@ public class PointTracker : MonoBehaviour{
 	void SynchPoints(float points, NetworkPlayer player){
 		PlayerStats playerStats = psInfo.GetPlayerStats(player);
 		playerStats.AddToScore(points);
-		//TODO: what if the player who got the points dies before this?
-		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
-		scoreUI.Refresh();
+
+		if(!playerStats.isDead()){
+			hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
+		}
+		scoreUI.IncreasePoints(player);
+
+		//scoreUI.Refresh();
+
 	}
 
 	//NOTE: should be called from playerdied, make public for testing
