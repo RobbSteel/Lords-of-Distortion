@@ -4,7 +4,9 @@
 public class PlayerStats {
 	public int deaths = 0;
 	public int kills = 0;
-	public float score = 0f;
+
+	public float roundScore = 0f;
+	public float totalScore = 0f;
 
 	public float timeOfDeath = float.PositiveInfinity;
 
@@ -15,9 +17,15 @@ public class PlayerStats {
 
 	}
 
+	public void AddToScore(float points){
+		roundScore += points;
+		totalScore += points;
+	}
+
 	public void LevelReset(){
 		timeOfDeath = float.PositiveInfinity;
 		playerEvents = new CircularBuffer<PlayerEvent>(2);
+		roundScore = 0f;
 	}
 
 	public void AddEvent(PlayerEvent playerEvent){
@@ -29,6 +37,9 @@ public class PlayerStats {
 		return playerEvents.ReadNewest();
 	}
 
+	public bool isDead(){
+		return timeOfDeath < float.PositiveInfinity;
+	}
 	
 }
 

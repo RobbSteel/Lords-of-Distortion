@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HUDTools : MonoBehaviour {
 	public UILabel TextPrefab;
+	public GameObject heartParticles;
 
 	public UILabel PointTextPrefab;
 
@@ -47,10 +48,18 @@ public class HUDTools : MonoBehaviour {
 		UILabel label = (UILabel)Instantiate(PointTextPrefab, Vector3.zero, PointTextPrefab.transform.rotation);
 
 		label.text = "+" + points.ToString();
+
+	
 		UIFollowTarget followTarget = label.GetComponent<UIFollowTarget>();
 		followTarget.Target = player.transform;
+			
+		GameObject hearts = Instantiate(heartParticles, player.transform.position, Quaternion.identity) as GameObject;
+		hearts.transform.parent = player.transform;
+		hearts.transform.localPosition = new Vector3(0f, player.GetComponent<BoxCollider2D>().size.y / 2, 0);
+
+
 		//TODO: if a player already is showing points, put above those.
-		followTarget.offset.y = 50f;
+		followTarget.offset.y = player.renderer.bounds.size.y / 2f;
 
 		StartCoroutine(FadeInOut(label, displayTime));
 	}

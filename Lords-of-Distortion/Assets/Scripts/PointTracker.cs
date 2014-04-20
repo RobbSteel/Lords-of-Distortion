@@ -6,7 +6,7 @@ public class PointTracker : MonoBehaviour{
 
 	PlayerServerInfo psInfo;
 	HUDTools hudTools;
-
+	ScoreUI scoreUI;
 	
 	class PointTimer{
 		public float pointDelay = 3f;
@@ -37,10 +37,19 @@ public class PointTracker : MonoBehaviour{
 		hudTools = GetComponent<HUDTools>();
 	}
 
+	public void Initialize(ScoreUI scoreUI){
+		this.scoreUI = scoreUI;
+	}
 
 	float timeApart = 2.0f;
 
 	public void PlayerDied(NetworkPlayer player){
+
+		//We've now lost the final player
+		if(lastPlayerTimer != null){
+			if(player == lastPlayerTimer.player)
+				lastPlayerTimer = null;
+		}
 
 		PlayerStats deadPlayerStats = psInfo.GetPlayerStats(player);
 
@@ -95,9 +104,15 @@ public class PointTracker : MonoBehaviour{
 	[RPC]
 	void SynchPoints(float points, NetworkPlayer player){
 		PlayerStats playerStats = psInfo.GetPlayerStats(player);
-		playerStats.score += points;
-		//TODO: what if the player who got the points dies before this?
-		hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
+		playerStats.AddToScore(points);
+
+		if(!playerStats.isDead()){
+			hudTools.ShowPoints(points, psInfo.GetPlayerGameObject(player));
+		}
+		scoreUI.IncreasePoints(player);
+
+		//scoreUI.Refresh();
+
 	}
 
 	//NOTE: should be called from playerdied, make public for testing

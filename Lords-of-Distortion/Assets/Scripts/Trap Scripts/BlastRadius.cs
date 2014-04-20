@@ -3,6 +3,9 @@ using System.Collections;
 
 public class BlastRadius : Power {
 
+	void Start(){
+		Destroy(gameObject, .8f);
+	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
 

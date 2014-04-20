@@ -274,6 +274,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
+		sessionManager = SessionManager.Instance;
 		FindPlatforms();
 		beginTime = float.PositiveInfinity;
 	
@@ -293,13 +294,17 @@ public class ArenaManager : MonoBehaviour {
 		placementUI = placementRoot.GetComponent<PlacementUI>();
 		placementUI.Initialize(powerPrefabs);
 
+		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
+		scoreUI.Initialize(sessionManager.psInfo);
+
 		pointTracker = GetComponent<PointTracker>();
+		pointTracker.Initialize(scoreUI);
 		SetUpTimer();
 	}
 	
 	// Use this for initialization
 	void Start () {
-		sessionManager = SessionManager.Instance;
+
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
 		//reset death timers and stuff.
 		sessionManager.psInfo.LevelReset();
@@ -411,7 +416,9 @@ public class ArenaManager : MonoBehaviour {
 	//Spawn a warning sign, wait .7 seconds, then spawn power. All of these are done locally on every client.
 	IEnumerator YieldThenPower(PowerSpawn spawn, NetworkViewID optionalViewID)
     {
-		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, spawn.position, Quaternion.identity);
+        Vector3 yieldSpawnLocation = spawn.position;
+        yieldSpawnLocation.z = -8;
+		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
         yield return new WaitForSeconds(0.7f);
 		Destroy(instantiatedSymbol);
 		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
