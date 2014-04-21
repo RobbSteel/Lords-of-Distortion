@@ -5,6 +5,7 @@ public class Earthquake : Power {
 
 	public float risetime;
 	public GameObject groundshatter;
+	public GameObject leafshatter;
 	public int reps = 0;
 	// Use this for initialization
 	void Start () {
@@ -34,9 +35,10 @@ public class Earthquake : Power {
 		if (GameObject.Find ("CollectData") != null) {
 			GA.API.Design.NewEvent ("Earthquake Crushes", player.transform.position);
 		}
-		
-		controller.Die ();
 
+		if(risetime <= 0){
+		controller.Die ();
+		}
 	}
 	public override void PowerActionStay (GameObject player, Controller2D controller)
 	{
@@ -54,13 +56,56 @@ public class Earthquake : Power {
 
 	}
 
+	[RPC]
+	void CrackPlatform(int index){
+
+		var manager = GameObject.FindGameObjectWithTag("ArenaManager");
+		var managerscript = manager.GetComponent<ArenaManager>();
+		var platformlist = managerscript.platformlist;
+		var platform = platformlist[index];
+		Instantiate(leafshatter, platform.transform.position, platform.transform.rotation);
+		Destroy(platform);
+	}
+
+	void DestroyPlatform(Collider2D col){
+
+		if(Network.isServer){
+
+		int index = 0;
+		var manager = GameObject.FindGameObjectWithTag("ArenaManager");
+		var managerscript = manager.GetComponent<ArenaManager>();
+		var platformlist = managerscript.platformlist;
+
+		for(int i = 0; i < platformlist.Count; i++){
+			
+			if(platformlist[i] == col.transform.gameObject){
+				index = i;
+			}
+			
+		 }
+			Destroy(col.gameObject);
+			Instantiate(leafshatter, col.transform.position, col.transform.rotation);
+			networkView.RPC("CrackPlatform", RPCMode.Others, index);
+		}
+
+	}
+
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
 
 
+	
+
+
 		//if (col.gameObject.CompareTag ("killplatform")) {
 		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground"){
+
+			if(col.transform.tag == "killplatform"){
+
+				DestroyPlatform(col);
+			
+			}
 
 			if(risetime <= 0){
 				Instantiate(groundshatter, transform.position, transform.rotation);
@@ -101,6 +146,8 @@ public class Earthquake : Power {
 				}
 			
 		  }
+
+
 		}
 	}
 

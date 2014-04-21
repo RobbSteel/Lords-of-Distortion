@@ -321,8 +321,6 @@ public class Controller2D : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		//This should have been done earlier. Power effects shouldn't matter
-		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
 		if (!powerInvulnerable && other.gameObject.tag == "Power")

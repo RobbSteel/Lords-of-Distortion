@@ -9,12 +9,12 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
-  - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
   - 198: {fileID: 19800000}
   - 199: {fileID: 19900000}
   - 82: {fileID: 8200000}
+  - 50: {fileID: 5000000}
   m_Layer: 9
   m_Name: SmokeBomb
   m_TagString: Power
@@ -35,7 +35,7 @@ Transform:
   m_Father: {fileID: 0}
 --- !u!50 &5000000
 Rigidbody2D:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
@@ -128,7 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e1400e413929b24289a67abf2db4aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 15
+  OFFLINE: 0
+  duration: 100
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1

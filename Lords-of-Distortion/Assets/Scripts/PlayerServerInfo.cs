@@ -25,6 +25,7 @@ public class PlayerServerInfo : MonoBehaviour {
 		players= new List<NetworkPlayer>();
 		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
 	}
+
 	public void LevelReset(){
 		foreach(var stats in playerStats){
 			stats.Value.LevelReset();
