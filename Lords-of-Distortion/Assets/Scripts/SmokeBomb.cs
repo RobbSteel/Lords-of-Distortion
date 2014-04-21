@@ -10,6 +10,7 @@ public class SmokeBomb : Power {
 	private string reducedVisionLayer;
 	private string playerLayer;
 	private string powerLayer;
+	private string otherPlayerLayer;
 	private string powerTag;
 	private string playerTag;
 	private string powerUpTag;
@@ -29,6 +30,7 @@ public class SmokeBomb : Power {
 		powerUpTag = "PowerUp";
 		playerLayer = "Player";
 		powerLayer = "PowersLayer";
+		otherPlayerLayer = "OtherPlayer";
 		reducedVisionLayer = "ReducedVision";
 		levelCamera = GameObject.Find("Main Camera").camera;
 		//adds component if it isnt there
@@ -46,12 +48,18 @@ public class SmokeBomb : Power {
 	
 	// Update is called once per frame
 	void Update () {
+		//Floating ();
+	}
 
+	void Floating(){
+		if( this.rigidbody2D.velocity.y >= 0 )
+		rigidbody2D.AddForce (Vector2.up);
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
-
-		targets.Add (player);
+		if (!targets.Contains (player)) {
+			targets.Add (player);
+		}
 		player.layer = LayerMask.NameToLayer(reducedVisionLayer);
 		this.gameObject.layer = LayerMask.NameToLayer (reducedVisionLayer);
 		visionReduced ();
@@ -72,24 +80,36 @@ public class SmokeBomb : Power {
 		levelCamera.SendMessage (cameraFadeOutFunctionName);
 		levelCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(powerLayer));
 		levelCamera.cullingMask &= ~(1 << LayerMask.NameToLayer(playerLayer));
+		levelCamera.cullingMask &= ~(1 << LayerMask.NameToLayer (otherPlayerLayer));
 	}
 
 	private void visionReEnabled(){
 		levelCamera.SendMessage (cameraFadeInFunctionName);
 		levelCamera.cullingMask |= 1 << LayerMask.NameToLayer(powerLayer);
-		levelCamera.cullingMask |= 1 << LayerMask.NameToLayer (playerLayer);
+		levelCamera.cullingMask |= 1 << LayerMask.NameToLayer(playerLayer);
+		levelCamera.cullingMask |= 1 << LayerMask.NameToLayer(otherPlayerLayer);
 	}
 
 	void OnTriggerEnter2D( Collider2D col ){
-		targets.Add (col.gameObject);
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
+			if( !targets.Contains( col.gameObject )){
+				targets.Add(col.gameObject);
+			}
 			col.gameObject.layer = LayerMask.NameToLayer(reducedVisionLayer);
 		}
 	}
 
+	void OnTriggerStay2D( Collider2D col ){
+		Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
+	}
+
+	void OnCollisionStay2D( Collision2D col ){
+		Debug.Log ("Collision POWER DETECTED WITHINSMOKE: " + col.gameObject.name);
+	}
+
 	void OnTriggerExit2D( Collider2D col ){
-		targets.Remove (col.gameObject);
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
+			targets.Remove (col.gameObject);
 			col.gameObject.layer = LayerMask.NameToLayer(powerLayer);
 		}
 	}
