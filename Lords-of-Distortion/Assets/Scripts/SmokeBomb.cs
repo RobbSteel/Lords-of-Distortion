@@ -19,7 +19,11 @@ public class SmokeBomb : Power {
 	private List<GameObject> targets;
 	private ParticleSystem smoke;
 
-
+	//needed for collision checking with trigger system to detect 2 objects that are static one needs to be moving
+	//in order to detect each other.
+	private bool switchMove;
+	private Vector3 original;
+	private Vector3 end;
 
 	void Awake(){
 		targets = new List<GameObject> ();
@@ -44,16 +48,25 @@ public class SmokeBomb : Power {
 	// Use this for initialization
 	void Start () {
 		Destroy(gameObject, duration);
+		original = this.transform.position;
+		end = this.transform.position + Vector3.left* 0.1f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//Floating ();
+		//needs to move a a very minium speed otherwise it wonts colide with traps
+		//that are static sense both are static one needs to be moving in order to cause a collision
+		this.transform.position = Vector3.Lerp( original , end ,Mathf.PingPong(Time.time , 1f));
 	}
 
-	void Floating(){
-		if( this.rigidbody2D.velocity.y >= 0 )
-		rigidbody2D.AddForce (Vector2.up);
+	void Move(){
+		if (switchMove) {
+			this.transform.position += Vector3.up;
+			switchMove = false;
+		} else {
+			this.transform.position -= Vector3.up;
+			switchMove = true;
+		}
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
@@ -94,23 +107,30 @@ public class SmokeBomb : Power {
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
 			if( !targets.Contains( col.gameObject )){
 				targets.Add(col.gameObject);
+				col.gameObject.layer = LayerMask.NameToLayer(reducedVisionLayer);
+				SetChildrensLayer( col.gameObject , reducedVisionLayer );
 			}
-			col.gameObject.layer = LayerMask.NameToLayer(reducedVisionLayer);
 		}
 	}
 
 	void OnTriggerStay2D( Collider2D col ){
-		Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
-	}
+		Debug.Log (col.name);
+		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
+			Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
 
-	void OnCollisionStay2D( Collision2D col ){
-		Debug.Log ("Collision POWER DETECTED WITHINSMOKE: " + col.gameObject.name);
+			if( !targets.Contains( col.gameObject )){
+				targets.Add(col.gameObject);
+				col.gameObject.layer = LayerMask.NameToLayer(reducedVisionLayer);
+				SetChildrensLayer( col.gameObject , reducedVisionLayer );
+			}
+		}
 	}
 
 	void OnTriggerExit2D( Collider2D col ){
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
 			targets.Remove (col.gameObject);
 			col.gameObject.layer = LayerMask.NameToLayer(powerLayer);
+			SetChildrensLayer( col.gameObject , powerLayer );
 		}
 	}
 
@@ -125,12 +145,21 @@ public class SmokeBomb : Power {
 			if( collided != null ){
 				if( collided.CompareTag( powerTag )){
 					collided.layer = LayerMask.NameToLayer(powerLayer);
+					SetChildrensLayer( collided , powerLayer );
 				}
 				if( collided.CompareTag( playerTag )){
 					collided.layer = LayerMask.NameToLayer(playerLayer);
 				}
 			}
 		}
+	}
+
+	public static void SetChildrensLayer(GameObject go, string layer) {
+		if (go == null) return;
+		foreach (Transform trans in go.GetComponentsInChildren<Transform>(true)) {
+			trans.gameObject.layer = LayerMask.NameToLayer(layer);
+		}
+		
 	}
 
 }
