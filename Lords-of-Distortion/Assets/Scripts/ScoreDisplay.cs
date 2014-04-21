@@ -57,12 +57,13 @@ public class ScoreDisplay : MonoBehaviour {
 
 		for(int i = 0; i < listed.Count; i++){
 
-			var score = infoscript.GetPlayerStats(listed[i]).roundScore;
+			var roundscore = infoscript.GetPlayerStats(listed[i]).roundScore;
+			var totalscore = infoscript.GetPlayerStats(listed[i]).totalScore;
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playercolor = infoscript.GetPlayerOptions(listed[i]).style;
 			print(playercolor);
 			var playernumber = i + 1;
-			ShowScoresLocally(score, playername, playernumber, playercolor);
+			ShowScoresLocally(roundscore, totalscore, playername, playernumber, playercolor);
 
 		}
 
@@ -80,7 +81,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//This happens for every game where victory isnt being declared
-	void RoundFinish(float score, string playername, int playernumber, GameObject playerpose){
+	void RoundFinish(float roundscore, float totalscore, string playername, int playernumber, GameObject playerpose){
 
 		print ("gettting local");
 		//var scorelabel = (GameObject)Instantiate(ScoreLabel, new Vector2(0,0), transform.rotation);
@@ -118,9 +119,9 @@ public class ScoreDisplay : MonoBehaviour {
 		var favortext = favorlabel.GetComponent<UILabel>();
 		//scoretext.text = score.ToString() + " points";
 		playertext.text = playername;
-		//killstext.text = "+" + kills;
+		killstext.text = "+" + roundscore;
 		//assiststext.text = "+" + assists;
-		favortext.text = "+" + score;
+		favortext.text = "+" + totalscore;
 		
 		
 	}
@@ -128,7 +129,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(float score, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
+	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
 
 		string color = "white";
 
@@ -151,7 +152,7 @@ public class ScoreDisplay : MonoBehaviour {
 			 //MatchFinish(score, playername, playernumber, playerpose);
 		  }else{
 
-			 RoundFinish(score,playername, playernumber, playerpose);
+			 RoundFinish(roundscore, totalscore, playername, playernumber, playerpose);
           }
 		}
 
