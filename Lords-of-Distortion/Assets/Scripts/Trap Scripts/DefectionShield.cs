@@ -14,15 +14,20 @@ public class DefectionShield : Power {
 	private Color shaderColor;
 	private GameObject target;
 	private Color currentColor;
-
-
+	//needed for collision checking with trigger system to detect 2 objects that are static one needs to be moving
+	//in order to detect each other.
+	private bool switchMove;
+	private Vector3 original;
+	private Vector3 end;
+	
 	// Use this for initialization
 	void Start () {
 		shaderColor = renderer.material.GetColor ("_TintColor");
 		currentColor = shaderColor;
 		insideExplosionRange = false;
 		timer = 0;
-
+		original = this.transform.position;
+		end = this.transform.position + Vector3.left* 0.1f;
 	}
 	
 	// Update is called once per frame
@@ -30,6 +35,16 @@ public class DefectionShield : Power {
 		DefectionShieldTimer();
 	}
 
+	void Move(){
+		if (switchMove) {
+			this.transform.position += Vector3.up;
+			switchMove = false;
+		} else {
+			this.transform.position -= Vector3.up;
+			switchMove = true;
+		}
+	}
+	
 	private void DefectionShieldTimer(){
 		timer += Time.deltaTime;
 		currentColor = Color.Lerp (shaderColor, Color.red, Time.time/defectionTimer);
