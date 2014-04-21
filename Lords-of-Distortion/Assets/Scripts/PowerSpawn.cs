@@ -43,7 +43,7 @@ public static class PowerTypeExtensions{
 		powersRequiringDirection.Add(PowerType.FIREBALL);
 		powersRequiringDirection.Add(PowerType.BOULDER);
 		powersRequiringDirection.Add(PowerType.GATE);
-		//powersRequiringDirection.Add(PowerType.GRAVITY);
+		powersRequiringDirection.Add(PowerType.GRAVITY);
 		
 		powersActive = new List<PowerType>();
 		powersActive.Add(PowerType.FIREBALL);
@@ -54,11 +54,11 @@ public static class PowerTypeExtensions{
         powersActive.Add(PowerType.PLAGUE);
 
 		powersPassive = new List<PowerType>();
-		//powersPassive.Add(PowerType.GRAVITY);
+		powersPassive.Add(PowerType.GRAVITY);
 		powersPassive.Add(PowerType.EARTH);
-		//powersPassive.Add(PowerType.SMOKE);
-		//powersPassive.Add(PowerType.FREEZE);
-		//powersPassive.Add(PowerType.GATE);
+		powersPassive.Add(PowerType.SMOKE);
+		powersPassive.Add(PowerType.FREEZE);
+		powersPassive.Add(PowerType.GATE);
 
 		psuedoPowers.Add(PowerType.MELEE);
 		psuedoPowers.Add(PowerType.SPIKES);
