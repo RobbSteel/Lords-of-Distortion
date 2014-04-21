@@ -6,17 +6,23 @@ public class DefectionShield : Power {
 
 	public bool insideExplosionRange;
 	public float timer;
-	public const float EXPLOSION_WAIT = 10f;
-	public float defectionTimer = EXPLOSION_WAIT;
+	public const float EXPLOSION_MAX_WAIT = 10f;
+	public float defectionTimer = EXPLOSION_MAX_WAIT;
 	public float defectionHitTimeReduction = 2f;
-	public float defectionAnimationLength;
+	public GameObject explosionPrefab;
+	public GameObject absorbPowerEffect;
+	private Color shaderColor;
 	private GameObject target;
+	private Color currentColor;
 
 
 	// Use this for initialization
 	void Start () {
+		shaderColor = renderer.material.GetColor ("_TintColor");
+		currentColor = shaderColor;
 		insideExplosionRange = false;
 		timer = 0;
+
 	}
 	
 	// Update is called once per frame
@@ -26,6 +32,8 @@ public class DefectionShield : Power {
 
 	private void DefectionShieldTimer(){
 		timer += Time.deltaTime;
+		currentColor = Color.Lerp (shaderColor, Color.red, Time.time/defectionTimer);
+		this.renderer.material.SetColor ("_TintColor", currentColor);
 		if (timer >= defectionTimer) {
 			Explode();
 		}
@@ -34,15 +42,17 @@ public class DefectionShield : Power {
 	//will take care of animation for bubble shield before it explodes
 	//and destroying it
 	public void Explode(){
-		Destroy (this.gameObject , defectionAnimationLength );
+		Destroy (this.gameObject);
+		GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
 	}
 
 	public void DefectionSheildHit(){
 		Debug.Log( "CurrentTime: " + timer + " TimeReduced: " + defectionHitTimeReduction );
-		timer += defectionHitTimeReduction;
+		defectionTimer -= defectionHitTimeReduction;
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller){
+		Debug.Log ("in");
 		insideExplosionRange = true;
 		target = player;
 		controller.powerInvulnerable = true;
@@ -55,6 +65,7 @@ public class DefectionShield : Power {
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
+		Debug.Log ("out");
 		insideExplosionRange = false;
 		target = null;
 		controller.powerInvulnerable = false;
@@ -63,8 +74,10 @@ public class DefectionShield : Power {
 
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.transform.tag == "Power"){
-			DefectionSheildHit();
 			Destroy( col.gameObject );
+			absorbPowerEffect.GetComponent<ParticleSystem>().startColor = renderer.material.GetColor ("_TintColor");
+			GameObject absorbEffect = Instantiate (absorbPowerEffect, col.transform.position, Quaternion.identity) as GameObject;
+			DefectionSheildHit();
 		} 
 	}
 
@@ -72,8 +85,9 @@ public class DefectionShield : Power {
 		if(col.transform.tag == "Power"){
 			//col.enabled = false;
 			Destroy( col.gameObject );
+			absorbPowerEffect.GetComponent<ParticleSystem>().startColor = renderer.material.GetColor ("_TintColor");
+			GameObject absorbEffect = Instantiate (absorbPowerEffect, col.transform.position, Quaternion.identity) as GameObject;
 			DefectionSheildHit();
-
 		} 
 	}
 
