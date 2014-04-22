@@ -57,8 +57,6 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void NotifyBeginTime(float time){
 		beginTime = time;
-        sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().LockMovement();
-		sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().Snare();
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
@@ -455,8 +453,7 @@ public class ArenaManager : MonoBehaviour {
 	void SpawnPowerLocally(PowerSpawn spawn, NetworkViewID optionalViewID){
 		StartCoroutine(YieldThenPower(spawn, optionalViewID));
 	}
-
-	bool playersFreed = false;
+	
 	bool trapsEnabled = false;
 
 	void Update () {
@@ -475,9 +472,6 @@ public class ArenaManager : MonoBehaviour {
 			//placementUI.Disable();
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
-			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
-			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
-			playersFreed = true;
 
 
 			placementUI.SwitchToLive(false);
