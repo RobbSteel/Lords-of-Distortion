@@ -6,7 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 2f; 
+	const float PLACEMENT_TIME = 5f; 
 	const float FIGHT_COUNT_DOWN_TIME = 2f;
 	const float POST_MATCH_TIME = 5f;
 	const float LAST_MAN_TIME = 10f;
@@ -45,6 +45,14 @@ public class ArenaManager : MonoBehaviour {
 	public bool lastmanvictory = false;
 
 	List<NetworkPlayer> livePlayers;
+
+	enum Phase{
+		PreGame,
+		InGame,
+		FinalPlayer
+	}
+	Phase currentPhase;
+
 
 	[RPC]
 	void NotifyBeginTime(float time){
@@ -358,7 +366,9 @@ public class ArenaManager : MonoBehaviour {
 
 			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
-			hudTools.DisplayText ("You may place initial traps");
+			currentPhase = Phase.PreGame;
+			hudTools.DisplayText ("Get Ready");
+
 		}
 		//TODO: have something that checks if all players have finished loading.
 	}
@@ -459,16 +469,26 @@ public class ArenaManager : MonoBehaviour {
 			showonce3 = true;
 		}
 
-		if(sentMyPowers == false && currentTime >= beginTime){
-            placementUI.DisableEditing();
-			placementUI.Disable();
+		if(currentPhase == Phase.PreGame && currentTime >= beginTime){
 
+           // placementUI.DisableEditing();
+			//placementUI.Disable();
+			currentPhase = Phase.InGame;
+			hudTools.DisplayText("GO!");
+			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
+			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
+			playersFreed = true;
+
+
+			placementUI.SwitchToLive(false);
+			placementUI.Enable();
+			trapsEnabled = true;
 			/*
 			 * Don't tween away powers
 			PlayMenuTween(true);
 			*/
 
-			//Synchronize proximity traps to server.
+			/*Synchronize proximity traps to server.
             foreach(PowerSpawn power in  placementUI.delayedTraps){
 				power.spawnTime = 0f; //no custom time so use 0
                 if(Network.isServer){
@@ -485,28 +505,18 @@ public class ArenaManager : MonoBehaviour {
 				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
 
 			sentMyPowers = true;
+			*/
 		}
 
-
-		//the rest of the code doesn't run until powers are finalized.
-		if(!powersSynchronized)
-			return;
-
-
-		if(!playersFreed){
-			hudTools.DisplayText("Get Ready");
-            sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().UnlockMovement();
-			sessionManager.psInfo.GetPlayerGameObject(Network.player).GetComponent<Controller2D>().FreeFromSnare();
-			playersFreed = true;
-		}
+		/*
 
 		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
 
-			/*
+
 			foreach(PowerSpawn spawn in placementUI.delayedTraps){
 				placementUI.PowerArmed(spawn);
 			}
-			*/
+
 
 			placementUI.ColorizeAll();
 
@@ -514,11 +524,11 @@ public class ArenaManager : MonoBehaviour {
 			hudTools.DisplayText ("Activation of traps enabled");
 
 			//also bring back power placement
-			placementUI.SwitchToLive(false);
-			placementUI.Enable();
+
 			placementUI.ShowTriggersInitial();
-			trapsEnabled = true;
+
 		}
+		*/
 
 		if(lastman && !finishgame && !showonce){
 
