@@ -6,8 +6,7 @@ using Priority_Queue;
 public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
-	const float PLACEMENT_TIME = 5f; 
-	const float FIGHT_COUNT_DOWN_TIME = 2f;
+	const float PRE_MATCH_TIME = 5f; 
 	const float POST_MATCH_TIME = 5f;
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
@@ -58,7 +57,7 @@ public class ArenaManager : MonoBehaviour {
 	void NotifyBeginTime(float time){
 		beginTime = time;
 		//set seed of fountain random generator to time
-		fountainManager.SetFirstSpawnTime(beginTime + FIGHT_COUNT_DOWN_TIME + 15f);
+		fountainManager.SetFirstSpawnTime(beginTime + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
 	}
@@ -362,7 +361,7 @@ public class ArenaManager : MonoBehaviour {
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
 			livePlayerCount = livePlayers.Count;
 
-			NotifyBeginTime(TimeManager.instance.time + PLACEMENT_TIME);
+			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			currentPhase = Phase.PreGame;
 			hudTools.DisplayText ("Get Ready");
@@ -393,7 +392,7 @@ public class ArenaManager : MonoBehaviour {
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
         float currentTime = TimeManager.instance.time;
-		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime  + FIGHT_COUNT_DOWN_TIME)
+		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime)
         {
 			spawn.owner = Network.player;
 			//unitiliazed
@@ -477,53 +476,7 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
 			trapsEnabled = true;
-
-			/*
-			 * Don't tween away powers
-			PlayMenuTween(true);
-			*/
-
-			/*Synchronize proximity traps to server.
-            foreach(PowerSpawn power in  placementUI.delayedTraps){
-				power.spawnTime = 0f; //no custom time so use 0
-                if(Network.isServer){
-					AddPowerSpawnLocally(false, power); 
-				}
-				else {
-					networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server, false,
-					                 (int)power.type, power.position, power.spawnTime, power.GetLocalID());
-				}
-			}
-			if(Network.isServer)
-				SentAllMyPowers();
-			else
-				networkView.RPC ("SentAllMyPowers", RPCMode.Server);
-
-			sentMyPowers = true;
-			*/
 		}
-
-		/*
-
-		if(!trapsEnabled && currentTime >= beginTime + FIGHT_COUNT_DOWN_TIME){
-
-
-			foreach(PowerSpawn spawn in placementUI.delayedTraps){
-				placementUI.PowerArmed(spawn);
-			}
-
-
-			placementUI.ColorizeAll();
-
-			placementUI.delayedTraps.Clear();
-			hudTools.DisplayText ("Activation of traps enabled");
-
-			//also bring back power placement
-
-			placementUI.ShowTriggersInitial();
-
-		}
-		*/
 
 		if(lastman && !finishgame && !showonce){
 
@@ -541,17 +494,6 @@ public class ArenaManager : MonoBehaviour {
 
 			hudTools.DisplayText ("Game Finish!");
 			showonce2 = true;
-		}
-		//send traps placed in live mode
-		if(placementUI.delayedTraps.Count > 0 && placementUI.live){
-			PowerSpawn spawn = placementUI.delayedTraps.Dequeue();
-			if(Network.isServer){
-				AddPowerSpawnLocally(true, spawn); 
-			}
-			else {
-				networkView.RPC ("AddPowerSpawnLocally", RPCMode.Server,true,
-				                 (int)spawn.type, spawn.position, spawn.spawnTime);
-			}
 		}
 
 		//Spawn one timed trap per frame, locally.
@@ -572,8 +514,7 @@ public class ArenaManager : MonoBehaviour {
 
 	private void SetUpTimer(){
 		timer = GameObject.Find("timer");
-		timer.GetComponent<countdown>().powerPlaceTimer = PLACEMENT_TIME;
-		timer.GetComponent<countdown>().fightCountdown = FIGHT_COUNT_DOWN_TIME;
+		timer.GetComponent<countdown>().preGameTimer = PRE_MATCH_TIME;
 		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
 		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
 	}

@@ -6,8 +6,7 @@ public class countdown : MonoBehaviour {
 	public UILabel myLabel;
 	
 	public float myTimer;
-	public float powerPlaceTimer;
-	public float fightCountdown;
+	public float preGameTimer;
 	public float postmatchtimer;
 	public float lastmantimer;
 	public float matchTime = 30f;
@@ -28,7 +27,7 @@ public class countdown : MonoBehaviour {
 	}
 
 	void Start(){
-		myTimer = powerPlaceTimer;
+		myTimer = preGameTimer;
 		CurrentTimer = 0;
 		defaultTimerPosition = this.transform.position;
 		Vector3 screenPos = GameObject.Find("Camera").gameObject.transform.position;
@@ -46,37 +45,24 @@ public class countdown : MonoBehaviour {
 	void Update()
 	{
 		TimerUI();
-		PlacementTimer();
-		FightCountDownTimer();
+		PreGameTimer();
 		MatchStartTimer();
 		KillLastPlayer();
 		MatchEndTimer();
 		
 	}
 	
-	void PlacementTimer(){
+	void PreGameTimer(){
 		if( CurrentTimer == 0 ){
 			myTimer -= Time.deltaTime;
 			
 			if( myTimer <= 0 ){
-				resetTimer( fightCountdown + 1 );
-			}
-		}
-	}
-	
-	void FightCountDownTimer(){
-		if( CurrentTimer == 1 ){
-			myTimer -= Time.deltaTime;
-			
-			if( myTimer <= 0 ){
-
-				resetTimer( 1 );
-
+				resetTimer(1 );
 				this.transform.localPosition = defaultTimerPosition;
 			}
 		}
 	}
-	
+
 	void MatchStartTimer(){
 		if( CurrentTimer == 2 ){
 			myTimer += Time.deltaTime;
