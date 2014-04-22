@@ -129,8 +129,8 @@ public class PlacementUI : MonoBehaviour {
 		/* Randomize some powers */
 		PowerType powerNum1;
 		PowerType powerNum2;
-		powerNum1 = RandomActivePower();
-		powerNum2 = RandomPassivePower();
+		powerNum1 = PowerTypeExtensions.RandomActivePower();
+		powerNum2 = PowerTypeExtensions.RandomPassivePower();
 		inventoryPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
 		inventoryPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
 
@@ -143,6 +143,11 @@ public class PlacementUI : MonoBehaviour {
 			i++;
 		}
 		TriggerGrid.Reposition();
+	}
+
+	//Instead of letting system to it randomly, pick 2 powers to start with
+	public void Initialize(PowerPrefabs powerPrefabs, PowerType slotA, PowerType slotB){
+		
 	}
 
 	//Finds first empty powerboard and insert new power.
@@ -630,7 +635,7 @@ public class PlacementUI : MonoBehaviour {
 			//avoid giving same power
 			PowerType newPower = PowerType.UNDEFINED;
 			do {
-				newPower =  RandomPower();
+				newPower =  PowerTypeExtensions.RandomPower();
 			} while (inventoryPowers.ContainsKey(newPower));
 
 			InventoryPower freePower = new InventoryPower(newPower, false);
@@ -664,24 +669,5 @@ public class PlacementUI : MonoBehaviour {
 		}
     }
 
-    public PowerType RandomActivePower()
-    {
-		int thisOne = Random.Range(0, PowerTypeExtensions.powersActive.Count);
-		return PowerTypeExtensions.powersActive[thisOne];
-    }
-
-    public PowerType RandomPassivePower()
-    {
-		int thisOne = Random.Range(0, PowerTypeExtensions.powersPassive.Count);
-		return PowerTypeExtensions.powersPassive[thisOne];
-    }
-
-    public PowerType RandomPower()
-    {
-        int thisOne = Random.Range(0, 2);
-        if (thisOne == 0)
-            return RandomActivePower();
-        else return RandomPassivePower();
-    }
 
 }

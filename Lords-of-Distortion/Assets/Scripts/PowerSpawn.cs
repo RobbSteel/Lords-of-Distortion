@@ -90,6 +90,26 @@ public static class PowerTypeExtensions{
 		return powersWithNetworking.Contains(type);
 	}
 
+	public static PowerType RandomActivePower()
+	{
+		int thisOne = UnityEngine.Random.Range(0, powersActive.Count);
+		return powersActive[thisOne];
+	}
+	
+	public static PowerType RandomPassivePower()
+	{
+		int thisOne = UnityEngine.Random.Range(0, powersPassive.Count);
+		return powersPassive[thisOne];
+	}
+	
+	public static PowerType RandomPower()
+	{
+		int thisOne = UnityEngine.Random.Range(0, 2);
+		if (thisOne == 0)
+			return RandomActivePower();
+		else return RandomPassivePower();
+	}
+
 }
 
 
