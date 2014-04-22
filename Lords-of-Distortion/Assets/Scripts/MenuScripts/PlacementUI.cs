@@ -122,7 +122,7 @@ public class PlacementUI : MonoBehaviour {
 	//Pass in dependencies
 	//TODO: check if initialize was called.
 	public void Initialize(PowerPrefabs powerPrefabs){
-		this.powerPrefabs = powerPrefabs;
+;
 
 		/*Turn available powers into empty boards depending on count. Also
 		 puts in initial slots.*/
@@ -131,8 +131,16 @@ public class PlacementUI : MonoBehaviour {
 		PowerType powerNum2;
 		powerNum1 = PowerTypeExtensions.RandomActivePower();
 		powerNum2 = PowerTypeExtensions.RandomPassivePower();
-		inventoryPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
-		inventoryPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
+
+		Initialize(powerPrefabs, powerNum1, powerNum2);
+	}
+
+	//Instead of letting system to it randomly, pick 2 powers to start with
+	public void Initialize(PowerPrefabs powerPrefabs, PowerType slotA, PowerType slotB){
+
+		this.powerPrefabs = powerPrefabs;
+		inventoryPowers.Add(slotA, new InventoryPower(slotA, false));
+		inventoryPowers.Add(slotB, new InventoryPower(slotB, false));
 
 		int i = 1;
 		foreach(var inventoryPower in inventoryPowers){
@@ -143,11 +151,6 @@ public class PlacementUI : MonoBehaviour {
 			i++;
 		}
 		TriggerGrid.Reposition();
-	}
-
-	//Instead of letting system to it randomly, pick 2 powers to start with
-	public void Initialize(PowerPrefabs powerPrefabs, PowerType slotA, PowerType slotB){
-		
 	}
 
 	//Finds first empty powerboard and insert new power.

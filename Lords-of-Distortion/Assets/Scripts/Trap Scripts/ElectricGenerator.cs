@@ -59,6 +59,7 @@ public class ElectricGenerator : Power {
 		ElectricShot shot = ElectricityShot.GetComponent<ElectricShot>();
 		shot.spawnInfo = new PowerSpawn(this.spawnInfo);
 		spawnInfo.direction = direction;
+		shot.direction = direction;
 	}
 
 	void plusformation(){
