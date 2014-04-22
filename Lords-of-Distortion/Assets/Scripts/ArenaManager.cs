@@ -274,7 +274,6 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void FindPlatforms(){
-
 		var arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
 		for(int i = 0; i < arenaplatforms.Length; i++){
 			platformlist.Add(arenaplatforms[i]);
@@ -301,7 +300,8 @@ public class ArenaManager : MonoBehaviour {
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
 		placementUI = placementRoot.GetComponent<PlacementUI>();
 		placementUI.Initialize(powerPrefabs);
-
+		placementUI.Disable();
+		
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
 
@@ -483,6 +483,7 @@ public class ArenaManager : MonoBehaviour {
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
 			trapsEnabled = true;
+
 			/*
 			 * Don't tween away powers
 			PlayMenuTween(true);
