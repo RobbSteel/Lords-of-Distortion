@@ -70,11 +70,11 @@ public class ScoreDisplay : MonoBehaviour {
 
 			var roundscore = infoscript.GetPlayerStats(listed[i]).roundScore;
 			var totalscore = infoscript.GetPlayerStats(listed[i]).totalScore;
-			var lastdeath = infoscript.GetPlayerStats(listed[i]).lastdeath.PowerType;
+			//var lastdeath = infoscript.GetPlayerStats(listed[i]).lastdeath.PowerType;
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playercolor = infoscript.GetPlayerOptions(listed[i]).style;
 			var playernumber = i + 1;
-			ShowScoresLocally(roundscore, totalscore, playername, playernumber, playercolor, lastdeath);
+			ShowScoresLocally(roundscore, totalscore, playername, playernumber, playercolor);
 
 		}
 
@@ -83,7 +83,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 			for(int z = 0; z < listed.Count; z++){
 				sessionManager.matchfinish = false;
-				infoscript.GetPlayerStats(listed[z]).roundScore = 0;
+				infoscript.GetPlayerStats(listed[z]).totalScore = 0;
 			}
 
 		}
@@ -91,7 +91,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 	}
 
-	void DisplayDeath(PowerType lastdeath, int playernumber){
+	void DisplayDeath(int playernumber){
 
 		GameObject label;
 		/*
@@ -109,9 +109,9 @@ public class ScoreDisplay : MonoBehaviour {
 		}
 
 	//This happens for every game where victory isnt being declared
-	void RoundFinish(float roundscore, float totalscore, string playername, int playernumber, GameObject playerpose, PowerType lastdeath){
+	void RoundFinish(float roundscore, float totalscore, string playername, int playernumber, GameObject playerpose){
 
-		DisplayDeath(lastdeath, playernumber);
+		DisplayDeath(playernumber);
 
 		//Instantiate Label Objects
 		var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
@@ -135,7 +135,7 @@ public class ScoreDisplay : MonoBehaviour {
 		//Locate them to the proper locations
 		playerlabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
 		playerpose.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
-		killlabel.transform.localPosition = new Vector2(0, 350+(-150*playernumber));
+		killlabel.transform.localPosition = new Vector2(200, 350+(-150*playernumber));
 		favorlabel.transform.localPosition = new Vector2(500, 350+(-150*playernumber));
 		
 		//Find the Text component
@@ -146,7 +146,7 @@ public class ScoreDisplay : MonoBehaviour {
 		//Add score text to the box
 		playertext.text = playername;
 		killstext.text = "+" + roundscore;
-		favortext.text = "+" + totalscore;
+		favortext.text =  "" + totalscore;
 		
 		
 	}
@@ -167,7 +167,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor, PowerType lastdeath){
+	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
 
 
 
@@ -175,7 +175,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 		var playerpose = DetermineColor(color);
-		RoundFinish(roundscore, totalscore, playername, playernumber, playerpose, lastdeath);
+		RoundFinish(roundscore, totalscore, playername, playernumber, playerpose);
           
 		}
 
@@ -216,9 +216,9 @@ public class ScoreDisplay : MonoBehaviour {
 			playericon.transform.localScale = new Vector3(200,200,1);
 			winlabel.transform.localScale = new Vector3(1,1,1);
 
-			playerlabel.transform.localPosition = new Vector2(0, 350+(-500));
-			playericon.transform.localPosition = new Vector2(0, 350+(-300));
-			winlabel.transform.localPosition = new Vector2(0, 350+(-100));
+			playerlabel.transform.localPosition = new Vector2(-300, 350+(-500));
+			playericon.transform.localPosition = new Vector2(-300, 350+(-300));
+			winlabel.transform.localPosition = new Vector2(-300, 350+(-100));
 
 			var playertext = playerlabel.GetComponent<UILabel>();
 			var wintext = winlabel.GetComponent<UILabel>();
@@ -275,6 +275,9 @@ public class ScoreDisplay : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		timeleft -= Time.deltaTime;
+
+
 		if(timeleft < 7 && timeleft > 6 && !finish){
 
 			var destroylist = GameObject.FindGameObjectsWithTag("ScoreLabels");
@@ -291,12 +294,9 @@ public class ScoreDisplay : MonoBehaviour {
 
 		if(Network.isServer){
 
-		   if(timeleft > 0){
+		   if(timeleft < 0 && !sentLevelLoadRPC){
 
-			   timeleft -= Time.deltaTime;
-				 
-		    } else if(!sentLevelLoadRPC){
-			
+			   
 			   sessionManager.LoadNextLevel(false);
 			   sentLevelLoadRPC = true;
 		    }
