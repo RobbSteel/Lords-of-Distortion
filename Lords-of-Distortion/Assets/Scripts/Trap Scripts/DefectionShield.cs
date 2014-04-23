@@ -16,6 +16,7 @@ public class DefectionShield : Power {
 	private Color currentColor;
 	//needed for collision checking with trigger system to detect 2 objects that are static one needs to be moving
 	//in order to detect each other.
+    private Controller2D playerController;
 	private bool switchMove;
 	private Vector3 original;
 	private Vector3 end;
@@ -61,8 +62,14 @@ public class DefectionShield : Power {
 	//will take care of animation for bubble shield before it explodes
 	//and destroying it
 	public void Explode(){
-		Destroy (this.gameObject);
+		//Destroy (this.gameObject);
 		GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+        //
+        explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+        Vector3 charMarkLoc = transform.position;
+        charMarkLoc.z = 1.4f;
+        var charmark = Instantiate(Resources.Load("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+        Destroy(gameObject);
 	}
 
 	public void DefectionSheildHit(){
@@ -73,6 +80,8 @@ public class DefectionShield : Power {
 		insideExplosionRange = true;
 		target = player;
 		controller.powerInvulnerable = true;
+        if (playerController == null)
+            playerController = controller;
 	}
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller){
@@ -106,7 +115,7 @@ public class DefectionShield : Power {
 
 	void OnDestroy(){
 		if (insideExplosionRange) {
-			Destroy (target);
+            playerController.Die(DeathType.FIRE);
 		} 
 	}
 }
