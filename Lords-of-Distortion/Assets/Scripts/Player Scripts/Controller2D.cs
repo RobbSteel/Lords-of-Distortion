@@ -297,7 +297,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead)
 			return;
 		
-		if (!powerInvulnerable && other.gameObject.tag == "Power")
+		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);

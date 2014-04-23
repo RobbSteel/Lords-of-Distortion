@@ -12,7 +12,6 @@ GameObject:
   - 199: {fileID: 19900000}
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
-  - 50: {fileID: 5000000}
   m_Layer: 9
   m_Name: defectionShield
   m_TagString: Power
@@ -31,21 +30,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!50 &5000000
-Rigidbody2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 1
-  m_FixedAngle: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
 --- !u!58 &5800000
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -71,10 +55,10 @@ MonoBehaviour:
   OFFLINE: 0
   insideExplosionRange: 0
   timer: 0
-  defectionTimer: 10
   defectionHitTimeReduction: 2
   explosionPrefab: {fileID: 100006, guid: b53204f18cef1f14eab20fc61aa3ebbb, type: 2}
   absorbPowerEffect: {fileID: 100000, guid: 3b5463f929cb4034a8c9e0ed197289f0, type: 2}
+  shieldshaderColor: {r: 0, g: 1, b: .0482759476, a: 0}
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -229,7 +213,7 @@ ParticleSystem:
         rgba: 4294967295
       maxColor:
         serializedVersion: 2
-        rgba: 1346957311
+        rgba: 3204448255
       minMaxState: 0
     startSize:
       scalar: 4

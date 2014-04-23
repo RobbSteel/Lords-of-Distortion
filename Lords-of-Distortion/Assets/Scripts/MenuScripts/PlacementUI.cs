@@ -79,7 +79,7 @@ public class PlacementUI : MonoBehaviour {
 	//http://www.youtube.com/watch?v=eUFY8Zw0Bag
 	public bool live = false;
 	bool deadScreen = false;
-
+	bool autoRefill = false;
 
 	PlacementState state = PlacementState.Default;
 
@@ -180,10 +180,9 @@ public class PlacementUI : MonoBehaviour {
 		boardsByType.Remove(type);
 		inventoryPowers.Remove(type);
 		//Switch to random power.
-		if(deadScreen){
+		if(autoRefill){
 			Resupply();
-
-			GridEnabled(false);
+			//GridEnabled(false);
 		}
 	}
 
@@ -202,16 +201,10 @@ public class PlacementUI : MonoBehaviour {
 		live = true;
 
 		if(infinitePowers){
-			///Destroy untriggered powers
-			for(int i = allTraps.Count -1; i >= 0; i--){
-				RemoveFromInventory(allTraps[i].type);
-				DestroyUIPower(allTraps[i]);
-			}
-			
 
 			//Only limit placement if the player is dead and has infinite powers.
-			deadScreen = true;
-
+			//deadScreen = true;
+			autoRefill = true;
 			//resupply twice
 			Resupply();
 			Resupply();
@@ -306,6 +299,7 @@ public class PlacementUI : MonoBehaviour {
 			}
             // Uncomment the timer to set restrictions on how often players place powers while dead.
 			else if(timer <= 0.0f){
+
 
 				SpawnPowerVisual(activeInfo);
 				FollowMouse();
