@@ -7,7 +7,7 @@ public class PlayerStats {
 
 	public float roundScore = 0f;
 	public float totalScore = 0f;
-
+	public PlayerEvent lastdeath;
 	public float timeOfDeath = float.PositiveInfinity;
 
 	//can only store 3 events
@@ -34,6 +34,7 @@ public class PlayerStats {
 
 	//returns move that killed player usually
 	public PlayerEvent LastEvent(){
+		lastdeath = playerEvents.ReadNewest();
 		return playerEvents.ReadNewest();
 	}
 
