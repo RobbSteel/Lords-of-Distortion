@@ -14,7 +14,10 @@ public class JoinServer : MonoBehaviour {
 		infoscript = information.GetComponent<PlayerServerInfo>();
 	}
 
-	void OnPress(){
+	void OnPress(bool isDown){
+		//do once only
+		if(isDown)
+			return;
 
 		print (hostList[servernumber].comment);
 		if(hostList[servernumber].comment == "InProgress"){

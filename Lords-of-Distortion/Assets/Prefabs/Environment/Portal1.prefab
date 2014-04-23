@@ -9,14 +9,12 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
-  - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
   - 198: {fileID: 19800000}
   - 199: {fileID: 19900000}
-  - 82: {fileID: 8200000}
-  - 50: {fileID: 5000000}
+  - 58: {fileID: 5800000}
   m_Layer: 9
-  m_Name: SmokeBomb
+  m_Name: Portal1
   m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,25 +27,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.76652861, y: -.679226279, z: 0}
+  m_LocalPosition: {x: -1.54350257, y: 1.60586631, z: -.00750017166}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!50 &5000000
-Rigidbody2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 1
-  m_FixedAngle: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
 --- !u!58 &5800000
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -57,66 +40,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Radius: 1.75
+  m_Radius: 1
   m_Center: {x: 0, y: 0}
---- !u!82 &8200000
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 9229dadea0b5b6f479c809462797c0d1, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: .200000003
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,29 +50,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e1400e413929b24289a67abf2db4aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: f526e6f741b8e4e498f211f4d2bb2b7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OFFLINE: 0
-  duration: 10
+  portalTo: {fileID: 0}
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  lengthInSec: 1
+  lengthInSec: 5
   startDelay: 0
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1
+      scalar: 8
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -180,7 +105,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 0
+      scalar: -.150000006
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -304,10 +229,10 @@ ParticleSystem:
         rgba: 4294967295
       maxColor:
         serializedVersion: 2
-        rgba: 4293092982
+        rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: 1.5
+      scalar: .100000001
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -374,25 +299,25 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 1000
+    maxNumParticles: 1500
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 0
-    radius: 1.69000006
+    type: 7
+    radius: .730000019
     angle: 25
     length: 5
     boxX: 1
     boxY: 1
     boxZ: 1
-    placementMode: 0
+    placementMode: 1
     m_Mesh: {fileID: 0}
     randomDirection: 0
   EmissionModule:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 13
+      scalar: 156.100006
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -471,7 +396,7 @@ ParticleSystem:
   RotationModule:
     enabled: 1
     curve:
-      scalar: 3.49065852
+      scalar: .785398185
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -509,13 +434,13 @@ ParticleSystem:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 4278190080
+          rgba: 3305111552
         key1:
           serializedVersion: 2
-          rgba: 4282365682
+          rgba: 4294901980
         key2:
           serializedVersion: 2
-          rgba: 2561814
+          rgba: 0
         key3:
           serializedVersion: 2
           rgba: 0
@@ -531,9 +456,9 @@ ParticleSystem:
         key7:
           serializedVersion: 2
           rgba: 0
-        ctime0: 964
-        ctime1: 31033
-        ctime2: 65150
+        ctime0: 0
+        ctime1: 65342
+        ctime2: 0
         ctime3: 0
         ctime4: 0
         ctime5: 0
@@ -547,7 +472,7 @@ ParticleSystem:
         atime5: 0
         atime6: 0
         atime7: 0
-        m_NumColorKeys: 3
+        m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
         key0:
@@ -1063,10 +988,10 @@ ParticleSystem:
       maxGradient:
         key0:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4280418048
         key1:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 4278255390
         key2:
           serializedVersion: 2
           rgba: 0
@@ -1190,11 +1115,11 @@ ParticleSystemRenderer:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 4172996bb0317ce40ae7f268732664d7, type: 2}
+  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1203,15 +1128,15 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortingLayerID: 0
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
-  m_VelocityScale: 0
-  m_LengthScale: 2
+  m_VelocityScale: 2
+  m_LengthScale: 1
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_SortMode: 0
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -1237,7 +1162,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_SortingLayerID: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: .477941155, g: .172199383, b: .172199383, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
