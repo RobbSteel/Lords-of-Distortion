@@ -34,6 +34,7 @@ public class PlacementUI : MonoBehaviour {
 	public Sprite electricSprite;
 	public Sprite earthSprite;
 	public Sprite blackholeSprite;
+	public Sprite deflectionSprite;
 
 	private List<UIButton> buttons = new List<UIButton>();
 	private Dictionary<PowerType, PowerBoard> boardsByType = new Dictionary<PowerType, PowerBoard>();
@@ -105,6 +106,7 @@ public class PlacementUI : MonoBehaviour {
 		icons.Add (PowerType.PLAGUE, plagueSprite);
 		icons.Add (PowerType.EARTH, earthSprite);
 		icons.Add (PowerType.HOLE, blackholeSprite);
+		icons.Add (PowerType.DEFLECTIVE, deflectionSprite);
 		/*Hard code some powers for now*/
 		/*
          * draftedPowers.Add(PowerType.SMOKE, new InventoryPower(PowerType.SMOKE, 1, "Chalk Dust"));

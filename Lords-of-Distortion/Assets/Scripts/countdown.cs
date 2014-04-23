@@ -57,14 +57,14 @@ public class countdown : MonoBehaviour {
 			myTimer -= Time.deltaTime;
 			
 			if( myTimer <= 0 ){
-				resetTimer(1 );
+				resetTimer( 1 );
 				this.transform.localPosition = defaultTimerPosition;
 			}
 		}
 	}
 
 	void MatchStartTimer(){
-		if( CurrentTimer == 2 ){
+		if( CurrentTimer == 1 ){
 			myTimer += Time.deltaTime;
 
 			if(arenaManager.finishgame == true){
@@ -83,7 +83,7 @@ public class countdown : MonoBehaviour {
 
 	void KillLastPlayer(){
 
-		if(CurrentTimer == 3){
+		if(CurrentTimer == 2){
 
 			myTimer -= Time.deltaTime;
 			 
@@ -109,7 +109,7 @@ public class countdown : MonoBehaviour {
 	//Counts down 5 seconds after final player death and then loads the next level.
 	void MatchEndTimer(){
 
-		if(CurrentTimer == 4){
+		if(CurrentTimer == 3){
 			myTimer -= Time.deltaTime;
 
 			if(myTimer <= .2){
