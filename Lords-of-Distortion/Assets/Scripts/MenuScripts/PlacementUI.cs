@@ -139,17 +139,22 @@ public class PlacementUI : MonoBehaviour {
 	public void Initialize(PowerPrefabs powerPrefabs, PowerType slotA, PowerType slotB){
 
 		this.powerPrefabs = powerPrefabs;
-		inventoryPowers.Add(slotA, new InventoryPower(slotA, false));
-		inventoryPowers.Add(slotB, new InventoryPower(slotB, false));
+		if(slotA != PowerType.UNDEFINED)
+			inventoryPowers.Add(slotA, new InventoryPower(slotA, false));
+		if(slotB != PowerType.UNDEFINED)
+			inventoryPowers.Add(slotB, new InventoryPower(slotB, false));
 
-		int i = 1;
-		foreach(var inventoryPower in inventoryPowers){
+		//Create the empty grid of powers
+		for(int i = 0; i < 2; i++){
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			entry.GetComponent<PowerBoard>().index = i;
 			fixedBoards.Add( entry.GetComponent<PowerBoard>());
-			AddToInventory(inventoryPower.Value);
-			i++;
 		}
+
+		foreach(var inventoryPower in inventoryPowers){
+				AddToInventory(inventoryPower.Value);
+		}
+
 		TriggerGrid.Reposition();
 	}
 

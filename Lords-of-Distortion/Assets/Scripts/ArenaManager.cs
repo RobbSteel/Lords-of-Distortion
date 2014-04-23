@@ -296,8 +296,6 @@ public class ArenaManager : MonoBehaviour {
 		GameObject placementRoot = Instantiate(placementRootPrefab, 
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
 		placementUI = placementRoot.GetComponent<PlacementUI>();
-		placementUI.Initialize(powerPrefabs);
-		placementUI.Disable();
 		
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
@@ -360,7 +358,13 @@ public class ArenaManager : MonoBehaviour {
 			//spawn players immediately. gets
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
 			livePlayerCount = livePlayers.Count;
-
+			if(livePlayerCount < 3){
+				placementUI.Initialize(powerPrefabs);
+			}
+			else {
+				placementUI.Initialize(powerPrefabs, PowerTypeExtensions.RandomActivePower(), PowerType.UNDEFINED);
+			}
+			placementUI.Disable();
 			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
 			currentPhase = Phase.PreGame;
