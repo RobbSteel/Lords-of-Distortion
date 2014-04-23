@@ -98,7 +98,7 @@ public class ElectricGenerator : Power {
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		controller.Die();
+		controller.Die(DeathType.FIRE);
 	}
 	
 	public override void PowerActionStay (GameObject player, Controller2D controller)
