@@ -44,7 +44,6 @@ public static class PowerTypeExtensions{
 		powersRequiringDirection.Add(PowerType.FIREBALL);
 		powersRequiringDirection.Add(PowerType.BOULDER);
 		powersRequiringDirection.Add(PowerType.GATE);
-		powersRequiringDirection.Add(PowerType.GRAVITY);
 		
 		powersActive = new List<PowerType>();
 		powersActive.Add(PowerType.FIREBALL);
