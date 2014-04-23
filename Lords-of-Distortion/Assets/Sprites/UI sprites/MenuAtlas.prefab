@@ -9,11 +9,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  - 148: {fileID: 14800000}
   m_Layer: 0
-  m_Name: SessionManager
-  m_TagString: SessionManager
-  m_Icon: {fileID: -215833656, guid: 0000000000000000d000000000000000, type: 0}
+  m_Name: MenuAtlas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -24,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.51081419, y: -1.89219213, z: -.212330759}
+  m_LocalPosition: {x: .826506734, y: -.296591401, z: -.00805664062}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -36,29 +35,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cbd8be40fae2ac40a1ceab8e7b35f08, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  psInfo: {fileID: 0}
-  finishedLoading: 0
-  matchfinish: 0
-  roundsplayed: 0
-  timemanager: {fileID: 0}
-  characterPrefab: {fileID: 400002, guid: c22bc8f079b01cd43839e156d60e88f2, type: 2}
-  timeManagerPrefab: {fileID: 100000, guid: cb5c59ecdb830b543b4a385ee95d0c80, type: 2}
---- !u!148 &14800000
-NetworkView:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_StateSynchronization: 0
-  m_Observed: {fileID: 11400000}
-  m_ViewID:
-    m_ID: 0
-    m_Type: 0
+  material: {fileID: 2100000, guid: ce67ce28d0ee7bb4a87547aa030f9861, type: 2}
+  mSprites: []
+  mPixelSize: 1
+  mReplacement: {fileID: 0}
+  mCoordinates: 0
+  sprites: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -40,7 +40,7 @@ public class Hook : MonoBehaviour {
 		hookscript = go.GetComponent<HookHit>();
 		hookscript.networkController = networkController;
 		hookscript.shooter = gameObject;
-		hooktimer = 3;
+		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -63,6 +63,10 @@ public class Hook : MonoBehaviour {
 
 	void Update(){
 
+        if(hooktimer > 0)
+        {
+            hooktimer -= Time.deltaTime;
+        }
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(going == true){
 			if(hookscript.hooked == true){
@@ -74,6 +78,7 @@ public class Hook : MonoBehaviour {
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
+                hooktimer = 1.5f;
 				//apparently clients cant rpc each other directly, so let server tell the character
 				//on the hooked players client when to start pulling the hooked player.
 				if(Network.isServer && !hookpull){
@@ -101,7 +106,7 @@ public class Hook : MonoBehaviour {
 		//Get input from user and set cooldown to avoid repeated use.
         //previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0){
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0 && hooktimer <= 0){
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
@@ -125,10 +130,9 @@ public class Hook : MonoBehaviour {
 				ShootHookLocal(mouseClick);
 			}
 
-		} else {
+		} /*else {
 			hooktimer -= Time.deltaTime;
-		}
-
+		}*/
 
 		if(going == true){
 			hookgoing(speed);
