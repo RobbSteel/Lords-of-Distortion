@@ -9,6 +9,7 @@ public class HookHit : MonoBehaviour {
 	public GameObject shooter;
 	public float timer = 1;
 	public bool destroyed = false;
+    public bool playSound = false;
 	public GameObject hookedPlayer;
 	public LineRenderer lr;
 	public Material rope;
@@ -44,7 +45,7 @@ public class HookHit : MonoBehaviour {
 		if(timer > 0){
 			timer -= Time.deltaTime;
 		}else{
-		
+            playSound = false;
 			destroyed = true;
 		}
 
@@ -83,7 +84,11 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			hooked = true;
-			AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
+            if (!playSound)
+            {
+                AudioSource.PlayClipAtPoint(hookWallHitSfx, transform.position);
+                playSound = true;
+            }
 		}
 
 		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
