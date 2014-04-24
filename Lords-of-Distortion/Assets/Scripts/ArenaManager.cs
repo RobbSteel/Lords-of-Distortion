@@ -54,12 +54,20 @@ public class ArenaManager : MonoBehaviour {
 
 
 	[RPC]
-	void NotifyBeginTime(float time){
+	void NotifyBeginTime(float time, int playerCount){
 		beginTime = time;
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
+
+		if(playerCount < 3){
+			placementUI.Initialize(powerPrefabs);
+		}
+		else {
+			placementUI.Initialize(powerPrefabs, PowerTypeExtensions.RandomActivePower(), PowerType.UNDEFINED);
+		}
+		placementUI.Disable();
 	}
 	
 	
@@ -358,15 +366,9 @@ public class ArenaManager : MonoBehaviour {
 			//spawn players immediately. gets
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
 			livePlayerCount = livePlayers.Count;
-			if(livePlayerCount < 3){
-				placementUI.Initialize(powerPrefabs);
-			}
-			else {
-				placementUI.Initialize(powerPrefabs, PowerTypeExtensions.RandomActivePower(), PowerType.UNDEFINED);
-			}
-			placementUI.Disable();
-			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME);
-			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
+
+			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME, livePlayerCount.Value);
+			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime, livePlayerCount.Value);
 			currentPhase = Phase.PreGame;
 			hudTools.DisplayText ("Get Ready");
 

@@ -147,7 +147,7 @@ public class PlacementUI : MonoBehaviour {
 			inventoryPowers.Add(slotB, new InventoryPower(slotB, false));
 
 		//Create the empty grid of powers
-		for(int i = 0; i < 2; i++){
+		for(int i = 1; i < 3; i++){
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			entry.GetComponent<PowerBoard>().index = i;
 			fixedBoards.Add( entry.GetComponent<PowerBoard>());
@@ -195,7 +195,7 @@ public class PlacementUI : MonoBehaviour {
 		//Switch to random power.
 		if(autoRefill){
 			Resupply();
-			//GridEnabled(false);
+			GridEnabled(false);
 		}
 	}
 
@@ -216,7 +216,7 @@ public class PlacementUI : MonoBehaviour {
 		if(infinitePowers){
 
 			//Only limit placement if the player is dead and has infinite powers.
-			//deadScreen = true;
+			deadScreen = true;
 			autoRefill = true;
 			//resupply twice
 			Resupply();

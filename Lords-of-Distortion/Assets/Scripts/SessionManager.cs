@@ -106,7 +106,7 @@ public class SessionManager : MonoBehaviour {
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
-		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager = TimeManager.instance;
 		timemanager.SyncTimes();
 		++playerCounter;
 
