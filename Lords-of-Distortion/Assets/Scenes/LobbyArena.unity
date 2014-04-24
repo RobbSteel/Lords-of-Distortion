@@ -179,7 +179,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 17dc5fd616fb4c44d8695b3829c1086c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: .300000012
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -662,7 +662,7 @@ ParticleSystem:
         rgba: 3026629873
       minMaxState: 0
     startSize:
-      scalar: .0700000003
+      scalar: .100000001
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -677,7 +677,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: 0
+          value: .599999964
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -709,7 +709,7 @@ ParticleSystem:
       minMaxState: 3
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 20000
+    maxNumParticles: 1000
   ShapeModule:
     serializedVersion: 2
     enabled: 1
@@ -727,7 +727,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 200000
+      scalar: 1000
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1988,6 +1988,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
       propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
+      propertyPath: EmissionModule.rate.scalar
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
+      propertyPath: InitialModule.startSize.minCurve.m_Curve.Array.data[0].value
+      value: .599999964
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 2acd42b00fc96414c9a862a9dea3080a, type: 2}
+      propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.data[0].value
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
