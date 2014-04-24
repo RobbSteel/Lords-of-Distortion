@@ -21,6 +21,18 @@ public class ScoreDisplay : MonoBehaviour {
 	public NetworkPlayer winningplayer;
 
 	//Different Death Icons
+	public GameObject electricicon;
+	public GameObject plagueicon;
+	public GameObject hookicon;
+	public GameObject stickyicon;
+	public GameObject iceicon;
+	public GameObject fireicon;
+	public GameObject spikeicon;
+	public GameObject bouldericon;
+	public GameObject blackholeicon;
+	public GameObject earthicon;
+	public GameObject alive;
+
 
 
 	PlayerServerInfo infoscript;
@@ -70,11 +82,11 @@ public class ScoreDisplay : MonoBehaviour {
 
 			var roundscore = infoscript.GetPlayerStats(listed[i]).roundScore;
 			var totalscore = infoscript.GetPlayerStats(listed[i]).totalScore;
-			//var lastdeath = infoscript.GetPlayerStats(listed[i]).lastdeath.PowerType;
+			var lastdeath = infoscript.GetPlayerStats(listed[i]).LastEvent().PowerType;
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playercolor = infoscript.GetPlayerOptions(listed[i]).style;
 			var playernumber = i + 1;
-			ShowScoresLocally(roundscore, totalscore, playername, playernumber, playercolor);
+			ShowScoresLocally(roundscore, totalscore, playername, playernumber, playercolor, lastdeath);
 
 		}
 
@@ -83,7 +95,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 			for(int z = 0; z < listed.Count; z++){
 				sessionManager.matchfinish = false;
-				infoscript.GetPlayerStats(listed[z]).totalScore = 0;
+				infoscript.GetPlayerStats(listed[z]).roundScore = 0;
 			}
 
 		}
@@ -91,27 +103,68 @@ public class ScoreDisplay : MonoBehaviour {
 
 	}
 
-	void DisplayDeath(int playernumber){
+	//Visually display death for players
+	void DisplayDeath(PowerType lastdeath, int playernumber){
 
-		GameObject label;
-		/*
-		if(PowerType.ELECTRIC == lastdeath){
 
-			label = (GameObject)Instantiate(electricicon, new Vector2(0,0), transform.rotation);
+		if(lastdeath != null){
+			GameObject label;
+			if(PowerType.ELECTRIC == lastdeath){
+				label = (GameObject)Instantiate(electricicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.BOULDER == lastdeath){
+				label = (GameObject)Instantiate(bouldericon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.EARTH == lastdeath){
+				label = (GameObject)Instantiate(earthicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.EXPLOSIVE == lastdeath){
+				label = (GameObject)Instantiate(stickyicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.FIREBALL == lastdeath){
+				label = (GameObject)Instantiate(fireicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.FREEZE == lastdeath){
+				label = (GameObject)Instantiate(iceicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.POWERHOOK == lastdeath){
+				label = (GameObject)Instantiate(hookicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.HOLE == lastdeath){
+				label = (GameObject)Instantiate(blackholeicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.PLAGUE == lastdeath){
+				label = (GameObject)Instantiate(plagueicon, new Vector2(0,0), transform.rotation);
+			}
+
+			else if(PowerType.SPIKES == lastdeath){
+				label = (GameObject)Instantiate(spikeicon, new Vector2(0,0), transform.rotation);
+			
+			} else {
+
+				label = (GameObject)Instantiate(alive, new Vector2(0,0), transform.rotation);
+			}
+
 			label.transform.parent = GameObject.Find("UI Root").transform;
-			label.transform.localScale = new Vector3(1,1,1);
-			label.transform.localPosition = new Vector2(0, 350+(-150*playernumber));
+			label.transform.localScale = new Vector3(80,80,1);
+			label.transform.localPosition = new Vector2(800, 1800+(-800*playernumber));
 		}
-
-*/
 	
 
-		}
+	}
 
 	//This happens for every game where victory isnt being declared
-	void RoundFinish(float roundscore, float totalscore, string playername, int playernumber, GameObject playerpose){
+	void RoundFinish(float roundscore, float totalscore, string playername, int playernumber, GameObject playerpose, PowerType lastdeath){
 
-		DisplayDeath(playernumber);
+		DisplayDeath(lastdeath, playernumber);
 
 		//Instantiate Label Objects
 		var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
@@ -135,8 +188,8 @@ public class ScoreDisplay : MonoBehaviour {
 		//Locate them to the proper locations
 		playerlabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
 		playerpose.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
-		killlabel.transform.localPosition = new Vector2(200, 350+(-150*playernumber));
-		favorlabel.transform.localPosition = new Vector2(500, 350+(-150*playernumber));
+		killlabel.transform.localPosition = new Vector2(350, 350+(-150*playernumber));
+		favorlabel.transform.localPosition = new Vector2(520, 350+(-150*playernumber));
 		
 		//Find the Text component
 		var playertext = playerlabel.GetComponent<UILabel>();
@@ -146,7 +199,7 @@ public class ScoreDisplay : MonoBehaviour {
 		//Add score text to the box
 		playertext.text = playername;
 		killstext.text = "+" + roundscore;
-		favortext.text =  "" + totalscore;
+		favortext.text = "+" + totalscore;
 		
 		
 	}
@@ -167,7 +220,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor){
+	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor, PowerType lastdeath){
 
 
 
@@ -175,7 +228,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 		var playerpose = DetermineColor(color);
-		RoundFinish(roundscore, totalscore, playername, playernumber, playerpose);
+		RoundFinish(roundscore, totalscore, playername, playernumber, playerpose, lastdeath);
           
 		}
 
@@ -216,9 +269,9 @@ public class ScoreDisplay : MonoBehaviour {
 			playericon.transform.localScale = new Vector3(200,200,1);
 			winlabel.transform.localScale = new Vector3(1,1,1);
 
-			playerlabel.transform.localPosition = new Vector2(-300, 350+(-500));
-			playericon.transform.localPosition = new Vector2(-300, 350+(-300));
-			winlabel.transform.localPosition = new Vector2(-300, 350+(-100));
+			playerlabel.transform.localPosition = new Vector2(0, 350+(-500));
+			playericon.transform.localPosition = new Vector2(0, 350+(-300));
+			winlabel.transform.localPosition = new Vector2(0, 350+(-100));
 
 			var playertext = playerlabel.GetComponent<UILabel>();
 			var wintext = winlabel.GetComponent<UILabel>();
@@ -275,9 +328,6 @@ public class ScoreDisplay : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		timeleft -= Time.deltaTime;
-
-
 		if(timeleft < 7 && timeleft > 6 && !finish){
 
 			var destroylist = GameObject.FindGameObjectsWithTag("ScoreLabels");
@@ -294,9 +344,12 @@ public class ScoreDisplay : MonoBehaviour {
 
 		if(Network.isServer){
 
-		   if(timeleft < 0 && !sentLevelLoadRPC){
+		   if(timeleft > 0){
 
-			   
+			   timeleft -= Time.deltaTime;
+				 
+		    } else if(!sentLevelLoadRPC){
+			
 			   sessionManager.LoadNextLevel(false);
 			   sentLevelLoadRPC = true;
 		    }
