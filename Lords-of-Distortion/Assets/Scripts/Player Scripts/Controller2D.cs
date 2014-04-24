@@ -297,7 +297,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead)
 			return;
 		
-		if (!powerInvulnerable && other.gameObject.tag == "Power")
+		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);
@@ -364,27 +364,37 @@ public class Controller2D : MonoBehaviour {
 			if(onDeath != null)
 				onDeath(gameObject);
 
+            string deathBy;
 			//Remove MashIcon from PlayerStatus Script
 			status.DestroyMashIcon();
 			//play death animation.
 			switch(deathType){
-			case DeathType.FIRE:
-				anim.SetTrigger("FireDeath");
-				break;
-			case DeathType.PLAGUE:
-				anim.SetTrigger("PlagueDeath");
-				break;
-			default:
-				anim.SetTrigger("Die");
-				break;
+			    case DeathType.FIRE:
+				    anim.SetTrigger("FireDeath");
+                    deathBy = "FireDeath";
+				    break;
+			    case DeathType.PLAGUE:
+				    anim.SetTrigger("PlagueDeath");
+                     deathBy = "PlagueDeath";
+				    break;
+			    default:
+				    anim.SetTrigger("Die");
+                    deathBy = "Die";
+				    break;
 			}
-
+            networkView.RPC("SendAnimation", RPCMode.Others, deathBy);
             GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
             GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			//We don't need the next line any more
 		}
 
 	}
+
+    [RPC]
+    void SendAnimation(string myDeath)
+    {
+        anim.SetTrigger(myDeath);
+    }
 
 	public void DieSimple(){
 		if(!networkController.isOwner && !dead){

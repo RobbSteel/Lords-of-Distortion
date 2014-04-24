@@ -28,7 +28,7 @@ public class ElectricShot : Power {
 		}
 
 
-		controller.Die();
+        controller.Die(DeathType.FIRE);
 	}
 	
 	public override void PowerActionStay (GameObject player, Controller2D controller)
