@@ -140,6 +140,7 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		//bring up the dead player placement screen.
+		placementUI.disabledPowers.Add(PowerType.GATE);
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}

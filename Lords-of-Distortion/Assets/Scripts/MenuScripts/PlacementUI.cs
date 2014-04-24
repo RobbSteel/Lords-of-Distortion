@@ -53,7 +53,7 @@ public class PlacementUI : MonoBehaviour {
 	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
 	public Dictionary<int, PowerSpawn> spawnByID = new Dictionary<int, PowerSpawn>();
-
+	public List<PowerType> disabledPowers = new List<PowerType>();
 
 	PowerPrefabs powerPrefabs;
 
@@ -646,7 +646,7 @@ public class PlacementUI : MonoBehaviour {
 			PowerType newPower = PowerType.UNDEFINED;
 			do {
 				newPower =  PowerTypeExtensions.RandomPower();
-			} while (inventoryPowers.ContainsKey(newPower));
+			} while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
 
 			InventoryPower freePower = new InventoryPower(newPower, false);
 
