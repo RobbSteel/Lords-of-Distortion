@@ -20,6 +20,7 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float pushpull = 0;
 	public float hittimer = 0;
+	public bool hookDisable;
     private float currentDrag;
 	private Animator animator;
 
@@ -106,14 +107,14 @@ public class Hook : MonoBehaviour {
 		//Get input from user and set cooldown to avoid repeated use.
         //previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0 && hooktimer <= 0){
-				Vector3 mouseClick = Input.mousePosition;
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0 && hooktimer <= 0 && !hookDisable){
+                
+                animator.SetFloat("Speed", 0);
+                Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
 				AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
-
-
-
+                
 				if(!OFFLINE){
 					if(GameObject.Find("CollectData") != null){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);

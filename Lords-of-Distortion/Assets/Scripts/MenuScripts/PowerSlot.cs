@@ -18,6 +18,7 @@ public class PowerSlot : MonoBehaviour {
 	
 	public InventoryPower associatedPower;
 
+	static Color Green = new Color(0f, 230f, 0f);
 	void Start(){
 		button = GetComponent<UIButton>();
 	}
@@ -50,7 +51,7 @@ public class PowerSlot : MonoBehaviour {
 	public void EnableActivation(){
 		activationEnabled = true;
 		activationMode = true;
-		keyLabel.color = Color.green;
+		keyLabel.color = Green;
 		button.isEnabled = true;
 		UIEventListener.Get(this.gameObject).onPress += RequestSpawn;
 	}

@@ -54,12 +54,20 @@ public class ArenaManager : MonoBehaviour {
 
 
 	[RPC]
-	void NotifyBeginTime(float time){
+	void NotifyBeginTime(float time, int playerCount){
 		beginTime = time;
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
+
+		if(playerCount < 3){
+			placementUI.Initialize(powerPrefabs);
+		}
+		else {
+			placementUI.Initialize(powerPrefabs, PowerTypeExtensions.RandomActivePower(), PowerType.UNDEFINED);
+		}
+		placementUI.Disable();
 	}
 	
 	
@@ -132,6 +140,7 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		//bring up the dead player placement screen.
+		placementUI.disabledPowers.Add(PowerType.GATE);
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}
@@ -296,8 +305,6 @@ public class ArenaManager : MonoBehaviour {
 		GameObject placementRoot = Instantiate(placementRootPrefab, 
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
 		placementUI = placementRoot.GetComponent<PlacementUI>();
-		placementUI.Initialize(powerPrefabs);
-		placementUI.Disable();
 		
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
@@ -361,8 +368,8 @@ public class ArenaManager : MonoBehaviour {
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
 			livePlayerCount = livePlayers.Count;
 
-			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME);
-			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
+			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME, livePlayerCount.Value);
+			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime, livePlayerCount.Value);
 			currentPhase = Phase.PreGame;
 			hudTools.DisplayText ("Get Ready");
 

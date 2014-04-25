@@ -9,6 +9,7 @@ public class HookHit : MonoBehaviour {
 	public GameObject shooter;
 	public float timer = 1;
 	public bool destroyed = false;
+    public bool playSound = false;
 	public GameObject hookedPlayer;
 	public LineRenderer lr;
 	public Material rope;
@@ -16,14 +17,13 @@ public class HookHit : MonoBehaviour {
 	public Controller2D affectedPlayerC2D;
 	public Vector3 targetPosition;
 	public Animator animator;
-
 	public AudioClip hookHitSfx;
 	public AudioClip hookWallHitSfx;
 
 	public bool OFFLINE;
 	bool poweredUp = false;
-	void Awake(){
 
+	void Awake(){
 		destroyed = false;
 		timer = timer / 5;
 		lr = gameObject.AddComponent<LineRenderer>();
@@ -44,9 +44,13 @@ public class HookHit : MonoBehaviour {
 		if(timer > 0){
 			timer -= Time.deltaTime;
 		}else{
-		
 			destroyed = true;
 		}
+
+        if(shooter.GetComponent<Hook>().going == true)
+        {
+            playSound = false;
+        }
 
 		lr.SetPosition(0, transform.position);
 		if(shooter == null)
@@ -83,7 +87,11 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			hooked = true;
-			AudioSource.PlayClipAtPoint( hookWallHitSfx , transform.position );
+            if (!playSound && !shooter.GetComponent<Hook>().movingback)
+            {
+                AudioSource.PlayClipAtPoint(hookWallHitSfx, transform.position);
+                playSound = true;
+            }
 		}
 
 		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){

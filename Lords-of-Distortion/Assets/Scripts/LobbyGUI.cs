@@ -74,7 +74,7 @@ public class LobbyGUI : MonoBehaviour {
             
             playBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
             playBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-            playBtn.transform.localPosition = new Vector2(-563.4375f, 305.625f);
+            playBtn.transform.localPosition = new Vector2(-563.4375f, -321.5379f);
 
             UIEventListener.Get(playBtn).onClick += PlayButton;
         }
@@ -83,7 +83,7 @@ public class LobbyGUI : MonoBehaviour {
         
         disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
         disconBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        disconBtn.transform.localPosition = new Vector2(-563.4375f, 230.9996f);
+        disconBtn.transform.localPosition = new Vector2(-437.4885f, -321.5379f);
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
 
