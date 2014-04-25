@@ -1950,10 +1950,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 484872046}
   - 212: {fileID: 484872045}
-  - 114: {fileID: 484872044}
   - 82: {fileID: 484872043}
   - 61: {fileID: 484872042}
   - 50: {fileID: 484872041}
+  - 114: {fileID: 484872044}
   m_Layer: 9
   m_Name: TrapFountain
   m_TagString: PowerUp
@@ -2051,13 +2051,12 @@ AudioSource:
 --- !u!114 &484872044
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: faf0a6925b063ff45b473e33d36300ba,
-    type: 2}
-  m_PrefabInternal: {fileID: 804775898}
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 484872040}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 758b1662ea1c4ea46b331f0f6ce1ac51, type: 3}
+  m_Script: {fileID: 11500000, guid: 8400c3737499e4e40a6a6d73cb34e9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fountainParticles: {fileID: 100000, guid: b5f1c0ce1d64860469f85e27cae0e2c1, type: 2}
@@ -2564,7 +2563,8 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11400000, guid: faf0a6925b063ff45b473e33d36300ba, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: faf0a6925b063ff45b473e33d36300ba, type: 2}
   m_RootGameObject: {fileID: 484872040}
   m_IsPrefabParent: 0
