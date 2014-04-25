@@ -36,7 +36,7 @@ public class Controller2D : MonoBehaviour {
 	bool stoppedJump;
 	public bool inAir = true;
 	public bool powerInvulnerable;
-	public delegate void DieAction(GameObject gO);
+	public delegate void DieAction(GameObject gO, DeathType deathType);
 	public static event DieAction onDeath; 
 
 	public float invulntime = 0;
@@ -372,37 +372,37 @@ public class Controller2D : MonoBehaviour {
 
 			//Here we call whatever events are subscribed to us.
 			if(GameObject.Find("LobbyGUI") == null){
-			status.DestroyMashIcon();
-			if(onDeath != null)
-				onDeath(gameObject);
-			}
-            string deathBy;
 			//Remove MashIcon from PlayerStatus Script
+			status.DestroyMashIcon();
+
+			}
+
+			if(onDeath != null)
+				onDeath(gameObject, deathType);
 
 			//play death animation.
-			switch(deathType){
-			    case DeathType.FIRE:
-				    anim.SetTrigger("FireDeath");
-                    deathBy = "FireDeath";
-				    break;
-			    case DeathType.PLAGUE:
-				    anim.SetTrigger("PlagueDeath");
-                     deathBy = "PlagueDeath";
-				    break;
-			    default:
-				    anim.SetTrigger("Die");
-                    deathBy = "Die";
-				    break;
-			}
-            networkView.RPC("SendAnimation", RPCMode.Others, deathBy);
+			DeathAnimation(deathType);
            
 			if(GameObject.Find("LobbyGUI") == null){
-			GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
-            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
+				GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
+	            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			}
 			//We don't need the next line any more
 		}
+	}
 
+	void DeathAnimation(DeathType deathType){
+		switch(deathType){
+		case DeathType.FIRE:
+			anim.SetTrigger("FireDeath");
+			break;
+		case DeathType.PLAGUE:
+			anim.SetTrigger("PlagueDeath");
+			break;
+		default:
+			anim.SetTrigger("Die");;
+			break;
+		}
 	}
 
     [RPC]
@@ -411,10 +411,10 @@ public class Controller2D : MonoBehaviour {
         anim.SetTrigger(myDeath);
     }
 
-	public void DieSimple(){
+	public void DieSimple(DeathType deathType){
 		if(!networkController.isOwner && !dead){
 			dead = true;
-			anim.SetTrigger("Die");
+			DeathAnimation(deathType);
 		}
 	}
 
@@ -436,8 +436,8 @@ public class Controller2D : MonoBehaviour {
 	public void DestroyPlayer()
 	{
 		if(GameObject.Find("LobbyGUI") == null){
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
-		Destroy (gameObject);
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
+			Destroy (gameObject);
 		} else {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;

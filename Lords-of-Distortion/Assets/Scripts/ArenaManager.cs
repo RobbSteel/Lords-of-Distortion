@@ -104,8 +104,9 @@ public class ArenaManager : MonoBehaviour {
 		} 
 	}
 
+
 	//Tells additional players to destroy clone.
-	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath){
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
 		if(Network.isServer){
 			//Store the time of death on server
 			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
@@ -113,11 +114,11 @@ public class ArenaManager : MonoBehaviour {
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
-					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime);
+					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime, deathTypeInteger);
 				}
 			}
 			//also destroy player on server
-			DestroyPlayerClone(deadPlayerID, adjustedTime);
+			DestroyPlayerClone(deadPlayerID, adjustedTime, deathTypeInteger);
 			//Explicitly pass our network player id
 			ServerDeathHandler(deadPlayerID);
 		}
@@ -125,32 +126,32 @@ public class ArenaManager : MonoBehaviour {
 
 	//Called only on the server. 
 	[RPC]
-	void NotifyServerOfDeath(NetworkMessageInfo info){
+	void NotifyServerOfDeath(int deathTypeInteger, NetworkMessageInfo info){
 		//Converts networked message to local function call.
-		NotifyOthersOfDeath(info.sender, (float)info.timestamp);
+		NotifyOthersOfDeath(info.sender, (float)info.timestamp, deathTypeInteger);
 	}
 
 
 	//Called on clients not controlling the player who just died.
 	[RPC]
-	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath){
+	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
 		print ("he dead");
 		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
-		deadPlayer.GetComponent<Controller2D>().DieSimple();
+		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
 	}
 
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer){
-
+	void LostPlayer(GameObject deadPlayer, DeathType deathType){
+		int deathTypeInteger = (int)deathType;
 		if(Network.isServer){
 			//pass network.time because it's going to be adjusted to synched time anyway
-			NotifyOthersOfDeath(Network.player, (float)Network.time);
+			NotifyOthersOfDeath(Network.player, (float)Network.time, deathTypeInteger);
 		}
 
 		else {
 			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
-			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server);
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger);
 		}
 
 		//bring up the dead player placement screen.
