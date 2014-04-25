@@ -525,14 +525,7 @@ public class LobbyManager : MonoBehaviour {
 		this.lastmanvictory = true;
 		hudTools.DisplayText("Last Player has Survived!");
 	}
-	
-	private void SetUpTimer(){
-		timer = GameObject.Find("timer");
-		timer.GetComponent<countdown>().preGameTimer = PRE_MATCH_TIME;
-		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
-		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
-	}
-	
+
 	
 	
 	public float getBeginTime()
