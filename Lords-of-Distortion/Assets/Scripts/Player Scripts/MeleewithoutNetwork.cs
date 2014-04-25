@@ -28,6 +28,7 @@ public class MeleewithoutNetwork : MonoBehaviour {
 	public float coolDownTimer = 0.5f;
 	public float damageDealt = 15f;
 	public bool meleeing = false;
+	public bool meleeDisable;
 	
 	void Awake()
 	{
@@ -46,7 +47,7 @@ public class MeleewithoutNetwork : MonoBehaviour {
 		if (meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
 			// If the fire button is pressed...
 			//print("maggot");
-			if (Input.GetButtonDown ("Melee") && !controller.stunned) {
+			if (Input.GetButtonDown ("Melee") && !controller.stunned && !meleeDisable) {
 				startMelee ();
 			}
 		}

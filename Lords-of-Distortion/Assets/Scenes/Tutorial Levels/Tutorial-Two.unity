@@ -4275,6 +4275,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextPrefab: {fileID: 11400004, guid: 23be67396af99e54eab302b862007366, type: 2}
+  heartParticles: {fileID: 0}
+  PointTextPrefab: {fileID: 0}
+  scoreFont: {fileID: 0}
 --- !u!114 &758807774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4366,6 +4369,7 @@ MonoBehaviour:
   coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
+  meleeDisable: 0
 --- !u!58 &846833888
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4399,6 +4403,7 @@ MonoBehaviour:
   UIoffsetX: -30
   UIoffsetY: 55
   recoverRate: 0
+  insidePlague: 0
   timegrav: 0
   timesmoke: 0
   timehook: 0
@@ -4447,6 +4452,7 @@ MonoBehaviour:
   chainspawner: 1
   pushpull: 0
   hittimer: 0
+  hookDisable: 1
 --- !u!148 &846833892
 NetworkView:
   m_ObjectHideFlags: 0
@@ -4475,7 +4481,6 @@ MonoBehaviour:
   DEBUG: 1
   instanceManager: {fileID: 0}
   isOwner: 1
-  DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   interpolationPercentage: 0
 --- !u!114 &846833894
 MonoBehaviour:
@@ -4509,6 +4514,8 @@ MonoBehaviour:
   hasbomb: 0
   locked: 0
   inAir: 1
+  powerInvulnerable: 0
+  DeathSpirit: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
   meleeSfx: {fileID: 8300000, guid: 9c07f3bf223c7ef45ace65a11559a4f2, type: 3}
   meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
@@ -6170,7 +6177,9 @@ Prefab:
       propertyPath: m_ViewID.m_Type
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11400008, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
+    - {fileID: 11400012, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
   m_RootGameObject: {fileID: 1679458142}
   m_IsPrefabParent: 0
@@ -9400,6 +9409,10 @@ Prefab:
       propertyPath: m_ViewID.m_Type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400008, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+      propertyPath: hookDisable
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
   m_RootGameObject: {fileID: 846833886}
@@ -9416,10 +9429,8 @@ GameObject:
   - 212: {fileID: 1679458154}
   - 50: {fileID: 1679458153}
   - 95: {fileID: 1679458152}
-  - 114: {fileID: 1679458151}
   - 114: {fileID: 1679458150}
   - 148: {fileID: 1679458149}
-  - 114: {fileID: 1679458148}
   - 61: {fileID: 1679458147}
   - 114: {fileID: 1679458146}
   - 58: {fileID: 1679458145}
@@ -9465,6 +9476,7 @@ MonoBehaviour:
   coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
+  meleeDisable: 0
 --- !u!58 &1679458145
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -9498,6 +9510,7 @@ MonoBehaviour:
   UIoffsetX: -30
   UIoffsetY: 55
   recoverRate: 0
+  insidePlague: 0
   timegrav: 0
   timesmoke: 0
   timehook: 0
@@ -9521,31 +9534,6 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: .365999997, y: .860057533}
   m_Center: {x: -.00244474411, y: .134455681}
---- !u!114 &1679458148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400008, guid: 3af8a9146ceb8c146bde5f157dfc077d,
-    type: 2}
-  m_PrefabInternal: {fileID: 1135532336}
-  m_GameObject: {fileID: 1679458142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
-  mousePos: {x: 0, y: 0, z: 0}
-  hookscript: {fileID: 0}
-  hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
-  OFFLINE: 1
-  hooktimer: 0
-  chainspawner: 1
-  pushpull: 0
-  hittimer: 0
 --- !u!148 &1679458149
 NetworkView:
   m_ObjectHideFlags: 0
@@ -9574,46 +9562,7 @@ MonoBehaviour:
   DEBUG: 1
   instanceManager: {fileID: 0}
   isOwner: 0
-  DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   interpolationPercentage: 0
---- !u!114 &1679458151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400012, guid: 3af8a9146ceb8c146bde5f157dfc077d,
-    type: 2}
-  m_PrefabInternal: {fileID: 1135532336}
-  m_GameObject: {fileID: 1679458142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9522eec88882fb46ab1e0d27f0ef610, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  facingRight: 0
-  jumpRequested: 0
-  DEBUG: 0
-  maxSpeed: 5
-  anim: {fileID: 0}
-  grounded: 0
-  groundCheck: {fileID: 1459650265}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  jumpForce: 650
-  stunned: 0
-  meleeStunned: 0
-  snared: 0
-  hooked: 0
-  deathOnHit: 0
-  canJump: 1
-  hasbomb: 0
-  locked: 1
-  inAir: 1
-  hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
-  meleeSfx: {fileID: 8300000, guid: 9c07f3bf223c7ef45ace65a11559a4f2, type: 3}
-  meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
-  deathSfx: {fileID: 0}
-  jumpSfx: {fileID: 8300000, guid: 189659795ee8c5c4db76f81b31ed0c56, type: 3}
-  knockedBack: 0
 --- !u!95 &1679458152
 Animator:
   serializedVersion: 2
