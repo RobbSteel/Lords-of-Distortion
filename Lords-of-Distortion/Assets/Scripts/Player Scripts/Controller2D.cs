@@ -18,7 +18,7 @@ public class Controller2D : MonoBehaviour {
 	public float maxSpeed = 10f;
 	public Animator anim;
 
-	private bool dead = false;
+	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
