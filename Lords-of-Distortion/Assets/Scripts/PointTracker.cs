@@ -80,9 +80,6 @@ public class PointTracker : MonoBehaviour{
 				}
 			}
 		}
-
-		//var managername = gameObject.name;
-		//networkView.RPC ("SynchronizePhases", RPCMode.Others, lastman, finishgame, managername);
 	}
 
 
@@ -119,15 +116,5 @@ public class PointTracker : MonoBehaviour{
 	void GivePoints(float points, NetworkPlayer player){
 		networkView.RPC("SynchPoints", RPCMode.Others, points, player);
 		SynchPoints(points, player);
-	}
-
-
-	//Makes sure that all players are transitioning phases together, such as Lastman standing or game finished
-	[RPC]
-	void SynchronizePhases(bool lastplayer, bool gamefinal, string managename){
-		var tempmanager = GameObject.Find(managename);
-		var tempscript = tempmanager.GetComponent<ArenaManager>();
-		tempscript.finishgame = gamefinal;
-		tempscript.lastman = lastplayer;
 	}
 }
