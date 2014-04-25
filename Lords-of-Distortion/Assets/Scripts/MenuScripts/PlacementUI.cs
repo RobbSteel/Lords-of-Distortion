@@ -53,7 +53,7 @@ public class PlacementUI : MonoBehaviour {
 	public Queue<PowerSpawn> delayedTraps = new Queue<PowerSpawn>(); //These are deleted when info is sent to server
 	public List<PowerSpawn> activatedTraps = new List<PowerSpawn>(); //might not need this
 	public Dictionary<int, PowerSpawn> spawnByID = new Dictionary<int, PowerSpawn>();
-
+	public List<PowerType> disabledPowers = new List<PowerType>();
 
 	PowerPrefabs powerPrefabs;
 
@@ -124,26 +124,39 @@ public class PlacementUI : MonoBehaviour {
 	//Pass in dependencies
 	//TODO: check if initialize was called.
 	public void Initialize(PowerPrefabs powerPrefabs){
-		this.powerPrefabs = powerPrefabs;
+;
 
 		/*Turn available powers into empty boards depending on count. Also
 		 puts in initial slots.*/
 		/* Randomize some powers */
 		PowerType powerNum1;
 		PowerType powerNum2;
-		powerNum1 = RandomActivePower();
-		powerNum2 = RandomPassivePower();
-		inventoryPowers.Add(powerNum1, new InventoryPower(powerNum1, false));
-		inventoryPowers.Add(powerNum2, new InventoryPower(powerNum2, false));
+		powerNum1 = PowerTypeExtensions.RandomActivePower();
+		powerNum2 = PowerTypeExtensions.RandomPassivePower();
 
-		int i = 1;
-		foreach(var inventoryPower in inventoryPowers){
+		Initialize(powerPrefabs, powerNum1, powerNum2);
+	}
+
+	//Instead of letting system to it randomly, pick 2 powers to start with
+	public void Initialize(PowerPrefabs powerPrefabs, PowerType slotA, PowerType slotB){
+
+		this.powerPrefabs = powerPrefabs;
+		if(slotA != PowerType.UNDEFINED)
+			inventoryPowers.Add(slotA, new InventoryPower(slotA, false));
+		if(slotB != PowerType.UNDEFINED)
+			inventoryPowers.Add(slotB, new InventoryPower(slotB, false));
+
+		//Create the empty grid of powers
+		for(int i = 1; i < 3; i++){
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			entry.GetComponent<PowerBoard>().index = i;
 			fixedBoards.Add( entry.GetComponent<PowerBoard>());
-			AddToInventory(inventoryPower.Value);
-			i++;
 		}
+
+		foreach(var inventoryPower in inventoryPowers){
+				AddToInventory(inventoryPower.Value);
+		}
+
 		TriggerGrid.Reposition();
 	}
 
@@ -182,7 +195,7 @@ public class PlacementUI : MonoBehaviour {
 		//Switch to random power.
 		if(autoRefill){
 			Resupply();
-			//GridEnabled(false);
+			GridEnabled(false);
 		}
 	}
 
@@ -203,7 +216,7 @@ public class PlacementUI : MonoBehaviour {
 		if(infinitePowers){
 
 			//Only limit placement if the player is dead and has infinite powers.
-			//deadScreen = true;
+			deadScreen = true;
 			autoRefill = true;
 			//resupply twice
 			Resupply();
@@ -632,8 +645,8 @@ public class PlacementUI : MonoBehaviour {
 			//avoid giving same power
 			PowerType newPower = PowerType.UNDEFINED;
 			do {
-				newPower =  RandomPower();
-			} while (inventoryPowers.ContainsKey(newPower));
+				newPower =  PowerTypeExtensions.RandomPower();
+			} while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
 
 			InventoryPower freePower = new InventoryPower(newPower, false);
 
@@ -666,24 +679,5 @@ public class PlacementUI : MonoBehaviour {
 		}
     }
 
-    public PowerType RandomActivePower()
-    {
-		int thisOne = Random.Range(0, PowerTypeExtensions.powersActive.Count);
-		return PowerTypeExtensions.powersActive[thisOne];
-    }
-
-    public PowerType RandomPassivePower()
-    {
-		int thisOne = Random.Range(0, PowerTypeExtensions.powersPassive.Count);
-		return PowerTypeExtensions.powersPassive[thisOne];
-    }
-
-    public PowerType RandomPower()
-    {
-        int thisOne = Random.Range(0, 2);
-        if (thisOne == 0)
-            return RandomActivePower();
-        else return RandomPassivePower();
-    }
 
 }
