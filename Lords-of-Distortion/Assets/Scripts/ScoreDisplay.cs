@@ -82,7 +82,16 @@ public class ScoreDisplay : MonoBehaviour {
 
 			var roundscore = infoscript.GetPlayerStats(listed[i]).roundScore;
 			var totalscore = infoscript.GetPlayerStats(listed[i]).totalScore;
-			var lastdeath = infoscript.GetPlayerStats(listed[i]).LastEvent().PowerType;
+
+			PowerType lastdeath = PowerType.UNDEFINED;
+
+			PlayerStats stats = infoscript.GetPlayerStats(listed[i]);
+
+			//only want last event if player died.
+			if(stats.isDead()){
+				lastdeath = stats.LastEvent().PowerType;
+			}
+
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playercolor = infoscript.GetPlayerOptions(listed[i]).style;
 			var playernumber = i + 1;
@@ -107,7 +116,7 @@ public class ScoreDisplay : MonoBehaviour {
 	void DisplayDeath(PowerType lastdeath, int playernumber){
 
 
-		if(lastdeath != null){
+		if(lastdeath != PowerType.UNDEFINED){
 			GameObject label;
 			if(PowerType.ELECTRIC == lastdeath){
 				label = (GameObject)Instantiate(electricicon, new Vector2(0,0), transform.rotation);
