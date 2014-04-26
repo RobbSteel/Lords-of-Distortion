@@ -75,7 +75,7 @@ public class OfflineArena : MonoBehaviour {
 			NetworkViewID newViewID = default(NetworkViewID);
 			if(spawn.type == PowerType.EXPLOSIVE || spawn.type == PowerType.FIREBALL || spawn.type == PowerType.FREEZE){
 				//Needs a viewID so that bombs can RPC each other.
-				newViewID = Network.AllocateViewID();
+				//newViewID = Network.AllocateViewID();
 			}
 
 			SpawnPowerLocally(spawn, newViewID);

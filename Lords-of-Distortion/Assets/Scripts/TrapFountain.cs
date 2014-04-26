@@ -21,14 +21,20 @@ public class TrapFountain : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		if( !tutorialUse )
-			Destroy(gameObject, 6f);
+		if( !tutorialUse ){
+			Destroy(gameObject , 6f);
+
+		}
 	}
 
 
 	
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag == "Player"){
+
+			if( tutorialUse )
+			placementUI = GameObject.Find( "OfflinePlacement(Clone)").GetComponent<PlacementUI>();
+
 			if(!used && placementUI.CanResupply()){
 				placementUI.Resupply();
 				used = true;
