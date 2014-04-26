@@ -128,8 +128,8 @@ public class TransferExplosive : Power
 				
 				//Blow up if the time is out
 				if (timer <= 0 && !exploded) {
-					var playercontroller = playerstuck.GetComponent<Controller2D>();
-			playercontroller.hasbomb = false;
+					//var playercontroller = playerstuck.GetComponent<Controller2D>();
+			//playercontroller.hasbomb = false;
 					GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
 			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 			Vector3 charMarkLoc = transform.position;

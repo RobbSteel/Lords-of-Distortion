@@ -117,7 +117,7 @@ public class DefectionShield : Power {
 
 	void OnDestroy(){
 		if (insideExplosionRange) {
-            playerController.Die(DeathType.FIRE);
+            playerController.Die(DeathType.EXPLOSION);
 		} 
 	}
 }

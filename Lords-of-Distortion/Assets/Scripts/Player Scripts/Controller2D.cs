@@ -5,7 +5,8 @@ using System.Collections;
 public enum DeathType{
 	CRUSH,
 	FIRE,
-	PLAGUE
+	PLAGUE,
+	EXPLOSION
 }
 
 public class Controller2D : MonoBehaviour {
@@ -256,7 +257,7 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!tutorialUse){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -269,7 +270,7 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 				Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!tutorialUse){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -404,8 +405,11 @@ public class Controller2D : MonoBehaviour {
 		case DeathType.PLAGUE:
 			anim.SetTrigger("PlagueDeath");
 			break;
+		case DeathType.EXPLOSION:
+			anim.SetTrigger ("ExplosionDeath");
+			break;
 		default:
-			anim.SetTrigger("Die");;
+			anim.SetTrigger("Die");
 			break;
 		}
 	}
@@ -447,6 +451,8 @@ public class Controller2D : MonoBehaviour {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
 			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;

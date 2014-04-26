@@ -70,7 +70,8 @@ public class FireBall : Power
 		var platform = platformlist[index];
 
 		Instantiate(fireparticle, transform.position, transform.rotation);
-		var newwall = Instantiate(firewall, platform.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));
+		var newwall = (GameObject)Instantiate(firewall, platform.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));
+		newwall.GetComponent<Firewall>().spawnInfo = new PowerSpawn(spawnInfo);
 		Destroy (newwall, 3.0f);
 		Destroy(gameObject);
 		Destroy(platform);
@@ -92,7 +93,8 @@ public class FireBall : Power
 			if(col.transform.tag == "killplatform" || col.transform.tag == "movingplatform"){
 				int index = 0;
 				Instantiate(fireparticle, transform.position, transform.rotation);
-				var newwall = Instantiate(firewall, col.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));
+				var newwall = (GameObject)Instantiate(firewall, col.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));
+				newwall.GetComponent<Firewall>().spawnInfo = new PowerSpawn(spawnInfo);
 				var manager = GameObject.FindGameObjectWithTag("ArenaManager");
 
 				var managerscript = manager.GetComponent<ArenaManager>();
