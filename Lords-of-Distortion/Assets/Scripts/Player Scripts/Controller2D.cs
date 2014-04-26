@@ -5,7 +5,8 @@ using System.Collections;
 public enum DeathType{
 	CRUSH,
 	FIRE,
-	PLAGUE
+	PLAGUE,
+	EXPLOSION
 }
 
 public class Controller2D : MonoBehaviour {
@@ -405,8 +406,11 @@ public class Controller2D : MonoBehaviour {
 		case DeathType.PLAGUE:
 			anim.SetTrigger("PlagueDeath");
 			break;
+		case DeathType.EXPLOSION:
+			anim.SetTrigger ("ExplosionDeath");
+			break;
 		default:
-			anim.SetTrigger("Die");;
+			anim.SetTrigger("Die");
 			break;
 		}
 	}
@@ -448,9 +452,12 @@ public class Controller2D : MonoBehaviour {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
 			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;
+            status.RemovePlague();
 			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 			newshield.transform.parent = gameObject.transform;
 			transform.position = new Vector2(0,0);

@@ -256,12 +256,14 @@ public class LobbyPlacement : MonoBehaviour {
 			
 			switch(state){
 				//Checks if we've clicked on a power that was already placed..
+			/*
 			case PlacementState.Default:
 				//make sure not to allow player to move powers when dead or when under an active button
 				if(!live && SelectExistingPower()){ 
 					FollowMouse();
 				}
 				break;
+				*/
 				//Called when we're in the process of moving a power around.
 			case PlacementState.MovingPower:
 				//Put down power.

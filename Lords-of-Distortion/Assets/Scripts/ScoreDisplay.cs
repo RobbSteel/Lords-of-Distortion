@@ -32,7 +32,7 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject blackholeicon;
 	public GameObject earthicon;
 	public GameObject alive;
-
+	public GameObject deflecticon;
 
 
 	PlayerServerInfo infoscript;
@@ -157,6 +157,10 @@ public class ScoreDisplay : MonoBehaviour {
 			else if(PowerType.SPIKES == lastdeath){
 				label = (GameObject)Instantiate(spikeicon, new Vector2(0,0), transform.rotation);
 			
+
+			}else if(PowerType.DEFLECTIVE == lastdeath){
+					label = (GameObject)Instantiate(deflecticon, new Vector2(0,0), transform.rotation);
+				
 			} else {
 
 				label = (GameObject)Instantiate(alive, new Vector2(0,0), transform.rotation);
@@ -278,9 +282,9 @@ public class ScoreDisplay : MonoBehaviour {
 			playericon.transform.localScale = new Vector3(200,200,1);
 			winlabel.transform.localScale = new Vector3(1,1,1);
 
-			playerlabel.transform.localPosition = new Vector2(0, 350+(-500));
-			playericon.transform.localPosition = new Vector2(0, 350+(-300));
-			winlabel.transform.localPosition = new Vector2(0, 350+(-100));
+			playerlabel.transform.localPosition = new Vector2(-400, 350+(-500));
+			playericon.transform.localPosition = new Vector2(-400, 350+(-300));
+			winlabel.transform.localPosition = new Vector2(-400, 350+(-100));
 
 			var playertext = playerlabel.GetComponent<UILabel>();
 			var wintext = winlabel.GetComponent<UILabel>();
