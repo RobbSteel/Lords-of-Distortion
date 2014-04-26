@@ -9,12 +9,13 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	bool wantToStartGame = false;
-    bool playerReady = false;
+    //bool playerReady = false;
 	public PlayerServerInfo infoscript;
 	public Transform sessionManagerPrefab;
-    
+    /*
     public GameObject readyImagePrefab;
     public List<GameObject> readyIcons;
+    */
     private bool initialGridUpdate = false;
 
     SessionManager sessionManager;
@@ -43,7 +44,7 @@ public class LobbyGUI : MonoBehaviour {
 		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
 		sessionManager.LoadNextLevel(false);
     }
-
+    /*
 	void Update(){
         if (!initialGridUpdate)
         {
@@ -67,7 +68,8 @@ public class LobbyGUI : MonoBehaviour {
     void OnPlayerDisconnected(NetworkPlayer player)
     {
     }
-
+    */
+    /*
     [RPC]
     void SendReadyStatus(int ready)
     {
@@ -79,8 +81,8 @@ public class LobbyGUI : MonoBehaviour {
         {
             readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.red;
         }
-    }
-
+    }*/
+    /*
     public void ReadyButton(GameObject go)
     {
         if(!playerReady)
@@ -96,7 +98,7 @@ public class LobbyGUI : MonoBehaviour {
             playerReady = false;
         }
     }
-
+    */
     public void DisconnectButton(GameObject go)
     {
         Network.Disconnect(200);
@@ -133,7 +135,7 @@ public class LobbyGUI : MonoBehaviour {
 
             UIEventListener.Get(playBtn).onClick += PlayButton;
 
-            readyIcons[0].GetComponent<UISprite>().enabled = true;
+            //readyIcons[0].GetComponent<UISprite>().enabled = true;
         }
 
         GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
@@ -143,7 +145,7 @@ public class LobbyGUI : MonoBehaviour {
         disconBtn.transform.localPosition = new Vector2(557.3703f, -321.5379f);
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
-
+        /*
         GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
 
         readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
@@ -151,7 +153,7 @@ public class LobbyGUI : MonoBehaviour {
         readyBtn.transform.localPosition = new Vector3(392.9831f, -321.5379f);
 
         UIEventListener.Get(readyBtn).onClick += ReadyButton;
-
+        */
 	}
 
 	void OnNetworkLoadedLevel(){
