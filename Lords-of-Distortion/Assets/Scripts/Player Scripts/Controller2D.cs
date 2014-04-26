@@ -256,7 +256,7 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!tutorialUse){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -269,7 +269,7 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 				Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!tutorialUse){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
