@@ -41,6 +41,9 @@ public class TutorialTwo: MonoBehaviour {
 		if (endScene)
 			loadNextLevel ();
 
+		if (player == null)
+			resetLevel ();
+
 		incrementObjective();
 	}
 
@@ -115,6 +118,11 @@ public class TutorialTwo: MonoBehaviour {
 	public void loadNextLevel(){
 		changeText ("FINISHED");
 		transitionToNewScene.EndScene( nextLevel );
+	}
+	
+	public void resetLevel(){
+		changeText ("You Died");
+		Application.LoadLevel (Application.loadedLevel);
 	}
 	
 	
