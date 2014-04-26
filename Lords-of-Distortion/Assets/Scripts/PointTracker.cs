@@ -12,7 +12,7 @@ public class PointTracker : MonoBehaviour{
 		public float pointDelay = 3f;
 		public float timeLeft = 0f;
 		public NetworkPlayer player;
-		public float pointValue = .5f;
+		public float pointValue = 5f;
 
 		public PointTimer(NetworkPlayer player, float pointDelay){
 			this.player = player;
@@ -71,11 +71,11 @@ public class PointTracker : MonoBehaviour{
 
 					if(attackerStats.timeOfDeath <= playerEvent.TimeOfContact){
 						//Attacking player died before the event happened, so give half point.
-						GivePoints(0.5f, attacker.Value);
+						GivePoints(5f, attacker.Value);
 					}
 					else {
 						//Give full point
-						GivePoints(1f, attacker.Value);
+						GivePoints(10f, attacker.Value);
 					}
 				}
 			}
