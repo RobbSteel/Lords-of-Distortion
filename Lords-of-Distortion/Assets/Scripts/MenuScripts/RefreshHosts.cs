@@ -10,11 +10,23 @@ public class RefreshHosts : MonoBehaviour {
 
 	private float refreshtime = 0;
 	// Use this for initialization
+
 	void Start () {
+
 	}
 
 
-	void OnPress(){
+	/* 
+	 * Lobby Name | Joinable? | Players | Ping
+	 * 
+	 */
+
+
+	void OnPress(bool isDown)
+	{
+		if(isDown)
+			return;
+
 		MasterServer.ClearHostList();
 		MasterServer.RequestHostList(typeName);
 
@@ -26,10 +38,7 @@ public class RefreshHosts : MonoBehaviour {
 			//Refreshes labels
 
 			for(int v = 0; v < oldlabels.Length;v++){
-
-
 				Destroy(oldlabels[v]);
-
 			}
 
 			//Takes each hosted match and adds a UI button for it upon click.
