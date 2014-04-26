@@ -442,6 +442,8 @@ public class Controller2D : MonoBehaviour {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
 			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;
