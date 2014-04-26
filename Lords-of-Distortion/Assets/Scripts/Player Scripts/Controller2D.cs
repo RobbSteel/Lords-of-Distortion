@@ -450,6 +450,7 @@ public class Controller2D : MonoBehaviour {
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;
+            status.RemovePlague();
 			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 			newshield.transform.parent = gameObject.transform;
 			transform.position = new Vector2(0,0);
