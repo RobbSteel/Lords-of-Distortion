@@ -36,7 +36,7 @@ public class TutorialOne : MonoBehaviour {
 			if (endScene) 
 				transitionToNewScene.EndScene( nextLevel );
 
-			if (player = null)
+			if (player == null)
 				resetLevel ();
 
 			incrementObjective();

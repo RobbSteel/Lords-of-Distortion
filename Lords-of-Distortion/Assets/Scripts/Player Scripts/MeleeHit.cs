@@ -5,6 +5,7 @@ public class MeleeHit : MonoBehaviour {
 
 	private Melee melee;
 	private Controller2D onHitDeath;
+	private Dummy onHit;
 	void Start(){
 		melee = transform.root.GetComponent<Melee>();
 	}

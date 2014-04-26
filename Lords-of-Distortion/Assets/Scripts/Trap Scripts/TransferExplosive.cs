@@ -6,16 +6,18 @@ using System.Collections;
 public class TransferExplosive : Power
 {
 	
-		public float timer = 8;
-		public GameObject playerstuck = null;
-		public GameObject explosionPrefab;
-		public bool stickready = true;
-		const float TRANSFER_WAIT = 1f;
-		public float stickytimer = TRANSFER_WAIT;
-		public bool firststick = true;
-		public bool playerdied = false;
-		bool sentRPC = false;
-		bool exploded = false;
+	public float timer = 8;
+	public GameObject playerstuck = null;
+	public GameObject explosionPrefab;
+	public bool stickready = true;
+	const float TRANSFER_WAIT = 1f;
+	public float stickytimer = TRANSFER_WAIT;
+	public bool firststick = true;
+	public bool playerdied = false;
+	bool sentRPC = false;
+	bool exploded = false;
+
+	public GameObject CharMark;
 
 		[RPC]
 		void IThinkIGotStuck (NetworkMessageInfo info)
@@ -132,7 +134,7 @@ public class TransferExplosive : Power
 			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 			Vector3 charMarkLoc = transform.position;
                     charMarkLoc.z = 1.4f;
-					var charmark = Instantiate (Resources.Load ("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
 					Destroy (gameObject);
             
 				} else {
@@ -162,7 +164,7 @@ public class TransferExplosive : Power
 				explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 				Vector3 charMarkLoc = transform.position;
 				charMarkLoc.z = 1.4f;
-				var charmark = Instantiate (Resources.Load ("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+				var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
 				Destroy (gameObject);
 			}
 
