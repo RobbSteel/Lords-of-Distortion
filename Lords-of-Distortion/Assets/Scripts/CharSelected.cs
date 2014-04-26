@@ -7,14 +7,18 @@ public class CharSelected : MonoBehaviour {
 	public MainGui playerscript;
 	public PlayerServerInfo infoscript;
 	public UIButton button;
-	public bool Char1Selected;
+
+
+
 	// Use this for initialization
 	void Start () {
-		Char1Selected = false;
 
 	}
 	
-	void OnPress(){
+	void OnPress(bool isDown){
+		if(isDown)
+			return;
+
 		/*Char1Selected = true;
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name" || playerscript.gameName == "" || playerscript.gameName == "Server Name"){
 			print("Nope");
@@ -25,6 +29,5 @@ public class CharSelected : MonoBehaviour {
 			Application.LoadLevel("LobbyArena");
 			
 		}*/
-
 	}	
 }

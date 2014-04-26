@@ -109,10 +109,10 @@ public class SessionManager : MonoBehaviour {
 		timemanager = TimeManager.instance;
 		timemanager.SyncTimes();
 		++playerCounter;
-
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, psInfo.playername, Network.player);
+		PlayerOptions localOptions = psInfo.localOptions;
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, localOptions.username, Network.player);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
-		ConfirmLocalSpawn (playerCounter, psInfo.playername, Network.player);
+		ConfirmLocalSpawn (playerCounter, localOptions.username, Network.player);
 		//SpawnPlayer(transform.position);
 	}
 	
@@ -121,7 +121,8 @@ public class SessionManager : MonoBehaviour {
 
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
-		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, psInfo.playername);
+		PlayerOptions localOptions = psInfo.localOptions;
+		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username);
 		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
 		timemanager.SyncTimes();
 	}

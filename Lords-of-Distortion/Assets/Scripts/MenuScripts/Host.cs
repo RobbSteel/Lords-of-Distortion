@@ -20,7 +20,7 @@ public class Host : MonoBehaviour {
 			print("Nope");
 			
 		} else {
-			infoscript.playername = playerscript.playerName;
+			infoscript.localOptions.username = playerscript.playerName;
 			infoscript.servername = playerscript.gameName;
 			infoscript.choice = "Host";
 			Application.LoadLevel("LobbyArena");
