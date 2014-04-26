@@ -67,7 +67,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100008
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jumpRequested: 0
-  DEBUG: 1
+  OFFLINE: 1
   maxSpeed: 5
   anim: {fileID: 0}
   dead: 0
@@ -474,6 +474,7 @@ MonoBehaviour:
   canJump: 0
   hasbomb: 0
   locked: 0
+  moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
   invulntime: 0
