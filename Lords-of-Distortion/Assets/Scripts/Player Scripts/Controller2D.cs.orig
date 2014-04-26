@@ -5,7 +5,8 @@ using System.Collections;
 public enum DeathType{
 	CRUSH,
 	FIRE,
-	PLAGUE
+	PLAGUE,
+	EXPLOSION
 }
 
 public class Controller2D : MonoBehaviour {
@@ -14,11 +15,11 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool jumpRequested = false;
 
-	public bool DEBUG;
+	public bool OFFLINE;
 	public float maxSpeed = 10f;
 	public Animator anim;
 
-	private bool dead = false;
+	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
@@ -35,19 +36,15 @@ public class Controller2D : MonoBehaviour {
     public bool locked;
 	bool stoppedJump;
 	public bool inAir = true;
-<<<<<<< HEAD
 	public bool powerInvulnerable;
-=======
-	/*--------Events-----------*/
->>>>>>> ac1af24220a512601a727d38d878143aeda9d12c
-	public delegate void DieAction(GameObject gO);
+	public delegate void DieAction(GameObject gO, DeathType deathType);
 	public static event DieAction onDeath; 
 
-
-<<<<<<< HEAD
-=======
+	public float invulntime = 0;
 	public GameObject DeathSpirit;
->>>>>>> ac1af24220a512601a727d38d878143aeda9d12c
+	public GameObject Respawn;
+	public GameObject invulnshield;
+	public GameObject newshield;
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
 	public AudioClip meleeSfx;
@@ -105,7 +102,6 @@ public class Controller2D : MonoBehaviour {
 		stunned = false;
         meleeStunned = false;
 		canJump = true;
-        locked = false;
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
@@ -113,7 +109,14 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!DEBUG && !networkController.isOwner)
+		if(invulntime > 0){
+			invulntime -= Time.deltaTime;
+		} else {
+			powerInvulnerable = false;
+			Destroy(newshield);
+		}
+
+		if(!OFFLINE && !networkController.isOwner)
 			return;
 		if(!hooked && !locked){
 
@@ -150,7 +153,7 @@ public class Controller2D : MonoBehaviour {
 
 		if(!hooked){
 		    IsGrounded();
-		    if(!DEBUG && !networkController.isOwner)
+		    if(!OFFLINE && !networkController.isOwner)
 			    return;
 
             if(!locked)
@@ -249,14 +252,16 @@ public class Controller2D : MonoBehaviour {
 		if(dead || !networkController.isOwner)
 			return;
 		
-<<<<<<< HEAD
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
-=======
-		if (other.gameObject.tag == "Power")
->>>>>>> ac1af24220a512601a727d38d878143aeda9d12c
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			status.GenerateEvent(power);
+<<<<<<< HEAD
+			if(!OFFLINE){
+=======
+			if(!tutorialUse){
+>>>>>>> 421269f2994552456ac19af4df0d66de6c832f83
+				status.GenerateEvent(power);
+			}
 			power.PowerActionEnter(gameObject, this);
 
 		}
@@ -266,8 +271,14 @@ public class Controller2D : MonoBehaviour {
 			if(other.gameObject.GetComponent<HookHit>().shooter == gameObject)
 				return;
 
-			Power power = other.gameObject.GetComponent<Power>();
-			status.GenerateEvent(power);
+				Power power = other.gameObject.GetComponent<Power>();
+<<<<<<< HEAD
+			if(!OFFLINE){
+=======
+			if(!tutorialUse){
+>>>>>>> 421269f2994552456ac19af4df0d66de6c832f83
+				status.GenerateEvent(power);
+			}
 			power.PowerActionEnter(gameObject, this);
 		}
 
@@ -308,7 +319,7 @@ public class Controller2D : MonoBehaviour {
 		if(dead)
 			return;
 		
-		if (!powerInvulnerable && other.gameObject.tag == "Power")
+		if (other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
 			power.PowerActionExit(gameObject, this);
@@ -332,19 +343,15 @@ public class Controller2D : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		//This should have been done earlier. Power effects shouldn't matter
-		//if they hit a copy of a player you don't control.
 		if(dead || !networkController.isOwner)
 			return;
-<<<<<<< HEAD
 		if (!powerInvulnerable && other.gameObject.tag == "Power")
-=======
-
-		if (other.gameObject.tag == "Power")
->>>>>>> ac1af24220a512601a727d38d878143aeda9d12c
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+
+			if(!OFFLINE)
 			status.GenerateEvent(power);
+
 			power.PowerActionEnter(gameObject, this);
 			
 		}
@@ -367,10 +374,10 @@ public class Controller2D : MonoBehaviour {
 	public void Die(DeathType deathType = DeathType.CRUSH){
 		if(networkController.isOwner && !dead){
 
+
 			dead = true;
 			snared = true;
 			collider2D.enabled = false;
-
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
@@ -379,35 +386,53 @@ public class Controller2D : MonoBehaviour {
 			*/
 
 			//Here we call whatever events are subscribed to us.
-			if(onDeath != null)
-				onDeath(gameObject);
-
+			if(GameObject.Find("LobbyGUI") == null){
 			//Remove MashIcon from PlayerStatus Script
 			status.DestroyMashIcon();
-			//play death animation.
-			switch(deathType){
-			case DeathType.FIRE:
-				anim.SetTrigger("FireDeath");
-				break;
-			case DeathType.PLAGUE:
-				anim.SetTrigger("PlagueDeath");
-				break;
-			default:
-				anim.SetTrigger("Die");
-				break;
+
 			}
 
-            GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
-            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
+			if(onDeath != null)
+				onDeath(gameObject, deathType);
+
+			//play death animation.
+			DeathAnimation(deathType);
+           
+			if(GameObject.Find("LobbyGUI") == null){
+				GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
+	            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
+			}
 			//We don't need the next line any more
 		}
-
 	}
 
-	public void DieSimple(){
+	void DeathAnimation(DeathType deathType){
+		switch(deathType){
+		case DeathType.FIRE:
+			anim.SetTrigger("FireDeath");
+			break;
+		case DeathType.PLAGUE:
+			anim.SetTrigger("PlagueDeath");
+			break;
+		case DeathType.EXPLOSION:
+			anim.SetTrigger ("ExplosionDeath");
+			break;
+		default:
+			anim.SetTrigger("Die");
+			break;
+		}
+	}
+
+    [RPC]
+    void SendAnimation(string myDeath)
+    {
+        anim.SetTrigger(myDeath);
+    }
+
+	public void DieSimple(DeathType deathType){
 		if(!networkController.isOwner && !dead){
 			dead = true;
-			anim.SetTrigger("Die");
+			DeathAnimation(deathType);
 		}
 	}
 
@@ -428,12 +453,28 @@ public class Controller2D : MonoBehaviour {
 	//Called when death animation finishes playing.
 	public void DestroyPlayer()
 	{
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
-		Destroy (gameObject);
+		if(GameObject.Find("LobbyGUI") == null){
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
+			Destroy (gameObject);
+		} else {
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
+			dead = false;
+			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
+			collider2D.enabled = true;
+			invulntime = 3;
+			powerInvulnerable = true;
+            status.RemovePlague();
+			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
+			newshield.transform.parent = gameObject.transform;
+			transform.position = new Vector2(0,0);
+			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+		}
 	}
 
 	void OnDestroy(){
-		if(!DEBUG){
+		if(!OFFLINE){
 			if(Network.isServer){
 				//blocks any lingering rpc calls
 				//Network.RemoveRPCs(networkView.viewID);

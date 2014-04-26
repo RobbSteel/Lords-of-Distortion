@@ -35,6 +35,7 @@ public class Controller2D : MonoBehaviour {
 	public bool hasbomb;
     public bool locked;
 	bool stoppedJump;
+	public bool moveDisable;
 	public bool inAir = true;
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType);
@@ -101,7 +102,6 @@ public class Controller2D : MonoBehaviour {
 		deathOnHit = false;
 		stunned = false;
         meleeStunned = false;
-		canJump = true;
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
@@ -156,7 +156,7 @@ public class Controller2D : MonoBehaviour {
 		    if(!OFFLINE && !networkController.isOwner)
 			    return;
 
-            if(!locked)
+            if(!locked && !moveDisable )
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
