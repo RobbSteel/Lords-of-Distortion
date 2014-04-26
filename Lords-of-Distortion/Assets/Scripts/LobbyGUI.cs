@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LobbyGUI : MonoBehaviour {
 
@@ -8,9 +9,16 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	bool wantToStartGame = false;
+    bool playerReady = false;
 	public PlayerServerInfo infoscript;
 	public Transform sessionManagerPrefab;
-	SessionManager sessionManager;
+    
+    public GameObject readyImagePrefab;
+    public List<GameObject> readyIcons;
+    private bool initialGridUpdate = false;
+
+    SessionManager sessionManager;
+    Dictionary<NetworkPlayer, GameObject> entries = new Dictionary<NetworkPlayer, GameObject>();
 
 	void Awake(){
 		//Important
@@ -20,7 +28,7 @@ public class LobbyGUI : MonoBehaviour {
 		}
 		else
 			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-	}
+        }
 
     public void PlayButton(GameObject go)
     {
@@ -37,9 +45,57 @@ public class LobbyGUI : MonoBehaviour {
     }
 
 	void Update(){
-
+        if (!initialGridUpdate)
+        {
+            for (int i = 1; i < infoscript.playernumb; i++ )
+            {
+                readyIcons[i].GetComponent<UISprite>().enabled = true;
+            }
+            initialGridUpdate = true;
+        }
 	}
 
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+        foreach (NetworkPlayer p in infoscript.players)
+        {
+            readyIcons[infoscript.playernumb].GetComponent<UISprite>().enabled = true;
+        }
+    }
+
+    void OnPlayerDisconnected(NetworkPlayer player)
+    {
+    }
+
+    [RPC]
+    void SendReadyStatus(int ready)
+    {
+        if(ready == 0)
+        {
+            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.green;
+        }
+        else
+        {
+            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.red;
+        }
+    }
+
+    public void ReadyButton(GameObject go)
+    {
+        if(!playerReady)
+        { 
+            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.green;
+            playerReady = true;
+            networkView.RPC("SendReadyStatus", RPCMode.Others, 0);
+        }
+        else
+        {
+            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.red;
+            networkView.RPC("SendReadyStatus", RPCMode.Others, 1);
+            playerReady = false;
+        }
+    }
 
     public void DisconnectButton(GameObject go)
     {
@@ -51,8 +107,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Start()
     {
-		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PlayerServerInfo>();
+        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action
@@ -77,15 +132,25 @@ public class LobbyGUI : MonoBehaviour {
             playBtn.transform.localPosition = new Vector2(-563.4375f, -321.5379f);
 
             UIEventListener.Get(playBtn).onClick += PlayButton;
+
+            readyIcons[0].GetComponent<UISprite>().enabled = true;
         }
 
         GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
         
         disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
         disconBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-        disconBtn.transform.localPosition = new Vector2(-437.4885f, -321.5379f);
+        disconBtn.transform.localPosition = new Vector2(557.3703f, -321.5379f);
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
+
+        GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
+
+        readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
+        readyBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        readyBtn.transform.localPosition = new Vector3(392.9831f, -321.5379f);
+
+        UIEventListener.Get(readyBtn).onClick += ReadyButton;
 
 	}
 
