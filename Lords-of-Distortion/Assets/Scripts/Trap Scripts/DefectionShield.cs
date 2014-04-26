@@ -20,6 +20,8 @@ public class DefectionShield : Power {
 	private bool switchMove;
 	private Vector3 original;
 	private Vector3 end;
+
+	public GameObject CharMark;
 	
 
 	// Use this for initialization
@@ -68,7 +70,7 @@ public class DefectionShield : Power {
         explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
         Vector3 charMarkLoc = transform.position;
         charMarkLoc.z = 1.4f;
-        var charmark = Instantiate(Resources.Load("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+		var charmark = Instantiate(CharMark, charMarkLoc, Quaternion.identity) as GameObject;
         Destroy(gameObject);
 	}
 

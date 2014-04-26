@@ -182,22 +182,8 @@ public class PlayerStatus : MonoBehaviour {
 		}
 	}
 	
-    private void UpdateDrag()
-    {
-        if(!insidePlague)
-        {
-            plagueTimer += Time.deltaTime;
-            if(plagueTimer > 1)
-            {
-                plagueTimer = 0;
-                playerControl.rigidbody2D.drag -= 10f;
-            }
-        }
-    }
-	
 	void FixedUpdate(){
-        UpdateDrag();
-		//push the character sideways
+     	//push the character sideways
 		if(knockBackPending){
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();

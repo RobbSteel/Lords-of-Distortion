@@ -51,6 +51,7 @@ public class Controller2D : MonoBehaviour {
 	public AudioClip meleeHitSfx;
 	public AudioClip deathSfx;
 	public AudioClip jumpSfx;
+	public bool tutorialUse;
 
 	NetworkController networkController;
 	PlayerStatus status;
@@ -256,7 +257,9 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			status.GenerateEvent(power);
+			if(tutorialUse){
+				status.GenerateEvent(power);
+			}
 			power.PowerActionEnter(gameObject, this);
 
 		}
@@ -266,8 +269,10 @@ public class Controller2D : MonoBehaviour {
 			if(other.gameObject.GetComponent<HookHit>().shooter == gameObject)
 				return;
 
-			Power power = other.gameObject.GetComponent<Power>();
-			status.GenerateEvent(power);
+				Power power = other.gameObject.GetComponent<Power>();
+			if(tutorialUse){
+				status.GenerateEvent(power);
+			}
 			power.PowerActionEnter(gameObject, this);
 		}
 
@@ -446,6 +451,8 @@ public class Controller2D : MonoBehaviour {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
 			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;
