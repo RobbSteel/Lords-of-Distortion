@@ -393,7 +393,9 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void UnStun(){
 
+		if( !playerControl.OFFLINE )
 		networkView.RPC("RemoveStunRemote", RPCMode.Others);
+
 		UnStunSimple();
 	}
 	
