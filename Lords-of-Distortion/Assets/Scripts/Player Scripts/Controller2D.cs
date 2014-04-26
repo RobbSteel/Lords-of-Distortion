@@ -18,7 +18,7 @@ public class Controller2D : MonoBehaviour {
 	public float maxSpeed = 10f;
 	public Animator anim;
 
-	private bool dead = false;
+	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
 	private float groundRadius = 0.2f;
@@ -36,11 +36,14 @@ public class Controller2D : MonoBehaviour {
 	bool stoppedJump;
 	public bool inAir = true;
 	public bool powerInvulnerable;
-	public delegate void DieAction(GameObject gO);
+	public delegate void DieAction(GameObject gO, DeathType deathType);
 	public static event DieAction onDeath; 
 
-
+	public float invulntime = 0;
 	public GameObject DeathSpirit;
+	public GameObject Respawn;
+	public GameObject invulnshield;
+	public GameObject newshield;
 	//Player Audio Clips  --
 	public AudioClip hookSfx;
 	public AudioClip meleeSfx;
@@ -107,6 +110,13 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(invulntime > 0){
+			invulntime -= Time.deltaTime;
+		} else {
+			powerInvulnerable = false;
+			Destroy(newshield);
+		}
+
 		if(!DEBUG && !networkController.isOwner)
 			return;
 		if(!hooked && !locked){
@@ -354,10 +364,10 @@ public class Controller2D : MonoBehaviour {
 	public void Die(DeathType deathType = DeathType.CRUSH){
 		if(networkController.isOwner && !dead){
 
+
 			dead = true;
 			snared = true;
 			collider2D.enabled = false;
-
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
@@ -366,33 +376,38 @@ public class Controller2D : MonoBehaviour {
 			*/
 
 			//Here we call whatever events are subscribed to us.
-			if(onDeath != null)
-				onDeath(gameObject);
-
-            string deathBy;
+			if(GameObject.Find("LobbyGUI") == null){
 			//Remove MashIcon from PlayerStatus Script
 			status.DestroyMashIcon();
-			//play death animation.
-			switch(deathType){
-			    case DeathType.FIRE:
-				    anim.SetTrigger("FireDeath");
-                    deathBy = "FireDeath";
-				    break;
-			    case DeathType.PLAGUE:
-				    anim.SetTrigger("PlagueDeath");
-                     deathBy = "PlagueDeath";
-				    break;
-			    default:
-				    anim.SetTrigger("Die");
-                    deathBy = "Die";
-				    break;
+
 			}
-            networkView.RPC("SendAnimation", RPCMode.Others, deathBy);
-            GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
-            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
+
+			if(onDeath != null)
+				onDeath(gameObject, deathType);
+
+			//play death animation.
+			DeathAnimation(deathType);
+           
+			if(GameObject.Find("LobbyGUI") == null){
+				GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
+	            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
+			}
 			//We don't need the next line any more
 		}
+	}
 
+	void DeathAnimation(DeathType deathType){
+		switch(deathType){
+		case DeathType.FIRE:
+			anim.SetTrigger("FireDeath");
+			break;
+		case DeathType.PLAGUE:
+			anim.SetTrigger("PlagueDeath");
+			break;
+		default:
+			anim.SetTrigger("Die");;
+			break;
+		}
 	}
 
     [RPC]
@@ -401,10 +416,10 @@ public class Controller2D : MonoBehaviour {
         anim.SetTrigger(myDeath);
     }
 
-	public void DieSimple(){
+	public void DieSimple(DeathType deathType){
 		if(!networkController.isOwner && !dead){
 			dead = true;
-			anim.SetTrigger("Die");
+			DeathAnimation(deathType);
 		}
 	}
 
@@ -425,8 +440,21 @@ public class Controller2D : MonoBehaviour {
 	//Called when death animation finishes playing.
 	public void DestroyPlayer()
 	{
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
-		Destroy (gameObject);
+		if(GameObject.Find("LobbyGUI") == null){
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
+			Destroy (gameObject);
+		} else {
+			Instantiate(DeathSpirit, transform.position, transform.rotation);
+			dead = false;
+			snared = false;
+			collider2D.enabled = true;
+			invulntime = 3;
+			powerInvulnerable = true;
+			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
+			newshield.transform.parent = gameObject.transform;
+			transform.position = new Vector2(0,0);
+			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+		}
 	}
 
 	void OnDestroy(){

@@ -12,7 +12,7 @@ public class PointTracker : MonoBehaviour{
 		public float pointDelay = 3f;
 		public float timeLeft = 0f;
 		public NetworkPlayer player;
-		public float pointValue = .5f;
+		public float pointValue = 5f;
 
 		public PointTimer(NetworkPlayer player, float pointDelay){
 			this.player = player;
@@ -71,18 +71,15 @@ public class PointTracker : MonoBehaviour{
 
 					if(attackerStats.timeOfDeath <= playerEvent.TimeOfContact){
 						//Attacking player died before the event happened, so give half point.
-						GivePoints(0.5f, attacker.Value);
+						GivePoints(5f, attacker.Value);
 					}
 					else {
 						//Give full point
-						GivePoints(1f, attacker.Value);
+						GivePoints(10f, attacker.Value);
 					}
 				}
 			}
 		}
-
-		//var managername = gameObject.name;
-		//networkView.RPC ("SynchronizePhases", RPCMode.Others, lastman, finishgame, managername);
 	}
 
 
@@ -119,15 +116,5 @@ public class PointTracker : MonoBehaviour{
 	void GivePoints(float points, NetworkPlayer player){
 		networkView.RPC("SynchPoints", RPCMode.Others, points, player);
 		SynchPoints(points, player);
-	}
-
-
-	//Makes sure that all players are transitioning phases together, such as Lastman standing or game finished
-	[RPC]
-	void SynchronizePhases(bool lastplayer, bool gamefinal, string managename){
-		var tempmanager = GameObject.Find(managename);
-		var tempscript = tempmanager.GetComponent<ArenaManager>();
-		tempscript.finishgame = gamefinal;
-		tempscript.lastman = lastplayer;
 	}
 }

@@ -7,7 +7,7 @@ public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
 	const float PRE_MATCH_TIME = 5f; 
-	const float POST_MATCH_TIME = 5f;
+	const float POST_MATCH_TIME = 4f;
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
 	TrapFountainManager fountainManager; 
@@ -15,21 +15,20 @@ public class ArenaManager : MonoBehaviour {
 	public List<Transform> spawnPositions;
 	private List<Vector3> playerSpawnVectors;
 	public List<GameObject> platformlist;
-
-	public bool finishgame = false;
-	public bool lastman = false;
-
 	
 	HeapPriorityQueue<PowerSpawn> allTimedSpawns;
 	List<NetworkPlayer> playersReady;
 	
-	float beginTime;
+	float beginTime = float.PositiveInfinity;
+	float finalPlayerTime = float.PositiveInfinity;
+	float endTime = float.PositiveInfinity;
+
 	int? livePlayerCount;
 	private bool played;
 	bool sentMyPowers = false;
 	bool powersSynchronized = false;
 	
-	private GameObject timer;
+	private Timer timer;
 	private PowerSpawn prevYield;
 	public GameObject alertSymbol;
 
@@ -37,25 +36,32 @@ public class ArenaManager : MonoBehaviour {
 	private HUDTools hudTools;
 	public GameObject placementRootPrefab;
     PlacementUI placementUI;
-	public bool showonce;
-	public bool showonce2;
-	public bool showonce3;
-	public bool showonce4;
-	public bool lastmanvictory = false;
+
+	string[] messages = new string[4]
+	{"Defeat the Last Player!", "Last Player Survived!",  "Game Finish!", "Vengeance!"};
 
 	List<NetworkPlayer> livePlayers;
 
 	enum Phase{
 		PreGame,
 		InGame,
-		FinalPlayer
+		FinalPlayer,
+		Finish
 	}
 	Phase currentPhase;
 
+	[RPC]
+	void SynchTimer(float time){
+		timer.countDownTime = time - TimeManager.instance.time;
+		timer.Show();
+	}
 
 	[RPC]
 	void NotifyBeginTime(float time, int playerCount){
 		beginTime = time;
+		
+		timer.countDownTime = beginTime - TimeManager.instance.time;
+		timer.Show();
 		//set seed of fountain random generator to time
 		fountainManager.SetFirstSpawnTime(beginTime + 15f);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
@@ -75,38 +81,44 @@ public class ArenaManager : MonoBehaviour {
 		livePlayerCount--;
 		livePlayers.Remove(player);
 
-		
+		//The last player was killed
 		if(livePlayerCount == 0){
-			print ("No more players");
-			//Sets a bool that will be checked by the timer script "Countdown" for game finishing
-			finishgame = true;
+			FinishGame(false); //Last player didn't win
 		}
 
 		pointTracker.PlayerDied(player);
 
-		if(livePlayerCount == 1 && !finishgame){
-			print("Finish him!");
-			lastman = true;
+		if(livePlayerCount == 1)
+		{
+			PrintMessage(0); //Defeat final player
+			networkView.RPC("PrintMessage", RPCMode.Others, 0);
+
 			//Get the last live player and pass to point tracker.
 			pointTracker.LastManStanding(livePlayers[0]);
+			currentPhase = Phase.FinalPlayer;
+
+			//give some time to kill last player
+			finalPlayerTime = TimeManager.instance.time + LAST_MAN_TIME;
+			SynchTimer(finalPlayerTime);
+			networkView.RPC("SynchTimer", RPCMode.Others, finalPlayerTime);
 		} 
 	}
 
+
 	//Tells additional players to destroy clone.
-	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath){
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
 		if(Network.isServer){
 			//Store the time of death on server
 			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
-			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = adjustedTime;
 			
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
-					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID);
+					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime, deathTypeInteger);
 				}
 			}
 			//also destroy player on server
-			DestroyPlayerClone(deadPlayerID);
+			DestroyPlayerClone(deadPlayerID, adjustedTime, deathTypeInteger);
 			//Explicitly pass our network player id
 			ServerDeathHandler(deadPlayerID);
 		}
@@ -114,29 +126,32 @@ public class ArenaManager : MonoBehaviour {
 
 	//Called only on the server. 
 	[RPC]
-	void NotifyServerOfDeath(NetworkMessageInfo info){
-		//Converts networked message to local function call
-		NotifyOthersOfDeath(info.sender, (float)info.timestamp);
+	void NotifyServerOfDeath(int deathTypeInteger, NetworkMessageInfo info){
+		//Converts networked message to local function call.
+		NotifyOthersOfDeath(info.sender, (float)info.timestamp, deathTypeInteger);
 	}
 
 
 	//Called on clients not controlling the player who just died.
 	[RPC]
-	void DestroyPlayerClone(NetworkPlayer deadPlayerID){
+	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
 		print ("he dead");
+		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
-		deadPlayer.GetComponent<Controller2D>().DieSimple();
+		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
 	}
 
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer){
-
+	void LostPlayer(GameObject deadPlayer, DeathType deathType){
+		int deathTypeInteger = (int)deathType;
 		if(Network.isServer){
-			NotifyOthersOfDeath(Network.player, (float)Network.time);
+			//pass network.time because it's going to be adjusted to synched time anyway
+			NotifyOthersOfDeath(Network.player, (float)Network.time, deathTypeInteger);
 		}
 
 		else {
-			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server);
+			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger);
 		}
 
 		//bring up the dead player placement screen.
@@ -289,7 +304,6 @@ public class ArenaManager : MonoBehaviour {
 	void Awake(){
 		sessionManager = SessionManager.Instance;
 		FindPlatforms();
-		beginTime = float.PositiveInfinity;
 	
 		playerSpawnVectors = new List<Vector3>();
 
@@ -305,13 +319,16 @@ public class ArenaManager : MonoBehaviour {
 		GameObject placementRoot = Instantiate(placementRootPrefab, 
 		                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
 		placementUI = placementRoot.GetComponent<PlacementUI>();
-		
+		timer = GameObject.Find("timer").GetComponent<Timer>();
+		timer.Hide();
+
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
 
 		pointTracker = GetComponent<PointTracker>();
 		pointTracker.Initialize(scoreUI);
-		SetUpTimer();
+
+
 	}
 	
 	// Use this for initialization
@@ -464,18 +481,14 @@ public class ArenaManager : MonoBehaviour {
 
 	void Update () {
         float currentTime = TimeManager.instance.time;
-		//Check to see if you are the last man standing
-		if(livePlayerCount == 1 && finishgame && !showonce3){
-			networkView.RPC ("LastManVictory", RPCMode.Others);
-			lastmanvictory = true;
-			hudTools.DisplayText ("Last Player has Survived!");
-			showonce3 = true;
-		}
+
 
 		if(currentPhase == Phase.PreGame && currentTime >= beginTime){
 
            // placementUI.DisableEditing();
 			//placementUI.Disable();
+			timer.Hide();
+
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
 
@@ -485,22 +498,19 @@ public class ArenaManager : MonoBehaviour {
 			trapsEnabled = true;
 		}
 
-		if(lastman && !finishgame && !showonce){
 
-			hudTools.DisplayText ("Defeat the final player!");
-			showonce = true;
+		else if(Network.isServer && currentPhase == Phase.FinalPlayer && currentTime >= finalPlayerTime){
+			//nobody killed this dude
+			FinishGame(true);
 		}
+		else if( currentPhase == Phase.Finish && currentTime >= endTime){
+			//game ended, load level
+			if(Network.isServer){
+				sessionManager.LoadNextLevel(true);
+			}
 
-		if(finishgame && !showonce4 && lastman && !lastmanvictory){
-			networkView.RPC("VengeanceMode", RPCMode.Others);
-			hudTools.DisplayText ("Vengeance!");
-			showonce4 = true;
-		}
-
-		if(finishgame && !showonce2 && !lastman){
-
-			hudTools.DisplayText ("Game Finish!");
-			showonce2 = true;
+			timer.Hide();
+			this.enabled = false;
 		}
 
 		//Spawn one timed trap per frame, locally.
@@ -509,28 +519,25 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	[RPC]
-	public void VengeanceMode(){
-		hudTools.DisplayText ("Vengeance!");
+	public void PrintMessage(int message){
+		hudTools.DisplayText (messages[message]);
 	}
-
-	[RPC]
-	public void LastManVictory(){
-		this.lastmanvictory = true;
-		hudTools.DisplayText("Last Player has Survived!");
+	
+	public void FinishGame(bool lastPlayerWon){
+		if(Network.isServer){
+			if(lastPlayerWon){
+				PrintMessage(1);
+				networkView.RPC("PrintMessage", RPCMode.Others, 1);
+			}
+			else{
+				PrintMessage(3);
+				networkView.RPC("PrintMessage", RPCMode.Others, 3);
+			}
+			//end game in 3 seconds
+			endTime = TimeManager.instance.time + POST_MATCH_TIME;
+			SynchTimer(endTime);
+			networkView.RPC("SynchTimer", RPCMode.Others, endTime);
+			currentPhase = Phase.Finish;
+		}
 	}
-
-	private void SetUpTimer(){
-		timer = GameObject.Find("timer");
-		timer.GetComponent<countdown>().preGameTimer = PRE_MATCH_TIME;
-		timer.GetComponent<countdown>().postmatchtimer = POST_MATCH_TIME;
-		timer.GetComponent<countdown>().lastmantimer = LAST_MAN_TIME;
-	}
-
-
-
-    public float getBeginTime()
-    {
-        return beginTime;
-    }
-
 }

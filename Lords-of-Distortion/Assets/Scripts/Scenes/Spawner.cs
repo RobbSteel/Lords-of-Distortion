@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Spawner : MonoBehaviour
@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
 	//int countDown_CurrentTimer;
 	//int? arenaMan_livePlayers;		// Reference to ArenaManager script
 	public Rigidbody2D SpikeHazards;			// Prefab of hazard perfabs.
-	public countdown count_down;
+	public Timer count_down;
 
 	void Awake()
 	{
@@ -36,7 +36,7 @@ public class Spawner : MonoBehaviour
 		//countdown count_Down = GetComponent<countdown>();
 		// If currentTimer == 2 and myTimer reaches 10...
 
-		if (timer.GetComponent<countdown>().myTimer >= 35) //&& countDown_CurrentTimer == 2 && arenaMan_livePlayers != 0)
+		if (timer.GetComponent<Timer>().countDownTime >= 35) //&& countDown_CurrentTimer == 2 && arenaMan_livePlayers != 0)
 
 			// Once spawnDelay reaches 0
 			if (spawnTimer <= 0) 
