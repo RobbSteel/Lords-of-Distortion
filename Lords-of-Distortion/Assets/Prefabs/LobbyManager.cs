@@ -132,8 +132,8 @@ public class LobbyManager : MonoBehaviour {
 		}
 		
 		//bring up the dead player placement screen.
-		placementUI.SwitchToLive(true);
-		placementUI.enabled = true;
+		//placementUI.SwitchToLive(true);
+		//placementUI.enabled = true;
 	}
 
 	//Server should do calculations of who to give points to.

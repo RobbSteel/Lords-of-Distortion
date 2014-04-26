@@ -8,11 +8,12 @@ public class TransferExplosive : Power
 	
 		public float timer = 8;
 		public GameObject playerstuck = null;
-	public GameObject explosionPrefab;
+		public GameObject explosionPrefab;
 		public bool stickready = true;
 		const float TRANSFER_WAIT = 1f;
 		public float stickytimer = TRANSFER_WAIT;
 		public bool firststick = true;
+		public bool playerdied = false;
 		bool sentRPC = false;
 		bool exploded = false;
 
@@ -30,6 +31,7 @@ public class TransferExplosive : Power
 		{
 				if (firstTime) {
 						firststick = false;
+		
 						//because we are now moving the rigidbody manually as opposed to letting physics do the work
 						//make it kinematic.
 						rigidbody2D.isKinematic = true;
@@ -67,7 +69,9 @@ public class TransferExplosive : Power
 										GA.API.Design.NewEvent ("Players Stuck", player.transform.position);
 								}
 
-								GA.API.Design.NewEvent ("Player Stuck", player.transform.position);
+
+								
+								
 								networkView.RPC ("AttachToPlayer", RPCMode.Others, Network.player, firststick);
 								//do this second so that firstick isnt changed until the end.
 								AttachToPlayer (Network.player, firststick);
@@ -105,7 +109,11 @@ public class TransferExplosive : Power
 		// Update is called once per frame
 		void  Update ()
 		{
-				if (timer <= 3 && !exploded) {
+				
+	
+
+
+			if (timer <= 3 && !exploded) {
 						//anim.SetTrigger("BombExplo");
 						//var bombExpo = Instantiate (Resources.Load ("BombE"), transform.position, Quaternion.identity) as GameObject;
 						//Destroy (gameObject);
@@ -118,7 +126,8 @@ public class TransferExplosive : Power
 				
 				//Blow up if the time is out
 				if (timer <= 0 && !exploded) {
-	
+					var playercontroller = playerstuck.GetComponent<Controller2D>();
+			playercontroller.hasbomb = false;
 					GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
 			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 			Vector3 charMarkLoc = transform.position;
@@ -143,11 +152,24 @@ public class TransferExplosive : Power
 				}
 
 				//If a player is stuck, follow them
-				if (playerstuck != null) {
+		if (playerstuck != null) {
 				
-						transform.position = playerstuck.transform.position;
+			var playercontroller = playerstuck.GetComponent<Controller2D>();
+
+			if(playercontroller.dead){
+				playercontroller.hasbomb = false;
+				GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+				explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+				Vector3 charMarkLoc = transform.position;
+				charMarkLoc.z = 1.4f;
+				var charmark = Instantiate (Resources.Load ("Charmark"), charMarkLoc, Quaternion.identity) as GameObject;
+				Destroy (gameObject);
+			}
+
+			transform.position = playerstuck.transform.position;
 				
-				}
+		}  
+	
 			
 				timer -= Time.deltaTime;
 			
