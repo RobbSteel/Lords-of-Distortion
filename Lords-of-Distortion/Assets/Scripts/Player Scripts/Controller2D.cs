@@ -14,7 +14,7 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool jumpRequested = false;
 
-	public bool DEBUG;
+	public bool OFFLINE;
 	public float maxSpeed = 10f;
 	public Animator anim;
 
@@ -50,7 +50,6 @@ public class Controller2D : MonoBehaviour {
 	public AudioClip meleeHitSfx;
 	public AudioClip deathSfx;
 	public AudioClip jumpSfx;
-	public bool tutorialUse;
 
 	NetworkController networkController;
 	PlayerStatus status;
@@ -102,7 +101,6 @@ public class Controller2D : MonoBehaviour {
 		stunned = false;
         meleeStunned = false;
 		canJump = true;
-        locked = false;
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
@@ -117,7 +115,7 @@ public class Controller2D : MonoBehaviour {
 			Destroy(newshield);
 		}
 
-		if(!DEBUG && !networkController.isOwner)
+		if(!OFFLINE && !networkController.isOwner)
 			return;
 		if(!hooked && !locked){
 
@@ -154,7 +152,7 @@ public class Controller2D : MonoBehaviour {
 
 		if(!hooked){
 		    IsGrounded();
-		    if(!DEBUG && !networkController.isOwner)
+		    if(!OFFLINE && !networkController.isOwner)
 			    return;
 
             if(!locked)
@@ -256,7 +254,7 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!OFFLINE){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -269,7 +267,7 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 				Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!OFFLINE){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -341,7 +339,10 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+
+			if(!OFFLINE)
 			status.GenerateEvent(power);
+
 			power.PowerActionEnter(gameObject, this);
 			
 		}
@@ -458,7 +459,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		if(!DEBUG){
+		if(!OFFLINE){
 			if(Network.isServer){
 				//blocks any lingering rpc calls
 				//Network.RemoveRPCs(networkView.viewID);

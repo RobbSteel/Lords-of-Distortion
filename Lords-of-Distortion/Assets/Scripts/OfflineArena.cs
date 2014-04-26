@@ -7,6 +7,8 @@ public class OfflineArena : MonoBehaviour {
 
 	public GameObject PlacementUIPrefab;
 	public GameObject alertSymbolPrefab;
+	public PowerType firstPower;
+	public PowerType secondPower;
 
 	private PlacementUI placementUI;
 	private PowerPrefabs powerPrefabs;
@@ -17,7 +19,7 @@ public class OfflineArena : MonoBehaviour {
 		GameObject placementRoot = Instantiate(PlacementUIPrefab, PlacementUIPrefab.transform.position, 
 		                                       Quaternion.identity) as GameObject;
 		placementUI = placementRoot.GetComponent<PlacementUI>();
-		placementUI.Initialize(powerPrefabs);
+		placementUI.Initialize (powerPrefabs, firstPower, secondPower);
 	}
 
 	void Start(){

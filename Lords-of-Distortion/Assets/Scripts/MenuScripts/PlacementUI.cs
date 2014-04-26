@@ -655,6 +655,20 @@ public class PlacementUI : MonoBehaviour {
         }
 	}
 
+	public void Resupply( PowerType specifiedPower ){
+		if(inventoryPowers.Count < 2){
+			//avoid giving same power
+			PowerType newPower = specifiedPower;
+		
+			InventoryPower freePower = new InventoryPower(newPower, false);
+			
+			inventoryPowers.Add(newPower, freePower);
+			AddToInventory(freePower);
+
+		}
+
+	}
+
 	//Destroy the associated UI power based solely on localID
 	public void DestroyUIPower(Power power){
 		DestroyUIPower(spawnByID[power.spawnInfo.GetLocalID()]);
