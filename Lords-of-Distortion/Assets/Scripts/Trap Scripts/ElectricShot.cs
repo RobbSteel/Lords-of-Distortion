@@ -9,7 +9,7 @@ public class ElectricShot : Power {
 	// Use this for initialization
 	void Start () {
 		Destroy (gameObject, 6.0f);
-		
+        particleSystem.renderer.sortingLayerName = "Foreground";
 	}
 	
 	// Update is called once per frame

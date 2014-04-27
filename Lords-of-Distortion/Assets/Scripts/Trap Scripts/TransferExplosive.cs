@@ -115,12 +115,16 @@ public class TransferExplosive : Power
 			//var playercontroller = playerstuck.GetComponent<Controller2D>();
 		    //playercontroller.hasbomb = false;
 			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-		    var playercontroller = playerstuck.GetComponent<Controller2D>();
+		    
+			if(playerstuck != null){
+			var playercontroller = playerstuck.GetComponent<Controller2D>();
 		    playercontroller.hasbomb = false;
+			}
 			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 			Vector3 charMarkLoc = transform.position;
             charMarkLoc.z = 1.4f;
 			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
+			exploded = true;
 			Destroy (gameObject);
             
 		} else {

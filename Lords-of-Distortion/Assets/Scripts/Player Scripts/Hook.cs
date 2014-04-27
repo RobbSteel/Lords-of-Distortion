@@ -107,15 +107,16 @@ public class Hook : MonoBehaviour {
 		//Get input from user and set cooldown to avoid repeated use.
         //previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && currentDrag == 0 && hooktimer <= 0 && !hookDisable){
-                
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
+            {
                 animator.SetFloat("Speed", 0);
                 Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
 				AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
                 
-				if(!OFFLINE){
+				if(!OFFLINE)
+                {
 					if(GameObject.Find("CollectData") != null){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);
 					}
@@ -126,9 +127,8 @@ public class Hook : MonoBehaviour {
 					else
 						networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
 				}
-
-
-				ShootHookLocal(mouseClick);
+                
+                ShootHookLocal(mouseClick);
 			}
 
 		} /*else {

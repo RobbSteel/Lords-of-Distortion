@@ -195,6 +195,10 @@ public class PlacementUI : MonoBehaviour {
 		//Switch to random power.
 		if(autoRefill){
 			Resupply();
+		}
+		if(deadScreen){
+			timer = 3.5f;
+			reEnabledButtons = false;
 			GridEnabled(false);
 		}
 	}
@@ -229,7 +233,8 @@ public class PlacementUI : MonoBehaviour {
 			}
 			*/
 		}
-		//TODO: destroy untriggered trapss
+
+		//TODO: destroy untriggered traps
 		GridEnabled(true);
 	}
 
@@ -395,10 +400,6 @@ public class PlacementUI : MonoBehaviour {
 		activePower.AddComponent<MouseFollow>();
         activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
-		if(deadScreen){
-			timer = 3.5f;
-			reEnabledButtons = false;
-		}
 		GridEnabled(false);
 	}
 
