@@ -27,7 +27,7 @@ public class DefectionShield : Power {
 	// Use this for initialization
 	void Start () {
 		this.renderer.material.SetColor ("_TintColor", shieldshaderColor);
-
+        particleSystem.renderer.sortingLayerName = "Foreground";
 		currentColor = shieldshaderColor;
 		insideExplosionRange = false;
 		timer = 0;

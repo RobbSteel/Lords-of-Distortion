@@ -11,7 +11,7 @@ public class ElectricGenerator : Power {
 	private float repetitions = 0;
 	// Use this for initialization
 	void Start () {
-		
+        particleSystem.renderer.sortingLayerName = "Foreground";
 		time = 1;
 		
 	}

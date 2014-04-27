@@ -47,6 +47,7 @@ public class SmokeBomb : Power {
 	
 	// Use this for initialization
 	void Start () {
+        particleSystem.renderer.sortingLayerName = "Foreground";
 		Destroy(gameObject, duration);
 		original = this.transform.position;
 		end = this.transform.position + Vector3.left* 0.1f;
