@@ -14,6 +14,7 @@ public class PlayerOptions{
 
 	public CharacterStyle style;
 	public string username;
+    public Character character;
 
 	private int playerNumber;
 	
