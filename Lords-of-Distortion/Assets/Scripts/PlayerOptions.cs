@@ -14,7 +14,7 @@ public class PlayerOptions{
 
 	public CharacterStyle style;
 	public string username;
-    public Character character;
+    public Character character = Character.Colossus;
 
 	private int playerNumber;
 	
