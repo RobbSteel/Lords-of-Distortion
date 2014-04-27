@@ -1,90 +1,133 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TutorialOne : MonoBehaviour {
+public class TutorialOne: MonoBehaviour {
+	
+	public Camera mainCam;
+	public GameObject player;
+	private string nextLevel = "Tutorial-Two";
+	public UILabel guiText;
+	public GameObject[] objectives;
+	public int currentObjective;
+	public string firstMessage;
+	public string secondMessage;
+	public string deathMessage;
+	public string finishedMessage;
+	private SceneFadeInOut transitionToNewScene;
+	private bool endScene;
+	private float fadeTimer;
+	private float durationOfFading;
+	private bool fade;
+	
+	void Awake(){
 		
-		public Camera mainCam;
-		public GameObject player;
-		private int currentLevel;
-		private string nextLevel = "Tutorial-Two";
-		private SceneFadeInOut transitionToNewScene;
-		public UILabel guiText;
-		public GameObject[] objectives;
-		public int currentObjective;
-		private bool endScene;
-		private float resetTimer;
-		private float timer;
+	}
+	
+	// Use this for initialization
+	void Start () {
+		fade = false;
+		durationOfFading = 2;
+		fadeTimer = 0;
+		transitionToNewScene = this.GetComponent<SceneFadeInOut> ();
+		currentObjective = 0;
+		objectives [currentObjective].SetActive (true);
+		guiText = GameObject.Find ("HUDText").GetComponent<UILabel>();
+		changeText( firstMessage );
+		runScene(currentObjective);
+		endScene = false;
+	}
+	
+	// Update is called once per frame
+	void Update () {
 		
-		void Awake(){
-
-		}
+		textAnimation ();
 		
-		// Use this for initialization
-		void Start () {
-			transitionToNewScene = this.GetComponent<SceneFadeInOut> ();
-			currentObjective = 0;
-			objectives [currentObjective].SetActive (true);
-			guiText = GameObject.Find ("HUDText").GetComponent<UILabel>();
-			changeText( "Welcome to Paper Project" );
-		    runScene(currentObjective);
-			endScene = false;
-
-		}
+		if (endScene)
+			loadNextLevel ();
 		
-		// Update is called once per frame
-		void Update () {
-			if (endScene) 
-				transitionToNewScene.EndScene( nextLevel );
-
-			if (player == null)
-				resetLevel ();
-
-			incrementObjective();
-		}
+		if (player == null)
+			resetLevel ();
 		
-		private void incrementObjective(){
-		if ( currentObjective < objectives.Length && objectives[currentObjective] == null ) {
-				currentObjective += 1;
-				
-				if( currentObjective < objectives.Length ){
-					objectives[currentObjective].SetActive(true);
-				}
-				if( currentObjective >= objectives.Length ){
-					endScene = true;
-				}
+		incrementObjective();
+	}
+	
+	private void textAnimation(){
+		if (fade)
+			fadeTextClear ();
+		
+		if (!fade)
+			fadeTextSolid ();
+	}
+	
+	private void setFadeClear(){
+		fadeTimer = 0;
+		fade = true;
+	}
+	
+	private void setFadeSolid(){
+		fadeTimer = 0;
+		fade = false;
+	}
+	
+	private void incrementObjective(){
+		if ( !endScene && objectives [currentObjective] == null ) {
+			currentObjective += 1;
+			
+			if( currentObjective < objectives.Length ){
+				objectives[currentObjective].SetActive(true);
+			}
+			else if (currentObjective >= objectives.Length ){
+				endScene = true;
 			}
 		}
+	}
+	
+	private void changeText( string newText ){
+		guiText.text = newText;
+	}
+	
+	private void runScene( int current ){
+		switch( current ){
+		case 0:
+			StartCoroutine( startScene());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void fadeTextClear(){
+		fadeTimer += Time.deltaTime;
+		Color current = Color.Lerp (Color.white, Color.clear, fadeTimer/durationOfFading );
+		guiText.color = current;
+	}
+	
+	private void fadeTextSolid(){
+		fadeTimer += Time.deltaTime;
+		Color current = Color.Lerp (Color.clear, Color.white, fadeTimer/durationOfFading );
+		guiText.color = current;
+	}
+	
+	IEnumerator startScene(){
+		player.GetComponent<Controller2D> ().locked = true;
+		yield return new WaitForSeconds (2);
+		setFadeClear ();
+		yield return new WaitForSeconds (durationOfFading);
+		setFadeSolid ();
+		changeText (secondMessage);
+		player.GetComponent<Controller2D> ().locked = false;
 		
-		private void changeText( string newText ){
-			guiText.text = newText;
-		}
-
-		private void runScene( int current ){
-			switch( current ){
-				case 0:
-					StartCoroutine( startScene());
-					break;
-				default:
-					break;
-			}
-		}
-
-		IEnumerator startScene(){
-			player.GetComponent<Controller2D> ().locked = true;
-			yield return new WaitForSeconds (2);
-			changeText ("Get To the way points");
-			player.GetComponent<Controller2D> ().locked = false;
-
-		}
-		
-		public void loadNextLevel(){
-			changeText ("FINISHED");
-			transitionToNewScene.EndScene( nextLevel );
-		}
-
-		public void resetLevel(){
-			changeText ("You Died");
-			Application.LoadLevel (Application.loadedLevel);
-		}
-
+	}
+	
+	public void loadNextLevel(){
+		changeText (finishedMessage);
+		transitionToNewScene.EndScene( nextLevel );
+	}
+	
+	public void resetLevel(){
+		changeText (deathMessage);
+		Application.LoadLevel (Application.loadedLevel);
+	}
+	
+	
 }

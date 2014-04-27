@@ -19,6 +19,7 @@ public class Melee : MonoBehaviour {
 	private Animator anim;		// Reference to the Animator component.
 	private Hook myhook;
 	public GameObject meleeObject;
+	public bool meleeDisable;
 
 	[HideInInspector]
 
@@ -44,7 +45,7 @@ public class Melee : MonoBehaviour {
 	void Update ()
 	{
 		//this.GetComponent<BoxCollider2D>().enabled = false;
-		if (meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
+		if ( !meleeDisable && meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
 			// If the fire button is pressed...
 			//print("maggot");
 			if (Input.GetButtonDown ("Melee") && !controller.stunned && networkController.isOwner) {
@@ -68,7 +69,9 @@ public class Melee : MonoBehaviour {
 			GA.API.Design.NewEvent("Melee Attack", transform.position);
 		}
 
+		if(!controller.OFFLINE)
 		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
+
 		// Enable Box Collider 2D
 		meleeObject.GetComponent<BoxCollider2D>().enabled = true;
 		controller.Snare();
