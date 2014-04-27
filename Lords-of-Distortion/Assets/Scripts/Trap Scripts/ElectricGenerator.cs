@@ -11,9 +11,7 @@ public class ElectricGenerator : Power {
 	private float repetitions = 0;
 	// Use this for initialization
 	void Start () {
-		
-		time = 1;
-		
+		time = 1;	
 	}
 	
 	// Update is called once per frame
