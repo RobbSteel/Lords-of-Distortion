@@ -155,11 +155,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 94676015}
   - 114: {fileID: 94676018}
-  - 65: {fileID: 94676020}
   - 114: {fileID: 94676019}
   - 114: {fileID: 94676017}
   - 114: {fileID: 94676016}
   - 114: {fileID: 94676021}
+  - 65: {fileID: 94676020}
   m_Layer: 8
   m_Name: Char2
   m_TagString: Untagged
@@ -222,9 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae9a72b19e669344a2c34a785aa28db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerscript: {fileID: 203184956}
   infoscript: {fileID: 837665392}
-  button: {fileID: 0}
   characterNum: 1
 --- !u!114 &94676019
 MonoBehaviour:
@@ -254,8 +252,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 211, y: 100, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 171.259995, y: 270.299988, z: 1}
+  m_Center: {x: -1.20000005, y: 5, z: 0}
 --- !u!114 &94676021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,7 +262,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 94676014}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Script: {fileID: 11500000, guid: e96b31ce75e592f45a1cff563a4869db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftAnchor:
@@ -285,37 +283,17 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 100
-  mHeight: 100
+  mWidth: 144
+  mHeight: 244
   mDepth: 0
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
+  keepAspectRatio: 2
   aspectRatio: 1
-  keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: '?'
-  mFontSize: 72
-  mFontStyle: 0
-  mEncoding: 1
-  mMaxLineCount: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 1, y: 1}
-  mOverflow: 0
-  mMaterial: {fileID: 0}
-  mApplyGradient: 0
-  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
-  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
-  mSpacingX: 0
-  mSpacingY: 0
-  mShrinkToFit: 0
-  mMaxLineWidth: 0
-  mMaxLineHeight: 0
-  mLineWidth: 0
-  mMultiline: 1
+  mSprite: {fileID: 21300000, guid: fe7bb80915ffcf74aa92940ebfe1e7f1, type: 3}
+  mMat: {fileID: 0}
+  mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
+  nextSprite: {fileID: 0}
 --- !u!1 &152077403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,9 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae9a72b19e669344a2c34a785aa28db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerscript: {fileID: 203184956}
   infoscript: {fileID: 837665392}
-  button: {fileID: 0}
   characterNum: 0
 --- !u!114 &1142760210
 MonoBehaviour:
@@ -1129,8 +1105,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 99.4475098, y: 196.278381, z: 0}
-  m_Center: {x: -.27624321, y: -.360805511, z: 0}
+  m_Size: {x: 170.100006, y: 267.690002, z: 0}
+  m_Center: {x: -.600000024, y: 6.19999981, z: 0}
 --- !u!114 &1142760212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1913,7 +1889,7 @@ Transform:
   m_GameObject: {fileID: 1979524387}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.35833335, y: .308333337, z: 0}
-  m_LocalScale: {x: .00625000009, y: .00625000009, z: .00625000009}
+  m_LocalScale: {x: .00466200477, y: .00466200477, z: .00466200477}
   m_Children:
   - {fileID: 1610089343}
   - {fileID: 1710019502}
@@ -2184,7 +2160,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3008
+  startingRenderQueue: 3009
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
