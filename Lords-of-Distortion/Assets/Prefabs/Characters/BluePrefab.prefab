@@ -367,9 +367,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jumpRequested: 0
-  DEBUG: 0
+  OFFLINE: 0
   maxSpeed: 5
   anim: {fileID: 0}
+  dead: 0
   grounded: 0
   groundCheck: {fileID: 400008}
   groundLayer:
@@ -381,12 +382,17 @@ MonoBehaviour:
   snared: 0
   hooked: 0
   deathOnHit: 0
-  canJump: 0
+  canJump: 1
   hasbomb: 0
   locked: 0
+  moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
+  invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+  Respawn: {fileID: 0}
+  invulnshield: {fileID: 0}
+  newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
   meleeSfx: {fileID: 8300000, guid: 9c07f3bf223c7ef45ace65a11559a4f2, type: 3}
   meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
@@ -432,6 +438,7 @@ MonoBehaviour:
   chainspawner: 1
   pushpull: 0
   hittimer: 0
+  hookDisable: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,6 +483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 100010}
+  meleeDisable: 0
   meleeTimer: 0
   coolDownTimer: .5
   damageDealt: 15

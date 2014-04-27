@@ -19,27 +19,27 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300070, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: .200000003
+    - time: .100000001
       value: {fileID: 21300072, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: .400000006
+    - time: .200000003
       value: {fileID: 21300074, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: .600000024
+    - time: .300000012
       value: {fileID: 21300076, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: .800000012
+    - time: .400000006
       value: {fileID: 21300078, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: 1
+    - time: .5
       value: {fileID: 21300080, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: 1.20000005
+    - time: .600000024
       value: {fileID: 21300082, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: 1.39999998
+    - time: .699999988
       value: {fileID: 21300084, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
-    - time: 1.60000002
+    - time: .800000012
       value: {fileID: 21300086, guid: 3be6cf1f9b49c9a4ebca2692df24e7c8, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 5
+  m_SampleRate: 10
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -47,7 +47,7 @@ AnimationClip:
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: 1.80000007
+    m_StopTime: .900000036
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -63,4 +63,11 @@ AnimationClip:
     m_Mirror: 0
   m_EditorCurves: []
   m_EulerEditorCurves: []
-  m_Events: []
+  m_Events:
+  - time: .899999976
+    functionName: DestroyPlayer
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
