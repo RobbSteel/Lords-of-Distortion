@@ -46,7 +46,7 @@ public class FireBall : Power
 
 		Instantiate(fireparticle, transform.position, transform.rotation);
 
-		if(OFFLINE)
+		if(!OFFLINE)
 		networkView.RPC("FireExplosion", RPCMode.Others);
 
 		controller.Die(DeathType.FIRE);

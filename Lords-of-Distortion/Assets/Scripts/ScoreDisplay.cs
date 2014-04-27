@@ -18,6 +18,7 @@ public class ScoreDisplay : MonoBehaviour {
 	SessionManager sessionManager;
 	public float timeleft;
 	public float winningscore = -1;
+	public float gonethrough = 0;
 	public NetworkPlayer winningplayer;
 
 	//Different Death Icons
@@ -266,33 +267,83 @@ public class ScoreDisplay : MonoBehaviour {
 
 		} else {
 
+
 			var currplayers = infoscript.players;
-			var playername = infoscript.GetPlayerOptions(winningplayer).username;
-			var playercolor = infoscript.GetPlayerOptions(winningplayer).style;
-			var playerclr = ColorCheck(playercolor);
-			var playericon = DetermineColor(playerclr);
-			var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
-			var winlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
+			var loselabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+			loselabel.transform.parent = GameObject.Find ("UI Root").transform;
+			loselabel.transform.localScale = new Vector3(1,1,1);
+			loselabel.transform.localPosition = new Vector2(300, 300);
+			var losetext = loselabel.GetComponent<UILabel>();
+			losetext.text = "LOSERS";
 
-			playerlabel.transform.parent = GameObject.Find ("UI Root").transform;
-			playericon.transform.parent = GameObject.Find ("UI Root").transform;
-			winlabel.transform.parent = GameObject.Find ("UI Root").transform;
 
-			playerlabel.transform.localScale = new Vector3(1, 1, 1);
-			playericon.transform.localScale = new Vector3(200,200,1);
-			winlabel.transform.localScale = new Vector3(1,1,1);
 
-			playerlabel.transform.localPosition = new Vector2(-400, 350+(-500));
-			playericon.transform.localPosition = new Vector2(-400, 350+(-300));
-			winlabel.transform.localPosition = new Vector2(-400, 350+(-100));
 
-			var playertext = playerlabel.GetComponent<UILabel>();
-			var wintext = winlabel.GetComponent<UILabel>();
+			for(int i = 0; i < currplayers.Count; i++){
 
-			playertext.text = playername;
-			wintext.text = "WINNER!";
+				if(currplayers[i] == winningplayer){
+
+					var playername = infoscript.GetPlayerOptions(winningplayer).username;
+					var playercolor = infoscript.GetPlayerOptions(winningplayer).style;
+					var playerclr = ColorCheck(playercolor);
+					var playericon = DetermineColor(playerclr);
+					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+					var winlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+					
+					playerlabel.transform.parent = GameObject.Find ("UI Root").transform;
+					playericon.transform.parent = GameObject.Find ("UI Root").transform;
+					winlabel.transform.parent = GameObject.Find ("UI Root").transform;
+					
+					playerlabel.transform.localScale = new Vector3(1, 1, 1);
+					playericon.transform.localScale = new Vector3(200,200,1);
+					winlabel.transform.localScale = new Vector3(1,1,1);
+					
+					playerlabel.transform.localPosition = new Vector2(-400, 350+(-500));
+					playericon.transform.localPosition = new Vector2(-400, 350+(-300));
+					winlabel.transform.localPosition = new Vector2(-400, 350+(-100));
+					
+					var playertext = playerlabel.GetComponent<UILabel>();
+					var wintext = winlabel.GetComponent<UILabel>();
+					
+					playertext.text = playername;
+					wintext.text = "WINNER!";
+
+			} else {
+
+					var playername = infoscript.GetPlayerOptions(currplayers[i]).username;
+					var playercolor = infoscript.GetPlayerOptions(currplayers[i]).style;
+					var playerclr = ColorCheck(playercolor);
+					var playericon = DetermineColor(playerclr);
+					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+
+					
+					playerlabel.transform.parent = GameObject.Find ("UI Root").transform;
+					playericon.transform.parent = GameObject.Find ("UI Root").transform;
+
+
+					playerlabel.transform.localScale = new Vector3(1f, 1f, 1);
+					playericon.transform.localScale = new Vector3(100,100,1);
+
+					
+					playerlabel.transform.localPosition = new Vector2(200, 150+(-200 * gonethrough));
+					playericon.transform.localPosition = new Vector2(400, 150+(-200 * gonethrough));
+
+					
+					var playertext = playerlabel.GetComponent<UILabel>();
+
+					
+					playertext.text = playername;
+					gonethrough++;
+
+
+
+			}
+
+
+		
 		}
 
+	}
 	}
 
 	//Instantiate the score pose with the appropriate color and returns it to displaylocally.
