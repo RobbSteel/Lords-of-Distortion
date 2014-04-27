@@ -1989,6 +1989,14 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
+      propertyPath: firstPower
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
+      propertyPath: secondPower
+      value: 17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
   m_RootGameObject: {fileID: 758807771}
@@ -2051,6 +2059,9 @@ MonoBehaviour:
   - {fileID: 100000, guid: 47839959c09bc5b4e802192850c3a39d, type: 2}
   - {fileID: 100000, guid: 5714feed25a0789429841ad095d32272, type: 2}
   - {fileID: 100000, guid: 7e6c255855139b94ab41c8b702212ac9, type: 2}
+  - {fileID: 100000, guid: 8b00768c197448c438dc444a2d59c667, type: 2}
+  - {fileID: 100004, guid: 1a6a28209911f5b4d8f5aaa21afefcd4, type: 2}
+  - {fileID: 100000, guid: 8fdf71532795a1d428072e6c5e20e14b, type: 2}
 --- !u!114 &758807776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2065,6 +2076,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlacementUIPrefab: {fileID: 100020, guid: 3c6a5a850dbdfd6469423bd3ce5c7509, type: 2}
   alertSymbolPrefab: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
+  firstPower: 17
+  secondPower: 17
 --- !u!4 &758807777
 Transform:
   m_ObjectHideFlags: 0
@@ -2152,6 +2165,10 @@ MonoBehaviour:
   - {fileID: 200724610}
   - {fileID: 274252144}
   currentObjective: 0
+  firstMessage: Moving Lesson
+  secondMessage: Get the last waypoint!
+  deathMessage: You Died
+  finishedMessage: Completed!
 --- !u!4 &877866778
 Transform:
   m_ObjectHideFlags: 0
@@ -3492,7 +3509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1105602002
 Transform:
   m_ObjectHideFlags: 0
@@ -3677,6 +3694,7 @@ MonoBehaviour:
   coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
+  meleeDisable: 0
 --- !u!58 &1319096266
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3759,6 +3777,7 @@ MonoBehaviour:
   chainspawner: 1
   pushpull: 0
   hittimer: 0
+  hookDisable: 1
 --- !u!148 &1319096270
 NetworkView:
   m_ObjectHideFlags: 0
@@ -3802,9 +3821,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jumpRequested: 0
-  DEBUG: 0
+  OFFLINE: 1
   maxSpeed: 5
   anim: {fileID: 0}
+  dead: 0
   grounded: 0
   groundCheck: {fileID: 617545821}
   groundLayer:
@@ -3816,12 +3836,17 @@ MonoBehaviour:
   snared: 0
   hooked: 0
   deathOnHit: 0
-  canJump: 0
+  canJump: 1
   hasbomb: 0
   locked: 0
+  moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
-  DeathSpirit: {fileID: 0}
+  invulntime: 0
+  DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  invulnshield: {fileID: 0}
+  newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
   meleeSfx: {fileID: 8300000, guid: 9c07f3bf223c7ef45ace65a11559a4f2, type: 3}
   meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
@@ -4584,6 +4609,14 @@ Prefab:
     - target: {fileID: 400012, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
       propertyPath: m_LocalPosition.x
       value: -7.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+      propertyPath: canJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400008, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+      propertyPath: hookDisable
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}

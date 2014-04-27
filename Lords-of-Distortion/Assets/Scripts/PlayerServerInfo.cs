@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class PlayerServerInfo : MonoBehaviour {
 	
-	public string playername;
 	public string servername;
 	public string choice;
+	public PlayerOptions localOptions;
+
 	public HostData chosenHost;
 	public int score = 0;
 	public int playernumb;
@@ -20,6 +21,7 @@ public class PlayerServerInfo : MonoBehaviour {
 	
 	void Awake () {
 		DontDestroyOnLoad(this);
+		localOptions = new PlayerOptions();
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
 		players= new List<NetworkPlayer>();

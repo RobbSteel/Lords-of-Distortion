@@ -229,7 +229,19 @@ public class PlayerStatus : MonoBehaviour {
         knockBackPending = true;
 	}
 	
-	
+	void TakeHitOffline(bool fromLeftSide ){
+		if(playerControl.knockedBack ){
+			return;
+		}
+		HitFeedback ();
+
+		float flip = 1f;
+		if(!fromLeftSide)
+			flip = -1f;
+		
+		BeginKnockBack(flip);
+
+	}
 
 	void TakeHit(bool fromLeftSide, NetworkPlayer attacker){
 
@@ -317,19 +329,26 @@ public class PlayerStatus : MonoBehaviour {
 		}
 	}
 
+
 	//This function tells the player that owns this character that he's been hit by you.
 	public void AddHit( bool fromLeftSide){
-		//Note, the following doesnt work(clients cant rpc each other directly)
-		//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
-		//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
-		NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController>().theOwner;
-		if(Network.isServer){
-			//RPC player we hit directly
-			networkView.RPC("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
-		}
-		else {
-			//tell server we hit player
-			networkView.RPC("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
+			//Offline Melee
+		if (playerControl.OFFLINE) {
+			TakeHitOffline(fromLeftSide);
+		}else{
+			//Note, the following doesnt work(clients cant rpc each other directly)
+			//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
+			//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
+			NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController>().theOwner;
+			if(Network.isServer){
+				//RPC player we hit directly
+				networkView.RPC("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
+			}
+			else {
+				//tell server we hit player
+				networkView.RPC("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
+			}
+
 		}
 	}
 	
