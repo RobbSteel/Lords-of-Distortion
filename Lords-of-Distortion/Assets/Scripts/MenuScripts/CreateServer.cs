@@ -18,7 +18,7 @@ public class CreateServer : MonoBehaviour {
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name" || playerscript.gameName == "" || playerscript.gameName == "Server Name"){
 			print("Nope");
 		} else {
-			infoscript.playername = playerscript.playerName;
+			infoscript.localOptions.username = playerscript.playerName;
 			infoscript.servername = playerscript.gameName;
 			infoscript.choice = "Host";
 			Application.LoadLevel("LobbyArena");

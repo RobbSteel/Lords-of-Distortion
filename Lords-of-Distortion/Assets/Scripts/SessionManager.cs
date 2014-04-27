@@ -45,35 +45,56 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	//NetworkController myPlayer;
-	public Transform characterPrefab;
+	public Transform colossusPrefab;
+	public Transform bluePrefab;
+
 	public GameObject timeManagerPrefab;
 	
 	//The client requests that the server do the following.
 	[RPC]
-	void RequestLocalSpawn( string username, NetworkMessageInfo info){
+	void RequestLocalSpawn(string username, int character, NetworkMessageInfo info){
 		//re-enable buffered rpc sending
 		//Network.SetSendingEnabled(info.sender, SETUP, true);
 		NetworkPlayer original = info.sender;
 		++playerCounter;
-		ConfirmLocalSpawn (playerCounter, username, original);
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, username, original);
+		ConfirmLocalSpawn (playerCounter, username, original, character);
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, username, original, character);
 	}
 	
 	
-	//This is called by each client when told to by the server.
+	//This is called by each client when told to by the server. 
+	//Allocates view ID (thereby becoming owner) and tells others to instantiate character clone
 	[RPC]
 	void SpawnPlayer(Vector3 location){
 		//var timeInstance = (GameObject)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		NetworkViewID newID = Network.AllocateViewID();
+		NetworkViewID newID = Network.AllocateViewID(); //allocate viewId for communications
 		int group = GAMEPLAY;
-		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, newID, group);
-		Transform instance = InstantiatePlayer(location, newID, group);
+		PlayerOptions localOptions = psInfo.localOptions;
+		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, (int)localOptions.character, newID, group);
+		Transform instance = InstantiatePlayer(location, (int)localOptions.character, newID, group);
 		instance.GetComponent<NetworkView>().RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
 	}
 
+	//Actually instantiates the character game object.
 	[RPC]
-	Transform InstantiatePlayer(Vector3 location, NetworkViewID viewID, int group){
-		Transform instance = (Transform)Instantiate(characterPrefab, location, Quaternion.identity);
+	Transform InstantiatePlayer(Vector3 location, int character,  NetworkViewID viewID, int group){
+
+		Transform instance = null;
+		//Instantiate different prefab depending on choice.
+		PlayerOptions.Character characterType = (PlayerOptions.Character)character;
+
+		switch(characterType){
+		case PlayerOptions.Character.Colossus:
+			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
+			break;
+		case PlayerOptions.Character.Blue:
+			instance = (Transform)Instantiate(bluePrefab, location, Quaternion.identity);
+			break;
+		default:
+			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
+			break;
+		}
+
 		NetworkView charNetworkView = instance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
 		charNetworkView.group = group;
@@ -85,18 +106,19 @@ public class SessionManager : MonoBehaviour {
 	 */
 	
 	[RPC]
-	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer original){
+	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer owner, int character){
 		playerCounter = playerNumber; //unity guarantees that rpcs will be in order
 		
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
+		options.character = (PlayerOptions.Character)character;
 		psInfo.playernumb = playerNumber;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
-		psInfo.AddPlayer(original, options, stats);
+		psInfo.AddPlayer(owner, options, stats);
 		
-		if(original == Network.player){
+		if(owner == Network.player){
 			//do this at the end so that options are available to the player
 			SpawnPlayer(transform.position);
 		}
@@ -109,22 +131,23 @@ public class SessionManager : MonoBehaviour {
 		timemanager = TimeManager.instance;
 		timemanager.SyncTimes();
 		++playerCounter;
-
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, psInfo.playername, Network.player);
+		PlayerOptions localOptions = psInfo.localOptions;
+		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, localOptions.username,Network.player, (int)localOptions.character);
 		//calling this causes problems because playerID will be set after we spawn, which is too late.
-		ConfirmLocalSpawn (playerCounter, psInfo.playername, Network.player);
+		ConfirmLocalSpawn (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
 		//SpawnPlayer(transform.position);
 	}
 	
 	void OnConnectedToServer()
 	{
-
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
-		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, psInfo.playername);
+		PlayerOptions localOptions = psInfo.localOptions;
+		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username, (int)localOptions.character);
 		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
 		timemanager.SyncTimes();
 	}
+
 	void OnPlayerConnected(NetworkPlayer player) {
 		//Dont send anything to this player until he loads this stage
 		//Network.SetSendingEnabled(player, SETUP, false);
