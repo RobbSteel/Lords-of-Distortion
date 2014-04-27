@@ -112,6 +112,7 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
+		options.character = (PlayerOptions.Character)character;
 		psInfo.playernumb = playerNumber;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
