@@ -94,6 +94,7 @@ public class DefectionShield : Power {
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
 		target = null;
+        insideExplosionRange = false;
 		controller.powerInvulnerable = false;
 	}
 
