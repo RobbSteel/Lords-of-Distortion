@@ -256,12 +256,14 @@ public class LobbyPlacement : MonoBehaviour {
 			
 			switch(state){
 				//Checks if we've clicked on a power that was already placed..
+			/*
 			case PlacementState.Default:
 				//make sure not to allow player to move powers when dead or when under an active button
 				if(!live && SelectExistingPower()){ 
 					FollowMouse();
 				}
 				break;
+				*/
 				//Called when we're in the process of moving a power around.
 			case PlacementState.MovingPower:
 				//Put down power.
@@ -637,6 +639,23 @@ public class LobbyPlacement : MonoBehaviour {
 			
 			inventoryPowers.Add(newPower, freePower);
 			AddToInventory(freePower);
+		}
+	}
+
+	public void Resupply( PowerType specifiedPower ){
+
+		if (!inventoryPowers.ContainsKey (specifiedPower)) {
+
+			if(inventoryPowers.Count < 2){
+				//avoid giving same power
+				PowerType newPower = specifiedPower;
+				
+				InventoryPower freePower = new InventoryPower(newPower, false);
+				
+				inventoryPowers.Add(newPower, freePower);
+				AddToInventory(freePower);
+				
+			}
 		}
 	}
 	

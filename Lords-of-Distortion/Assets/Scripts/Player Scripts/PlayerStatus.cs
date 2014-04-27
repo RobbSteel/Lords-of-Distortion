@@ -17,8 +17,9 @@ public class PlayerStatus : MonoBehaviour {
 	public float recoverRate;
 
     //variables for Plague
-    private float plagueTimer = 0f;
     public bool insidePlague = false;
+    private float plagueAmount = 0f;
+    private float plagueTimer = 0f;
 
 	//Metrics for death
 	public float timegrav;
@@ -76,7 +77,7 @@ public class PlayerStatus : MonoBehaviour {
 		shield.enableEmission = false;
 		levelCamera = GameObject.Find("Main Camera").camera;
 	}
-	
+
 	void Start(){
 		networkController = GetComponent<NetworkController>();
 		hitMarkSprites.enabled = false;
@@ -157,7 +158,28 @@ public class PlayerStatus : MonoBehaviour {
 		
 	}
 	
-	
+    public void AddPlague(float amount)
+    {
+        plagueAmount += amount;
+        PlagueUpdate();
+    }
+
+    public void RemovePlague()
+    {
+        plagueAmount = 0;
+        PlagueUpdate();
+    }
+
+    public float PlagueAmount()
+    {
+        return plagueAmount;
+    }
+
+    private void PlagueUpdate()
+    {
+        playerControl.rigidbody2D.drag = plagueAmount;
+    }
+
 	// Update is called once per frame
 	void Update () {
 		RegenBar();
@@ -182,22 +204,8 @@ public class PlayerStatus : MonoBehaviour {
 		}
 	}
 	
-    private void UpdateDrag()
-    {
-        if(!insidePlague)
-        {
-            plagueTimer += Time.deltaTime;
-            if(plagueTimer > 1)
-            {
-                plagueTimer = 0;
-                playerControl.rigidbody2D.drag -= 10f;
-            }
-        }
-    }
-	
 	void FixedUpdate(){
-        UpdateDrag();
-		//push the character sideways
+     	//push the character sideways
 		if(knockBackPending){
 			//player should be in air by now, so disable movement
 			playerControl.KnockBack();
@@ -385,7 +393,9 @@ public class PlayerStatus : MonoBehaviour {
 	
 	public void UnStun(){
 
+		if( !playerControl.OFFLINE )
 		networkView.RPC("RemoveStunRemote", RPCMode.Others);
+
 		UnStunSimple();
 	}
 	

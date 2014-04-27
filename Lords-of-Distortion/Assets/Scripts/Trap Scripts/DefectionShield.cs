@@ -27,7 +27,7 @@ public class DefectionShield : Power {
 	// Use this for initialization
 	void Start () {
 		this.renderer.material.SetColor ("_TintColor", shieldshaderColor);
-
+        particleSystem.renderer.sortingLayerName = "Foreground";
 		currentColor = shieldshaderColor;
 		insideExplosionRange = false;
 		timer = 0;
@@ -94,6 +94,7 @@ public class DefectionShield : Power {
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
 		target = null;
+        insideExplosionRange = false;
 		controller.powerInvulnerable = false;
 	}
 
@@ -117,7 +118,7 @@ public class DefectionShield : Power {
 
 	void OnDestroy(){
 		if (insideExplosionRange) {
-            playerController.Die(DeathType.FIRE);
+            playerController.Die(DeathType.EXPLOSION);
 		} 
 	}
 }

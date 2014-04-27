@@ -5,7 +5,8 @@ using System.Collections;
 public enum DeathType{
 	CRUSH,
 	FIRE,
-	PLAGUE
+	PLAGUE,
+	EXPLOSION
 }
 
 public class Controller2D : MonoBehaviour {
@@ -14,7 +15,7 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool jumpRequested = false;
 
-	public bool DEBUG;
+	public bool OFFLINE;
 	public float maxSpeed = 10f;
 	public Animator anim;
 
@@ -34,6 +35,7 @@ public class Controller2D : MonoBehaviour {
 	public bool hasbomb;
     public bool locked;
 	bool stoppedJump;
+	public bool moveDisable;
 	public bool inAir = true;
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType);
@@ -50,7 +52,6 @@ public class Controller2D : MonoBehaviour {
 	public AudioClip meleeHitSfx;
 	public AudioClip deathSfx;
 	public AudioClip jumpSfx;
-	public bool tutorialUse;
 
 	NetworkController networkController;
 	PlayerStatus status;
@@ -101,8 +102,6 @@ public class Controller2D : MonoBehaviour {
 		deathOnHit = false;
 		stunned = false;
         meleeStunned = false;
-		canJump = true;
-        locked = false;
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
@@ -117,7 +116,7 @@ public class Controller2D : MonoBehaviour {
 			Destroy(newshield);
 		}
 
-		if(!DEBUG && !networkController.isOwner)
+		if(!OFFLINE && !networkController.isOwner)
 			return;
 		if(!hooked && !locked){
 
@@ -154,10 +153,10 @@ public class Controller2D : MonoBehaviour {
 
 		if(!hooked){
 		    IsGrounded();
-		    if(!DEBUG && !networkController.isOwner)
+		    if(!OFFLINE && !networkController.isOwner)
 			    return;
 
-            if(!locked)
+            if(!locked && !moveDisable )
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
@@ -256,7 +255,7 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && (other.gameObject.tag == "Power" || other.gameObject.tag == "PowerHook" ))
 		{
 			Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!OFFLINE){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -269,7 +268,7 @@ public class Controller2D : MonoBehaviour {
 				return;
 
 				Power power = other.gameObject.GetComponent<Power>();
-			if(tutorialUse){
+			if(!OFFLINE){
 				status.GenerateEvent(power);
 			}
 			power.PowerActionEnter(gameObject, this);
@@ -341,7 +340,10 @@ public class Controller2D : MonoBehaviour {
 		if (!powerInvulnerable && other.gameObject.tag == "Power")
 		{
 			Power power = other.gameObject.GetComponent<Power>();
+
+			if(!OFFLINE)
 			status.GenerateEvent(power);
+
 			power.PowerActionEnter(gameObject, this);
 			
 		}
@@ -404,8 +406,11 @@ public class Controller2D : MonoBehaviour {
 		case DeathType.PLAGUE:
 			anim.SetTrigger("PlagueDeath");
 			break;
+		case DeathType.EXPLOSION:
+			anim.SetTrigger ("ExplosionDeath");
+			break;
 		default:
-			anim.SetTrigger("Die");;
+			anim.SetTrigger("Die");
 			break;
 		}
 	}
@@ -447,9 +452,12 @@ public class Controller2D : MonoBehaviour {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
 			snared = false;
+			hasbomb = false;
+			status.currentStunMeter = 0;
 			collider2D.enabled = true;
 			invulntime = 3;
 			powerInvulnerable = true;
+            status.RemovePlague();
 			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 			newshield.transform.parent = gameObject.transform;
 			transform.position = new Vector2(0,0);
@@ -458,7 +466,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		if(!DEBUG){
+		if(!OFFLINE){
 			if(Network.isServer){
 				//blocks any lingering rpc calls
 				//Network.RemoveRPCs(networkView.viewID);

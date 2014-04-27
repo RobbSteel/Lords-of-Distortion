@@ -6,6 +6,8 @@ public class LobbyFountain : MonoBehaviour {
 	public GameObject fountainParticles;
 	public GameObject getPowerParticles;
 	public bool tutorialUse;
+	public PowerType specifiedPower;
+	public bool randomPowerSupply;
 	ParticleSystem getPowerPSystem;
 	
 	bool used = false;
@@ -32,11 +34,20 @@ public class LobbyFountain : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag == "Player"){
 			if(placementUI.CanResupply()){
-				placementUI.Resupply();
-				audio.Play();
-				getPowerPSystem.Play();
+				reSupplyPlayer();
 			}
 		}
+	}
+
+	void reSupplyPlayer(){
+		if(randomPowerSupply)
+			placementUI.Resupply();
+		else
+			placementUI.Resupply(specifiedPower);
+		
+		used = true;
+		audio.Play();
+		getPowerPSystem.Play();
 	}
 	
 	void OnDisable(){

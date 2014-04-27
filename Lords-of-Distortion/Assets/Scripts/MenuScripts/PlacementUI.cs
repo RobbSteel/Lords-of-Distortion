@@ -195,6 +195,10 @@ public class PlacementUI : MonoBehaviour {
 		//Switch to random power.
 		if(autoRefill){
 			Resupply();
+		}
+		if(deadScreen){
+			timer = 3.5f;
+			reEnabledButtons = false;
 			GridEnabled(false);
 		}
 	}
@@ -229,7 +233,8 @@ public class PlacementUI : MonoBehaviour {
 			}
 			*/
 		}
-		//TODO: destroy untriggered trapss
+
+		//TODO: destroy untriggered traps
 		GridEnabled(true);
 	}
 
@@ -395,10 +400,6 @@ public class PlacementUI : MonoBehaviour {
 		activePower.AddComponent<MouseFollow>();
         activePower.GetComponent<MouseFollow>().camera = cam;
 		/*Disable all other buttons while placing power*/
-		if(deadScreen){
-			timer = 3.5f;
-			reEnabledButtons = false;
-		}
 		GridEnabled(false);
 	}
 
@@ -653,6 +654,23 @@ public class PlacementUI : MonoBehaviour {
 			inventoryPowers.Add(newPower, freePower);
 			AddToInventory(freePower);
         }
+	}
+
+	public void Resupply( PowerType specifiedPower ){
+		
+		if (!inventoryPowers.ContainsKey (specifiedPower)) {
+			
+			if(inventoryPowers.Count < 2){
+				//avoid giving same power
+				PowerType newPower = specifiedPower;
+				
+				InventoryPower freePower = new InventoryPower(newPower, false);
+				
+				inventoryPowers.Add(newPower, freePower);
+				AddToInventory(freePower);
+				
+			}
+		}
 	}
 
 	//Destroy the associated UI power based solely on localID
