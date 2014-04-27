@@ -154,9 +154,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 94676015}
+  - 114: {fileID: 94676018}
   - 65: {fileID: 94676020}
   - 114: {fileID: 94676019}
-  - 114: {fileID: 94676018}
   - 114: {fileID: 94676017}
   - 114: {fileID: 94676016}
   - 114: {fileID: 94676021}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 94676014}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ae9a72b19e669344a2c34a785aa28db, type: 3}
   m_Name: 
@@ -225,7 +225,7 @@ MonoBehaviour:
   playerscript: {fileID: 203184956}
   infoscript: {fileID: 837665392}
   button: {fileID: 0}
-  Char1Selected: 0
+  characterNum: 1
 --- !u!114 &94676019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,7 +832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80242b961fd36d44bc85abd5265320b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playername: 
   servername: 
   choice: 
   score: 0
@@ -1064,10 +1063,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1142760206}
+  - 114: {fileID: 1142760207}
   - 65: {fileID: 1142760211}
   - 114: {fileID: 1142760210}
   - 114: {fileID: 1142760212}
-  - 114: {fileID: 1142760207}
   m_Layer: 8
   m_Name: Char1
   m_TagString: Untagged
@@ -1093,7 +1092,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1142760205}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ae9a72b19e669344a2c34a785aa28db, type: 3}
   m_Name: 
@@ -1101,7 +1100,7 @@ MonoBehaviour:
   playerscript: {fileID: 203184956}
   infoscript: {fileID: 837665392}
   button: {fileID: 0}
-  Char1Selected: 0
+  characterNum: 0
 --- !u!114 &1142760210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1914,7 +1913,7 @@ Transform:
   m_GameObject: {fileID: 1979524387}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.35833335, y: .308333337, z: 0}
-  m_LocalScale: {x: .00451467279, y: .00451467279, z: .00451467279}
+  m_LocalScale: {x: .00625000009, y: .00625000009, z: .00625000009}
   m_Children:
   - {fileID: 1610089343}
   - {fileID: 1710019502}
