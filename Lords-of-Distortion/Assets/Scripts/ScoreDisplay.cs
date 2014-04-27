@@ -103,10 +103,10 @@ public class ScoreDisplay : MonoBehaviour {
 		if(sessionManager.matchfinish){
 
 			for(int z = 0; z < listed.Count; z++){
-				sessionManager.matchfinish = false;
-				infoscript.GetPlayerStats(listed[z]).roundScore = 0;
-			}
 
+				infoscript.GetPlayerStats(listed[z]).totalScore = 0;
+			}
+			sessionManager.matchfinish = false;
 		}
 		
 
@@ -340,9 +340,9 @@ public class ScoreDisplay : MonoBehaviour {
 	bool sentLevelLoadRPC = false;
 	// Update is called once per frame
 	void Update () {
-
+		print (sessionManager.matchfinish);
 		if(timeleft < 7 && timeleft > 6 && !finish){
-
+			print ("finish");
 			var destroylist = GameObject.FindGameObjectsWithTag("ScoreLabels");
 
 			for(int i = 0; i < destroylist.Length; i++){
@@ -355,17 +355,17 @@ public class ScoreDisplay : MonoBehaviour {
 		}
 
 
-		if(Network.isServer){
+
 
 		   if(timeleft > 0){
 
 			   timeleft -= Time.deltaTime;
 				 
 		    } else if(!sentLevelLoadRPC){
-			
-			   sessionManager.LoadNextLevel(false);
-			   sentLevelLoadRPC = true;
-		    }
-	   }
+				if(Network.isServer){
+			   		sessionManager.LoadNextLevel(false);
+			   		sentLevelLoadRPC = true;
+	  		 	}
+			}
 	}
 }
