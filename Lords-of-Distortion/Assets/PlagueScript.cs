@@ -10,6 +10,7 @@ public class PlagueScript : Power
 
     void Start () 
     {
+        //particleSystem.renderer.sortingLayerName = "Foreground";
         Destroy(gameObject, 15f);
 	}
 

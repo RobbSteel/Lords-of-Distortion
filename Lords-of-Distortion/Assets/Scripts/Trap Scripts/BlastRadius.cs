@@ -4,6 +4,7 @@ using System.Collections;
 public class BlastRadius : Power {
 
 	void Start(){
+        //particleSystem.renderer.sortingLayerName = "Foreground";
 		Destroy(gameObject, .8f);
 	}
 
@@ -19,7 +20,7 @@ public class BlastRadius : Power {
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller)
 	{
-        controller.Die(DeathType.EXPLOSION);
+        //controller.Die(DeathType.EXPLOSION);
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller)
