@@ -115,9 +115,9 @@ public class SmokeBomb : Power {
 	}
 
 	void OnTriggerStay2D( Collider2D col ){
-		Debug.Log (col.name);
+		// (col.name);
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
-			Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
+			//Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
 
 			if( !targets.Contains( col.gameObject )){
 				targets.Add(col.gameObject);
