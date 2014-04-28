@@ -131,7 +131,7 @@ public class LobbyGUI : MonoBehaviour {
             
             playBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
             playBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
-            playBtn.transform.localPosition = new Vector2(-563.4375f, -321.5379f);
+            playBtn.transform.localPosition = new Vector2(-545f, -321f);
 
             UIEventListener.Get(playBtn).onClick += PlayButton;
 
