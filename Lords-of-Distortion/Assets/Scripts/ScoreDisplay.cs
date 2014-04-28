@@ -9,6 +9,8 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject PlayerLabel;
 	public GameObject PlayerDisplay;
 	public GameObject BluePlayerDisplay;
+	public GameObject BlueEnd;
+	public GameObject ColEnd;
 	public GameObject KillLabel;
 	public GameObject AssistLabel;
 	public GameObject WinLabel;
@@ -215,7 +217,7 @@ public class ScoreDisplay : MonoBehaviour {
 		//Add score text to the box
 		playertext.text = playername;
 		killstext.text = "+" + roundscore;
-		favortext.text = "+" + totalscore;
+		favortext.text = "" + totalscore;
 		
 		
 	}
@@ -302,9 +304,9 @@ public class ScoreDisplay : MonoBehaviour {
 
 					GameObject playericon;
 					if(playertype == PlayerOptions.Character.Blue){
-						playericon = DetermineColorBlue(playerclr);
+						playericon = DetermineColorBlueEnd(playerclr);
 					} else {
-						playericon = DetermineColor(playerclr);
+						playericon = DetermineColorEnd(playerclr);
 					}
 
 					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
@@ -371,6 +373,88 @@ public class ScoreDisplay : MonoBehaviour {
 		}
 
 	}
+	}
+
+	GameObject DetermineColorBlueEnd(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "white"){
+			
+			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.white;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			
+			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.red;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			
+			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.green;
+			return tempplayer;
+		}
+		
+		if(color == "blue"){
+			
+			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.blue;
+			return tempplayer;
+		}
+		
+		tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+		return tempplayer; 
+	}
+
+
+
+	GameObject DetermineColorEnd(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "white"){
+			
+			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.white;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			
+			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.red;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			
+			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.green;
+			return tempplayer;
+		}
+		
+		if(color == "blue"){
+			
+			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+			var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
+			tempcolor.color = Color.blue;
+			return tempplayer;
+		}
+		
+		tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+		return tempplayer; 
 	}
 
 	//Instantiate the score pose with the appropriate color for BLUE character and returns it to displaylocally.
