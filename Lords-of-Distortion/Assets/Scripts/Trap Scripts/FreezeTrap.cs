@@ -99,7 +99,7 @@ public class FreezeTrap : Power {
                 frozenplayer = controller;
                 currentplayer = player;
 
-				if(OFFLINE)
+				if(!OFFLINE)
                 networkView.RPC("FreezeFollow", RPCMode.Others, Network.player);
             }
         }
