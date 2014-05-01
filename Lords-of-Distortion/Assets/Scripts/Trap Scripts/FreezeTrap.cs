@@ -70,6 +70,9 @@ public class FreezeTrap : Power {
                 currentplayer = player;
 
                 networkView.RPC("FreezeFollow", RPCMode.Others, Network.player);
+				if(GameObject.Find("CollectData") != null){
+					GA.API.Design.NewEvent("Times Frozen", player.transform.position);
+				}
             }
         }
         else
@@ -77,9 +80,7 @@ public class FreezeTrap : Power {
             player.rigidbody2D.drag = 45;
         }
 
-		if(GameObject.Find("CollectData") != null){
-			GA.API.Design.NewEvent("Times Frozen", player.transform.position);
-		}
+	
 		
 	}
 	
