@@ -19,6 +19,7 @@ public class HookHit : MonoBehaviour {
 	public Animator animator;
 	public AudioClip hookHitSfx;
 	public AudioClip hookWallHitSfx;
+	private bool metriconce = false;
 
 	public bool OFFLINE;
 	bool poweredUp = false;
@@ -98,8 +99,9 @@ public class HookHit : MonoBehaviour {
 
 			if(Network.isServer){
 
-				if(GameObject.Find("CollectData") != null){
+				if(GameObject.Find("CollectData") != null && !metriconce){
 					GA.API.Design.NewEvent("Hook Hits", col.transform.position);
+					metriconce = true;
 				}
 
 				hookedPlayer = col.gameObject;
