@@ -140,7 +140,7 @@ public class Earthquake : Power {
 					}
 				}
 			}
-				if(reps == 3){
+				if(reps == 2){
 					
 					Destroy(gameObject);
 				}
