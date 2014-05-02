@@ -10,7 +10,7 @@ public class SessionManager : MonoBehaviour {
 	private int arenaIndex; //for loading level purposes.
 	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
 	public PlayerServerInfo psInfo;
-	
+    public LobbyGUI lobbyGUIscript;
 	public bool finishedLoading = false;
 	public const int GAMEPLAY = 0;
 	const int SETUP = 1;
@@ -163,18 +163,23 @@ public class SessionManager : MonoBehaviour {
 
 	[RPC]
 	void PlayerDisconnected(NetworkPlayer player){
-		psInfo.RemovePlayer(player);
+        if (GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>() != null)
+        {
+            lobbyGUIscript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
+            lobbyGUIscript.RemoveReadyLight(player);
+        }
+        
+        psInfo.RemovePlayer(player);
 		--playerCounter;
-	}
+    }
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
 		if(psInfo.players.Contains(player)){
 			/* Remember to fix this */
-			Network.RemoveRPCs(player);
+            Network.RemoveRPCs(player);
 			Network.DestroyPlayerObjects(player);
-			psInfo.RemovePlayer(player);
-			--playerCounter;
-
+            PlayerDisconnected(player);
+		
 			networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
 			//Network.Destroy(myPlayer.gameObject);
 		}
