@@ -13,7 +13,8 @@ public class LobbyGUI : MonoBehaviour {
 	public PlayerServerInfo infoscript;
 	public Transform sessionManagerPrefab;
     private int localPlayerNum;
-
+    private float timer = 5;
+    private HUDTools hudTools;
     public UIGrid IconsGrid;
 
     public GameObject readyImagePrefab;
@@ -27,6 +28,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Awake(){
 		//Important
+        hudTools = GetComponent<HUDTools>();
 		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
 			sessionManager = manager.GetComponent<SessionManager>();
@@ -38,6 +40,22 @@ public class LobbyGUI : MonoBehaviour {
     public void SetLocalPlayerNum(int num)
     {
         localPlayerNum = num;
+    }
+
+    public void DisplayMessage()
+    {
+        hudTools.DisplayText("Waiting for host to start...");
+    }
+
+    void Update()
+    {
+        if(timer < 0)
+        {
+            DisplayMessage();
+            timer = 30f;
+        }
+
+        timer -= Time.deltaTime;
     }
 
     public void PlayButton(GameObject go)
@@ -53,31 +71,6 @@ public class LobbyGUI : MonoBehaviour {
 		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
 		sessionManager.LoadNextLevel(false);
     }
-    /*
-	void Update(){
-        if (!initialGridUpdate)
-        {
-            for (int i = 1; i < infoscript.playernumb; i++ )
-            {
-                readyIcons[i].GetComponent<UISprite>().enabled = true;
-            }
-            initialGridUpdate = true;
-        }
-	}
-
-    void OnPlayerConnected(NetworkPlayer player)
-    {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
-        foreach (NetworkPlayer p in infoscript.players)
-        {
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().enabled = true;
-        }
-    }
-
-    void OnPlayerDisconnected(NetworkPlayer player)
-    {
-    }
-    */
     
     [RPC]
     void SendReadyStatus(int ready, NetworkPlayer player)
