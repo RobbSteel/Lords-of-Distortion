@@ -9,13 +9,18 @@ public class LobbyGUI : MonoBehaviour {
 	private const string gameName = "Test";
 	bool wantConnection = false;
 	bool wantToStartGame = false;
-    //bool playerReady = false;
+    bool playerReady = false;
 	public PlayerServerInfo infoscript;
 	public Transform sessionManagerPrefab;
-    /*
+    private int localPlayerNum;
+    private float timer = 5;
+    private HUDTools hudTools;
+    public UIGrid IconsGrid;
+
     public GameObject readyImagePrefab;
-    public List<GameObject> readyIcons;
-    */
+    public List<GameObject> readyIcons = new List<GameObject>();
+    public Dictionary<NetworkPlayer, GameObject> dictionary = new Dictionary<NetworkPlayer,GameObject>();
+    
     private bool initialGridUpdate = false;
 
     SessionManager sessionManager;
@@ -23,6 +28,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Awake(){
 		//Important
+        hudTools = GetComponent<HUDTools>();
 		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
 			sessionManager = manager.GetComponent<SessionManager>();
@@ -30,6 +36,27 @@ public class LobbyGUI : MonoBehaviour {
 		else
 			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
         }
+
+    public void SetLocalPlayerNum(int num)
+    {
+        localPlayerNum = num;
+    }
+
+    public void DisplayMessage()
+    {
+        hudTools.DisplayText("Waiting for host to start...");
+    }
+
+    void Update()
+    {
+        if(timer < 0)
+        {
+            DisplayMessage();
+            timer = 30f;
+        }
+
+        timer -= Time.deltaTime;
+    }
 
     public void PlayButton(GameObject go)
     {
@@ -44,61 +71,42 @@ public class LobbyGUI : MonoBehaviour {
 		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
 		sessionManager.LoadNextLevel(false);
     }
-    /*
-	void Update(){
-        if (!initialGridUpdate)
-        {
-            for (int i = 1; i < infoscript.playernumb; i++ )
-            {
-                readyIcons[i].GetComponent<UISprite>().enabled = true;
-            }
-            initialGridUpdate = true;
-        }
-	}
-
-    void OnPlayerConnected(NetworkPlayer player)
-    {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
-        foreach (NetworkPlayer p in infoscript.players)
-        {
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().enabled = true;
-        }
-    }
-
-    void OnPlayerDisconnected(NetworkPlayer player)
-    {
-    }
-    */
-    /*
+    
     [RPC]
-    void SendReadyStatus(int ready)
+    void SendReadyStatus(int ready, NetworkPlayer player)
     {
+        GameObject myLight;
+        dictionary.TryGetValue(player, out myLight);
+
         if(ready == 0)
         {
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.green;
+            myLight.GetComponent<UISprite>().color = Color.green;
         }
         else
         {
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.red;
+            myLight.GetComponent<UISprite>().color = Color.red;
         }
-    }*/
-    /*
+    }
+    
     public void ReadyButton(GameObject go)
     {
+        GameObject myLight;
+        dictionary.TryGetValue(Network.player, out myLight);
+
         if(!playerReady)
         { 
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.green;
+            myLight.GetComponent<UISprite>().color = Color.green;
             playerReady = true;
-            networkView.RPC("SendReadyStatus", RPCMode.Others, 0);
+            networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 0, Network.player);
         }
         else
         {
-            readyIcons[infoscript.playernumb].GetComponent<UISprite>().color = Color.red;
-            networkView.RPC("SendReadyStatus", RPCMode.Others, 1);
+            myLight.GetComponent<UISprite>().color = Color.red;
+            networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 1, Network.player);
             playerReady = false;
         }
     }
-    */
+    
     public void DisconnectButton(GameObject go)
     {
         Network.Disconnect(200);
@@ -145,7 +153,7 @@ public class LobbyGUI : MonoBehaviour {
         disconBtn.transform.localPosition = new Vector2(557.3703f, -321.5379f);
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
-        /*
+        
         GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
 
         readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
@@ -153,8 +161,27 @@ public class LobbyGUI : MonoBehaviour {
         readyBtn.transform.localPosition = new Vector3(392.9831f, -321.5379f);
 
         UIEventListener.Get(readyBtn).onClick += ReadyButton;
-        */
+        
 	}
+
+    public void CreateReadyLight(NetworkPlayer player)
+    {
+        GameObject icons = NGUITools.AddChild(IconsGrid.gameObject, readyImagePrefab);
+        readyIcons.Add(icons);
+        IconsGrid.Reposition();
+        dictionary.Add(player, icons);
+    }
+
+    public void RemoveReadyLight(NetworkPlayer player)
+    {
+        GameObject myLight;
+        dictionary.TryGetValue(player, out myLight);
+
+        readyIcons.Remove(myLight);
+        Destroy(myLight);
+        dictionary.Remove(player);
+        IconsGrid.Reposition();
+    }
 
 	void OnNetworkLoadedLevel(){
 		//remove all rpcs
