@@ -30,7 +30,7 @@ public class LobbyGUI : MonoBehaviour {
 			sessionManager = manager.GetComponent<SessionManager>();
 		}
 		else
-			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+			sessionManager = SessionManager.Instance;
         }
 
     public void PlayButton(GameObject go)
@@ -43,7 +43,7 @@ public class LobbyGUI : MonoBehaviour {
 
 		MasterServer.UnregisterHost();
 		//reregister host with new comment
-		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
+		MasterServer.RegisterHost(typeName, infoscript.servername, "Playing");
 		sessionManager.LoadNextLevel(false);
     }
     /*
@@ -122,7 +122,7 @@ public class LobbyGUI : MonoBehaviour {
 			if(infoscript.choice == "Host")
             {
 				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
-				MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+				MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 			} 
             else if(infoscript.choice == "Find")
             {
@@ -167,13 +167,12 @@ public class LobbyGUI : MonoBehaviour {
 			//Tell master server that we are no longer in game.
 			Network.maxConnections = 4;
 			MasterServer.UnregisterHost();
-			MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+			MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 		}
 	}
 
 	//bug: this is only called on first registration
 	void OnMasterServerEvent(MasterServerEvent msEvent){
-		print ("did something");
 		//Dont want to load level until we are sure that the host has been registered with new comment
 		if(msEvent == MasterServerEvent.RegistrationSucceeded){
 
