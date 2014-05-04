@@ -71,7 +71,7 @@ public class NetworkController : MonoBehaviour {
 			PlayerOptions playerOptions = instanceManager.psInfo.GetPlayerOptions(theOwner);
 
             //Used for Ready button
-            if(GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>() != null)
+            if(GameObject.Find("LobbyGUI") != null)
             { 
                 lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
                 lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
