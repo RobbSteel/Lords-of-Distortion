@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class LobbyGUI : MonoBehaviour {
 
+	//public int connectionPort = 23466;
 	public int connectionPort = 25001;
 	private const string typeName = "Distorton";
 	private const string gameName = "Test";
@@ -22,6 +23,7 @@ public class LobbyGUI : MonoBehaviour {
     Dictionary<NetworkPlayer, GameObject> entries = new Dictionary<NetworkPlayer, GameObject>();
 
 	void Awake(){
+		//MasterServer.ipAddress = "38.104.224.202";
 		//Important
 		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
@@ -67,8 +69,10 @@ public class LobbyGUI : MonoBehaviour {
 
     void OnPlayerDisconnected(NetworkPlayer player)
     {
-    }
+	
+	}
     */
+
     /*
     [RPC]
     void SendReadyStatus(int ready)
@@ -99,6 +103,8 @@ public class LobbyGUI : MonoBehaviour {
         }
     }
     */
+
+
     public void DisconnectButton(GameObject go)
     {
         Network.Disconnect(200);
@@ -147,11 +153,9 @@ public class LobbyGUI : MonoBehaviour {
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
         /*
         GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
-
         readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
         readyBtn.transform.localScale = new Vector3(0.5f, 0.5f, 1);
         readyBtn.transform.localPosition = new Vector3(392.9831f, -321.5379f);
-
         UIEventListener.Get(readyBtn).onClick += ReadyButton;
         */
 	}
