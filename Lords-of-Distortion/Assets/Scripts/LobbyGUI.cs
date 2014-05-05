@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class LobbyGUI : MonoBehaviour {
 
+	//public int connectionPort = 23466;
 	public int connectionPort = 25001;
 	private const string typeName = "Distorton";
 	private const string gameName = "Test";
@@ -27,6 +28,7 @@ public class LobbyGUI : MonoBehaviour {
     Dictionary<NetworkPlayer, GameObject> entries = new Dictionary<NetworkPlayer, GameObject>();
 
 	void Awake(){
+		//MasterServer.ipAddress = "38.104.224.202";
 		//Important
         hudTools = GetComponent<HUDTools>();
 		if(SessionManager.Instance == null){
@@ -34,7 +36,7 @@ public class LobbyGUI : MonoBehaviour {
 			sessionManager = manager.GetComponent<SessionManager>();
 		}
 		else
-			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+			sessionManager = SessionManager.Instance;
         }
 
     public void SetLocalPlayerNum(int num)
@@ -68,7 +70,7 @@ public class LobbyGUI : MonoBehaviour {
 
 		MasterServer.UnregisterHost();
 		//reregister host with new comment
-		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
+		MasterServer.RegisterHost(typeName, infoscript.servername, "Playing");
 		sessionManager.LoadNextLevel(false);
     }
     
@@ -124,7 +126,7 @@ public class LobbyGUI : MonoBehaviour {
 			if(infoscript.choice == "Host")
             {
 				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
-				MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+				MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 			} 
             else if(infoscript.choice == "Find")
             {
@@ -190,13 +192,12 @@ public class LobbyGUI : MonoBehaviour {
 			//Tell master server that we are no longer in game.
 			Network.maxConnections = 4;
 			MasterServer.UnregisterHost();
-			MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+			MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 		}
 	}
 
 	//bug: this is only called on first registration
 	void OnMasterServerEvent(MasterServerEvent msEvent){
-		print ("did something");
 		//Dont want to load level until we are sure that the host has been registered with new comment
 		if(msEvent == MasterServerEvent.RegistrationSucceeded){
 
