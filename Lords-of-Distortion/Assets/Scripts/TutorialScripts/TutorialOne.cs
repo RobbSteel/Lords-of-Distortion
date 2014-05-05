@@ -18,7 +18,7 @@ public class TutorialOne: MonoBehaviour {
 	private float fadeTimer;
 	private float durationOfFading;
 	private bool fade;
-	
+
 	void Awake(){
 		
 	}
@@ -74,6 +74,7 @@ public class TutorialOne: MonoBehaviour {
 			currentObjective += 1;
 			
 			if( currentObjective < objectives.Length ){
+				runScene(currentObjective);
 				objectives[currentObjective].SetActive(true);
 			}
 			else if (currentObjective >= objectives.Length ){
