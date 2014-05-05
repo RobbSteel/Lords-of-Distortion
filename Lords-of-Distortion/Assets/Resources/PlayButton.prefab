@@ -13,7 +13,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: PlayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400004}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Texture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,8 +43,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -578, y: 323, z: 0}
-  m_LocalScale: {x: .5, y: .5, z: 1}
+  m_LocalPosition: {x: 892, y: -707, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
   m_Father: {fileID: 0}
@@ -55,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -3.29999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -69,7 +69,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 222, y: 122, z: 0}
+  m_Size: {x: 288, y: 111, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -83,9 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100000}
-  hover: {r: .882352948, g: 0, b: 0, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
+  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
+  pressed: {r: .558823526, g: 1, b: .671399534, a: 1}
+  duration: .100000001
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   dragHighlight: 0
   onClick: []
@@ -116,15 +116,15 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
-  mColor: {r: .486274511, g: .498039216, b: 1, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 222
-  mHeight: 122
-  mDepth: 1
+  mWidth: 288
+  mHeight: 111
+  mDepth: 10
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.81967211
+  aspectRatio: 2.59459448
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
@@ -139,7 +139,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -178,21 +178,21 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 222
-  mHeight: 122
-  mDepth: 0
+  mWidth: 820
+  mHeight: 325
+  mDepth: 9
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.81967211
+  aspectRatio: 2.52307701
   mRect:
     serializedVersion: 2
-    x: 0
+    x: -.0799999982
     y: 0
     width: 1
     height: 1
-  mTexture: {fileID: 2800000, guid: ea237dd98a91170448bebe39ece9550d, type: 3}
-  mMat: {fileID: 0}
+  mTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
+  mMat: {fileID: 2100000, guid: 9dd83cb74d1e3b34880647bb1ca31c81, type: 2}
   mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
 --- !u!114 &11400006
 MonoBehaviour:
@@ -216,9 +216,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2982c19e9f37160469655ab04b3ef2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClickTexture: {fileID: 2800000, guid: ef525c7eb55029d48b8e010f71dce967, type: 3}
-  onHoverTexture: {fileID: 2800000, guid: a6cc22fea0c94254387dddad3f5c6239, type: 3}
-  defaultTexture: {fileID: 0}
+  onClickTexture: {fileID: 0}
+  onHoverTexture: {fileID: 2800000, guid: 056b02cf334afe24f9e844adc89dd0cb, type: 3}
+  defaultTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

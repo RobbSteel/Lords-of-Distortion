@@ -42,8 +42,10 @@ public class TrapFountain : MonoBehaviour {
 	}
 
 	void reSupplyPlayer(){
-		if(randomPowerSupply)
+		if(randomPowerSupply){
 			placementUI.Resupply();
+			placementUI.Resupply();
+		}
 		else
 			placementUI.Resupply(specifiedPower);
 

@@ -8,8 +8,9 @@ public class NetworkController : MonoBehaviour {
 	public SessionManager instanceManager;
 
 	public NetworkPlayer theOwner;
-	private Controller2D controller2D;
-
+    public LobbyGUI lobbyGuiScript;
+    private Controller2D controller2D;
+    
 	public bool isOwner = false;
 
 	private float width;
@@ -50,6 +51,7 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	//Sets the network ID to this instantiation of the player.
+    // TODO: move to session manager
 	[RPC]
 	void SetPlayerID(NetworkPlayer player)
 	{
@@ -67,6 +69,15 @@ public class NetworkController : MonoBehaviour {
 		if(!DEBUG){
 			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 			PlayerOptions playerOptions = instanceManager.psInfo.GetPlayerOptions(theOwner);
+
+            //Used for Ready button
+            if(GameObject.Find("LobbyGUI") != null)
+            { 
+                lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
+                lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
+                lobbyGuiScript.CreateReadyLight(player);
+            }
+
 			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
 			if(instanceManager.psInfo.GetPlayerGameObject(theOwner) == null)
 				instanceManager.psInfo.AddPlayerGameObject(theOwner, gameObject);

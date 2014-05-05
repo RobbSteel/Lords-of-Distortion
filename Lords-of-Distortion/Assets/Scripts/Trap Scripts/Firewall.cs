@@ -14,7 +14,7 @@ public class Firewall : Power {
 			GA.API.Design.NewEvent("Firewall Death", player.transform.position);
 		}
 		
-		controller.Die();
+		controller.Die(DeathType.FIRE);
 	}
 
 

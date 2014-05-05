@@ -6,7 +6,8 @@ public enum DeathType{
 	CRUSH,
 	FIRE,
 	PLAGUE,
-	EXPLOSION
+	EXPLOSION,
+	RIPPED
 }
 
 public class Controller2D : MonoBehaviour {
@@ -408,6 +409,9 @@ public class Controller2D : MonoBehaviour {
 			break;
 		case DeathType.EXPLOSION:
 			anim.SetTrigger ("ExplosionDeath");
+			break;
+		case DeathType.RIPPED:
+			anim.SetTrigger ("RippedDeath");
 			break;
 		default:
 			anim.SetTrigger("Die");

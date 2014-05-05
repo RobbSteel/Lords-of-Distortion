@@ -77,6 +77,9 @@ public class SmokeBomb : Power {
 		player.layer = LayerMask.NameToLayer(reducedVisionLayer);
 		this.gameObject.layer = LayerMask.NameToLayer (reducedVisionLayer);
 		visionReduced ();
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Smoke Blinds", player.transform.position);
+		}
 	}
 
 	public override void PowerActionStay(GameObject player, Controller2D controller){
@@ -115,9 +118,9 @@ public class SmokeBomb : Power {
 	}
 
 	void OnTriggerStay2D( Collider2D col ){
-		Debug.Log (col.name);
+		// (col.name);
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
-			Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
+			//Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
 
 			if( !targets.Contains( col.gameObject )){
 				targets.Add(col.gameObject);

@@ -202,7 +202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.76857948, y: -.48102349, z: 0}
+  m_LocalPosition: {x: -6.64768076, y: .190750048, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -236,7 +236,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Radius: .200000003
-  m_Center: {x: 0, y: -.349999994}
+  m_Center: {x: -.0299999993, y: -.419999987}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -247,14 +247,14 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 3257cd551cc0a0b44a313388a624346f, type: 2}
   m_IsTrigger: 0
   m_Size: {x: .365999997, y: .860057533}
-  m_Center: {x: -.00244474411, y: .134455681}
+  m_Center: {x: -.0299999993, y: .0199999996}
 --- !u!61 &6100002
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Size: {x: .208806068, y: .662578285}
@@ -367,9 +367,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jumpRequested: 0
-  DEBUG: 0
+  OFFLINE: 0
   maxSpeed: 5
   anim: {fileID: 0}
+  dead: 0
   grounded: 0
   groundCheck: {fileID: 400008}
   groundLayer:
@@ -381,12 +382,17 @@ MonoBehaviour:
   snared: 0
   hooked: 0
   deathOnHit: 0
-  canJump: 0
+  canJump: 1
   hasbomb: 0
   locked: 0
+  moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
+  invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
+  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  invulnshield: {fileID: 100004, guid: 9afff53007e8e334aa9c7d9a62fab07e, type: 2}
+  newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
   meleeSfx: {fileID: 8300000, guid: 9c07f3bf223c7ef45ace65a11559a4f2, type: 3}
   meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
@@ -432,6 +438,7 @@ MonoBehaviour:
   chainspawner: 1
   pushpull: 0
   hittimer: 0
+  hookDisable: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,6 +483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 100010}
+  meleeDisable: 0
   meleeTimer: 0
   coolDownTimer: .5
   damageDealt: 15
