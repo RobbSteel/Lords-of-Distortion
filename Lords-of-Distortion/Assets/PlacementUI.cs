@@ -1,10 +1,10 @@
-﻿
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class LobbyPlacement : MonoBehaviour {
+public class PlacementUILobby : MonoBehaviour {
 	
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;

@@ -708,6 +708,4 @@ public class PlacementUI : MonoBehaviour {
 			placedPowers.Remove(key);
 		}
     }
-
-
 }
