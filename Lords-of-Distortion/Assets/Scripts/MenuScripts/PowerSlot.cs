@@ -73,10 +73,17 @@ public class PowerSlot : MonoBehaviour {
 
 	// Check for key press and call event .
 	void Update () {
-		if(activationEnabled && Input.GetKeyDown(keyText)){
-			print("Pressed " + keyText + ", try to spawn that power");
-			wasSpawned = true;
-			powerKey(linkedSpawn, this.gameObject);
+		if(Input.GetKeyDown(keyText)){
+			if(activationEnabled){
+				wasSpawned = true;
+				powerKey(linkedSpawn, this.gameObject);
+			}
+			else {
+				//simulate a button press
+				if(button.isEnabled)
+					UIEventListener.Get(gameObject).onPress(gameObject, false);
+			}
+
 		}
 	}
 }

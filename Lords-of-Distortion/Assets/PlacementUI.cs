@@ -1,10 +1,10 @@
-﻿
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class LobbyPlacement : MonoBehaviour {
+public class PlacementUILobby : MonoBehaviour {
 	
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
@@ -161,11 +161,12 @@ public class LobbyPlacement : MonoBehaviour {
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				buttons.Add(slot.GetComponent<UIButton>());
 				UIEventListener.Get(slot).onPress  += PowerButtonClick;
-				
+
 				PowerBoard boardReference = null;
 				boardsByType.TryGetValue(associatedPower.type, out boardReference);
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
+					GiveTrigger(slot, boardReference.index);
 				}
 				break;
 			}
@@ -399,7 +400,7 @@ public class LobbyPlacement : MonoBehaviour {
 		PowerBoard relevantBoard = boardsByType[spawn.type];
 		PowerSlot slotFromBoard = relevantBoard.currentPower;
 		//Give button a trigger (inital color)
-		GiveTrigger(slotFromBoard.gameObject, relevantBoard.index);
+
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;

@@ -36,7 +36,7 @@ public class LobbyManager : MonoBehaviour {
 	
 	private HUDTools hudTools;
 	public GameObject placementRootPrefab;
-	LobbyPlacement placementUI;
+	PlacementUI placementUI;
 	public bool showonce;
 	public bool showonce2;
 	public bool showonce3;
@@ -296,11 +296,11 @@ public class LobbyManager : MonoBehaviour {
 			powerPrefabs = GetComponent<PowerPrefabs>();
 			GameObject placementRoot = Instantiate(placementRootPrefab, 
 			                                       placementRootPrefab.transform.position, Quaternion.identity) as GameObject;
-			placementUI = placementRoot.GetComponent<LobbyPlacement>();
+			placementUI = placementRoot.GetComponent<PlacementUI>();
 			placementUI.Initialize(powerPrefabs);
+			placementUI.SwitchToLive(false);
 			placementUI.Enable();
 			print ("got here");
-			
 		} 
 	}
 	
@@ -362,18 +362,7 @@ public class LobbyManager : MonoBehaviour {
 			if(GameObject.Find("LobbyGUI") != null){
 				print ("lobby");
 				currentPhase = Phase.InGame;
-				placementUI.SwitchToLive(false);
-				placementUI.Enable();
 				trapsEnabled = true;
-			} else {
-				//spawn players immediately. gets
-				livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
-				livePlayerCount = livePlayers.Count;
-				
-				NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME);
-				networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime);
-				currentPhase = Phase.PreGame;
-				hudTools.DisplayText ("Get Ready");
 			}
 		}
 		//TODO: have something that checks if all players have finished loading.

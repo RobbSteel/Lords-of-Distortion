@@ -387,10 +387,10 @@ public class ArenaManager : MonoBehaviour {
 
 			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME, livePlayerCount.Value);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime, livePlayerCount.Value);
-			currentPhase = Phase.PreGame;
-			hudTools.DisplayText ("Get Ready");
-
 		}
+
+		hudTools.DisplayText ("Get Ready");
+		currentPhase = Phase.PreGame;
 		//TODO: have something that checks if all players have finished loading.
 	}
 
