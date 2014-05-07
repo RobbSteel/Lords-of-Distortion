@@ -10,6 +10,8 @@ public class FrozenEffect : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		setupEffect = false;
+		this.particleSystem.renderer.sortingLayerName = "Player";
+		this.particleSystem.renderer.sortingOrder = 100;
 	}
 
 	// Update is called once per frame

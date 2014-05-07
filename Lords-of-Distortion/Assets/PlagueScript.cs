@@ -11,7 +11,7 @@ public class PlagueScript : Power
     void Start () 
     {
         //particleSystem.renderer.sortingLayerName = "Foreground";
-        Destroy(gameObject, 15f);
+        Destroy(gameObject, 8f);
 	}
 
     void OnDestroy()

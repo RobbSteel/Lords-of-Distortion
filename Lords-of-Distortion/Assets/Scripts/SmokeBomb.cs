@@ -77,6 +77,9 @@ public class SmokeBomb : Power {
 		player.layer = LayerMask.NameToLayer(reducedVisionLayer);
 		this.gameObject.layer = LayerMask.NameToLayer (reducedVisionLayer);
 		visionReduced ();
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Smoke Blinds", player.transform.position);
+		}
 	}
 
 	public override void PowerActionStay(GameObject player, Controller2D controller){
