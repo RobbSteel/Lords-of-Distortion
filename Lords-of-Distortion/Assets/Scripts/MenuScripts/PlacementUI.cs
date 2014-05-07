@@ -175,11 +175,13 @@ public class PlacementUI : MonoBehaviour {
 				buttons.Add(slot.GetComponent<UIButton>());
 				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
+				//Make boards accessible by current power type
 				PowerBoard boardReference = null;
 				boardsByType.TryGetValue(associatedPower.type, out boardReference);
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
 				}
+				GiveTrigger(slot, board.index);
 				break;
 			}
 		}
@@ -243,7 +245,6 @@ public class PlacementUI : MonoBehaviour {
 		state = PlacementState.Default;
 		foreach(PowerBoard board in fixedBoards){
 			if(board.currentPower.linkedSpawn != null){
-				GiveTrigger(board.currentPower.gameObject, board.index);
 				board.currentPower.EnableActivation();
 			}
 		}

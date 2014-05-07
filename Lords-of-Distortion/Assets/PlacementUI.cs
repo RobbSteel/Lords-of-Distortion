@@ -161,11 +161,12 @@ public class PlacementUILobby : MonoBehaviour {
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				buttons.Add(slot.GetComponent<UIButton>());
 				UIEventListener.Get(slot).onPress  += PowerButtonClick;
-				
+
 				PowerBoard boardReference = null;
 				boardsByType.TryGetValue(associatedPower.type, out boardReference);
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
+					GiveTrigger(slot, boardReference.index);
 				}
 				break;
 			}
@@ -399,7 +400,7 @@ public class PlacementUILobby : MonoBehaviour {
 		PowerBoard relevantBoard = boardsByType[spawn.type];
 		PowerSlot slotFromBoard = relevantBoard.currentPower;
 		//Give button a trigger (inital color)
-		GiveTrigger(slotFromBoard.gameObject, relevantBoard.index);
+
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;
