@@ -163,7 +163,7 @@ public class SessionManager : MonoBehaviour {
 
 	[RPC]
 	void PlayerDisconnected(NetworkPlayer player){
-        if (GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>() != null)
+        if (GameObject.Find("LobbyGUI") != null)
         {
             lobbyGUIscript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
             lobbyGUIscript.RemoveReadyLight(player);
