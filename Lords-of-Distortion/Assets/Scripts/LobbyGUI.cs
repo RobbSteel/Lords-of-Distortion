@@ -148,6 +148,7 @@ public class LobbyGUI : MonoBehaviour {
             //readyIcons[0].GetComponent<UISprite>().enabled = true;
         }
 
+        //TODO: Change to NGUITOOLS.ADDCHILD
         GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
         
         disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
@@ -156,6 +157,7 @@ public class LobbyGUI : MonoBehaviour {
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
         
+        //TODO: Change to NGUITOOLS.ADDCHILD
         GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
 
         readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
