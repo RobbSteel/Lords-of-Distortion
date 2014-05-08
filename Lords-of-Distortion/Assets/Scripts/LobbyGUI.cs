@@ -17,6 +17,10 @@ public class LobbyGUI : MonoBehaviour {
     private float timer = 5;
     private HUDTools hudTools;
     public UIGrid IconsGrid;
+    public GameObject playbtn;
+
+    private int connectedPlayers;
+    private int numReady = 0;
 
     public GameObject readyImagePrefab;
     public List<GameObject> readyIcons = new List<GameObject>();
@@ -30,6 +34,7 @@ public class LobbyGUI : MonoBehaviour {
 	void Awake(){
 		//MasterServer.ipAddress = "38.104.224.202";
 		//Important
+        playbtn = GameObject.Find("playBtn");
         hudTools = GetComponent<HUDTools>();
 		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
@@ -51,6 +56,16 @@ public class LobbyGUI : MonoBehaviour {
 
     void Update()
     {
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            connectedPlayers = infoscript.players.Count;
+            //Debug.Log("NUM CONNECTED PLAYERS: " + connectedPlayers);
+            if(numReady == connectedPlayers)
+            {
+                PlayButton(playbtn);
+            }
+        }
+
         if(timer < 0)
         {
             DisplayMessage();
@@ -82,14 +97,26 @@ public class LobbyGUI : MonoBehaviour {
 
         if(ready == 0)
         {
+            AddNumReady();
             myLight.GetComponent<UISprite>().color = Color.green;
         }
         else
         {
+            RemoveNumReady();
             myLight.GetComponent<UISprite>().color = Color.red;
         }
     }
-    
+
+    public void AddNumReady()
+    {
+        numReady += 1;
+    }
+
+    public void RemoveNumReady()
+    {
+        numReady -= 1;
+    }
+
     public void ReadyButton(GameObject go)
     {
         GameObject myLight;
@@ -99,11 +126,13 @@ public class LobbyGUI : MonoBehaviour {
         { 
             myLight.GetComponent<UISprite>().color = Color.green;
             playerReady = true;
+            AddNumReady();
             networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 0, Network.player);
         }
         else
         {
             myLight.GetComponent<UISprite>().color = Color.red;
+            RemoveNumReady();
             networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 1, Network.player);
             playerReady = false;
         }
