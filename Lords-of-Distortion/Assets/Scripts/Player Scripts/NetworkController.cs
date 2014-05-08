@@ -5,10 +5,8 @@ using System.Linq;
 
 public class NetworkController : MonoBehaviour {
 	public bool DEBUG;
-	public SessionManager instanceManager;
 
 	public NetworkPlayer theOwner;
-    public LobbyGUI lobbyGuiScript;
     private Controller2D controller2D;
     
 	public bool isOwner = false;
@@ -50,55 +48,6 @@ public class NetworkController : MonoBehaviour {
 
 	}
 
-	//Sets the network ID to this instantiation of the player.
-    // TODO: move to session manager
-	[RPC]
-	void SetPlayerID(NetworkPlayer player)
-	{
-		theOwner = player;
-		if(player == Network.player){ 
-			isOwner = true; //we can control the player locally
-		}
-		else{
-			rigidbody2D.isKinematic = true;
-			//put on other player layer
-			gameObject.layer = 13;
-		}
-
-		//we should have created a local playeroptions by now
-		if(!DEBUG){
-			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-			PlayerOptions playerOptions = instanceManager.psInfo.GetPlayerOptions(theOwner);
-
-            //Used for Ready button
-            if(GameObject.Find("LobbyGUI") != null)
-            { 
-                lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
-                lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
-                lobbyGuiScript.CreateReadyLight(player);
-            }
-
-			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
-			if(instanceManager.psInfo.GetPlayerGameObject(theOwner) == null)
-				instanceManager.psInfo.AddPlayerGameObject(theOwner, gameObject);
-			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
-			switch(playerOptions.style){
-
-			case PlayerOptions.CharacterStyle.BLUE:
-				myRenderer.color = Color.blue;
-				break;
-				
-			case PlayerOptions.CharacterStyle.RED:
-				myRenderer.color = Color.red;
-				break;
-
-			case PlayerOptions.CharacterStyle.GREEN:
-				myRenderer.color = Color.green;
-				break;
-			}
-		}
-	}
-
 	void Awake() {
 		controller2D = GetComponent<Controller2D>();
 		states = new CircularBuffer<State>(10);
@@ -129,12 +78,19 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	float interval = float.PositiveInfinity;
+	
 
-
-	void ExtrapolatePosition(){
-
+	public void SetOwner(NetworkPlayer owner){
+		theOwner = owner;
+		if(owner == Network.player){ 
+			isOwner = true; //we can control the player locally
+		}
+		else {
+			rigidbody2D.isKinematic = true;
+			//put on other player layer
+			gameObject.layer = 13;
+		}
 	}
-
 
 	Vector3 estimatedVelocity;
 	Vector3 latestPosition;
@@ -305,7 +261,7 @@ public class NetworkController : MonoBehaviour {
 	void OnDestroy(){
 		//remove self from dictionary since gameobject will be invalid.
 		if(!DEBUG)
-			instanceManager.psInfo.playerObjects.Remove(theOwner);
+			SessionManager.Instance.psInfo.playerObjects.Remove(theOwner);
 	}
 
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
