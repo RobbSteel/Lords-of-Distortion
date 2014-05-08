@@ -2,14 +2,14 @@
 using System.Collections;
 
 public class CharSelected : MonoBehaviour {
-    public PlayerServerInfo infoscript;
-    public int characterNum;
+	public PlayerServerInfo infoscript;
+	public int characterNum;
 	UIButtonColor buttcolor;
-
+	
 	void Awake(){
 		buttcolor = GetComponent<UIButtonColor>();
 	}
-	/*
+
 	void Update(){
 				if (infoscript.localOptions.character == (PlayerOptions.Character)characterNum) {
 						buttcolor.defaultColor = Color.green;
@@ -21,13 +21,13 @@ public class CharSelected : MonoBehaviour {
 						//buttcolor.pressed = Color.white;
 				}
 		}
-*/
-	void OnPress(bool isDown)
-    {
 
+	void OnPress(bool isDown)
+	{
+		
 		if (isDown) {
 			return;
 		}
-        infoscript.localOptions.character = (PlayerOptions.Character)characterNum;
+		infoscript.localOptions.character = (PlayerOptions.Character)characterNum;
 	}
 }

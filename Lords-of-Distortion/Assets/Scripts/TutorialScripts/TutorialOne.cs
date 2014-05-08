@@ -5,7 +5,7 @@ public class TutorialOne: MonoBehaviour {
 	
 	public Camera mainCam;
 	public GameObject player;
-	private string nextLevel = "Tutorial-Two";
+	private string nextLevel = "Tutorial-Jump";
 	public UILabel guiText;
 	public GameObject[] objectives;
 	public int currentObjective;
