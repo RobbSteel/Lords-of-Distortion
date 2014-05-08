@@ -77,7 +77,7 @@ public class ArenaManager : MonoBehaviour {
 	}
 	
 	
-	void ServerDeathHandler(NetworkPlayer player){
+	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false){
 		livePlayerCount--;
 		livePlayers.Remove(player);
 
@@ -85,8 +85,10 @@ public class ArenaManager : MonoBehaviour {
 		if(livePlayerCount == 0){
 			FinishGame(false); //Last player didn't win
 		}
-
-		pointTracker.PlayerDied(player);
+		if(!disconnect)
+		{
+			pointTracker.PlayerDied(player);
+		}
 
 		if(livePlayerCount == 1)
 		{
@@ -104,6 +106,11 @@ public class ArenaManager : MonoBehaviour {
 		} 
 	}
 
+	//called on server.
+	void OnPlayerDisconnected(NetworkPlayer player)
+	{
+		ServerDeathHandler(player, true);
+	}
 
 	//Tells additional players to destroy clone.
 	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
@@ -159,6 +166,8 @@ public class ArenaManager : MonoBehaviour {
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}
+
+
 
 	//Server should do calculations of who to give points to.
 	void HandlePlayerEvent(NetworkPlayer affected, PlayerEvent playerEvent){
@@ -387,10 +396,10 @@ public class ArenaManager : MonoBehaviour {
 
 			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME, livePlayerCount.Value);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime, livePlayerCount.Value);
-			currentPhase = Phase.PreGame;
-			hudTools.DisplayText ("Get Ready");
-
 		}
+
+		hudTools.DisplayText ("Get Ready");
+		currentPhase = Phase.PreGame;
 		//TODO: have something that checks if all players have finished loading.
 	}
 

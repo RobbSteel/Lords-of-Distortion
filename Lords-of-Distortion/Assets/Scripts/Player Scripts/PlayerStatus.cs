@@ -388,6 +388,7 @@ public class PlayerStatus : MonoBehaviour {
 
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
+		playerControl.anim.SetTrigger ("Frozen");
 		//playerControl.anim.enabled = false;
 		playerControl.deathOnHit = true;
 
