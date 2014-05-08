@@ -9,6 +9,7 @@ public class movingPlatform : MonoBehaviour {
     public float startAt;
     public float pauseFor;
 
+    //TODO : Start at match begin time instead of when level loads
     IEnumerator Start()
     {
         var pointA = transform.position;
