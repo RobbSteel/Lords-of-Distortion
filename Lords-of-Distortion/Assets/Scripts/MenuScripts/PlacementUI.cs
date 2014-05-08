@@ -1,11 +1,10 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class PlacementUI : MonoBehaviour {
-
+	private Camera UICamera;
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
 
@@ -119,12 +118,12 @@ public class PlacementUI : MonoBehaviour {
 	
 	void Start(){
         cam = Camera.main;
+		UICamera = GetComponentInChildren<Camera>();
 	}
 
 	//Pass in dependencies
 	//TODO: check if initialize was called.
 	public void Initialize(PowerPrefabs powerPrefabs){
-;
 
 		/*Turn available powers into empty boards depending on count. Also
 		 puts in initial slots.*/
@@ -170,16 +169,19 @@ public class PlacementUI : MonoBehaviour {
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
 
 				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower);
+				slot.GetComponent<UIWidget>().depth = 2;
 				slots.Add(slot);
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				buttons.Add(slot.GetComponent<UIButton>());
 				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
+				//Make boards accessible by current power type
 				PowerBoard boardReference = null;
 				boardsByType.TryGetValue(associatedPower.type, out boardReference);
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
 				}
+				GiveTrigger(slot, board.index);
 				break;
 			}
 		}
@@ -243,7 +245,6 @@ public class PlacementUI : MonoBehaviour {
 		state = PlacementState.Default;
 		foreach(PowerBoard board in fixedBoards){
 			if(board.currentPower.linkedSpawn != null){
-				GiveTrigger(board.currentPower.gameObject, board.index);
 				board.currentPower.EnableActivation();
 			}
 		}
@@ -271,7 +272,6 @@ public class PlacementUI : MonoBehaviour {
 		}
 
 		if(Input.GetMouseButtonDown(0)){
-
 			switch(state){
 			//Checks if we've clicked on a power that was already placed..
 			case PlacementState.Default:
@@ -283,7 +283,9 @@ public class PlacementUI : MonoBehaviour {
 			//Called when we're in the process of moving a power around.
 			case PlacementState.MovingPower:
 				//Put down power.
-				PlacePower();
+				if(!ClickedOnUI()){
+					PlacePower();
+				}
 				break;
 
 			//called when we're in the process of changing the direction of a power.
@@ -317,12 +319,23 @@ public class PlacementUI : MonoBehaviour {
 			}
             // Uncomment the timer to set restrictions on how often players place powers while dead.
 			else if(timer <= 0.0f){
-
-
 				SpawnPowerVisual(activeInfo);
+
 				FollowMouse();
 			}
         }
+	}
+
+	private bool ClickedOnUI(){
+		int UILayerID = LayerMask.NameToLayer("UI");
+		int layerMask = 1 << UILayerID;
+		Ray mousePoint = UICamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if(Physics.Raycast(mousePoint.origin, mousePoint.direction, out hit, Mathf.Infinity, layerMask)){
+			print("hit me");
+			return true;
+		}
+		return false;
 	}
 
 	//Do a raycast to determine if we've clicked on a power on screen.
@@ -696,6 +709,4 @@ public class PlacementUI : MonoBehaviour {
 			placedPowers.Remove(key);
 		}
     }
-
-
 }

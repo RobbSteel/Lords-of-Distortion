@@ -11,13 +11,21 @@ public class TutorialThree: MonoBehaviour {
 	public int currentObjective;
 	public string firstMessage;
 	public string secondMessage;
+	public string thridMessage;
+	public string fourthMessage;
+	public string fifthMessage;
 	public string deathMessage;
 	public string finishedMessage;
+	public GameObject powerToKillPlayer;
+	public GameObject waringSign;
 	private SceneFadeInOut transitionToNewScene;
 	private bool endScene;
 	private float fadeTimer;
 	private float durationOfFading;
 	private bool fade;
+	private bool deathScreenEvent;
+	private PlacementUI deathscreen;
+
 	
 	void Awake(){
 		
@@ -35,9 +43,11 @@ public class TutorialThree: MonoBehaviour {
 		changeText( firstMessage );
 		runScene(currentObjective);
 		endScene = false;
+		powerToKillPlayer.SetActive (false);
+		deathScreenEvent = false;
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
 		
 		textAnimation ();
@@ -45,12 +55,13 @@ public class TutorialThree: MonoBehaviour {
 		if (endScene)
 			loadNextLevel ();
 		
-		if (player == null)
+		if (player == null && !deathScreenEvent )
 			resetLevel ();
 		
 		incrementObjective();
 	}
-	
+
+	//correctly applies fade animations for ui text
 	private void textAnimation(){
 		if (fade)
 			fadeTextClear ();
@@ -58,22 +69,26 @@ public class TutorialThree: MonoBehaviour {
 		if (!fade)
 			fadeTextSolid ();
 	}
-	
+
+	//sets fade to make invisable
 	private void setFadeClear(){
 		fadeTimer = 0;
 		fade = true;
 	}
-	
+
+	//sets fade back to visable
 	private void setFadeSolid(){
 		fadeTimer = 0;
 		fade = false;
 	}
-	
+
+	//increases count to next objective for player to complete
 	private void incrementObjective(){
 		if ( !endScene && objectives [currentObjective] == null ) {
 			currentObjective += 1;
 			
 			if( currentObjective < objectives.Length ){
+				runScene(currentObjective);
 				objectives[currentObjective].SetActive(true);
 			}
 			else if (currentObjective >= objectives.Length ){
@@ -81,15 +96,33 @@ public class TutorialThree: MonoBehaviour {
 			}
 		}
 	}
-	
+
+	//changes ui Text
 	private void changeText( string newText ){
 		guiText.text = newText;
 	}
-	
+
+	//runs specific events once objectives are completed
 	private void runScene( int current ){
 		switch( current ){
 		case 0:
+			Debug.Log("Start");
 			StartCoroutine( startScene());
+			break;
+		case 1:
+			Debug.Log("Active");
+
+			StartCoroutine( teachActive() );
+			break;
+		case 2:
+			Debug.Log("Passive");
+
+			StartCoroutine( teachPassive() );
+			break;
+		case 3:
+			Debug.Log("Death");
+
+			StartCoroutine( teachDeathScreen() );
 			break;
 		default:
 			break;
@@ -108,6 +141,7 @@ public class TutorialThree: MonoBehaviour {
 		guiText.color = current;
 	}
 	
+	//get fountain
 	IEnumerator startScene(){
 		player.GetComponent<Controller2D> ().locked = true;
 		yield return new WaitForSeconds (2);
@@ -119,15 +153,69 @@ public class TutorialThree: MonoBehaviour {
 		
 	}
 	
+	//teach active
+	//--flash active slot icon
+	//--display text
+	IEnumerator teachActive(){
+		setFadeClear ();
+		yield return new WaitForSeconds (durationOfFading);
+		setFadeSolid ();
+		changeText (thridMessage);
+		player.GetComponent<Controller2D> ().locked = false;
+
+
+	}
+	
+	//teach passive
+	//--flash passive icon
+	//--display text
+	IEnumerator teachPassive(){
+		setFadeClear ();
+		yield return new WaitForSeconds (durationOfFading);
+		setFadeSolid ();
+		changeText (fourthMessage);
+		player.GetComponent<Controller2D> ().locked = false;			
+	}
+
+	//teach death screen
+	//spawn a dummy and a power
+	//resupply with  powers
+	IEnumerator teachDeathScreen(){
+		deathScreenEvent = true;
+		deathscreen = GameObject.Find( "OfflinePlacement(Clone)").GetComponent<PlacementUI>();
+		waringSign.transform.position = player.transform.position;
+		waringSign.SetActive (true);
+		yield return new WaitForSeconds (0.5f);
+		player.GetComponent<Controller2D> ().locked = true;
+		setupPowerToUse();
+		yield return new WaitForSeconds (2f);
+		setFadeClear ();
+		yield return new WaitForSeconds (durationOfFading);
+		setFadeSolid ();
+		changeText (fifthMessage);
+		InvokeRepeating ("resupplyDeathScreen", 1f, 10f);
+
+	}
+
+	public void setupPowerToUse(){
+		powerToKillPlayer.transform.position = waringSign.transform.position;
+		Destroy (waringSign);
+		powerToKillPlayer.SetActive (true);
+	}
+
+	//loads next level when needed
 	public void loadNextLevel(){
 		changeText (finishedMessage);
 		transitionToNewScene.EndScene( nextLevel );
 	}
-	
+
+	public void resupplyDeathScreen(){
+		deathscreen.Resupply();
+	}
+
+	//reset level
 	public void resetLevel(){
 		changeText (deathMessage);
 		Application.LoadLevel (Application.loadedLevel);
 	}
-	
-	
 }

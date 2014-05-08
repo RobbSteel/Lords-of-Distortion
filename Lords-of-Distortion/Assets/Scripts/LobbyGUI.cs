@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class LobbyGUI : MonoBehaviour {
 
+	//public int connectionPort = 23466;
 	public int connectionPort = 25001;
 	private const string typeName = "Distorton";
 	private const string gameName = "Test";
@@ -16,6 +17,10 @@ public class LobbyGUI : MonoBehaviour {
     private float timer = 5;
     private HUDTools hudTools;
     public UIGrid IconsGrid;
+    public GameObject playbtn;
+
+    private int connectedPlayers;
+    private int numReady = 0;
 
     public GameObject readyImagePrefab;
     public List<GameObject> readyIcons = new List<GameObject>();
@@ -27,14 +32,16 @@ public class LobbyGUI : MonoBehaviour {
     Dictionary<NetworkPlayer, GameObject> entries = new Dictionary<NetworkPlayer, GameObject>();
 
 	void Awake(){
+		//MasterServer.ipAddress = "38.104.224.202";
 		//Important
+        playbtn = GameObject.Find("playBtn");
         hudTools = GetComponent<HUDTools>();
 		if(SessionManager.Instance == null){
 			Transform manager = (Transform)Instantiate (sessionManagerPrefab, sessionManagerPrefab.position, Quaternion.identity);
 			sessionManager = manager.GetComponent<SessionManager>();
 		}
 		else
-			sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
+			sessionManager = SessionManager.Instance;
         }
 
     public void SetLocalPlayerNum(int num)
@@ -49,6 +56,16 @@ public class LobbyGUI : MonoBehaviour {
 
     void Update()
     {
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            connectedPlayers = infoscript.players.Count;
+            //Debug.Log("NUM CONNECTED PLAYERS: " + connectedPlayers);
+            if(numReady == connectedPlayers)
+            {
+                PlayButton(playbtn);
+            }
+        }
+
         if(timer < 0)
         {
             DisplayMessage();
@@ -68,7 +85,7 @@ public class LobbyGUI : MonoBehaviour {
 
 		MasterServer.UnregisterHost();
 		//reregister host with new comment
-		MasterServer.RegisterHost(typeName, infoscript.servername, "InProgress");
+		MasterServer.RegisterHost(typeName, infoscript.servername, "Playing");
 		sessionManager.LoadNextLevel(false);
     }
     
@@ -80,14 +97,26 @@ public class LobbyGUI : MonoBehaviour {
 
         if(ready == 0)
         {
+            AddNumReady();
             myLight.GetComponent<UISprite>().color = Color.green;
         }
         else
         {
+            RemoveNumReady();
             myLight.GetComponent<UISprite>().color = Color.red;
         }
     }
-    
+
+    public void AddNumReady()
+    {
+        numReady += 1;
+    }
+
+    public void RemoveNumReady()
+    {
+        numReady -= 1;
+    }
+
     public void ReadyButton(GameObject go)
     {
         GameObject myLight;
@@ -97,11 +126,13 @@ public class LobbyGUI : MonoBehaviour {
         { 
             myLight.GetComponent<UISprite>().color = Color.green;
             playerReady = true;
+            AddNumReady();
             networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 0, Network.player);
         }
         else
         {
             myLight.GetComponent<UISprite>().color = Color.red;
+            RemoveNumReady();
             networkView.RPC("SendReadyStatus", RPCMode.OthersBuffered, 1, Network.player);
             playerReady = false;
         }
@@ -124,7 +155,7 @@ public class LobbyGUI : MonoBehaviour {
 			if(infoscript.choice == "Host")
             {
 				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
-				MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+				MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 			} 
             else if(infoscript.choice == "Find")
             {
@@ -146,6 +177,7 @@ public class LobbyGUI : MonoBehaviour {
             //readyIcons[0].GetComponent<UISprite>().enabled = true;
         }
 
+        //TODO: Change to NGUITOOLS.ADDCHILD
         GameObject disconBtn = (GameObject)Instantiate(Resources.Load("Disconnect"));
         
         disconBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
@@ -154,6 +186,7 @@ public class LobbyGUI : MonoBehaviour {
 
         UIEventListener.Get(disconBtn).onClick += DisconnectButton;
         
+        //TODO: Change to NGUITOOLS.ADDCHILD
         GameObject readyBtn = (GameObject)Instantiate(Resources.Load("Ready"));
 
         readyBtn.transform.parent = GameObject.Find("UI Root LobbyArena").transform;
@@ -190,13 +223,12 @@ public class LobbyGUI : MonoBehaviour {
 			//Tell master server that we are no longer in game.
 			Network.maxConnections = 4;
 			MasterServer.UnregisterHost();
-			MasterServer.RegisterHost(typeName, infoscript.servername, "InLobby");
+			MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 		}
 	}
 
 	//bug: this is only called on first registration
 	void OnMasterServerEvent(MasterServerEvent msEvent){
-		print ("did something");
 		//Dont want to load level until we are sure that the host has been registered with new comment
 		if(msEvent == MasterServerEvent.RegistrationSucceeded){
 

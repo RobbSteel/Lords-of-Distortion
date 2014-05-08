@@ -74,6 +74,7 @@ public class TutorialTwo: MonoBehaviour {
 			currentObjective += 1;
 			
 			if( currentObjective < objectives.Length ){
+				runScene(currentObjective);
 				objectives[currentObjective].SetActive(true);
 			}
 			else if (currentObjective >= objectives.Length ){
