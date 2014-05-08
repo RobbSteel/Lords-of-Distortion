@@ -11,10 +11,14 @@ public class LobbyFountain : MonoBehaviour {
 	ParticleSystem getPowerPSystem;
 	
 	bool used = false;
-	public LobbyPlacement placementUI;
+	public PlacementUI placementUI;
 	
 	void Awake(){
 		
+
+	}
+	// Use this for initialization
+	void Start () {
 		fountainParticles = (GameObject)Instantiate(fountainParticles, transform.position, Quaternion.identity);
 		fountainParticles.GetComponent<ParticleSystem>().Play();
 		
@@ -22,11 +26,7 @@ public class LobbyFountain : MonoBehaviour {
 		getPowerPSystem = getPowerParticles.GetComponent<ParticleSystem>();
 
 		var ui = GameObject.Find("LobbyPlacement(Clone)");
-		placementUI = ui.GetComponentInChildren<LobbyPlacement>();
-	}
-	// Use this for initialization
-	void Start () {
-
+		placementUI = ui.GetComponentInChildren<PlacementUI>();
 	}
 	
 	
