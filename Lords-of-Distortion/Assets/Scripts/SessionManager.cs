@@ -8,7 +8,7 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
+	public string[] arenas = new string[4]{"empty", "empty", "empty", "empty"}; //an array of arenas
 	public PlayerServerInfo psInfo;
     public LobbyGUI lobbyGUIscript;
 	public bool finishedLoading = false;
@@ -255,6 +255,10 @@ public class SessionManager : MonoBehaviour {
 		if(scorescreen){
 			roundsplayed++;
 			level = "PointsScreen";
+		}else if(GameObject.Find("LobbyGUI") != null){
+
+			level = "StageSelect";
+
 		} else {
 			++arenaIndex;
 			if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
