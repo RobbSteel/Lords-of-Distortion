@@ -4,6 +4,8 @@ using System.Collections;
 public class StageSelect : MonoBehaviour {
 
 	public GameObject difficulty;
+	public GameObject pick;
+	public string currentstage;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,8 +16,25 @@ public class StageSelect : MonoBehaviour {
 	
 	}
 
-	void StageInfo(){
+	[RPC]
+	void HostPickInfo(){
 
+		DeleteInfo();
+		StageInfo();
+		MapDisplay();
+		PickButton();
+	}
+
+
+void PickButton(){
+	
+		var picklabel = GameObject.Find("PickStage(Clone)");
+		var pickinfo = picklabel.GetComponent<AddStage>();
+		pickinfo.stagename = gameObject.transform.name;
+		pickinfo.stagedisplay = this.gameObject;
+	}
+
+	void StageInfo(){
 		GameObject difflabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, 0), transform.rotation);
 		difflabel.tag = "Display";
 		difflabel.transform.parent = GameObject.Find("UI Root").transform;
@@ -23,7 +42,6 @@ public class StageSelect : MonoBehaviour {
 		difflabel.transform.localPosition = new Vector2(325, -100);
 		var difficultytext = difflabel.GetComponent<UILabel>();
 		difficultytext.text = "Difficulty: Moderate";
-
 	}
 
 	void DeleteInfo(){
@@ -47,10 +65,13 @@ public class StageSelect : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-
+		if(Network.isServer){
 		DeleteInfo();
 		StageInfo();
 		MapDisplay();
+		PickButton();
 
+		networkView.RPC("HostPickInfo", RPCMode.Others);
+		}
 	}
 }

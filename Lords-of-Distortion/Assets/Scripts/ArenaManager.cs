@@ -379,7 +379,7 @@ public class ArenaManager : MonoBehaviour {
 		//Instantiate(LordsScreenPrefab, LordsScreenPrefab.position, Quaternion.rotation);
 		//TODO: Resynchronize times when level loads, dont draw the timer  ui until this happens
 		//TimeManager.instance.SyncTimes();
-		if(Network.isServer){
+		if(Network.isServer && GameObject.Find ("PickManager") == null){
 
 			//spawn players immediately. gets
 			livePlayers = sessionManager.SpawnPlayers(playerSpawnVectors);
