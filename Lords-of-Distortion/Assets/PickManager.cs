@@ -9,7 +9,8 @@ public class PickManager : MonoBehaviour {
 	public GameObject pickbutton;
 	public GameObject allUI;
 	public bool moveonce = false;
-	// Use this for initialization
+
+	//On load instantiate the picking UI
 	void OnNetworkLoadedLevel () {
 		manager = SessionManager.Instance;
 
@@ -22,20 +23,11 @@ public class PickManager : MonoBehaviour {
 
 	}
 
-
-
-void ReposPick(){
-		var pickbutton = GameObject.Find("PickStage(Clone)");
-		pickbutton.transform.localScale = new Vector3(1, 1, 1);
-		pickbutton.transform.localPosition = new Vector2(325, -250);
-
-}
-
 	bool sentLevelLoadRPC = false;
 	// Update is called once per frame
 	void Update () {
 	
-
+		//Check to see if the roster is filled
 		if(numberofpicks == 4){
 
 			for(int i = 0; i < 4; i++){
@@ -43,13 +35,14 @@ void ReposPick(){
 				manager.arenas[i] = picks[i];
 
 			}
+
+			//Play our set of levels
 			if(!sentLevelLoadRPC){
-			if(Network.isServer){
-				manager.LoadNextLevel(false);
-				sentLevelLoadRPC = true;
-				
+				if(Network.isServer){
+					manager.LoadNextLevel(false);
+					sentLevelLoadRPC = true;
 				}
-		}
+			}
 		}
 	}
 }
