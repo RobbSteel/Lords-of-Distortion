@@ -30,7 +30,7 @@ void ReposPick(){
 
 }
 
-
+	bool sentLevelLoadRPC = false;
 	// Update is called once per frame
 	void Update () {
 	
@@ -48,11 +48,13 @@ void ReposPick(){
 				manager.arenas[i] = picks[i];
 
 			}
-
+			if(!sentLevelLoadRPC){
 			if(Network.isServer){
 				manager.LoadNextLevel(false);
-			}
+				sentLevelLoadRPC = true;
+				
+				}
 		}
-
+		}
 	}
 }
