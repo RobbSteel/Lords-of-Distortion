@@ -413,8 +413,11 @@ public class Controller2D : MonoBehaviour {
 		case DeathType.RIPPED:
 			anim.SetTrigger ("RippedDeath");
 			break;
+        case DeathType.CRUSH:
+            anim.SetTrigger("CrushedDeath");
+            break;
 		default:
-			anim.SetTrigger("Die");
+			anim.SetTrigger("Die"); //not gonna work
 			break;
 		}
 	}

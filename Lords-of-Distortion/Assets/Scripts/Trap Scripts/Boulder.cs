@@ -11,7 +11,7 @@ public class Boulder : Power {
 			GA.API.Design.NewEvent("Boulder Death", player.transform.position);
 		}
 
-		controller.Die();
+		controller.Die(DeathType.CRUSH);
 	}
 	public override void PowerActionStay (GameObject player, Controller2D controller)
 	{

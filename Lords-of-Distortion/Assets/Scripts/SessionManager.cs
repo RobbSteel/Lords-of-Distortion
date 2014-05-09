@@ -70,14 +70,13 @@ public class SessionManager : MonoBehaviour {
 		NetworkViewID newID = Network.AllocateViewID(); //allocate viewId for communications
 		int group = GAMEPLAY;
 		PlayerOptions localOptions = psInfo.localOptions;
-		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, (int)localOptions.character, newID, group);
-		Transform instance = InstantiatePlayer(location, (int)localOptions.character, newID, group);
-		instance.GetComponent<NetworkView>().RPC("SetPlayerID", RPCMode.AllBuffered, Network.player);
+		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, (int)localOptions.character, Network.player, newID, group);
+		Transform instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
 	}
 
 	//Actually instantiates the character game object.
 	[RPC]
-	Transform InstantiatePlayer(Vector3 location, int character,  NetworkViewID viewID, int group){
+	Transform InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
 
 		Transform instance = null;
 		//Instantiate different prefab depending on choice.
@@ -98,7 +97,42 @@ public class SessionManager : MonoBehaviour {
 		NetworkView charNetworkView = instance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
 		charNetworkView.group = group;
+
+		NetworkController nwController = instance.gameObject.GetComponent<NetworkController>();
+
+		nwController.SetOwner(owner);
+		psInfo.AddPlayerGameObject(owner, instance.gameObject);
+		SetColor(instance.gameObject, owner);
 		return instance;
+	}
+
+	void SetColor(GameObject playerObject, NetworkPlayer player){
+		PlayerOptions playerOptions = psInfo.GetPlayerOptions(player);
+			
+		//Used for Ready button
+		if(GameObject.Find("LobbyGUI") != null)
+		{ 
+			LobbyGUI lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
+			lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
+			lobbyGuiScript.CreateReadyLight(player);
+		}
+
+		SpriteRenderer myRenderer = playerObject.GetComponent<SpriteRenderer>();
+
+		switch(playerOptions.style){
+				
+		case PlayerOptions.CharacterStyle.BLUE:
+			myRenderer.color = Color.blue;
+			break;
+				
+		case PlayerOptions.CharacterStyle.RED:
+			myRenderer.color = Color.red;
+			break;
+				
+		case PlayerOptions.CharacterStyle.GREEN:
+			myRenderer.color = Color.green;
+			break;
+		}
 	}
 
 	/*
@@ -111,9 +145,9 @@ public class SessionManager : MonoBehaviour {
 		
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
+		print ("player number is " + playerNumber);
 		options.PlayerNumber = playerNumber;
 		options.character = (PlayerOptions.Character)character;
-		psInfo.playernumb = playerNumber;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		psInfo.AddPlayer(owner, options, stats);
@@ -144,7 +178,7 @@ public class SessionManager : MonoBehaviour {
 		//timeManager = instance.GetComponent<TimeManager>();
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username, (int)localOptions.character);
-		timemanager = GameObject.Find ("TimeManager").GetComponent<TimeManager>();
+		timemanager = TimeManager.instance;
 		timemanager.SyncTimes();
 	}
 
@@ -163,7 +197,7 @@ public class SessionManager : MonoBehaviour {
 
 	[RPC]
 	void PlayerDisconnected(NetworkPlayer player){
-        if (GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>() != null)
+        if (GameObject.Find("LobbyGUI") != null)
         {
             lobbyGUIscript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
             lobbyGUIscript.RemoveReadyLight(player);
@@ -186,7 +220,8 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	[RPC]
-	IEnumerator LoadLevel(String level, int commonPrefix, bool finished){
+	IEnumerator LoadLevel(String level, int arenaIndex, int commonPrefix, bool finished){
+		this.arenaIndex = arenaIndex;
 		matchfinish = finished;
 		finishedLoading = false;
 		Network.SetSendingEnabled(GAMEPLAY, false);
@@ -238,10 +273,9 @@ public class SessionManager : MonoBehaviour {
 			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;
-			
 		}
 		
-		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, levelPrefix++, matchfinish);
+		networkView.RPC("LoadLevel", RPCMode.AllBuffered, level, arenaIndex, levelPrefix++, matchfinish);
 	}
 	
 	//this function should be called by the server arena manager.
@@ -265,19 +299,29 @@ public class SessionManager : MonoBehaviour {
 	}
 	
 	//called when we re-enter this scene after a game is over.
+	//TODO: fix so that playeroptions are synched.
 	void OnNetworkLoadedLevel(){
 
 		if(arenaIndex == -1){
+			print("doing it");
+			psInfo.ClearPlayers();
+			playerCounter = -1;
+
 			if(Network.isServer){
 				Network.RemoveRPCsInGroup(SETUP);
 				Network.RemoveRPCsInGroup(GAMEPLAY);
-
+				OnServerInitialized();
+				/*
 				List<Vector3> tempLocations = new List<Vector3>();
 				tempLocations.Add(transform.position);
 				tempLocations.Add(transform.position);
 				tempLocations.Add(transform.position);
 				tempLocations.Add(transform.position);
 				SpawnPlayers(tempLocations);
+				*/
+			}
+			else{
+				OnConnectedToServer();
 			}
 		}
 	}

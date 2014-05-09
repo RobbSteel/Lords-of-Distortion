@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class PlacementUI : MonoBehaviour {
+	public const float ARM_TIME = 2.6f;
 	private Camera UICamera;
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
@@ -418,7 +419,7 @@ public class PlacementUI : MonoBehaviour {
 
 	private void LivePlacement(PowerSpawn spawn){
 		print ("disable triggering until time is up");
-		spawn.SetTimer(3f); //start armament time
+		spawn.SetTimer(ARM_TIME); //start armament time
         
         //TODO: start radial cooldown on actives
 		PowerBoard relevantBoard = boardsByType[spawn.type];

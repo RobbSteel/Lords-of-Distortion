@@ -10,7 +10,6 @@ public class PlayerServerInfo : MonoBehaviour {
 
 	public HostData chosenHost;
 	public int score = 0;
-	public int playernumb;
 
 
 	//We want each player to have a list of his own options.
@@ -57,6 +56,7 @@ public class PlayerServerInfo : MonoBehaviour {
 		players.Remove(player);
 		playerOptions.Remove(player);
 		playerStats.Remove(player);
+		playerObjects.Remove(player);
 	}
 
 	public PlayerOptions GetPlayerOptions(NetworkPlayer player){
@@ -69,5 +69,11 @@ public class PlayerServerInfo : MonoBehaviour {
 		PlayerStats stats = null;
 		playerStats.TryGetValue(player, out stats);
 		return stats;
+	}
+
+	public void ClearPlayers(){
+		for(int i = players.Count -1; i >= 0; i--){
+			RemovePlayer(players[i]);
+		}
 	}
 }

@@ -5,10 +5,8 @@ using System.Linq;
 
 public class NetworkController : MonoBehaviour {
 	public bool DEBUG;
-	public SessionManager instanceManager;
 
 	public NetworkPlayer theOwner;
-    public LobbyGUI lobbyGuiScript;
     private Controller2D controller2D;
     
 	public bool isOwner = false;
@@ -45,63 +43,10 @@ public class NetworkController : MonoBehaviour {
 			this.inAir = false;
 		}
 	}
-	//just learned about this, might be useful later on
-	void OnNetworkInstantiate(NetworkMessageInfo info){
-
-	}
-
-	//Sets the network ID to this instantiation of the player.
-    // TODO: move to session manager
-	[RPC]
-	void SetPlayerID(NetworkPlayer player)
-	{
-		theOwner = player;
-		if(player == Network.player){ 
-			isOwner = true; //we can control the player locally
-		}
-		else{
-			rigidbody2D.isKinematic = true;
-			//put on other player layer
-			gameObject.layer = 13;
-		}
-
-		//we should have created a local playeroptions by now
-		if(!DEBUG){
-			instanceManager =  GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
-			PlayerOptions playerOptions = instanceManager.psInfo.GetPlayerOptions(theOwner);
-
-            //Used for Ready button
-            if(GameObject.Find("LobbyGUI") != null)
-            { 
-                lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
-                lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
-                lobbyGuiScript.CreateReadyLight(player);
-            }
-
-			//Debug.Log("Player " + theOwner + " number " + playerOptions.PlayerNumber);
-			if(instanceManager.psInfo.GetPlayerGameObject(theOwner) == null)
-				instanceManager.psInfo.AddPlayerGameObject(theOwner, gameObject);
-			SpriteRenderer myRenderer = gameObject.GetComponent<SpriteRenderer>();
-			switch(playerOptions.style){
-
-			case PlayerOptions.CharacterStyle.BLUE:
-				myRenderer.color = Color.blue;
-				break;
-				
-			case PlayerOptions.CharacterStyle.RED:
-				myRenderer.color = Color.red;
-				break;
-
-			case PlayerOptions.CharacterStyle.GREEN:
-				myRenderer.color = Color.green;
-				break;
-			}
-		}
-	}
 
 	void Awake() {
 		controller2D = GetComponent<Controller2D>();
-		states = new CircularBuffer<State>(10);
+		states = new CircularBuffer<State>(20);
 	}
 
 	void Start () {
@@ -129,32 +74,62 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	float interval = float.PositiveInfinity;
+	
 
-
-	void ExtrapolatePosition(){
-
+	public void SetOwner(NetworkPlayer owner){
+		theOwner = owner;
+		if(owner == Network.player){ 
+			isOwner = true; //we can control the player locally
+		}
+		else {
+			rigidbody2D.isKinematic = true;
+			//put on other player layer
+			gameObject.layer = 13;
+		}
 	}
-
 
 	Vector3 estimatedVelocity;
 	Vector3 latestPosition;
 
 	State latestState;
-
+	//The backup delay between players, in case packets drop.
 	double interpolationDelay = 0.10;
+
+	public double ConnectionPing{
+		private set{
+			ping = value;
+		}
+
+		get{
+			return ping;
+		}
+	}
+
+	[SerializeField]
+	private double ping = 0.0;
+	double LerpDouble(double from, double to, double t){
+		if(t > 1.0)
+			t = 1.0;
+		return (1.0-t) * from + t * to;
+	}
+
+	double pingLerpRate = 1.0;
 	float maxExtrapolation = .25f;
 	float interpolations = 0f;
 	float updates = 0f;
+
 	public float interpolationPercentage;
+
 	void Update () {
 
 		if (isOwner)
 			return;
 		updates++;
-
-		//The time we would like to see the other player. Were are seeing where they were in the past
-		double simulationTime = Network.time - interpolationDelay;
-
+		//Take into consideration ping between players when setting simulation time.
+		//We want it to be smoothed, so that fluctuating ping doesnt cause jittering
+		smoothPing = LerpDouble(smoothPing, ping, (double)Time.deltaTime);
+		//The time we would like to see the other player. We are seeing where they were in the past
+		double simulationTime = Network.time - smoothPing - interpolationDelay;
 
 		//Check to see if we have something newer than our desired simulation time,
 		//so we can interpolate. This also implies that there is a state which has a time further
@@ -191,11 +166,9 @@ public class NetworkController : MonoBehaviour {
 					controller2D.anim.SetFloat( "Speed", unit);
 
 					interpolations++;
-
 					return;
 				}
 				i--;
-
 			}
 		}
 
@@ -305,8 +278,9 @@ public class NetworkController : MonoBehaviour {
 	void OnDestroy(){
 		//remove self from dictionary since gameobject will be invalid.
 		if(!DEBUG)
-			instanceManager.psInfo.playerObjects.Remove(theOwner);
+			SessionManager.Instance.psInfo.playerObjects.Remove(theOwner);
 	}
+	double smoothPing;
 
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info){
 
@@ -332,11 +306,13 @@ public class NetworkController : MonoBehaviour {
 		}
 
 		else {
+
+			ConnectionPing = Network.time - info.timestamp;
 			//reject out of order/duplicate packets
+
 			if(states.Count >= 2){
 				double newestTime = states.ReadNewest().remoteTime;
 				if(info.timestamp >= newestTime + 1f/Network.sendRate * 2.0f){
-					Debug.Log("lost previous packet");
 					Debug.Log("Delay: " + (newestTime - info.timestamp) + " (s)");
 				}
 				else if(info.timestamp < newestTime) {
@@ -381,5 +357,4 @@ public class NetworkController : MonoBehaviour {
 			}
 		}
 	}
-
 }
