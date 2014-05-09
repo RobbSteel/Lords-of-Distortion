@@ -5,12 +5,20 @@ public class GemTransition : MonoBehaviour {
 
     private int gemHealth = 100;
     private bool transition = false;
+    private bool broken = false;
     private float timeBetweenDamage = 3f;
-	// Use this for initialization
-	void Start () {
+
+    public GameObject Part1;
+    public GameObject Part2;
+
+    //private CameraShake shake;
+    public Camera mainCam;
 	
-	}
-	
+    void OnStart()
+    {
+      //  shake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+    }
+
 	// Update is called once per frame
 	void Update () 
     {
@@ -25,7 +33,14 @@ public class GemTransition : MonoBehaviour {
             transition = true;
         }
 
-        Debug.Log("GEM HEALTH AT : " + gemHealth);
+        if (transition && !broken)
+        {
+            Part1.SetActive(false);
+            Part2.SetActive(true);
+            mainCam.GetComponent<CameraShake>().PlayShake();
+            broken = true;
+            //shake.PlayShake();
+        }
 
 	}
 
@@ -58,8 +73,6 @@ public class GemTransition : MonoBehaviour {
     {
         if (timeBetweenDamage <= 0) 
         { 
-            Debug.Log(collider.name + " Collided with the GEM");
-        
             switch(collider.name)
             {
                 case "Earthquake(Clone)" : EarthquakeCollision(collider); break;
@@ -83,6 +96,14 @@ public class GemTransition : MonoBehaviour {
             }
 
             timeBetweenDamage = 3f;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.name == "Boulder(Clone)")
+        {
+            gemHealth -= 20;
         }
     }
 
