@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Boulder : Power {
 
+    public GameObject rockShatterPrefab;
 	float direction = -1.0f;
+
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
 
@@ -22,6 +24,11 @@ public class Boulder : Power {
 
 	}
 
+    void OnDestroy()
+    {
+        GameObject rockShatter = Instantiate(rockShatterPrefab, transform.position, Quaternion.identity) as GameObject;
+    }
+
 	Vector2 force = new Vector2(-200f, 50);
 	Vector2 velocity = new Vector2(8f, 0f); 
 
@@ -35,6 +42,7 @@ public class Boulder : Power {
 
 		force.x = force.x * direction;
 		velocity.x = velocity.x * direction;
+        Destroy(gameObject, 10f);
 	}
 
 

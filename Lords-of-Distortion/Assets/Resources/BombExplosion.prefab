@@ -70,6 +70,7 @@ GameObject:
   - 111: {fileID: 11100000}
   - 95: {fileID: 9500000}
   - 82: {fileID: 8200000}
+  - 50: {fileID: 5000000}
   m_Layer: 9
   m_Name: BombExplosion
   m_TagString: Power
@@ -124,6 +125,21 @@ Transform:
   - {fileID: 400002}
   - {fileID: 400000}
   m_Father: {fileID: 0}
+--- !u!50 &5000000
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 1
+  m_FixedAngle: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!58 &5800000
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -280,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650dc749ebe1e924d92ae15306fbb4f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OFFLINE: 0
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
