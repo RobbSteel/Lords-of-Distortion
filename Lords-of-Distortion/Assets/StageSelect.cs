@@ -28,7 +28,7 @@ public class StageSelect : MonoBehaviour {
 
 void PickButton(){
 	
-		var picklabel = GameObject.Find("PickStage(Clone)");
+		var picklabel = GameObject.Find("PickStage");
 		var pickinfo = picklabel.GetComponent<AddStage>();
 		pickinfo.stagename = gameObject.transform.name;
 		pickinfo.stagedisplay = this.gameObject;
@@ -37,7 +37,7 @@ void PickButton(){
 	void StageInfo(){
 		GameObject difflabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, 0), transform.rotation);
 		difflabel.tag = "Display";
-		difflabel.transform.parent = GameObject.Find("UI Root").transform;
+		difflabel.transform.parent = GameObject.Find("SelectUI(Clone)").transform;
 		difflabel.transform.localScale = new Vector3(1, 1, 1);
 		difflabel.transform.localPosition = new Vector2(325, -100);
 		var difficultytext = difflabel.GetComponent<UILabel>();

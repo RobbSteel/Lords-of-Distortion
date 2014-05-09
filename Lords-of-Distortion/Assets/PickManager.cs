@@ -7,13 +7,14 @@ public class PickManager : MonoBehaviour {
 	SessionManager manager;
 	public string[] picks = new string[4]{"empty","empty","empty","empty"};
 	public GameObject pickbutton;
+	public GameObject allUI;
 	public bool moveonce = false;
 	// Use this for initialization
 	void OnNetworkLoadedLevel () {
 		manager = SessionManager.Instance;
 
 		if(Network.isServer){
-		GameObject picklabel = (GameObject)Network.Instantiate(pickbutton, new Vector3(400, 0, 0), transform.rotation,0);
+		GameObject picklabel = (GameObject)Network.Instantiate(allUI, new Vector3(0, 0, 0), transform.rotation,0);
 		
 		}
 	
@@ -34,12 +35,6 @@ void ReposPick(){
 	// Update is called once per frame
 	void Update () {
 	
-		if(!moveonce){
-
-			ReposPick();
-			moveonce = true;
-
-		}
 
 		if(numberofpicks == 4){
 
