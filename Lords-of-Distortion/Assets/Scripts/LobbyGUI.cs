@@ -42,7 +42,7 @@ public class LobbyGUI : MonoBehaviour {
 		}
 		else
 			sessionManager = SessionManager.Instance;
-        }
+    }
 
     public void SetLocalPlayerNum(int num)
     {

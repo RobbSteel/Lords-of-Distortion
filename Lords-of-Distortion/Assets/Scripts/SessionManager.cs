@@ -8,7 +8,7 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	private string[] arenas = new string[4]{"StageOne", "StageOne-Four", "StageOne-Two", "StageOne-Three"}; //an array of arenas
+	public string[] arenas = new string[4]{"empty", "empty", "empty", "empty"}; //an array of arenas
 	public PlayerServerInfo psInfo;
     public LobbyGUI lobbyGUIscript;
 	public bool finishedLoading = false;
@@ -41,7 +41,7 @@ public class SessionManager : MonoBehaviour {
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
-		arenaIndex = -1;// lobby is -1
+		arenaIndex = -2;// lobby is -1
 	}
 	
 	//NetworkController myPlayer;
@@ -246,7 +246,7 @@ public class SessionManager : MonoBehaviour {
 
 		if(Network.isServer){
 			//set update rate back to normal after were in game
-			if(arenaIndex == -1)
+			if(arenaIndex == -2)
 				MasterServer.updateRate = 60;
 		}
 
@@ -255,11 +255,15 @@ public class SessionManager : MonoBehaviour {
 		if(scorescreen){
 			roundsplayed++;
 			level = "PointsScreen";
+		}else if(GameObject.Find("LobbyGUI") != null){
+
+			level = "StageSelect";
+			arenaIndex = -1;
 		} else {
 			++arenaIndex;
 			if(arenaIndex >= arenas.Length){ //we're out of arenas, go back to lobby
 				level = "LobbyArena";
-				arenaIndex = -1;	
+				arenaIndex = -2;	
 			} else {
 				level = arenas[arenaIndex];
 			}
@@ -298,7 +302,7 @@ public class SessionManager : MonoBehaviour {
 	//TODO: fix so that playeroptions are synched.
 	void OnNetworkLoadedLevel(){
 
-		if(arenaIndex == -1){
+		if(arenaIndex == -2){
 			print("doing it");
 			psInfo.ClearPlayers();
 			playerCounter = -1;

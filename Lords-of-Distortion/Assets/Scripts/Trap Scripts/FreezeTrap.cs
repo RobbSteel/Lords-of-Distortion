@@ -26,7 +26,7 @@ public class FreezeTrap : Power {
         {
             if(!freezeExplosionActivated)
             {
-                GetComponent<CircleCollider2D>().radius = 1.25f;
+                GetComponent<CircleCollider2D>().radius = 1.6f;
                 GameObject freezeExplosion = (GameObject)Instantiate(Resources.Load("FreezeExplode"));
                 freezeExplosion.transform.position = transform.position;
                 freezeExplosionActivated = true;
