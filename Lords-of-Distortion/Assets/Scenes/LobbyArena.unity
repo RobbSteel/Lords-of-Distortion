@@ -2138,7 +2138,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 3a7e0ec846f4e1a40b46b3035474d89f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: .5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2726,6 +2726,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 886339501}
   - 108: {fileID: 886339502}
+  - 114: {fileID: 886339503}
   m_Layer: 0
   m_Name: gemLighting
   m_TagString: Lighting
@@ -2754,8 +2755,8 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 1, g: .68275857, b: 0, a: 1}
-  m_Intensity: 4.92000008
-  m_Range: 1.67999995
+  m_Intensity: 0
+  m_Range: 3
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -2779,6 +2780,25 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
+--- !u!114 &886339503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 886339500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7031b21a527f5e4a9f8f86860bec363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glowEndingTween: 3
+  glowStartingTween: 0
+  rangeEndingTween: 0
+  rangeStartingTween: 0
+  glowTween: 1
+  rangeTween: 0
+  glowTweenLength: 1
+  rangeTweenLength: 0
 --- !u!1 &894471601
 GameObject:
   m_ObjectHideFlags: 0
@@ -3600,8 +3620,8 @@ Transform:
   - {fileID: 886339501}
   - {fileID: 2034441085}
   - {fileID: 1599075537}
-  - {fileID: 201294242}
   - {fileID: 75070580}
+  - {fileID: 201294242}
   m_Father: {fileID: 0}
 --- !u!1 &1086890397
 GameObject:
@@ -5996,6 +6016,7 @@ MonoBehaviour:
   infoscript: {fileID: 0}
   sessionManagerPrefab: {fileID: 400000, guid: c79f913312239db4eab4647dc5c4d47b, type: 2}
   IconsGrid: {fileID: 1515826884}
+  playbtn: {fileID: 0}
   readyImagePrefab: {fileID: 100000, guid: e24c35952f9910345a82a4ae2c512fd4, type: 2}
   readyIcons: []
 --- !u!4 &1568938112
@@ -8013,6 +8034,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2034441085}
   - 108: {fileID: 2034441086}
+  - 114: {fileID: 2034441087}
   m_Layer: 0
   m_Name: gemLighting
   m_TagString: Lighting
@@ -8027,7 +8049,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2034441084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.05624104, y: 3.36205077, z: .209999993}
+  m_LocalPosition: {x: 8.30265999, y: 3.21419883, z: .550000012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1084984282}
@@ -8041,8 +8063,8 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 1, g: .68275857, b: 0, a: 1}
-  m_Intensity: 3.22000003
-  m_Range: 1.67999995
+  m_Intensity: 0
+  m_Range: 1.5
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -8066,6 +8088,25 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
+--- !u!114 &2034441087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034441084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7031b21a527f5e4a9f8f86860bec363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glowEndingTween: 2
+  glowStartingTween: 0
+  rangeEndingTween: 0
+  rangeStartingTween: 0
+  glowTween: 1
+  rangeTween: 0
+  glowTweenLength: 1
+  rangeTweenLength: 0
 --- !u!1 &2049942353
 GameObject:
   m_ObjectHideFlags: 0
