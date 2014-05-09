@@ -43,10 +43,6 @@ public class NetworkController : MonoBehaviour {
 			this.inAir = false;
 		}
 	}
-	//just learned about this, might be useful later on
-	void OnNetworkInstantiate(NetworkMessageInfo info){
-
-	}
 
 	void Awake() {
 		controller2D = GetComponent<Controller2D>();
@@ -110,12 +106,13 @@ public class NetworkController : MonoBehaviour {
 	}
 
 	[SerializeField]
-	double ping = 0.0;
+	private double ping = 0.0;
 	double LerpDouble(double from, double to, double t){
 		if(t > 1.0)
 			t = 1.0;
 		return (1.0-t) * from + t * to;
 	}
+
 	double pingLerpRate = 1.0;
 	float maxExtrapolation = .25f;
 	float interpolations = 0f;
