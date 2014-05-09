@@ -5,6 +5,8 @@ public class StageSelect : MonoBehaviour {
 
 	public GameObject difficulty;
 	public GameObject pick;
+	public string difficultyrating;
+	public string stagename;
 	public string currentstage;
 
 	[RPC]
@@ -34,7 +36,14 @@ public class StageSelect : MonoBehaviour {
 	difflabel.transform.localScale = new Vector3(1, 1, 1);
 	difflabel.transform.localPosition = new Vector2(325, -100);
 	var difficultytext = difflabel.GetComponent<UILabel>();
-	difficultytext.text = "Difficulty: Moderate";
+	difficultytext.text = difficultyrating;
+	GameObject stagelabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, 0), transform.rotation);
+	stagelabel.tag = "Display";
+	stagelabel.transform.parent = GameObject.Find("SelectUI(Clone)").transform;
+	stagelabel.transform.localScale = new Vector3(1, 1, 1);
+	stagelabel.transform.localPosition = new Vector2(325, -40);
+	var stagetext = stagelabel.GetComponent<UILabel>();
+	stagetext.text = stagename;
  }
 
 //Used for deletion of information when a new button is pressed
