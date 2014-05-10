@@ -9,7 +9,7 @@ public class PlayerOptions{
 	}
 
 	public enum Character{
-		Colossus = 0, Blue
+		Colossus = 0, Blue , Mummy
 	}
 
 	public CharacterStyle style;

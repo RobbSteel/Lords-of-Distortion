@@ -47,6 +47,7 @@ public class SessionManager : MonoBehaviour {
 	//NetworkController myPlayer;
 	public Transform colossusPrefab;
 	public Transform bluePrefab;
+    public Transform mummyPrefab;
 
 	public GameObject timeManagerPrefab;
 	
@@ -89,6 +90,9 @@ public class SessionManager : MonoBehaviour {
 		case PlayerOptions.Character.Blue:
 			instance = (Transform)Instantiate(bluePrefab, location, Quaternion.identity);
 			break;
+        case PlayerOptions.Character.Mummy:
+            instance = (Transform)Instantiate(mummyPrefab, location, Quaternion.identity);
+            break;
 		default:
 			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
 			break;
