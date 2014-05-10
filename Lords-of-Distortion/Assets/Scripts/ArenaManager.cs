@@ -76,7 +76,7 @@ public class ArenaManager : MonoBehaviour {
 		timer.countDownTime = beginTime - TimeManager.instance.time;
 		timer.Show();
 		//set seed of fountain random generator to time
-		fountainManager.SetFirstSpawnTime(beginTime + 15f);
+		fountainManager.SetFirstSpawnTime(beginTime + 15f - TimeManager.instance.time);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
 

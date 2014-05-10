@@ -26,22 +26,19 @@ public class TrapFountainManager : MonoBehaviour {
 	}
 
 	public void SetFirstSpawnTime(float time){
-		spawnTime = time - TimeManager.instance.time;
-	}
-	//Sets the seed for the random number generator
-	public void SetSeed(int seed){
-		random = new System.Random(seed);
+		spawnTime = time;
 		activated = true;
 	}
 
+	//Sets the seed for the random number generator
+	public void SetSeed(int seed){
+		random = new System.Random(seed);
+	}
 
 	void Awake(){
 		activated = false;
 	}
 
-	void Start () {
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		if(activated){
