@@ -7,7 +7,7 @@ public class ArenaManager : MonoBehaviour {
 	PowerPrefabs powerPrefabs;
 
 	const float PRE_MATCH_TIME = 5f; 
-	const float POST_MATCH_TIME = 4f;
+	const float POST_MATCH_TIME = 2f;
 	const float LAST_MAN_TIME = 10f;
 	SessionManager sessionManager;
 	TrapFountainManager fountainManager; 
@@ -50,8 +50,21 @@ public class ArenaManager : MonoBehaviour {
 	}
 	Phase currentPhase;
 
+	//Has the additional task of synching phase
 	[RPC]
-	void SynchTimer(float time){
+	void SynchTimer(float time, int phase){
+		currentPhase =  (Phase)phase;
+
+		if(currentPhase == Phase.Finish){
+			endTime = time;
+		}
+		else
+		{
+			SynchUITimer(time);
+		}
+	}
+
+	private void SynchUITimer(float time){
 		timer.countDownTime = time - TimeManager.instance.time;
 		timer.Show();
 	}
@@ -85,6 +98,7 @@ public class ArenaManager : MonoBehaviour {
 		if(livePlayerCount == 0){
 			FinishGame(false); //Last player didn't win
 		}
+
 		if(!disconnect)
 		{
 			pointTracker.PlayerDied(player);
@@ -101,8 +115,8 @@ public class ArenaManager : MonoBehaviour {
 
 			//give some time to kill last player
 			finalPlayerTime = TimeManager.instance.time + LAST_MAN_TIME;
-			SynchTimer(finalPlayerTime);
-			networkView.RPC("SynchTimer", RPCMode.Others, finalPlayerTime);
+			SynchUITimer(finalPlayerTime);
+			networkView.RPC("SynchTimer", RPCMode.Others, finalPlayerTime, (int)Phase.FinalPlayer);
 		} 
 	}
 
@@ -493,14 +507,9 @@ public class ArenaManager : MonoBehaviour {
 
 
 		if(currentPhase == Phase.PreGame && currentTime >= beginTime){
-
-           // placementUI.DisableEditing();
-			//placementUI.Disable();
 			timer.Hide();
-
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
-
 
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
@@ -508,11 +517,13 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 
-		else if(Network.isServer && currentPhase == Phase.FinalPlayer && currentTime >= finalPlayerTime){
-			//nobody killed this dude
-			FinishGame(true);
+		else if(currentPhase == Phase.FinalPlayer && currentTime >= finalPlayerTime){
+			if(Network.isServer){
+				//nobody killed this dude
+				FinishGame(true);
+			}
 		}
-		else if( currentPhase == Phase.Finish && currentTime >= endTime){
+		else if(currentPhase == Phase.Finish && currentTime >= endTime){
 			//game ended, load level
 			if(Network.isServer){
 				sessionManager.LoadNextLevel(true);
@@ -544,8 +555,7 @@ public class ArenaManager : MonoBehaviour {
 			}
 			//end game in 3 seconds
 			endTime = TimeManager.instance.time + POST_MATCH_TIME;
-			SynchTimer(endTime);
-			networkView.RPC("SynchTimer", RPCMode.Others, endTime);
+			networkView.RPC("SynchTimer", RPCMode.Others, endTime, (int)Phase.Finish);
 			currentPhase = Phase.Finish;
 		}
 	}
