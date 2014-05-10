@@ -15,21 +15,22 @@ public class TimeManager : MonoBehaviour {
 		}
 		instance = this;
 		DontDestroyOnLoad(this);
+
+		//Only do this once. Calling synctimes again should not modify server time, because we cannot
+		//guarantee synchtimes will be called  server first.
+		if(Network.isServer){
+			//time will start at 0 on server
+			deltaTime = -(float)Network.time;
+		}
 	}
 
 	public void SyncTimes(){
 		if(Network.isServer){
-			deltaTime = -(float)Network.time;
+			deltaTime = deltaTime; //stays the same
 		}
 		else{
-			print ("Get server time");
 			networkView.RPC("GetServerTime", RPCMode.Server);
 		}
-
-	}
-
-	void Start(){
-
 	}
 
 	void Update () {
