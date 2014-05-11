@@ -99,7 +99,7 @@ public class Earthquake : Power {
 
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
-		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground"){
+		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject"){
 
 			if(col.transform.tag == "killplatform"){
 

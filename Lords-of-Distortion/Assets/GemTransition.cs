@@ -7,7 +7,10 @@ public class GemTransition : MonoBehaviour {
     private bool transition = false;
     private bool broken = false;
     private float timeBetweenDamage = 3f;
+    private float timer = 0f;
+    private int callOnce = 0;
 
+    public GemShatterLighting gemLighting;
     public GameObject Part1;
     public GameObject Part2;
 
@@ -30,14 +33,29 @@ public class GemTransition : MonoBehaviour {
 	    if(gemHealth <= 0)
         {
             Debug.Log("GEM DEAD");
-            transition = true;
+
+            timer += Time.deltaTime;
+            
+            if (timer > 4)
+            {
+                transition = true;
+            }
+            if (callOnce == 0)
+            {
+                callOnce = 1;
+            }
+            else if (callOnce == 1)
+            {
+                callOnce = 2;
+                gemLighting.GemShattered();
+                mainCam.GetComponent<CameraShake>().PlayShake();
+            }
         }
 
         if (transition && !broken)
         {
             Part1.SetActive(false);
             Part2.SetActive(true);
-            mainCam.GetComponent<CameraShake>().PlayShake();
             broken = true;
             //shake.PlayShake();
         }
@@ -52,7 +70,7 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == explosion.name && explosion.tag == "Power")
             {
-                gemHealth -= 50;
+                gemHealth -= 100; //50
             }
         }
     }
@@ -64,7 +82,7 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == earthquake.name && earthquake.tag == "Power")
             {
-                gemHealth -= 25;
+                gemHealth -= 100; //25
             }
         }
     }
@@ -79,7 +97,7 @@ public class GemTransition : MonoBehaviour {
                 case "BombExplosion(Clone)": ExplosionCollision(collider); break;
             }
 
-            timeBetweenDamage = 3f;
+            timeBetweenDamage = 1f;
         }
     }
 
@@ -95,7 +113,7 @@ public class GemTransition : MonoBehaviour {
                 case "BombExplosion(Clone)": ExplosionCollision(collider); break;
             }
 
-            timeBetweenDamage = 3f;
+            timeBetweenDamage = 1f;
         }
     }
 
@@ -103,7 +121,7 @@ public class GemTransition : MonoBehaviour {
     {
         if(collision.gameObject.name == "Boulder(Clone)")
         {
-            gemHealth -= 20;
+            gemHealth -= 100;// 20;
         }
     }
 
