@@ -6209,11 +6209,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.15481579
+      value: -.0519552417
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.51521909
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_LocalPosition.z
@@ -6245,7 +6245,7 @@ Prefab:
       objectReference: {fileID: 8300000, guid: daa11af5e7dc579478fbf91f6be00a80, type: 3}
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_Volume
-      value: .5
+      value: .349999994
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
@@ -9150,6 +9150,7 @@ GameObject:
   - 4: {fileID: 1580725017}
   - 82: {fileID: 1580725016}
   - 114: {fileID: 1580725015}
+  - 81: {fileID: 1580725018}
   m_Layer: 0
   m_Name: GameMusic
   m_TagString: Untagged
@@ -9180,7 +9181,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: daa11af5e7dc579478fbf91f6be00a80, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .5
+  m_Volume: .349999994
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -9235,10 +9236,18 @@ Transform:
   m_PrefabInternal: {fileID: 916236370}
   m_GameObject: {fileID: 1580725014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.15481579, y: 1.51521909, z: 0}
+  m_LocalPosition: {x: -.0519552417, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!81 &1580725018
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 8100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5,
+    type: 2}
+  m_PrefabInternal: {fileID: 916236370}
+  m_GameObject: {fileID: 1580725014}
+  m_Enabled: 1
 --- !u!1001 &1587935206
 Prefab:
   m_ObjectHideFlags: 0
@@ -11721,7 +11730,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2132269331}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &2132269333
 Behaviour:
   m_ObjectHideFlags: 0
