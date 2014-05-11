@@ -93,7 +93,7 @@ public class NetworkController : MonoBehaviour {
 
 	State latestState;
 	//The backup delay between players, in case packets drop.
-	double interpolationDelay = 0.10;
+	public static double interpolationDelay = 0.10;
 
 	public double ConnectionPing{
 		private set{

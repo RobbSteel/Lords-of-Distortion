@@ -22,15 +22,12 @@ public class Melee : MonoBehaviour {
 	public bool meleeDisable;
 
 	[HideInInspector]
-
-
-	public float meleeTimer = 0;
-
-	public float coolDownTimer = 0.5f;
+	
 	public float damageDealt = 15f;
 
 	public bool meleeing = false;
 
+	const float MOVEMENT_WINDOW = .033f; //about 2 frames if running at 60fps
 	void Awake()
 	{
 		// Setting up the references.
@@ -39,21 +36,24 @@ public class Melee : MonoBehaviour {
 		myhook = GetComponent<Hook>();
 		networkController = GetComponent<NetworkController>();
 		meleeObject.GetComponent<BoxCollider2D>().enabled = false;
-
 	}
 	
 	void Update ()
 	{
 		//this.GetComponent<BoxCollider2D>().enabled = false;
-		if ( !meleeDisable && meleeTimer <= 0 && !myhook.hookthrown && !controller.locked) {
+		if (!meleeDisable && !myhook.hookthrown && !controller.locked) {
 			// If the fire button is pressed...
-			//print("maggot");
 			if (Input.GetButtonDown ("Melee") && !controller.stunned && networkController.isOwner) {
 				startMelee ();
 			}
 		}
-		else
-			meleeTimer -= Time.deltaTime;
+
+		if(meleeing){
+			movementTime -= Time.deltaTime;
+			if(movementTime <= 0f){
+				controller.Snare();
+			}
+		}
 	}
 
 	//Play animation on all clients.
@@ -61,6 +61,8 @@ public class Melee : MonoBehaviour {
 	void NotifyVisualMelee(){
 		anim.SetTrigger ("Melee");
 	}
+
+	float movementTime = .033f;
 
 	private void startMelee(){
 		meleeing = true;
@@ -70,16 +72,13 @@ public class Melee : MonoBehaviour {
 		}
 
 		if(!controller.OFFLINE)
-		networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
+			networkView.RPC ("NotifyVisualMelee", RPCMode.Others);
 
 		// Enable Box Collider 2D
 		meleeObject.GetComponent<BoxCollider2D>().enabled = true;
-		controller.Snare();
+		movementTime = MOVEMENT_WINDOW;
 		anim.SetTrigger ("Melee");
 		AudioSource.PlayClipAtPoint( controller.meleeSfx , transform.position);
-		meleeTimer =  coolDownTimer;
-
-
 	}
 
 	//Called by animator when the animation is done. Previously the collider was sticking around.
@@ -88,9 +87,8 @@ public class Melee : MonoBehaviour {
 		controller.FreeFromSnare();
 		meleeing = false;
 	}
-
-
-	public void HandleCollsion(GameObject playerObject){
+	
+	public void HandleCollision(GameObject playerObject){
 		// ... find the StunBar script and call the TakeDamage function.
 		//playerObject.GetComponent<StunBar>().TakeDamage(damageDealt);
 		playerObject.GetComponent<PlayerStatus>().AddHit(controller.facingRight);

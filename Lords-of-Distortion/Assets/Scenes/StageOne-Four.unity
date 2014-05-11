@@ -2457,7 +2457,7 @@ Prefab:
       objectReference: {fileID: 8300000, guid: 2113c686e1122ea4d98710cdd78bf50b, type: 3}
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_Volume
-      value: .5
+      value: .300000012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
@@ -3495,7 +3495,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1720777363}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &1720777365
 Behaviour:
   m_ObjectHideFlags: 0
@@ -4420,6 +4420,7 @@ GameObject:
   - 4: {fileID: 1933095746}
   - 82: {fileID: 1933095745}
   - 114: {fileID: 1933095744}
+  - 81: {fileID: 1933095747}
   m_Layer: 0
   m_Name: GameMusic
   m_TagString: Untagged
@@ -4450,7 +4451,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 2113c686e1122ea4d98710cdd78bf50b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .5
+  m_Volume: .300000012
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4509,6 +4510,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!81 &1933095747
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 8100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1218423040}
+  m_GameObject: {fileID: 1933095743}
+  m_Enabled: 1
 --- !u!1 &1941172818
 GameObject:
   m_ObjectHideFlags: 0

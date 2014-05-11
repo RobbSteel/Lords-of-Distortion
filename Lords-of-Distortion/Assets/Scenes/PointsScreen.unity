@@ -100,7 +100,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 30498026}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &30498028
 Behaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ Prefab:
       objectReference: {fileID: 8300000, guid: 0f0f5d7fb35c5d542b8b72303195a102, type: 3}
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_Volume
-      value: 1
+      value: .349999994
       objectReference: {fileID: 0}
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: Loop
@@ -407,6 +407,7 @@ GameObject:
   - 4: {fileID: 350887709}
   - 82: {fileID: 350887708}
   - 114: {fileID: 350887707}
+  - 81: {fileID: 350887710}
   m_Layer: 0
   m_Name: GameMusic
   m_TagString: Untagged
@@ -437,7 +438,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 0f0f5d7fb35c5d542b8b72303195a102, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: .349999994
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -496,6 +497,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!81 &350887710
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 8100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5,
+    type: 2}
+  m_PrefabInternal: {fileID: 330674735}
+  m_GameObject: {fileID: 350887706}
+  m_Enabled: 1
 --- !u!1 &372247114
 GameObject:
   m_ObjectHideFlags: 0

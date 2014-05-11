@@ -17,7 +17,7 @@ public class MeleeHit : MonoBehaviour {
 			col.GetComponent<Controller2D>();
 			//check to see if an effect is in place to be killed on melee hit
 			onHitDeath = col.GetComponent<Controller2D>();
-			melee.HandleCollsion(col.gameObject);
+			melee.HandleCollision(col.gameObject);
 			AudioSource.PlayClipAtPoint( onHitDeath.meleeHitSfx , transform.position);
 
 			Debug.Log ("Player hit");
