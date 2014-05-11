@@ -8,6 +8,7 @@ public class Hook : MonoBehaviour {
 	public bool movingback = false;
 	public bool hookpull = false;
 	public bool hookthrown = false;
+	public bool destroyed = true;
 
 	public Vector3 mousePos = new Vector3(0,0, 0);
 	public HookHit hookscript;
@@ -34,7 +35,7 @@ public class Hook : MonoBehaviour {
 	}
 	
 	void ShootHookLocal(Vector3 target){
-		mousePos = target;
+
 
 		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
 		going = true;
@@ -44,6 +45,7 @@ public class Hook : MonoBehaviour {
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
+		mousePos = transform.position + 100f * direction;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -75,7 +77,7 @@ public class Hook : MonoBehaviour {
 				movingtowards = true;
 				going = false;
 				
-			}else if(hookscript.destroyed == true){
+			}else if(destroyed == true){
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
@@ -109,7 +111,8 @@ public class Hook : MonoBehaviour {
 		if(!hookthrown){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
             {
-                animator.SetFloat("Speed", 0);
+				destroyed = false;
+				animator.SetFloat("Speed", 0);
                 Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
@@ -135,8 +138,11 @@ public class Hook : MonoBehaviour {
 			hooktimer -= Time.deltaTime;
 		}*/
 
-		if(going == true){
+		if(going == true && Input.GetMouseButton(1)){
 			hookgoing(speed);
+		} else {
+
+			destroyed = true;
 		}
 
 
