@@ -34,8 +34,8 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		fade = false;
-		durationOfFading = 2;
-		fadeTimer = 2;
+		durationOfFading = 1;
+		fadeTimer = 1;
 		transitionToNewScene = this.GetComponent<SceneFadeInOut> ();
 		currentObjective = 0;
 		objectives [currentObjective].SetActive (true);
@@ -143,13 +143,13 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	
 	//get fountain
 	IEnumerator startScene(){
-		//player.GetComponent<Controller2D> ().locked = true;
-		yield return new WaitForSeconds (2);
+		player.GetComponent<Controller2D> ().locked = true;
+		yield return new WaitForSeconds (durationOfFading);
 		setFadeClear ();
 		yield return new WaitForSeconds (durationOfFading);
 		setFadeSolid ();
 		changeText (secondMessage);
-		//player.GetComponent<Controller2D> ().locked = false;
+		player.GetComponent<Controller2D> ().locked = false;
 		
 	}
 	
