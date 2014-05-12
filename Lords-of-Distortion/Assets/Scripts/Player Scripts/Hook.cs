@@ -8,7 +8,6 @@ public class Hook : MonoBehaviour {
 	public bool movingback = false;
 	public bool hookpull = false;
 	public bool hookthrown = false;
-	public bool destroyed = true;
 
 	public Vector3 mousePos = new Vector3(0,0, 0);
 	public HookHit hookscript;
@@ -77,7 +76,7 @@ public class Hook : MonoBehaviour {
 				movingtowards = true;
 				going = false;
 				
-			}else if(destroyed == true){
+			}else if(hookscript.destroyed == true){
 				movingback = true;
 				going = false;
 			} else if(hookscript.playerhooked == true){
@@ -111,7 +110,7 @@ public class Hook : MonoBehaviour {
 		if(!hookthrown){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
             {
-				destroyed = false;
+			
 				animator.SetFloat("Speed", 0);
                 Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
@@ -138,11 +137,19 @@ public class Hook : MonoBehaviour {
 			hooktimer -= Time.deltaTime;
 		}*/
 
-		if(going == true && Input.GetMouseButton(1)){
-			hookgoing(speed);
+		if(going == true){
+		if(networkController.isOwner){
+			if(Input.GetMouseButton(1)){
+				hookgoing(speed);
+			} else {
+				hookscript.destroyed = true;
+				networkView.RPC ("HookReturn", RPCMode.Others);
+			}
 		} else {
 
-			destroyed = true;
+				hookgoing(speed);
+
+			}
 		}
 
 
@@ -183,6 +190,13 @@ public class Hook : MonoBehaviour {
 		}
 }
 
+
+	[RPC]
+	void HookReturn(){
+
+		hookscript.destroyed = true;
+
+	}
 
 //Gives players the option to hook players to them or pull themselves to the hooked player.
 

@@ -42,7 +42,7 @@ public class HookHit : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, hookedPlayer.transform.position, 10);
 		}
 
-
+	
 
         if(shooter.GetComponent<Hook>().going == true)
         {

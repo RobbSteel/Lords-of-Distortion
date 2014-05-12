@@ -48,6 +48,7 @@ public class ArenaManager : MonoBehaviour {
 		FinalPlayer,
 		Finish
 	}
+
 	Phase currentPhase;
 
 	//Has the additional task of synching phase
@@ -177,6 +178,7 @@ public class ArenaManager : MonoBehaviour {
 
 		//bring up the dead player placement screen.
 		placementUI.disabledPowers.Add(PowerType.GATE);
+		placementUI.disabledPowers.Add(PowerType.DEFLECTIVE);
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
 	}
@@ -225,7 +227,6 @@ public class ArenaManager : MonoBehaviour {
 	{
 		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact);
 		HandlePlayerEvent(info.sender, playerEvent);
-
 	}
 
 	[RPC]
@@ -416,7 +417,7 @@ public class ArenaManager : MonoBehaviour {
 		currentPhase = Phase.PreGame;
 		//TODO: have something that checks if all players have finished loading.
 	}
-
+	//---Trap Spawning--------------------------------------------
 	private void SpawnTimedTraps(float currentTime){
 		if(allTimedSpawns.Count != 0){
 			//print ("Current time " + currentTime + ", next trap time " + (beginTime +  allTimedSpawns.First.Priority))
@@ -451,7 +452,7 @@ public class ArenaManager : MonoBehaviour {
 			//Call this function locally on and remotely
 			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
 			                Network.player);
-			SpawnPowerLocally(spawn, newViewID);
+			SpawnPowerLocally(spawn, 0f, newViewID);
             //Remove from your inventory and  disable button 
             placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
@@ -460,20 +461,24 @@ public class ArenaManager : MonoBehaviour {
 				//remove from grid if power is not infinite.
 				if(!powerSlot.associatedPower.infinite)
 					placementUI.RemoveFromInventory(powerSlot.associatedPower.type);
-					
 			}
 		}
 	}
 
+	//Player sees the warning symbol for his own powers longer than the other players.
+	const float MaxWarningDuration = 0.8f; //old one was .7f
+	const float MaxLagAdjustment = 0.24f; //The max amount of time the warning can be reduced to account for lag, for fairness.
+
 	//http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html
 	//http://docs.unity3d.com/Documentation/ScriptReference/Coroutine.html
 	//Spawn a warning sign, wait .7 seconds, then spawn power. All of these are done locally on every client.
-	IEnumerator YieldThenPower(PowerSpawn spawn, NetworkViewID optionalViewID)
+	IEnumerator YieldThenPower(PowerSpawn spawn, float warningDuration, NetworkViewID optionalViewID)
     {
         Vector3 yieldSpawnLocation = spawn.position;
         yieldSpawnLocation.z = -8;
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
-        yield return new WaitForSeconds(0.7f);
+		print ("Warning duration is " + warningDuration);
+		yield return new WaitForSeconds(warningDuration);
 		Destroy(instantiatedSymbol);
 		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
 		power.GetComponent<Power>().spawnInfo = spawn;
@@ -486,25 +491,30 @@ public class ArenaManager : MonoBehaviour {
 	//this function converts parameters into a powerspawn object
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
-	                       NetworkPlayer owner){
+	                       NetworkPlayer owner, NetworkMessageInfo info){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
 		requestedSpawn.direction = direction;
 		requestedSpawn.owner  = owner;
-		SpawnPowerLocally(requestedSpawn, optionalViewID);
+
+		float networkDelay = (float)(Network.time - info.timestamp);
+		SpawnPowerLocally(requestedSpawn, networkDelay, optionalViewID);
 	}
 
 	//The function that actually starts the coroutine for spawning powers.
-	void SpawnPowerLocally(PowerSpawn spawn, NetworkViewID optionalViewID){
-		StartCoroutine(YieldThenPower(spawn, optionalViewID));
+	void SpawnPowerLocally(PowerSpawn spawn, float networkDelay,  NetworkViewID optionalViewID){
+		float adjustedWarningDuration = MaxWarningDuration - 
+			Mathf.Min(networkDelay, MaxLagAdjustment) - (float)NetworkController.interpolationDelay;
+		StartCoroutine(YieldThenPower(spawn, adjustedWarningDuration, optionalViewID));
 	}
+
+	//--------Trap Spawning End -----------------------
 	
 	bool trapsEnabled = false;
 
 	void Update () {
         float currentTime = TimeManager.instance.time;
-
 
 		if(currentPhase == Phase.PreGame && currentTime >= beginTime){
 			timer.Hide();
