@@ -110,7 +110,8 @@ public class Hook : MonoBehaviour {
 		if(!hookthrown){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
             {
-                animator.SetFloat("Speed", 0);
+			
+				animator.SetFloat("Speed", 0);
                 Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
@@ -137,7 +138,18 @@ public class Hook : MonoBehaviour {
 		}*/
 
 		if(going == true){
-			hookgoing(speed);
+		if(networkController.isOwner){
+			if(Input.GetMouseButton(1)){
+				hookgoing(speed);
+			} else {
+				hookscript.destroyed = true;
+				networkView.RPC ("HookReturn", RPCMode.Others);
+			}
+		} else {
+
+				hookgoing(speed);
+
+			}
 		}
 
 
@@ -178,6 +190,13 @@ public class Hook : MonoBehaviour {
 		}
 }
 
+
+	[RPC]
+	void HookReturn(){
+
+		hookscript.destroyed = true;
+
+	}
 
 //Gives players the option to hook players to them or pull themselves to the hooked player.
 
