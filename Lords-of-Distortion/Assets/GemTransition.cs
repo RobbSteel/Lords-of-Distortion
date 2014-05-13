@@ -15,6 +15,7 @@ public class GemTransition : MonoBehaviour {
     public GemShatterLighting gemLighting;
     public GameObject Part1;
     public GameObject Part2;
+    public PlayerServerInfo psinfo;
 
     //private CameraShake shake;
     public Camera mainCam;
@@ -27,6 +28,11 @@ public class GemTransition : MonoBehaviour {
     };
 
     private StagePhase currentPhase = StagePhase.GemAlive;
+
+    void Awake()
+    {
+        psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+    }
 
 	// Update is called once per frame
 	void Update () 
@@ -41,7 +47,8 @@ public class GemTransition : MonoBehaviour {
             Debug.Log("GEM DEAD");
 
             timer += Time.deltaTime;
-            
+            LiftPlayers();
+
             if (timer > 4)
             {
                 transition = true;
@@ -56,12 +63,14 @@ public class GemTransition : MonoBehaviour {
                 currentPhase = StagePhase.GemDestroyed;
                 gemLighting.GemShattered(true);
                 DestroyPlatform();
+                DestroyCharmarks();
                 mainCam.GetComponent<CameraShake>().PlayShake();
             }
         }
 
         if (transition && !broken)
         {
+            LowerPlayers();
             Part1.SetActive(false);
             Part2.SetActive(true);
             broken = true;
@@ -71,6 +80,22 @@ public class GemTransition : MonoBehaviour {
         }
 
 	}
+
+    void LiftPlayers()
+    {
+        foreach(NetworkPlayer player in psinfo.players)
+        {
+            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+        }
+    }
+
+    void LowerPlayers()
+    {
+        foreach (NetworkPlayer player in psinfo.players)
+        {
+            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
+        }
+    }
 
     void ExplosionCollision(Collider2D collider)
     {
@@ -94,6 +119,15 @@ public class GemTransition : MonoBehaviour {
             {
                 gemHealth -= 100; //25
             }
+        }
+    }
+
+    void DestroyCharmarks()
+    {
+        GameObject[] charmarks = GameObject.FindGameObjectsWithTag("charmark");
+        foreach(GameObject mark in charmarks)
+        {
+            Destroy(mark);
         }
     }
 
