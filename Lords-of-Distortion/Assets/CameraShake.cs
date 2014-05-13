@@ -50,6 +50,6 @@ public class CameraShake : MonoBehaviour
             yield return 0;
         }
 
-        transform.position = originalCamPos;
+        gameObject.transform.position = new Vector3(0, 0, -10);
     }
 }
