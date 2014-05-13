@@ -23,10 +23,14 @@ public class GemShatterLighting : MonoBehaviour {
         }
 	}
 
-    public void GemShattered()
+    public void GemShattered(bool value)
     {
-        shattered = true;
+        shattered = value;
     }
 
+    public void ResetLighting()
+    {
+        light.intensity = 0.5f;
+    }
 
 }

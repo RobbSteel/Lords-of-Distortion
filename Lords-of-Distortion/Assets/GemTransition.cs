@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GemTransition : MonoBehaviour {
 
@@ -8,19 +9,24 @@ public class GemTransition : MonoBehaviour {
     private bool broken = false;
     private float timeBetweenDamage = 3f;
     private float timer = 0f;
-    private int callOnce = 0;
+   // private int callOnce = 0;
 
+    public ParticleSystem earthShatter;
     public GemShatterLighting gemLighting;
     public GameObject Part1;
     public GameObject Part2;
 
     //private CameraShake shake;
     public Camera mainCam;
-	
-    void OnStart()
+
+    enum StagePhase
     {
-      //  shake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-    }
+        GemAlive = 0,
+        GemBroken = 1,
+        GemDestroyed = 2
+    };
+
+    private StagePhase currentPhase = StagePhase.GemAlive;
 
 	// Update is called once per frame
 	void Update () 
@@ -40,14 +46,16 @@ public class GemTransition : MonoBehaviour {
             {
                 transition = true;
             }
-            if (callOnce == 0)
+
+            if (currentPhase == StagePhase.GemAlive)
             {
-                callOnce = 1;
+                currentPhase = StagePhase.GemBroken;
             }
-            else if (callOnce == 1)
+            if (currentPhase == StagePhase.GemBroken)
             {
-                callOnce = 2;
-                gemLighting.GemShattered();
+                currentPhase = StagePhase.GemDestroyed;
+                gemLighting.GemShattered(true);
+                DestroyPlatform();
                 mainCam.GetComponent<CameraShake>().PlayShake();
             }
         }
@@ -57,7 +65,9 @@ public class GemTransition : MonoBehaviour {
             Part1.SetActive(false);
             Part2.SetActive(true);
             broken = true;
-            //shake.PlayShake();
+            gameObject.SetActive(false);
+            gemLighting.GemShattered(false);
+            gemLighting.ResetLighting();
         }
 
 	}
@@ -125,5 +135,37 @@ public class GemTransition : MonoBehaviour {
         }
     }
 
+    [RPC]
+    void CrackPlatform(int index)
+    {
+
+        var manager = GameObject.FindGameObjectWithTag("ArenaManager");
+        var managerscript = manager.GetComponent<ArenaManager>();
+        var platformlist = managerscript.platformlist;
+        var platform = platformlist[index];
+        Instantiate(earthShatter, platform.transform.position, platform.transform.rotation);
+        Destroy(platform);
+    }
+
+    void DestroyPlatform()
+    {
+        if (Network.isServer)
+        {
+
+            int index = 0;
+            GameObject manager = GameObject.FindGameObjectWithTag("ArenaManager");
+            ArenaManager managerscript = manager.GetComponent<ArenaManager>();
+            List<GameObject> platformlist = managerscript.platformlist;
+
+            foreach(GameObject go in platformlist)
+            {
+                Instantiate(earthShatter, go.transform.position, go.transform.rotation);
+                networkView.RPC("CrackPlatform", RPCMode.Others, index);
+                Destroy(go);
+            }
+            
+        }
+
+    }
 
 }
