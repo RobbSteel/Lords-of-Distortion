@@ -12,12 +12,13 @@ public class PlacementUI : MonoBehaviour {
 	//The prefab for the UI elements in grid.
 	public GameObject PowerBoard;
 	public GameObject PowerSlot;
-
 	public GameObject dottedLine;
+
+	public GameObject progressBar;
 
 	//Holds the entries for powers.
 	public UIGrid TriggerGrid;
-
+	private UIRoot uiRoot;
 	public Dictionary<PowerType, Sprite> icons;
 	string[] triggerKeys = new string[] {"1", "2", "3", "4", "5"};
 
@@ -42,6 +43,7 @@ public class PlacementUI : MonoBehaviour {
 
 	Dictionary<PowerType, InventoryPower> inventoryPowers;
 	Dictionary<GameObject, PowerSpawn> placedPowers = new Dictionary<GameObject, PowerSpawn>();
+	Dictionary<PowerSpawn, UIProgressBar> progressBars = new Dictionary<PowerSpawn, UIProgressBar>();
 
 
     public List<GameObject> allTrapsGO = new List<GameObject>();
@@ -57,7 +59,7 @@ public class PlacementUI : MonoBehaviour {
 
 	PowerPrefabs powerPrefabs;
 
-    private Camera cam;
+    private Camera stageCamera;
     float timer = 0.0f;
     public UISprite deadLordBtnRed;
    
@@ -118,8 +120,9 @@ public class PlacementUI : MonoBehaviour {
 	}
 	
 	void Start(){
-        cam = Camera.main;
+        stageCamera = Camera.main;
 		UICamera = GetComponentInChildren<Camera>();
+		uiRoot = GetComponent<UIRoot>();
 	}
 
 	//Pass in dependencies
@@ -236,7 +239,6 @@ public class PlacementUI : MonoBehaviour {
 			}
 			*/
 		}
-
 		//TODO: destroy untriggered traps
 		GridEnabled(true);
 	}
@@ -268,8 +270,10 @@ public class PlacementUI : MonoBehaviour {
 		//Advance armament time for delayed powers.
 		for(int i = allTraps.Count - 1; i >= 0; i--){
 			PowerSpawn spawn = allTraps[i];
-			if(spawn.timerSet)
+			if(spawn.timerSet){
+				progressBars[spawn].value = spawn.timeCountdown / ARM_TIME;
 				spawn.ElapseTime(Time.deltaTime);
+			}
 		}
 
 		if(Input.GetMouseButtonDown(0)){
@@ -412,16 +416,25 @@ public class PlacementUI : MonoBehaviour {
 	private void FollowMouse(){
 		state = PlacementState.MovingPower;
 		activePower.AddComponent<MouseFollow>();
-        activePower.GetComponent<MouseFollow>().camera = cam;
+        activePower.GetComponent<MouseFollow>().camera = stageCamera;
 		/*Disable all other buttons while placing power*/
 		GridEnabled(false);
 	}
 
+	//called to start the power arm timer, and execute related visual changes.
 	private void LivePlacement(PowerSpawn spawn){
-		print ("disable triggering until time is up");
+
+		GameObject armProgress = NGUITools.AddChild(gameObject, progressBar);
+		progressBars.Add(spawn, armProgress.GetComponent<UIProgressBar>());
+		//Move progress bar to position of power.
+		Vector3 screenPosition = stageCamera.WorldToScreenPoint(activePower.transform.position);;
+		//print ("Screen Width: " + Screen.height + "UI Root " + uiRoot.manualHeight);
+		Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+		screenPosition -= screenCenter;
+
+		armProgress.transform.localPosition = new Vector3(screenPosition.x, screenPosition.y, 0f);
+
 		spawn.SetTimer(ARM_TIME); //start armament time
-        
-        //TODO: start radial cooldown on actives
 		PowerBoard relevantBoard = boardsByType[spawn.type];
 		PowerSlot slotFromBoard = relevantBoard.currentPower;
 		//Give button a trigger (inital color)
@@ -521,11 +534,10 @@ public class PlacementUI : MonoBehaviour {
 		if(GameObject.Find("CollectData") != null){
 
 			PlacementData(activePower);
-			
+		
 		}
 
 		KillMovement(activePower);
-
 
 		//Either go back to default state or require setting a direction.
 		if(activePowerType.TypeRequiresDirection()){
@@ -549,11 +561,11 @@ public class PlacementUI : MonoBehaviour {
 			if(!deadScreen || !live) //dont renable buttons if in dead screen unless timer is up
 				GridEnabled(true);
 		}
-
 	}
 
+	//Called when the power spawn timer reaches zero. 
 	public void PowerArmed(PowerSpawn powerSpawn){
-
+		powerSpawn.timerSet = false;
 		foreach (var pair in placedPowers)
 		{
 			if (powerSpawn == pair.Value)
@@ -564,6 +576,9 @@ public class PlacementUI : MonoBehaviour {
 				ChangeParticleColor(pair.Key, original);
 			}
 		}
+		//Get rid of progress bar, instantiate ready symbol
+		NGUITools.Destroy(progressBars[powerSpawn].gameObject);
+		progressBars.Remove(powerSpawn);
 	}
 
 	public void ColorizeAll(){
