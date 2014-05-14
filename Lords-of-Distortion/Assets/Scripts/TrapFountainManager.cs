@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class TrapFountainManager : MonoBehaviour {
 
 	public List<Transform> potentialLocations;
+	[HideInInspector]
 	public PlacementUI placementUI;
 	private bool activated;
 
