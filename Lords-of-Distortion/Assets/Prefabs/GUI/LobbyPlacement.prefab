@@ -126,7 +126,6 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400024}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400032}
   m_Layer: 10
   m_Name: LobbyPlacement
   m_TagString: Untagged
@@ -287,6 +286,7 @@ MonoBehaviour:
   PowerBoard: {fileID: 100000, guid: 508fb569d1dc8d046995dde67b6f2547, type: 2}
   PowerSlot: {fileID: 100002, guid: ed8199170f0cd8b4aa0f2d7050335bb5, type: 2}
   dottedLine: {fileID: 100000, guid: 67ab9307cfe46c341b5d51b6477ebd6c, type: 2}
+  progressBar: {fileID: 100004, guid: 4acef80a777fdaf4a8d0fb587f75aca0, type: 2}
   TriggerGrid: {fileID: 11400014}
   glueSprite: {fileID: 21300000, guid: c62ce25fd5a732f41aa0221529f72fed, type: 3}
   smokeSprite: {fileID: 21300000, guid: 23f4cd03f067c1c4788f539ab648bfe5, type: 3}
@@ -603,39 +603,6 @@ MonoBehaviour:
   manualHeight: 720
   minimumHeight: 720
   maximumHeight: 1536
---- !u!114 &11400032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f7c35675f33379468369dba78a2994d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PowerBoard: {fileID: 100000, guid: 508fb569d1dc8d046995dde67b6f2547, type: 2}
-  PowerSlot: {fileID: 100002, guid: ed8199170f0cd8b4aa0f2d7050335bb5, type: 2}
-  dottedLine: {fileID: 100000, guid: 67ab9307cfe46c341b5d51b6477ebd6c, type: 2}
-  TriggerGrid: {fileID: 11400014}
-  glueSprite: {fileID: 21300000, guid: 9a6b54d7363a55341a80b6b5f927c7fb, type: 3}
-  smokeSprite: {fileID: 21300000, guid: 53f61e39828aed740a9ebab3b82838db, type: 3}
-  inkSprite: {fileID: 21300000, guid: e2525bcb63077d84db05442c131873ca, type: 3}
-  windSprite: {fileID: 21300000, guid: cb29c9a55e9669e4294426887b11e194, type: 3}
-  transferSprite: {fileID: 21300000, guid: 404e6c301e281af4292c196c4d6142fb, type: 3}
-  boulderSprite: {fileID: 21300000, guid: a57dcb846ec882449adbccd6bcd142c2, type: 3}
-  freezeSprite: {fileID: 21300000, guid: 280aa03a32191894c97437f076734d67, type: 3}
-  gateSprite: {fileID: 21300000, guid: bc898c4882c62fb47a14fabc5aef47e6, type: 3}
-  plagueSprite: {fileID: 21300000, guid: 03f91eac2eb978c439b64f7b12c985b5, type: 3}
-  electricSprite: {fileID: 21300000, guid: 458b3631c4463bd439d7e37193332371, type: 3}
-  earthSprite: {fileID: 21300000, guid: ea5ee4f358ab0114ab44db0682773326, type: 3}
-  blackholeSprite: {fileID: 21300000, guid: 4207c4987eaa6464b8536285e667807e, type: 3}
-  deflectionSprite: {fileID: 21300000, guid: d1f2520618af62c44b3ec1ae38f12e4d, type: 3}
-  allTrapsGO: []
-  slots: []
-  dummyInv: []
-  deadLordBtnRed: {fileID: 11400002}
-  live: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

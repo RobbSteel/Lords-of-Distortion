@@ -47,7 +47,7 @@ public class FireBall : Power
 		Instantiate(fireparticle, transform.position, transform.rotation);
 
 		if(!OFFLINE)
-		networkView.RPC("FireExplosion", RPCMode.Others);
+			networkView.RPC("FireExplosion", RPCMode.Others);
 
 		controller.Die(DeathType.FIRE);
 		Destroy(gameObject);
@@ -79,7 +79,6 @@ public class FireBall : Power
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		print ("at least here");
 		print (col.transform);
         gField = GameObject.Find("gravityField(Clone)");
 		if (gField != null) {

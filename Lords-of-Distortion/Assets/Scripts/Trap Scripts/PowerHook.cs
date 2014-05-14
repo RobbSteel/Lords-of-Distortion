@@ -11,7 +11,7 @@ public class PowerHook : Power {
 			if (GameObject.Find ("CollectData") != null) {
 				GA.API.Design.NewEvent ("Empowered Hook Kills", player.transform.position);
 			}
-			controller.Die();
+			controller.Die(DeathType.FIRE);
 		}
 	}
 

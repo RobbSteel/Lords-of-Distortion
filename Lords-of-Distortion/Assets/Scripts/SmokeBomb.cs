@@ -80,10 +80,10 @@ public class SmokeBomb : Power {
 		if(GameObject.Find("CollectData") != null){
 			GA.API.Design.NewEvent("Smoke Blinds", player.transform.position);
 		}
+		controller.move = -controller.move;
 	}
 
 	public override void PowerActionStay(GameObject player, Controller2D controller){
-
 	}
 
 	public override void PowerActionExit(GameObject player, Controller2D controller){
@@ -91,6 +91,9 @@ public class SmokeBomb : Power {
 		this.gameObject.layer = LayerMask.NameToLayer (reducedVisionLayer);
 		player.layer = LayerMask.NameToLayer ( playerLayer );
 		visionReEnabled ();
+	
+		controller.move = -controller.move;
+
 	}
 
 	private void visionReduced(){

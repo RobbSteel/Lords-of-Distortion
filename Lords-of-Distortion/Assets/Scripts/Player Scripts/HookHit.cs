@@ -11,6 +11,7 @@ public class HookHit : MonoBehaviour {
 	public bool destroyed = false;
     public bool playSound = false;
 	public GameObject hookedPlayer;
+	public GameObject fireeffect;
 	public LineRenderer lr;
 	public Material rope;
 	public NetworkController networkController;
@@ -42,11 +43,7 @@ public class HookHit : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, hookedPlayer.transform.position, 10);
 		}
 
-		if(timer > 0){
-			timer -= Time.deltaTime;
-		}else{
-			destroyed = true;
-		}
+	
 
         if(shooter.GetComponent<Hook>().going == true)
         {
@@ -73,6 +70,8 @@ public class HookHit : MonoBehaviour {
 			pH.spawnInfo.type = PowerType.POWERHOOK;
 			gameObject.tag = "PowerHook";
 			poweredUp = true;
+			GameObject hookfire = (GameObject)Instantiate(fireeffect, transform.position, transform.rotation);
+			hookfire.transform.parent = gameObject.transform;
 			return;
 		}
 

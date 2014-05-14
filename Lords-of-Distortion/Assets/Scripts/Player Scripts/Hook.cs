@@ -34,7 +34,7 @@ public class Hook : MonoBehaviour {
 	}
 	
 	void ShootHookLocal(Vector3 target){
-		mousePos = target;
+
 
 		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
 		going = true;
@@ -44,6 +44,7 @@ public class Hook : MonoBehaviour {
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
+		mousePos = transform.position + 100f * direction;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -97,86 +98,108 @@ public class Hook : MonoBehaviour {
 			}
 		}
 
-	}
-
-	void FixedUpdate () {
-	
 		float speed = 1.0f;
 		speed = speed / 4;
-        currentDrag = controller2D.rigidbody2D.drag;
+		currentDrag = controller2D.rigidbody2D.drag;
 		//Get input from user and set cooldown to avoid repeated use.
-        //previously hooktimer <= 0
+		//previously hooktimer <= 0
 		if(!hookthrown){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
-            {
-                animator.SetFloat("Speed", 0);
-                Vector3 mouseClick = Input.mousePosition;
+			{
+				
+				animator.SetFloat("Speed", 0);
+				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
 				AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
-                
+				
 				if(!OFFLINE)
-                {
+				{
 					if(GameObject.Find("CollectData") != null){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);
 					}
-
+					
 					if(Network.isServer)
 						networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
 					
 					else
 						networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
 				}
-                
-                ShootHookLocal(mouseClick);
+				
+				ShootHookLocal(mouseClick);
 			}
-
+			
 		} /*else {
 			hooktimer -= Time.deltaTime;
 		}*/
-
+		
 		if(going == true){
-			hookgoing(speed);
+			if(networkController.isOwner){
+				if(Input.GetMouseButton(1)){
+					hookgoing(speed);
+				} else {
+					hookscript.destroyed = true;
+					networkView.RPC ("HookReturn", RPCMode.Others);
+				}
+			} else {
+				
+				hookgoing(speed);
+				
+			}
 		}
-
-
+		
+		
 		//Pull the player to us but destroy the hook after a fixed amount of time.
 		if(hookpull == true){
-		
+			
 			if(hittimer > 0){
-
+				
 				pullingplayer(speed);
-			
+				
 			} else {
-
-			DestroyHookPossible();
-			
+				
+				DestroyHookPossible();
+				
 			}
-
+			
 			hittimer -= Time.deltaTime; 
 		}
 		
-
+		
 		if(movingtowards == true){
-
+			
 			if(hittimer > 0){
-			
-			movingtohook(speed);
-			
+				
+				movingtohook(speed);
+				
 			} else {
-
-			DestroyHookPossible();
-
+				
+				DestroyHookPossible();
+				
 			}
-
+			
 			hittimer -= Time.deltaTime;
 		}
-
+		
 		if(movingback == true){
 			hookmovingback(speed);
 		}
+		
+		
+	}
+	
+	void FixedUpdate () {
+	
+
 }
 
+
+	[RPC]
+	void HookReturn(){
+
+		hookscript.destroyed = true;
+
+	}
 
 //Gives players the option to hook players to them or pull themselves to the hooked player.
 

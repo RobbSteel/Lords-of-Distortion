@@ -20,6 +20,7 @@ public class Controller2D : MonoBehaviour {
 	public float maxSpeed = 10f;
 	public Animator anim;
 
+	public float move;
 	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
@@ -224,7 +225,7 @@ public class Controller2D : MonoBehaviour {
 			
 			//to make jumping and changing direction is disabled
 			//if(!grounded) return;
-			float move = Input.GetAxis ( "Horizontal" );
+		    move = Input.GetAxis ( "Horizontal" );
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			//Problem: THis sets velocity to zero.
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );

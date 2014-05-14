@@ -149,7 +149,6 @@ public class SessionManager : MonoBehaviour {
 		
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
-		print ("player number is " + playerNumber);
 		options.PlayerNumber = playerNumber;
 		options.character = (PlayerOptions.Character)character;
 		options.username = username; //This is how we know the usernames of other players
@@ -307,7 +306,6 @@ public class SessionManager : MonoBehaviour {
 	void OnNetworkLoadedLevel(){
 
 		if(arenaIndex == -2){
-			print("doing it");
 			psInfo.ClearPlayers();
 			playerCounter = -1;
 

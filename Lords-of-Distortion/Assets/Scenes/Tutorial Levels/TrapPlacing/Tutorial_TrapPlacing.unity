@@ -588,7 +588,7 @@ Transform:
   m_PrefabInternal: {fileID: 2124710637}
   m_GameObject: {fileID: 31097065}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.6658697, y: 2.64819956, z: 0}
+  m_LocalPosition: {x: 15.6752768, y: 1.49887335, z: 0}
   m_LocalScale: {x: .75, y: .75, z: 1}
   m_Children:
   - {fileID: 2744880}
@@ -916,8 +916,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 2026196344}
   meleeDisable: 1
-  meleeTimer: 0
-  coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
 --- !u!1 &169507953
@@ -10300,8 +10298,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 1522817885}
   meleeDisable: 0
-  meleeTimer: 0
-  coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
 --- !u!58 &798778589
@@ -12150,11 +12146,11 @@ MonoBehaviour:
   - {fileID: 1813422814}
   - {fileID: 1317657907}
   currentObjective: 0
-  firstMessage: Kill the dummy!
-  secondMessage: Click and place trap anywhere, number key triggers it.
-  thirdMessage: 
+  firstMessage: Resupply give you a trap.
+  secondMessage: Click and place trap anywhere.
+  thirdMessage: Number key to trigger trap.
   fourthMessage: Some traps kill directly, others kill indirectly...
-  fifthMessage: Traps can be place even after death.
+  fifthMessage: Traps can be placed even after death.
   deathMessage: You've died.
   finishedMessage: Tutorial Complete!
   powerToKillPlayer: {fileID: 2022412592}
@@ -17554,8 +17550,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 169507953}
   meleeDisable: 1
-  meleeTimer: 0
-  coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
 --- !u!58 &1144640175
@@ -20346,8 +20340,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 314447592}
   meleeDisable: 1
-  meleeTimer: 0
-  coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
 --- !u!58 &1435317090
@@ -27410,11 +27402,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 15.6658697
+      value: 15.6752768
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.64819956
+      value: 1.49887335
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.z
