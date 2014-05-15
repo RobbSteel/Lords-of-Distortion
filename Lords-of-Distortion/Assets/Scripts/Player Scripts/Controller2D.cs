@@ -43,6 +43,7 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
 	public float lives = 3;
+	public Vector3 respawnpoint;
 	public float invulntime = 0;
 	public GameObject DeathSpirit;
 	public GameObject Respawn;
@@ -107,6 +108,11 @@ public class Controller2D : MonoBehaviour {
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
+
+		if(GameObject.Find ("Respawn") != null){
+
+			respawnpoint = GameObject.Find("Respawn").transform.position;
+		}
 	}
 
 	// Update is called once per frame
@@ -465,7 +471,7 @@ public class Controller2D : MonoBehaviour {
 		status.RemovePlague();
 		newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 		newshield.transform.parent = gameObject.transform;
-		transform.position = new Vector2(0,0);
+		transform.position = respawnpoint;
 		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
 
 
@@ -503,7 +509,7 @@ public class Controller2D : MonoBehaviour {
             status.RemovePlague();
 			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 			newshield.transform.parent = gameObject.transform;
-			transform.position = new Vector2(0,0);
+			transform.position = respawnpoint;
 			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
 		}
 	}
