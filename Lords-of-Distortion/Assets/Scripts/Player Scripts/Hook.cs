@@ -111,6 +111,7 @@ public class Hook : MonoBehaviour {
 				Vector3 mouseClick = Input.mousePosition;
 				mouseClick = Camera.main.ScreenToWorldPoint(mouseClick);
 				hookthrown = true;
+				animator.SetTrigger("HookThrow");
 				AudioSource.PlayClipAtPoint( controller2D.hookSfx , transform.position );
 				
 				if(!OFFLINE)
