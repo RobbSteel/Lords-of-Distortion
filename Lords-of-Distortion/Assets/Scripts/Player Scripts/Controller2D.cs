@@ -40,9 +40,10 @@ public class Controller2D : MonoBehaviour {
 	public bool moveDisable;
 	public bool inAir = true;
 	public bool powerInvulnerable;
-	public delegate void DieAction(GameObject gO, DeathType deathType);
+	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
-
+	public float lives = 3;
+	public Vector3 respawnpoint;
 	public float invulntime = 0;
 	public GameObject DeathSpirit;
 	public GameObject Respawn;
@@ -107,6 +108,11 @@ public class Controller2D : MonoBehaviour {
 		facingRight = true;
 		hasbomb = false;
 		myHook = GetComponent<Hook>();
+
+		if(GameObject.Find ("Respawn") != null){
+
+			respawnpoint = GameObject.Find("Respawn").transform.position;
+		}
 	}
 
 	// Update is called once per frame
@@ -382,12 +388,12 @@ public class Controller2D : MonoBehaviour {
 			//Here we call whatever events are subscribed to us.
 			if(GameObject.Find("LobbyGUI") == null){
 			//Remove MashIcon from PlayerStatus Script
-			status.DestroyMashIcon();
-
+			//status.DestroyMashIcon();
+			lives--;
 			}
 
 			if(onDeath != null)
-				onDeath(gameObject, deathType);
+				onDeath(gameObject, deathType, lives);
 
 			//play death animation.
 			DeathAnimation(deathType);
@@ -429,9 +435,11 @@ public class Controller2D : MonoBehaviour {
         anim.SetTrigger(myDeath);
     }
 
-	public void DieSimple(DeathType deathType){
+	public void DieSimple(DeathType deathType, float lives = 0){
 		if(!networkController.isOwner && !dead){
+			if(lives == 0){
 			dead = true;
+			}
 			DeathAnimation(deathType);
 		}
 	}
@@ -450,12 +458,45 @@ public class Controller2D : MonoBehaviour {
 	 */
 
 
+ void loselife(){
+
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
+		dead = false;
+		snared = false;
+		hasbomb = false;
+		status.currentStunMeter = 0;
+		collider2D.enabled = true;
+		invulntime = 3;
+		powerInvulnerable = true;
+		status.RemovePlague();
+		newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
+		newshield.transform.parent = gameObject.transform;
+		transform.position = respawnpoint;
+		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+
+
+	}
+
+	[RPC]
+	void DeadPlayer(){
+
+		Destroy(gameObject);
+	}
+
 	//Called when death animation finishes playing.
 	public void DestroyPlayer()
 	{
 		if(GameObject.Find("LobbyGUI") == null){
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
+
+			if(lives == 0){
 			Destroy (gameObject);
+				networkView.RPC("DeadPlayer", RPCMode.Others);
+			} else {
+
+				loselife();
+			}
+
 		} else {
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
 			dead = false;
@@ -468,7 +509,7 @@ public class Controller2D : MonoBehaviour {
             status.RemovePlague();
 			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 			newshield.transform.parent = gameObject.transform;
-			transform.position = new Vector2(0,0);
+			transform.position = respawnpoint;
 			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
 		}
 	}
