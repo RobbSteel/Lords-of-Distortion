@@ -23,6 +23,7 @@ public class ArenaManager : MonoBehaviour {
 	float finalPlayerTime = float.PositiveInfinity;
 	float endTime = float.PositiveInfinity;
 
+	public LivesUI livesUI;
 	int? livePlayerCount;
 	private bool played;
 	bool sentMyPowers = false;
@@ -91,10 +92,15 @@ public class ArenaManager : MonoBehaviour {
 	}
 	
 	
-	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false){
+	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false, float lives = 0){
+		print ("handlerlives" + lives);
+
+		livesUI.DecreaseLives(player, lives);
+
+		if(lives == 0){
 		livePlayerCount--;
 		livePlayers.Remove(player);
-
+		}
 		//The last player was killed
 		if(livePlayerCount == 0){
 			FinishGame(false); //Last player didn't win
@@ -124,11 +130,11 @@ public class ArenaManager : MonoBehaviour {
 	//called on server.
 	void OnPlayerDisconnected(NetworkPlayer player)
 	{
-		ServerDeathHandler(player, true);
+		ServerDeathHandler(player, true, 0);
 	}
 
 	//Tells additional players to destroy clone.
-	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
 		if(Network.isServer){
 			//Store the time of death on server
 			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
@@ -136,27 +142,27 @@ public class ArenaManager : MonoBehaviour {
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
-					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime, deathTypeInteger);
+					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime, deathTypeInteger, lives);
 				}
 			}
 			//also destroy player on server
-			DestroyPlayerClone(deadPlayerID, adjustedTime, deathTypeInteger);
+			DestroyPlayerClone(deadPlayerID, adjustedTime, deathTypeInteger, lives);
 			//Explicitly pass our network player id
-			ServerDeathHandler(deadPlayerID);
+			ServerDeathHandler(deadPlayerID, false, lives);
 		}
 	}
 
 	//Called only on the server. 
 	[RPC]
-	void NotifyServerOfDeath(int deathTypeInteger, NetworkMessageInfo info){
+	void NotifyServerOfDeath(int deathTypeInteger,float lives, NetworkMessageInfo info){
 		//Converts networked message to local function call.
-		NotifyOthersOfDeath(info.sender, (float)info.timestamp, deathTypeInteger);
+		NotifyOthersOfDeath(info.sender, (float)info.timestamp, deathTypeInteger, lives);
 	}
 
 
 	//Called on clients not controlling the player who just died.
 	[RPC]
-	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
+	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
 		print ("he dead");
 		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
@@ -164,23 +170,27 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer, DeathType deathType){
+	void LostPlayer(GameObject deadPlayer, DeathType deathType, float lives){
 		int deathTypeInteger = (int)deathType;
+		print ("lives" + lives);
+	
 		if(Network.isServer){
 			//pass network.time because it's going to be adjusted to synched time anyway
-			NotifyOthersOfDeath(Network.player, (float)Network.time, deathTypeInteger);
+			NotifyOthersOfDeath(Network.player, (float)Network.time, deathTypeInteger, lives);
 		}
 
 		else {
 			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
-			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger);
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger, lives);
 		}
 
+		if(lives == 0){
 		//bring up the dead player placement screen.
 		placementUI.disabledPowers.Add(PowerType.GATE);
 		placementUI.disabledPowers.Add(PowerType.DEFLECTIVE);
 		placementUI.SwitchToLive(true);
 		placementUI.enabled = true;
+		}
 	}
 
 
@@ -348,6 +358,9 @@ public class ArenaManager : MonoBehaviour {
 
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
+
+		//livesUI = placementRoot.GetComponent<LivesUI>();
+		//livesUI.Initialize(sessionManager.psInfo);
 
 		pointTracker = GetComponent<PointTracker>();
 		pointTracker.Initialize(scoreUI);
