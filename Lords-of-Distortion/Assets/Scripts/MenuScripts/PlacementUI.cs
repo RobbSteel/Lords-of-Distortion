@@ -405,7 +405,7 @@ public class PlacementUI : MonoBehaviour {
 		activePowerType = info.associatedPower.type;
 
 		activePower = Instantiate (powerPrefabs.list[(int)activePowerType],
-		                           info.transform.position, Quaternion.identity) as GameObject;
+		                           info.transform.position, powerPrefabs.list[(int)activePowerType].transform.rotation) as GameObject;
 
         ManipulateActivePower(activePower);
 
