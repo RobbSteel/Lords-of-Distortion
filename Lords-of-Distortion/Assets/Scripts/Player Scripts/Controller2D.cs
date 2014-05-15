@@ -42,7 +42,7 @@ public class Controller2D : MonoBehaviour {
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
-	public float lives = 2;
+	public float lives = 3;
 	public float invulntime = 0;
 	public GameObject DeathSpirit;
 	public GameObject Respawn;

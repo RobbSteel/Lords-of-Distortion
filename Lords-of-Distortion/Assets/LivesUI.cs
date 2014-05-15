@@ -16,12 +16,14 @@ public class LivesUI : MonoBehaviour {
 	Dictionary<NetworkPlayer, GameObject> entry  = new Dictionary<NetworkPlayer, GameObject>();
 
 	//Uses psinfo to generate player score grid.
-	public void Initialize(PlayerServerInfo psInfo){
+	public void Initialize(PlayerServerInfo psInfo, float lives){
 		this.psInfo = psInfo;
 
 		foreach(NetworkPlayer player in psInfo.players){
 			GameObject livesUI = NGUITools.AddChild(livesGrid.gameObject, PlayerLivesPrefab) as GameObject;
 			livesUI.transform.localEulerAngles = new Vector3(0f, 0f, 3f);
+			GameObject childLabel = livesUI.transform.GetChild(0).gameObject;
+			childLabel.GetComponent<UILabel>().text = lives.ToString();
 			string playerName = psInfo.GetPlayerOptions(player).username;
 			livesUI.GetComponent<UILabel>().text = playerName;
 			entry.Add(player, livesUI);

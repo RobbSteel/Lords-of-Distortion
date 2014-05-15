@@ -22,6 +22,7 @@ public class ArenaManager : MonoBehaviour {
 	float beginTime = float.PositiveInfinity;
 	float finalPlayerTime = float.PositiveInfinity;
 	float endTime = float.PositiveInfinity;
+	float totallives = 3;
 
 	public LivesUI livesUI;
 	int? livePlayerCount;
@@ -90,12 +91,20 @@ public class ArenaManager : MonoBehaviour {
 		}
 		placementUI.Disable();
 	}
-	
+
+	[RPC]
+	void DecreaseLives(NetworkPlayer player, float lives){
+
+		livesUI.DecreaseLives(player, lives);
+
+
+	}
 	
 	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false, float lives = 0){
 		print ("handlerlives" + lives);
 
-//		livesUI.DecreaseLives(player, lives);
+		livesUI.DecreaseLives(player, lives);
+		networkView.RPC("DecreaseLives", RPCMode.Others, player, lives);
 
 		if(lives == 0){
 		livePlayerCount--;
@@ -359,8 +368,8 @@ public class ArenaManager : MonoBehaviour {
 		ScoreUI scoreUI = placementRoot.GetComponent<ScoreUI>();
 		scoreUI.Initialize(sessionManager.psInfo);
 
-		//livesUI = placementRoot.GetComponent<LivesUI>();
-		//livesUI.Initialize(sessionManager.psInfo);
+		livesUI = placementRoot.GetComponent<LivesUI>();
+		livesUI.Initialize(sessionManager.psInfo, totallives);
 
 		pointTracker = GetComponent<PointTracker>();
 		pointTracker.Initialize(scoreUI);
