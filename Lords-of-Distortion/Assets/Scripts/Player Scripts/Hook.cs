@@ -44,7 +44,8 @@ public class Hook : MonoBehaviour {
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 direction = Vector3.Normalize(target - transform.position);
-		mousePos = transform.position + 100f * direction;
+		//mousePos = transform.position + 100f * direction;
+		mousePos = target;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -133,7 +134,7 @@ public class Hook : MonoBehaviour {
 		} /*else {
 			hooktimer -= Time.deltaTime;
 		}*/
-		
+		/*
 		if(going == true){
 			if(networkController.isOwner){
 				if(Input.GetMouseButton(1)){
@@ -148,7 +149,12 @@ public class Hook : MonoBehaviour {
 				
 			}
 		}
-		
+		*/
+
+		if(going == true){
+
+			hookgoing(speed);
+		}
 		
 		//Pull the player to us but destroy the hook after a fixed amount of time.
 		if(hookpull == true){
