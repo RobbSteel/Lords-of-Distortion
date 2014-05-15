@@ -95,7 +95,7 @@ public class ArenaManager : MonoBehaviour {
 	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false, float lives = 0){
 		print ("handlerlives" + lives);
 
-		livesUI.DecreaseLives(player, lives);
+//		livesUI.DecreaseLives(player, lives);
 
 		if(lives == 0){
 		livePlayerCount--;
@@ -111,7 +111,7 @@ public class ArenaManager : MonoBehaviour {
 			pointTracker.PlayerDied(player);
 		}
 
-		if(livePlayerCount == 1)
+		if(livePlayerCount == 1 && lives == 0)
 		{
 			PrintMessage(0); //Defeat final player
 			networkView.RPC("PrintMessage", RPCMode.Others, 0);
