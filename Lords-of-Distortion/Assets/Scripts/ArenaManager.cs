@@ -173,7 +173,9 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
 		print ("he dead");
+		if(lives == 0){
 		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
+		}
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
 		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
 	}
@@ -189,7 +191,9 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		else {
+			if(lives == 0){
 			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
+			}
 			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger, lives);
 		}
 
