@@ -17,12 +17,28 @@ GameObject:
   - 114: {fileID: 11400000}
   - 60: {fileID: 6000000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
-  - 60: {fileID: 6000002}
-  - 114: {fileID: 11400006}
+  - 148: {fileID: 14800000}
   m_Layer: 17
   m_Name: Gem
   m_TagString: SolidObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400002}
+  - 61: {fileID: 6100010}
+  - 61: {fileID: 6100008}
+  - 61: {fileID: 6100006}
+  m_Layer: 17
+  m_Name: GemTop
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,10 +50,22 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .602610588, y: -2.17894435, z: .100000001}
+  m_LocalPosition: {x: .649474561, y: -3.07372737, z: .100000001}
   m_LocalScale: {x: 1.27625501, y: 1.58493555, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 400002}
   m_Father: {fileID: 0}
+--- !u!4 &400002
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -.0568172336, z: 11.9227047}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
 --- !u!60 &6000000
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -49,54 +77,18 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_Poly:
     m_Paths:
-    - - {x: .893554747, y: .695800841}
-      - {x: .805664122, y: .695800841}
-      - {x: .336914092, y: .710449278}
-      - {x: 0, y: .710449278}
-      - {x: -.0292968769, y: .695800841}
-      - {x: -1.02539074, y: .695800841}
-      - {x: -1.17187512, y: .534668028}
-      - {x: -1.27441418, y: .358886749}
-      - {x: -1.27441418, y: .300292999}
-      - {x: -.615234435, y: -.446777374}
-      - {x: -.14648439, y: -.944824278}
-      - {x: -.0439453162, y: -.944824278}
-      - {x: .776367247, y: -.124511726}
-      - {x: 1.11328137, y: .256347686}
-      - {x: 1.11328137, y: .358886749}
---- !u!60 &6000002
-PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
-  m_IsTrigger: 0
-  m_Poly:
-    m_Paths:
-    - - {x: .893554747, y: .695800841}
-      - {x: .805664122, y: .695800841}
-      - {x: .336914092, y: .710449278}
-      - {x: 0, y: .710449278}
-      - {x: -.0292968769, y: .695800841}
-      - {x: -1.02539074, y: .695800841}
-      - {x: -1.17187512, y: .534668028}
-      - {x: -1.27441418, y: .358886749}
-      - {x: -1.27441418, y: .300292999}
-      - {x: -.615234435, y: -.446777374}
-      - {x: -.14648439, y: -.944824278}
-      - {x: -.0439453162, y: -.944824278}
-      - {x: .776367247, y: -.124511726}
-      - {x: 1.11328137, y: .256347686}
-      - {x: 1.11328137, y: .358886749}
+    - - {x: -1.03327048, y: .590283453}
+      - {x: .884637296, y: .577726007}
+      - {x: 1.0879122, y: .320005208}
+      - {x: -.0889129639, y: -.939585984}
+      - {x: -1.23197222, y: .349832654}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 1.90203571, y: .327746511}
@@ -107,7 +99,7 @@ BoxCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
   m_IsTrigger: 0
   m_Size: {x: .0670159534, y: .327746511}
@@ -118,6 +110,39 @@ BoxCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
+  m_Enabled: 0
+  m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .0605426691, y: .327746511}
+  m_Center: {x: .852999985, y: .550999999}
+--- !u!61 &6100006
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: 1.90203571, y: .327746511}
+  m_Center: {x: -.0700000003, y: .550000012}
+--- !u!61 &6100008
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
+  m_IsTrigger: 0
+  m_Size: {x: .0670159534, y: .327746511}
+  m_Center: {x: -.99000001, y: .550999999}
+--- !u!61 &6100010
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
   m_IsTrigger: 0
@@ -162,9 +187,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da9d8244225eb7a46afd0b9e013133ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  earthShatter: {fileID: 19800004, guid: fb639cd72e5f4dd49afc38d15d65f7b1, type: 2}
   gemLighting: {fileID: 11400002}
   Part1: {fileID: 0}
   Part2: {fileID: 0}
+  psinfo: {fileID: 0}
   mainCam: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -178,33 +205,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light: {fileID: 0}
---- !u!114 &11400004
-MonoBehaviour:
+--- !u!148 &14800000
+NetworkView:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9d8244225eb7a46afd0b9e013133ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gemLighting: {fileID: 11400006}
-  Part1: {fileID: 0}
-  Part2: {fileID: 0}
-  mainCam: {fileID: 0}
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f67fd37f733654fbe29e355133c383, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  light: {fileID: 0}
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 400000}
+  m_ViewID:
+    m_ID: 0
+    m_Type: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
