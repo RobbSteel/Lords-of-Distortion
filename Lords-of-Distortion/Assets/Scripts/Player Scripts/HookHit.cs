@@ -7,7 +7,7 @@ public class HookHit : MonoBehaviour {
 	public bool hooked = false;
 	public bool playerhooked = false;
 	public GameObject shooter;
-	public float timer = 1;
+	public float timer = 4f;
 	public bool destroyed = false;
     public bool playSound = false;
 	public GameObject hookedPlayer;
@@ -27,7 +27,6 @@ public class HookHit : MonoBehaviour {
 
 	void Awake(){
 		destroyed = false;
-		timer = timer / 5;
 		lr = gameObject.AddComponent<LineRenderer>();
 		lr.SetWidth(.1f, .1f);
 		lr.material = rope;
