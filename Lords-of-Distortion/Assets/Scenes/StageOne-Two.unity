@@ -663,7 +663,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 600
+      scalar: 200
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1960,6 +1960,10 @@ Prefab:
     - target: {fileID: 19800000, guid: b0979d8072189df42b5a1dc1ff7e89dc, type: 2}
       propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.data[0].value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: b0979d8072189df42b5a1dc1ff7e89dc, type: 2}
+      propertyPath: EmissionModule.rate.scalar
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0979d8072189df42b5a1dc1ff7e89dc, type: 2}
@@ -5410,6 +5414,7 @@ MonoBehaviour:
   - {fileID: 1485814812}
   - {fileID: 495799539}
   platformlist: []
+  livesUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   placementRootPrefab: {fileID: 100004, guid: d3cd913089056b345bd90fad246e4797, type: 2}
 --- !u!4 &1779164192
@@ -5955,7 +5960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &1973973052
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -7174,6 +7179,10 @@ Prefab:
     - target: {fileID: 19800000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
       propertyPath: InitialModule.startLifetime.scalar
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c2ae31899339d27498579846f4bc6076, type: 2}

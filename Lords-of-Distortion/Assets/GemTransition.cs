@@ -86,6 +86,7 @@ public class GemTransition : MonoBehaviour {
         foreach(NetworkPlayer player in psinfo.players)
         {
             psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = true;
         }
     }
 
@@ -94,6 +95,7 @@ public class GemTransition : MonoBehaviour {
         foreach (NetworkPlayer player in psinfo.players)
         {
             psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
+            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = false;
         }
     }
 
