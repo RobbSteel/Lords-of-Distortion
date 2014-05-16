@@ -449,10 +449,12 @@ public class PlayerStatus : MonoBehaviour {
 
 	//Generates an event and calls function if one exists
 	public void GenerateEvent(Power power){
-		
+
 		PlayerEvent playerEvent = null;
 		
 		if(power.spawnInfo != null){
+			if(power.spawnInfo.type.IsPsuedoPower())
+				return;
 			playerEvent = new PlayerEvent(power.spawnInfo.type, 
 			                              TimeManager.instance.time, power.spawnInfo.owner);
 			playerEvent.Attacker = power.spawnInfo.owner;
