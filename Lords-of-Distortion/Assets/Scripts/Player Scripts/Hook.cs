@@ -78,7 +78,7 @@ public class Hook : MonoBehaviour {
 				movingtowards = true;
 				going = false;
 			}
-			else if(hookscript.destroyed == true)
+			else if(hookscript.returning == true)
 			{
 				movingback = true;
 				going = false;
@@ -171,7 +171,7 @@ public class Hook : MonoBehaviour {
 
 	[RPC]
 	void HookReturn(){
-		hookscript.destroyed = true;
+		hookscript.returning = true;
 	}
 
 	//Gives players the option to hook players to them or pull themselves to the hooked player.
@@ -313,9 +313,12 @@ public class Hook : MonoBehaviour {
 
 	//Instantiates links while the hook is traveling
 	void hookgoing(float speed){
-
 		go.transform.position = Vector2.MoveTowards(go.transform.position, mousePos, hookSpeed);
-	
+		float distance = Vector2.Distance(go.transform.position, mousePos);
+		if(distance <= .05f){
+			//Reached destination
+			hookscript.returning = true;
+		}
 	}
 
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
