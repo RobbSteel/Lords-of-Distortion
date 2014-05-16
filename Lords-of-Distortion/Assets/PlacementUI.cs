@@ -105,7 +105,7 @@ public class PlacementUILobby : MonoBehaviour {
 		icons.Add (PowerType.ELECTRIC, electricSprite);
 		icons.Add (PowerType.PLAGUE, plagueSprite);
 		icons.Add (PowerType.EARTH, earthSprite);
-		icons.Add (PowerType.HOLE, blackholeSprite);
+		icons.Add (PowerType.BH_OUTER, blackholeSprite);
 		icons.Add (PowerType.DEFLECTIVE, deflectionSprite);
 		/*Hard code some powers for now*/
 		/*

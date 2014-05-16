@@ -9,14 +9,14 @@ public class BlackHoleRadius : Power
 	GameObject playerGO;
 	Controller2D controller;
 	public float BHForce;
+
+
 	void Start () 
 	{
 		Destroy(gameObject, 8f);
 		BHForce = 0.16f;
 	}
-	void Update(){
-	}
-	
+
 	void FixedUpdate(){
 		if (entered) {
             if(playerGO != null)

@@ -151,7 +151,7 @@ public class ScoreDisplay : MonoBehaviour {
 				label = (GameObject)Instantiate(hookicon, new Vector2(0,0), transform.rotation);
 			}
 
-			else if(PowerType.HOLE == lastdeath){
+			else if(PowerType.BH_INNER == lastdeath){
 				label = (GameObject)Instantiate(blackholeicon, new Vector2(0,0), transform.rotation);
 			}
 
