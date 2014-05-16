@@ -492,9 +492,11 @@ public class Controller2D : MonoBehaviour {
 			if(lives == 0){
 			Destroy (gameObject);
 				networkView.RPC("DeadPlayer", RPCMode.Others);
-			} else {
-
-				loselife();
+			} else{
+				if(OFFLINE)
+					Destroy(gameObject);
+				else
+					loselife();
 			}
 
 		} else {
