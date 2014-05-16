@@ -150,7 +150,6 @@ public class Tutorial_trapplacing: MonoBehaviour {
 		setFadeSolid ();
 		changeText (secondMessage);
 		player.GetComponent<Controller2D> ().locked = false;
-		
 	}
 	
 	//teach active
