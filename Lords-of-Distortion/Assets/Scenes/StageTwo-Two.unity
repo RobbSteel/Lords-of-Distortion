@@ -261,7 +261,7 @@ GameObject:
   - 61: {fileID: 93796188}
   - 61: {fileID: 93796187}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,7 +353,7 @@ GameObject:
   - 61: {fileID: 96243262}
   - 61: {fileID: 96243261}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -438,6 +438,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 107418822}
+  - 61: {fileID: 107418823}
   m_Layer: 0
   m_Name: ceiling-tiles
   m_TagString: Untagged
@@ -452,7 +453,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 107418821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.0625925064, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 84001739}
@@ -460,6 +461,17 @@ Transform:
   - {fileID: 1295503986}
   - {fileID: 17383165}
   m_Father: {fileID: 391362203}
+--- !u!61 &107418823
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 107418821}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: 25.8400002, y: .469999999}
+  m_Center: {x: 0, y: 5.09000015}
 --- !u!1 &109522219
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +535,7 @@ GameObject:
   - 61: {fileID: 110227928}
   - 61: {fileID: 110227927}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,7 +697,11 @@ Prefab:
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
     - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
       propertyPath: m_TagString
-      value: killplatform
+      value: movingPlatform
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
@@ -705,7 +721,7 @@ GameObject:
   - 61: {fileID: 195803279}
   - 61: {fileID: 195803278}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -847,6 +863,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1794557783}
@@ -984,6 +1004,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 838176531}
@@ -1002,7 +1026,7 @@ GameObject:
   - 61: {fileID: 339666721}
   - 61: {fileID: 339666720}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1295,6 +1319,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1706592693}
@@ -1339,6 +1367,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 761591850}
@@ -1522,7 +1554,7 @@ GameObject:
   - 61: {fileID: 585666313}
   - 61: {fileID: 585666312}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1653,6 +1685,10 @@ Prefab:
     - target: {fileID: 21200000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
       propertyPath: m_Color.b
       value: .882352948
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
@@ -1857,7 +1893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &614534281
 Transform:
   m_ObjectHideFlags: 0
@@ -1865,7 +1901,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 614534280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 7.03481674}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 109522221}
@@ -2247,6 +2283,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1780547394}
@@ -2363,6 +2403,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: -.969744325
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 110227925}
@@ -2431,7 +2475,7 @@ GameObject:
   - 61: {fileID: 761591853}
   - 61: {fileID: 761591852}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2603,7 +2647,7 @@ GameObject:
   - 61: {fileID: 838176534}
   - 61: {fileID: 838176533}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2695,7 +2739,7 @@ GameObject:
   - 61: {fileID: 848249728}
   - 61: {fileID: 848249727}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2807,6 +2851,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 96243259}
@@ -2825,7 +2873,7 @@ GameObject:
   - 61: {fileID: 876915451}
   - 61: {fileID: 876915450}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2966,6 +3014,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: .982417822
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 848249725}
@@ -3048,6 +3100,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 93796185}
@@ -3175,6 +3231,10 @@ Prefab:
     - target: {fileID: 400000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
@@ -3332,6 +3392,10 @@ Prefab:
     - target: {fileID: 400000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
       propertyPath: m_LocalRotation.w
       value: .99632293
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
@@ -3564,7 +3628,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1335700792}
   - 212: {fileID: 1335700791}
-  - 61: {fileID: 1335700790}
   m_Layer: 0
   m_Name: ceiling
   m_TagString: Untagged
@@ -3572,18 +3635,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!61 &1335700790
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100000, guid: a3740cde84cbd344490d1a2b70c9ae1c,
-    type: 2}
-  m_PrefabInternal: {fileID: 1577141606}
-  m_GameObject: {fileID: 1335700789}
-  m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
-  m_IsTrigger: 0
-  m_Size: {x: 12.6199999, y: .360000014}
-  m_Center: {x: .300000012, y: .879999995}
 --- !u!212 &1335700791
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3765,6 +3816,14 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_TagString
+      value: movingPlatform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1601662132}
@@ -3861,7 +3920,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 0e3d07eba2171e1448fc1bb0b44168ef, type: 2}
       propertyPath: m_LocalPosition.x
-      value: .649474561
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0e3d07eba2171e1448fc1bb0b44168ef, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3945,7 +4004,7 @@ GameObject:
   - 61: {fileID: 1379741483}
   - 61: {fileID: 1379741482}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4038,8 +4097,8 @@ GameObject:
   - 61: {fileID: 1431245777}
   - 114: {fileID: 1431245781}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
-  m_TagString: killplatform
+  m_Name: Part1Platform
+  m_TagString: movingPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4127,10 +4186,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 1641219057}
+  pauseAfterFirstMove: 1
+  firstMovePauseDelay: 2
   speed: .5
-  wait: 1
-  startAt: 0
-  pauseFor: 2
+  pauseAfterCycle: 1
+  cyclePauseDelay: 2
 --- !u!1 &1440246488
 GameObject:
   m_ObjectHideFlags: 0
@@ -5428,7 +5488,12 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 6100000, guid: a3740cde84cbd344490d1a2b70c9ae1c, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6100000, guid: a3740cde84cbd344490d1a2b70c9ae1c, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a3740cde84cbd344490d1a2b70c9ae1c, type: 2}
   m_RootGameObject: {fileID: 1335700789}
   m_IsPrefabParent: 0
@@ -5447,8 +5512,8 @@ GameObject:
   - 61: {fileID: 1601662134}
   - 114: {fileID: 1601662138}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
-  m_TagString: killplatform
+  m_Name: Part1Platform
+  m_TagString: movingPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5536,10 +5601,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 1953782259}
+  pauseAfterFirstMove: 1
+  firstMovePauseDelay: 2
   speed: .5
-  wait: 1
-  startAt: 0
-  pauseFor: 2
+  pauseAfterCycle: 1
+  cyclePauseDelay: 2
 --- !u!1 &1608631046
 GameObject:
   m_ObjectHideFlags: 0
@@ -5657,7 +5723,7 @@ GameObject:
   - 61: {fileID: 1706592696}
   - 61: {fileID: 1706592695}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5747,7 +5813,7 @@ GameObject:
   - 61: {fileID: 1718414258}
   - 61: {fileID: 1718414257}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5911,6 +5977,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: .993047953
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1718414255}
@@ -5929,7 +5999,7 @@ GameObject:
   - 61: {fileID: 1780547396}
   - 61: {fileID: 1780547395}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6083,7 +6153,7 @@ GameObject:
   - 61: {fileID: 1794557786}
   - 61: {fileID: 1794557785}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6358,6 +6428,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1917372960}
@@ -6485,7 +6559,7 @@ Transform:
   m_PrefabInternal: {fileID: 1366041897}
   m_GameObject: {fileID: 1814336250}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .649474561, y: -3.07372737, z: .100000001}
+  m_LocalPosition: {x: 0, y: -3.07372737, z: .100000001}
   m_LocalScale: {x: 1.27625501, y: 1.58493555, z: 1}
   m_Children:
   - {fileID: 1861169279}
@@ -6869,6 +6943,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 916d2662c3451734eb4747e904c0f633, type: 2}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part1Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 1379741480}
@@ -6982,7 +7060,7 @@ GameObject:
   - 61: {fileID: 1917372963}
   - 61: {fileID: 1917372962}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part2Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7094,6 +7172,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: .993047893
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
   m_RootGameObject: {fileID: 195803276}
@@ -7133,6 +7215,10 @@ Prefab:
     - target: {fileID: 400000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
       propertyPath: m_LocalRotation.w
       value: .998469889
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
+      propertyPath: m_Name
+      value: Part2Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de93974c47c45de4e8f427016b5a6c24, type: 2}
@@ -7178,7 +7264,7 @@ GameObject:
   - 61: {fileID: 2015681226}
   - 61: {fileID: 2015681225}
   m_Layer: 17
-  m_Name: CaveP-Small-BothEnds
+  m_Name: Part1Platform
   m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

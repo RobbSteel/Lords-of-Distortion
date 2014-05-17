@@ -4,23 +4,26 @@ using System.Collections;
 public class movingPlatform : MonoBehaviour {
 
     public Transform pointB;
+    public bool pauseAfterFirstMove;
+    public float firstMovePauseDelay;
     public float speed;
-    public bool wait;
-    public float startAt;
-    public float pauseFor;
-
+    public bool pauseAfterCycle;
+    private float startAfter;
+    public float cyclePauseDelay;
+    private ArenaManager arenascript;
+    
     //TODO : Start at match begin time instead of when level loads
-    IEnumerator Start()
+    IEnumerator StartMoving()
     {
-        var pointA = transform.position;
-        if (wait)
-            yield return new WaitForSeconds(startAt);
+        Vector3 pointA = transform.position;
         while (true)
         {
             yield return StartCoroutine(MoveObject(transform, pointA, pointB.position, 3.0f));
+            if (pauseAfterFirstMove)
+                yield return new WaitForSeconds(firstMovePauseDelay);
             yield return StartCoroutine(MoveObject(transform, pointB.position, pointA, 3.0f));
-            if (wait)
-                yield return new WaitForSeconds(pauseFor);
+            if (pauseAfterCycle)
+                yield return new WaitForSeconds(cyclePauseDelay);
         }
     }
 

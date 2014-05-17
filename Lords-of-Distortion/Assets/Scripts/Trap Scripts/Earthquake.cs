@@ -99,9 +99,10 @@ public class Earthquake : Power {
 
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
-		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject"){
+		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject" || col.transform.tag == "movingPlatform"){
 
-			if(col.transform.tag == "killplatform"){
+            if (col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform")
+            {
 
 				DestroyPlatform(col);
 			

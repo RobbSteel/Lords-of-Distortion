@@ -9,7 +9,7 @@ public class GemTransition : MonoBehaviour {
     private bool broken = false;
     private float timeBetweenDamage = 3f;
     private float timer = 0f;
-   // private int callOnce = 0;
+    //private int callOnce = 0;
 
     public ParticleSystem earthShatter;
     public GemShatterLighting gemLighting;
@@ -32,6 +32,7 @@ public class GemTransition : MonoBehaviour {
     void Awake()
     {
         psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+        Part2.SetActive(false);
     }
 
 	// Update is called once per frame
@@ -187,7 +188,6 @@ public class GemTransition : MonoBehaviour {
     {
         if (Network.isServer)
         {
-
             int index = 0;
             GameObject manager = GameObject.FindGameObjectWithTag("ArenaManager");
             ArenaManager managerscript = manager.GetComponent<ArenaManager>();
@@ -195,13 +195,14 @@ public class GemTransition : MonoBehaviour {
 
             foreach(GameObject go in platformlist)
             {
-                Instantiate(earthShatter, go.transform.position, go.transform.rotation);
-                networkView.RPC("CrackPlatform", RPCMode.Others, index);
-                Destroy(go);
+                if (go != null && go.name == "Part1Platform")
+                {
+                    Instantiate(earthShatter, go.transform.position, go.transform.rotation);
+                    networkView.RPC("CrackPlatform", RPCMode.Others, index);
+                    Destroy(go);
+                }
             }
-            
         }
-
     }
 
 }
