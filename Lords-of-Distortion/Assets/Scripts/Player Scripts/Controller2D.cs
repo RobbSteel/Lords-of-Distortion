@@ -34,6 +34,7 @@ public class Controller2D : MonoBehaviour {
 	public bool hooked = false;
 	public bool deathOnHit;
 	public bool canJump;
+	public bool crouching = false;
 	public bool hasbomb;
     public bool locked;
 	bool stoppedJump;
@@ -124,6 +125,7 @@ public class Controller2D : MonoBehaviour {
 
 		    Jump();
 		    stoppedJump = Input.GetButtonUp("Jump");
+			Crouch();
             if(snared)
             { 
                 rigidbody2D.gravityScale = 1;
@@ -192,6 +194,7 @@ public class Controller2D : MonoBehaviour {
 			    jumpRequested = false;
 		    }
 		    previousY = rigidbody2D.velocity.y;
+
 	
 		}
 }
@@ -201,6 +204,25 @@ public class Controller2D : MonoBehaviour {
 			jumpRequested = true;
 		}
 	}
+
+
+	//checks to see if our player can crouch and resets crouch once Crouch Input is released
+	private void Crouch(){
+		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Crouch") ){
+			moveDisable = true;
+
+			canJump = false;
+			crouching = true;
+			anim.SetBool("Crouch", crouching );
+		}
+		if( Input.GetButtonUp("Crouch")){
+			crouching = false;
+			canJump = true;
+			moveDisable = false;
+			anim.SetBool("Crouch", crouching );
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();

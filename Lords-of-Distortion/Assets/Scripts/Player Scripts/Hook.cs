@@ -104,7 +104,7 @@ public class Hook : MonoBehaviour {
 		//Get input from user and set cooldown to avoid repeated use.
 		//previously hooktimer <= 0
 		if(!hookthrown){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable)
+			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable && !controller2D.crouching )
 			{
 				
 				animator.SetFloat("Speed", 0);
