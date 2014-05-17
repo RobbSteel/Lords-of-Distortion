@@ -473,6 +473,7 @@ public class Controller2D : MonoBehaviour {
 		newshield.transform.parent = gameObject.transform;
 		transform.position = respawnpoint;
 		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+		transform.parent = null;
 
 
 	}
