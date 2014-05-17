@@ -118,8 +118,8 @@ GameObject:
   - 148: {fileID: 14800002}
   - 114: {fileID: 11400004}
   - 61: {fileID: 6100002}
-  - 114: {fileID: 11400002}
   - 58: {fileID: 5800000}
+  - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   m_Layer: 8
   m_Name: MummyPrefab
@@ -135,7 +135,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.64768076, y: -2.35253239, z: 0}
+  m_LocalPosition: {x: -5.62575769, y: -.466252267, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400012}
@@ -162,7 +162,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.115581512, y: -.994583428, z: 0}
+  m_LocalPosition: {x: -.0217647552, y: -.601642132, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -235,8 +235,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: .200000003
-  m_Center: {x: -.0299999993, y: -.419999987}
+  m_Radius: .285371244
+  m_Center: {x: .0299999993, y: -.224999994}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -257,8 +257,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 3257cd551cc0a0b44a313388a624346f, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: .365999997, y: .860057533}
-  m_Center: {x: -.0299999993, y: .0199999996}
+  m_Size: {x: .543292642, y: .812452674}
+  m_Center: {x: .0352592468, y: .18876189}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -344,8 +344,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 100002}
   meleeDisable: 0
-  meleeTimer: 0
-  coolDownTimer: .5
   damageDealt: 15
   meleeing: 0
 --- !u!114 &11400002
@@ -436,6 +434,7 @@ MonoBehaviour:
   OFFLINE: 0
   maxSpeed: 5
   anim: {fileID: 0}
+  move: 0
   dead: 0
   grounded: 1
   groundCheck: {fileID: 400004}
@@ -454,6 +453,8 @@ MonoBehaviour:
   moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
+  lives: 3
+  respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
