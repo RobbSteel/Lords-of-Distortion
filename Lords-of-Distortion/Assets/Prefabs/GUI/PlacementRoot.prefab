@@ -45,6 +45,7 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400016}
   - 114: {fileID: 11400034}
+  - 114: {fileID: 11400036}
   m_Layer: 10
   m_Name: PlacementRoot
   m_TagString: Untagged
@@ -111,7 +112,7 @@ GameObject:
   - 4: {fileID: 400012}
   - 114: {fileID: 11400032}
   m_Layer: 10
-  m_Name: ScoresGrid
+  m_Name: LivesGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,6 +216,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &100026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400026}
+  - 114: {fileID: 11400038}
+  m_Layer: 10
+  m_Name: ScoresGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -244,11 +261,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -31, y: -11, z: 0}
   m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 400008}
   - {fileID: 400010}
+  - {fileID: 400026}
   - {fileID: 400012}
   - {fileID: 400002}
   - {fileID: 400014}
@@ -294,8 +312,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 210.377151, y: -301.417542, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -581.966431, y: -301.41748, z: 0}
+  m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!4 &400014
@@ -370,6 +388,17 @@ Transform:
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 400014}
+--- !u!4 &400026
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 210.377151, y: -301.417542, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
 --- !u!20 &2000000
 Camera:
   m_ObjectHideFlags: 1
@@ -1028,7 +1057,41 @@ MonoBehaviour:
   PlayerScorePrefab: {fileID: 100002, guid: cbf21251eb805c64b8c4f101744f6478, type: 2}
   heartParticles: {fileID: 100000, guid: de9d7d5f8012cc749ab58ed66a1d74db, type: 2}
   UICamera: {fileID: 2000000}
-  scoresGrid: {fileID: 11400032}
+  scoresGrid: {fileID: 11400038}
+--- !u!114 &11400036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f39f120fd7fb97a4d94dd27c04dc9714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerLivesPrefab: {fileID: 100002, guid: 359ccce4439b2af4eabfc9c16e721b76, type: 2}
+  heartParticles: {fileID: 0}
+  UICamera: {fileID: 2000000}
+  livesGrid: {fileID: 11400032}
+--- !u!114 &11400038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c4de3b4b6fe9045b059ee627c100df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrangement: 0
+  maxPerLine: 0
+  cellWidth: 130
+  cellHeight: 200
+  animateSmoothly: 0
+  sorted: 0
+  hideInactive: 1
+  keepWithinPanel: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

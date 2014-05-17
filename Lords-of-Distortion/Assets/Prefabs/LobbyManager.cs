@@ -119,7 +119,7 @@ public class LobbyManager : MonoBehaviour {
 	}
 	
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer, DeathType deathType){
+	void LostPlayer(GameObject deadPlayer, DeathType deathType, float lives){
 		int deathTypeInteger = (int)deathType;
 		if(Network.isServer){
 			//pass network.time because it's going to be adjusted to synched time anyway

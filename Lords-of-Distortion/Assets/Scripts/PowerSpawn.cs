@@ -15,7 +15,7 @@ public enum PowerType{
 	ELECTRIC,
 	PLAGUE,
 	EARTH,
-	HOLE,
+	BH_OUTER,
 	DEFLECTIVE,
 	//NON Powers
 	MELEE,
@@ -23,6 +23,7 @@ public enum PowerType{
 	HOOK,
 	//Special Cases
 	POWERHOOK,
+	BH_INNER,
 	UNDEFINED
 }
 
@@ -48,7 +49,7 @@ public static class PowerTypeExtensions{
 		powersActive = new List<PowerType>();
 		powersActive.Add(PowerType.FIREBALL);
 		powersActive.Add(PowerType.ELECTRIC);
-		powersActive.Add(PowerType.HOLE);
+		powersActive.Add(PowerType.BH_OUTER);
 		powersActive.Add(PowerType.EXPLOSIVE);
 		powersActive.Add(PowerType.BOULDER);
         powersActive.Add(PowerType.PLAGUE);
@@ -62,9 +63,7 @@ public static class PowerTypeExtensions{
 		powersPassive.Add(PowerType.GATE);
 		powersPassive.Add(PowerType.DEFLECTIVE);
 
-		psuedoPowers.Add(PowerType.MELEE);
-		psuedoPowers.Add(PowerType.SPIKES);
-		psuedoPowers.Add(PowerType.HOOK);
+		psuedoPowers.Add(PowerType.BH_OUTER);
 
 		powersWithNetworking.Add(PowerType.FIREBALL);
 		powersWithNetworking.Add(PowerType.EXPLOSIVE);

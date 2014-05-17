@@ -90,7 +90,7 @@ public class FireBall : Power
 		}
 
 		if(Network.isServer){
-			if(col.transform.tag == "killplatform" || col.transform.tag == "movingplatform"){
+			if(col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform"){
 				int index = 0;
 				Instantiate(fireparticle, transform.position, transform.rotation);
 				var newwall = (GameObject)Instantiate(firewall, col.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));

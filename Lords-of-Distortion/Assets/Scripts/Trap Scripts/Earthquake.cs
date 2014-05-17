@@ -99,9 +99,10 @@ public class Earthquake : Power {
 
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
-		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject"){
+		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject" || col.transform.tag == "movingPlatform"){
 
-			if(col.transform.tag == "killplatform"){
+            if (col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform")
+            {
 
 				DestroyPlatform(col);
 			
@@ -141,8 +142,9 @@ public class Earthquake : Power {
 				}
 			}
 				if(reps == 2){
-					
-					Destroy(gameObject);
+					var renderer = gameObject.GetComponent<SpriteRenderer>();
+					renderer.enabled = false;
+					Destroy(gameObject, 2.0f);
 				}
 			
 		  }

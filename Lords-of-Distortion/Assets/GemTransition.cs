@@ -9,12 +9,13 @@ public class GemTransition : MonoBehaviour {
     private bool broken = false;
     private float timeBetweenDamage = 3f;
     private float timer = 0f;
-   // private int callOnce = 0;
+    //private int callOnce = 0;
 
     public ParticleSystem earthShatter;
     public GemShatterLighting gemLighting;
     public GameObject Part1;
     public GameObject Part2;
+    public PlayerServerInfo psinfo;
 
     //private CameraShake shake;
     public Camera mainCam;
@@ -27,6 +28,12 @@ public class GemTransition : MonoBehaviour {
     };
 
     private StagePhase currentPhase = StagePhase.GemAlive;
+
+    void Awake()
+    {
+        psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+        Part2.SetActive(false);
+    }
 
 	// Update is called once per frame
 	void Update () 
@@ -41,7 +48,8 @@ public class GemTransition : MonoBehaviour {
             Debug.Log("GEM DEAD");
 
             timer += Time.deltaTime;
-            
+            LiftPlayers();
+
             if (timer > 4)
             {
                 transition = true;
@@ -56,12 +64,14 @@ public class GemTransition : MonoBehaviour {
                 currentPhase = StagePhase.GemDestroyed;
                 gemLighting.GemShattered(true);
                 DestroyPlatform();
+                DestroyCharmarks();
                 mainCam.GetComponent<CameraShake>().PlayShake();
             }
         }
 
         if (transition && !broken)
         {
+            LowerPlayers();
             Part1.SetActive(false);
             Part2.SetActive(true);
             broken = true;
@@ -71,6 +81,24 @@ public class GemTransition : MonoBehaviour {
         }
 
 	}
+
+    void LiftPlayers()
+    {
+        foreach(NetworkPlayer player in psinfo.players)
+        {
+            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = true;
+        }
+    }
+
+    void LowerPlayers()
+    {
+        foreach (NetworkPlayer player in psinfo.players)
+        {
+            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
+            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = false;
+        }
+    }
 
     void ExplosionCollision(Collider2D collider)
     {
@@ -94,6 +122,15 @@ public class GemTransition : MonoBehaviour {
             {
                 gemHealth -= 100; //25
             }
+        }
+    }
+
+    void DestroyCharmarks()
+    {
+        GameObject[] charmarks = GameObject.FindGameObjectsWithTag("charmark");
+        foreach(GameObject mark in charmarks)
+        {
+            Destroy(mark);
         }
     }
 
@@ -151,7 +188,6 @@ public class GemTransition : MonoBehaviour {
     {
         if (Network.isServer)
         {
-
             int index = 0;
             GameObject manager = GameObject.FindGameObjectWithTag("ArenaManager");
             ArenaManager managerscript = manager.GetComponent<ArenaManager>();
@@ -159,13 +195,14 @@ public class GemTransition : MonoBehaviour {
 
             foreach(GameObject go in platformlist)
             {
-                Instantiate(earthShatter, go.transform.position, go.transform.rotation);
-                networkView.RPC("CrackPlatform", RPCMode.Others, index);
-                Destroy(go);
+                if (go != null && go.name == "Part1Platform")
+                {
+                    Instantiate(earthShatter, go.transform.position, go.transform.rotation);
+                    networkView.RPC("CrackPlatform", RPCMode.Others, index);
+                    Destroy(go);
+                }
             }
-            
         }
-
     }
 
 }

@@ -7,8 +7,8 @@ public class HookHit : MonoBehaviour {
 	public bool hooked = false;
 	public bool playerhooked = false;
 	public GameObject shooter;
-	public float timer = 1;
-	public bool destroyed = false;
+	public float timer = 4f;
+	public bool returning = false;
     public bool playSound = false;
 	public GameObject hookedPlayer;
 	public GameObject fireeffect;
@@ -26,8 +26,7 @@ public class HookHit : MonoBehaviour {
 	bool poweredUp = false;
 
 	void Awake(){
-		destroyed = false;
-		timer = timer / 5;
+		returning = false;
 		lr = gameObject.AddComponent<LineRenderer>();
 		lr.SetWidth(.1f, .1f);
 		lr.material = rope;
@@ -43,7 +42,13 @@ public class HookHit : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, hookedPlayer.transform.position, 10);
 		}
 
-	
+	if(timer > 0){
+
+			timer -= Time.deltaTime;
+	} else {
+
+			returning = true;
+		}
 
         if(shooter.GetComponent<Hook>().going == true)
         {
@@ -94,7 +99,7 @@ public class HookHit : MonoBehaviour {
             }
 		}
 
-		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && destroyed != true){
+		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && returning != true){
 
 			if(Network.isServer){
 

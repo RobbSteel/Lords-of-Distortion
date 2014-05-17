@@ -18,7 +18,7 @@ public class JoinServer : MonoBehaviour {
 		UIButton button = GetComponent<UIButton>();
 		if(hostData.comment == "Playing")
 			button.isEnabled = false;
-		else if(hostData.connectedPlayers >= 3)
+		else if(hostData.connectedPlayers > 3)
 			button.isEnabled = false;
 	}
 
@@ -31,7 +31,7 @@ public class JoinServer : MonoBehaviour {
 		if(hostData.comment == "Playing"){
 			print("Can't join game in progress");
 		}
-		else if(hostData.connectedPlayers == 3){
+		else if(hostData.connectedPlayers > 3){
 			print ("There's too many players");
 		}
 		else{
@@ -39,7 +39,6 @@ public class JoinServer : MonoBehaviour {
 			infoscript.chosenHost = hostData;
 			infoscript.servername = hostData.gameName;
 			var error = Network.Connect(hostData); //Attempt connecting, even though we might not have latest hostdata
-
 		}
 	}
 	

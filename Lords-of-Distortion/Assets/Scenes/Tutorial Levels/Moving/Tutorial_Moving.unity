@@ -1264,7 +1264,7 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 1717528210}
   m_GameObject: {fileID: 273078840}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_Material: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
   m_IsTrigger: 0
   m_Size: {x: 10, y: .460000008}
   m_Center: {x: 0, y: 0}
@@ -2293,7 +2293,7 @@ Transform:
   m_PrefabInternal: {fileID: 1709310866}
   m_GameObject: {fileID: 876847795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.53999996, y: 2.06052303, z: 0}
+  m_LocalPosition: {x: -8.63000011, y: 2.06052303, z: 0}
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1144062867}
@@ -4542,6 +4542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DEBUG: 1
   isOwner: 1
+  ping: 0
   interpolationPercentage: 0
 --- !u!114 &1319096272
 MonoBehaviour:
@@ -4560,6 +4561,7 @@ MonoBehaviour:
   OFFLINE: 1
   maxSpeed: 5
   anim: {fileID: 0}
+  move: 0
   dead: 0
   grounded: 0
   groundCheck: {fileID: 617545821}
@@ -4578,6 +4580,8 @@ MonoBehaviour:
   moveDisable: 0
   inAir: 1
   powerInvulnerable: 0
+  lives: 3
+  respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
@@ -5487,7 +5491,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 8a3c246f102b6af4099f4fd8a61bee98, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -8.53999996
+      value: -8.63000011
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8a3c246f102b6af4099f4fd8a61bee98, type: 2}
       propertyPath: m_LocalPosition.y
@@ -5557,6 +5561,10 @@ Prefab:
       propertyPath: m_LocalScale.x
       value: .300000012
       objectReference: {fileID: 0}
+    - target: {fileID: 6100004, guid: 8a3c246f102b6af4099f4fd8a61bee98, type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a3c246f102b6af4099f4fd8a61bee98, type: 2}
   m_RootGameObject: {fileID: 273078840}

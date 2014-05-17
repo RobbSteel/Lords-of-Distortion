@@ -1264,10 +1264,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 46411225}
+  pauseAfterFirstMove: 0
+  firstMovePauseDelay: 4
   speed: 4
-  wait: 1
-  startAt: 2
-  pauseFor: 3
+  pauseAfterCycle: 1
+  startAfter: 3
+  cyclePauseDelay: 4
 --- !u!1 &40168714
 GameObject:
   m_ObjectHideFlags: 0
@@ -4987,6 +4989,7 @@ MonoBehaviour:
   - {fileID: 541952524}
   - {fileID: 2049946668}
   platformlist: []
+  livesUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   placementRootPrefab: {fileID: 100004, guid: d3cd913089056b345bd90fad246e4797, type: 2}
 --- !u!4 &637716032
@@ -6020,6 +6023,22 @@ Prefab:
       propertyPath: pointB
       value: 
       objectReference: {fileID: 295506331}
+    - target: {fileID: 11400016, guid: 11ea5a0271215bd468c87f428e167d98, type: 2}
+      propertyPath: pauseAfterFirstMove
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 11ea5a0271215bd468c87f428e167d98, type: 2}
+      propertyPath: firstMovePauseDelay
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 11ea5a0271215bd468c87f428e167d98, type: 2}
+      propertyPath: pauseAfterCycle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 11ea5a0271215bd468c87f428e167d98, type: 2}
+      propertyPath: cyclePauseDelay
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11ea5a0271215bd468c87f428e167d98, type: 2}
   m_RootGameObject: {fileID: 902621094}
@@ -6544,10 +6563,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 295506331}
+  pauseAfterFirstMove: 0
+  firstMovePauseDelay: 4
   speed: 4
-  wait: 1
-  startAt: 0
-  pauseFor: 3
+  pauseAfterCycle: 1
+  startAfter: 0
+  cyclePauseDelay: 4
 --- !u!1 &915604718
 GameObject:
   m_ObjectHideFlags: 0
@@ -10789,10 +10810,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 798604248}
+  pauseAfterFirstMove: 0
+  firstMovePauseDelay: 0
   speed: 4
-  wait: 1
-  startAt: 0
-  pauseFor: 3
+  pauseAfterCycle: 1
+  startAfter: 0
+  cyclePauseDelay: 4
 --- !u!1 &1601786777
 GameObject:
   m_ObjectHideFlags: 0
@@ -15290,6 +15313,26 @@ Prefab:
       propertyPath: pointB
       value: 
       objectReference: {fileID: 46411225}
+    - target: {fileID: 11400000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
+      propertyPath: firstMovePauseDelay
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
+      propertyPath: pauseAfterCycle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
+      propertyPath: cyclePauseDelay
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
+      propertyPath: pauseAfterFirstMove
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
+      propertyPath: startAfter
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 60578134ca2fe0b46bdd8f727ca781d4, type: 2}
   m_RootGameObject: {fileID: 38623393}

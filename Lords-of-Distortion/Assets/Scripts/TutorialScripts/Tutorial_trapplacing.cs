@@ -34,8 +34,8 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		fade = false;
-		durationOfFading = 1;
-		fadeTimer = 1;
+		durationOfFading = 2;
+		fadeTimer = 2;
 		transitionToNewScene = this.GetComponent<SceneFadeInOut> ();
 		currentObjective = 0;
 		objectives [currentObjective].SetActive (true);
@@ -150,7 +150,6 @@ public class Tutorial_trapplacing: MonoBehaviour {
 		setFadeSolid ();
 		changeText (secondMessage);
 		player.GetComponent<Controller2D> ().locked = false;
-		
 	}
 	
 	//teach active
@@ -186,7 +185,7 @@ public class Tutorial_trapplacing: MonoBehaviour {
 		waringSign.transform.position = player.transform.position;
 		waringSign.SetActive (true);
 		yield return new WaitForSeconds (0.5f);
-		player.GetComponent<Controller2D> ().locked = true;
+		//player.GetComponent<Controller2D> ().locked = true;
 		setupPowerToUse();
 		yield return new WaitForSeconds (2f);
 		setFadeClear ();
