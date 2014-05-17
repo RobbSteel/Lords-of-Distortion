@@ -8,7 +8,7 @@ public class movingPlatform : MonoBehaviour {
     public float firstMovePauseDelay;
     public float speed;
     public bool pauseAfterCycle;
-    private float startAfter;
+    public float startAfter;
     public float cyclePauseDelay;
     
     //TODO : Start at match begin time instead of when level loads
