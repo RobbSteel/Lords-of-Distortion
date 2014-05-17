@@ -39,6 +39,7 @@ public class Controller2D : MonoBehaviour {
     public bool locked;
 	bool stoppedJump;
 	public bool moveDisable;
+	public bool crouchDisable;
 	public bool inAir = true;
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
@@ -102,6 +103,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
+		crouchDisable = true;
 		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
@@ -214,14 +216,14 @@ public class Controller2D : MonoBehaviour {
 
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
 	private void Crouch(){
-		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Crouch") ){
+		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Crouch") && !crouchDisable ){
 			moveDisable = true;
 
 			canJump = false;
 			crouching = true;
 			anim.SetBool("Crouch", crouching );
 		}
-		if( Input.GetButtonUp("Crouch")){
+		if( Input.GetButtonUp("Crouch") && !crouchDisable ){
 			crouching = false;
 			canJump = true;
 			moveDisable = false;
