@@ -82,7 +82,7 @@ public class ArenaManager : MonoBehaviour {
 		fountainManager.SetFirstSpawnTime(beginTime + 15f - TimeManager.instance.time);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
-
+        
 		if(playerCount < 3){
 			placementUI.Initialize(powerPrefabs);
 		}
@@ -342,10 +342,16 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void FindPlatforms(){
-		var arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
+		GameObject[] arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
 		for(int i = 0; i < arenaplatforms.Length; i++){
 			platformlist.Add(arenaplatforms[i]);
 		}
+        
+        arenaplatforms = GameObject.FindGameObjectsWithTag("movingPlatform");
+        for (int i = 0; i < arenaplatforms.Length; i++)
+        {
+            platformlist.Add(arenaplatforms[i]);
+        }
 	}
 
 	void Awake(){
