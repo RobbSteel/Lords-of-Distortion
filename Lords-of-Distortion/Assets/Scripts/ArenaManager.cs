@@ -82,14 +82,7 @@ public class ArenaManager : MonoBehaviour {
 		fountainManager.SetFirstSpawnTime(beginTime + 15f - TimeManager.instance.time);
 		fountainManager.SetSeed((int)(beginTime * 1000f));
 		fountainManager.placementUI = placementUI;
-        foreach(GameObject go in platformlist)
-        {
-            if(go.tag == "movingPlatform")
-            {
-                go.GetComponent<movingPlatform>().StartCoroutine("StartMoving");
-            }
-        }
-
+        
 		if(playerCount < 3){
 			placementUI.Initialize(powerPrefabs);
 		}

@@ -10,12 +10,14 @@ public class movingPlatform : MonoBehaviour {
     public bool pauseAfterCycle;
     private float startAfter;
     public float cyclePauseDelay;
-    private ArenaManager arenascript;
     
     //TODO : Start at match begin time instead of when level loads
-    IEnumerator StartMoving()
+    IEnumerator Start()
     {
         Vector3 pointA = transform.position;
+        if (pauseAfterCycle)
+            yield return new WaitForSeconds(startAfter);
+
         while (true)
         {
             yield return StartCoroutine(MoveObject(transform, pointA, pointB.position, 3.0f));
