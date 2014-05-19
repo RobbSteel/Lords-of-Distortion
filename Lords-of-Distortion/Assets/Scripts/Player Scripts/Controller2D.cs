@@ -40,11 +40,13 @@ public class Controller2D : MonoBehaviour {
 	public bool moveDisable;
 	public bool inAir = true;
 	public bool powerInvulnerable;
+	public bool recentdeath = false;
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
 	public float lives = 3;
 	public Vector3 respawnpoint;
 	public float invulntime = 0;
+	public float respawntime = 3;
 	public GameObject DeathSpirit;
 	public GameObject Respawn;
 	public GameObject invulnshield;
@@ -117,13 +119,22 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+if(dead){
+		if(respawntime > 0){
+			respawntime -= Time.deltaTime;
+		} else {
+
+			respawn();
+		}
+	}
+
 		if(invulntime > 0){
 			invulntime -= Time.deltaTime;
 		} else {
 			powerInvulnerable = false;
 			Destroy(newshield);
 		}
-
+	
 		if(!OFFLINE && !networkController.isOwner)
 			return;
 		if(!hooked && !locked){
@@ -457,10 +468,10 @@ public class Controller2D : MonoBehaviour {
 	 * Player object is destroyed
 	 */
 
-
- void loselife(){
-
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
+void respawn(){
+		respawntime = 2;
+		var derp = gameObject.GetComponent<SpriteRenderer>();
+		derp.enabled = true;
 		dead = false;
 		snared = false;
 		hasbomb = false;
@@ -471,11 +482,20 @@ public class Controller2D : MonoBehaviour {
 		status.RemovePlague();
 		newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 		newshield.transform.parent = gameObject.transform;
-		transform.position = respawnpoint;
 		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
 		transform.parent = null;
 
+	
+	}
 
+
+ void loselife(){
+
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
+		respawntime = 2;
+		var derp = gameObject.GetComponent<SpriteRenderer>();
+		derp.enabled = false;
+		transform.position = respawnpoint;
 	}
 
 	[RPC]
@@ -492,7 +512,7 @@ public class Controller2D : MonoBehaviour {
 
 			if(lives == 0){
 			Destroy (gameObject);
-				networkView.RPC("DeadPlayer", RPCMode.Others);
+				//networkView.RPC("DeadPlayer", RPCMode.Others);
 			} else{
 				if(OFFLINE)
 					Destroy(gameObject);
@@ -501,19 +521,9 @@ public class Controller2D : MonoBehaviour {
 			}
 
 		} else {
-			Instantiate(DeathSpirit, transform.position, transform.rotation);
-			dead = false;
-			snared = false;
-			hasbomb = false;
-			status.currentStunMeter = 0;
-			collider2D.enabled = true;
-			invulntime = 3;
-			powerInvulnerable = true;
-            status.RemovePlague();
-			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
-			newshield.transform.parent = gameObject.transform;
-			transform.position = respawnpoint;
-			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+		
+			loselife();
+
 		}
 	}
 
