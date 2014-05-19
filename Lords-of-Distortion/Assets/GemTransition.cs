@@ -86,8 +86,11 @@ public class GemTransition : MonoBehaviour {
     {
         foreach(NetworkPlayer player in psinfo.players)
         {
-            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
-            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = true;
+            if(player != null)
+            { 
+                psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+                psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = true;
+            }
         }
     }
 
@@ -95,8 +98,11 @@ public class GemTransition : MonoBehaviour {
     {
         foreach (NetworkPlayer player in psinfo.players)
         {
-            psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
-            psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = false;
+            if(player != null)
+            { 
+                psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
+                psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = false;
+            }
         }
     }
 
@@ -175,7 +181,6 @@ public class GemTransition : MonoBehaviour {
     [RPC]
     void CrackPlatform(int index)
     {
-
         var manager = GameObject.FindGameObjectWithTag("ArenaManager");
         var managerscript = manager.GetComponent<ArenaManager>();
         var platformlist = managerscript.platformlist;
@@ -201,6 +206,8 @@ public class GemTransition : MonoBehaviour {
                     networkView.RPC("CrackPlatform", RPCMode.Others, index);
                     Destroy(go);
                 }
+
+                index += 1;
             }
         }
     }
