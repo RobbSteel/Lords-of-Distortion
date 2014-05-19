@@ -17,7 +17,7 @@ public class ElectricGenerator : Power {
 	// Update is called once per frame
 	void Update () {
 		
-		if(repetitions == 4){
+		if(repetitions == 3){
 			
 			Destroy(gameObject);
 		}
