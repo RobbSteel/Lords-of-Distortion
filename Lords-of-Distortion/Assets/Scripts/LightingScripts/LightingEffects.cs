@@ -13,6 +13,8 @@ public class LightingEffects : MonoBehaviour {
 	public bool rangeTween;
 	public float glowTweenLength;
 	public float rangeTweenLength;
+	public float startTweenDelay;
+	private float startDelayTimer;
 	private float glowTimer;
 	private float rangeTimer;
 	private bool switchGlowTween;
@@ -29,7 +31,7 @@ public class LightingEffects : MonoBehaviour {
 		//if wanted then set startingTween else leave as default
 		if( rangeTween )
 		lighting.range = rangeStartingTween;
-
+		startDelayTimer = 0;
 		switchGlowTween = true;
 		switchRangeTween = true;
 		glowTimer = 0;
@@ -38,8 +40,14 @@ public class LightingEffects : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		GlowTweening ();
-		RangeTweening ();
+
+		if (startDelayTimer >= startTweenDelay) {
+			GlowTweening ();
+			RangeTweening ();
+		}
+		else
+			startDelayTimer += Time.deltaTime;
+
 	}
 
 	//executes glowing tween for lights.
