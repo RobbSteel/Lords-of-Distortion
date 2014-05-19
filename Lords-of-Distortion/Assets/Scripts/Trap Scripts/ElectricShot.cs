@@ -39,15 +39,7 @@ public class ElectricShot : Power {
 	{
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
 
-
-		if (col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform" || col.transform.tag == "Ground")
-		{
-			
-			Destroy(gameObject);
-		}
-	}
 
 
 }
