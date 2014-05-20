@@ -1263,7 +1263,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400000, guid: ae3f2fb2d9555fb42bea03362e0f7e28, type: 2}
       propertyPath: potentialLocations.Array.size
-      value: 11
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ae3f2fb2d9555fb42bea03362e0f7e28, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1320,7 +1320,7 @@ Prefab:
     - target: {fileID: 11400000, guid: ae3f2fb2d9555fb42bea03362e0f7e28, type: 2}
       propertyPath: potentialLocations.Array.data[5]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 474435658}
     - target: {fileID: 11400000, guid: ae3f2fb2d9555fb42bea03362e0f7e28, type: 2}
       propertyPath: potentialLocations.Array.data[6]
       value: 
@@ -2056,10 +2056,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 827490474}
+  pauseAfterFirstMove: 0
+  firstMovePauseDelay: 0
   speed: .800000012
-  wait: 0
-  startAt: 0
-  pauseFor: 0
+  pauseAfterCycle: 0
+  startAfter: 0
+  cyclePauseDelay: 0
 --- !u!1001 &192185124
 Prefab:
   m_ObjectHideFlags: 0
@@ -8394,12 +8396,7 @@ MonoBehaviour:
   - {fileID: 1477561345}
   - {fileID: 297704973}
   - {fileID: 899891225}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 474435658}
-  - {fileID: 0}
-  - {fileID: 0}
   placementUI: {fileID: 0}
   TrapFountainPrefab: {fileID: 100000, guid: faf0a6925b063ff45b473e33d36300ba, type: 2}
 --- !u!4 &1500238932
