@@ -74,6 +74,13 @@ public class ArenaManager : MonoBehaviour {
 
 	[RPC]
 	void NotifyBeginTime(float time, int playerCount){
+
+		if(time < TimeManager.instance.time)
+		{
+			Debug.LogError("Network time not synched properly. RPC calls might be getting missed.");
+
+		}
+
 		beginTime = time;
 		
 		timer.countDownTime = beginTime - TimeManager.instance.time;
