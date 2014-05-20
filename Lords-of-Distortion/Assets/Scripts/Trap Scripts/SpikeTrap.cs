@@ -15,7 +15,7 @@ public class SpikeTrap : Power {
 
 	void Awake(){
 		//grabs child refences that is the refernce for the To Position
-//		childTweenPoint = transform.FindChild("TweenPosition").gameObject;
+		//childTweenPoint = transform.FindChild("TweenPosition").gameObject;
 		//startPosition = transform.position;
 		//spikeTween = this.GetComponent<TweenPosition>();
 		//spikeTween.duration = durationOfTween;

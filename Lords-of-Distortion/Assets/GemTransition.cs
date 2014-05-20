@@ -75,9 +75,9 @@ public class GemTransition : MonoBehaviour {
             Part1.SetActive(false);
             Part2.SetActive(true);
             broken = true;
-            gameObject.SetActive(false);
             gemLighting.GemShattered(false);
             gemLighting.ResetLighting();
+            gameObject.SetActive(false);
         }
 
 	}
@@ -88,8 +88,12 @@ public class GemTransition : MonoBehaviour {
         {
             if(player != null)
             { 
-                psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = -0.25f;
-                psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = true;
+                GameObject playerGO = psinfo.GetPlayerGameObject(player);
+                if(playerGO != null)
+                { 
+                    playerGO.GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+                    playerGO.GetComponent<Controller2D>().locked = true;
+                }
             }
         }
     }
@@ -100,8 +104,12 @@ public class GemTransition : MonoBehaviour {
         {
             if(player != null)
             { 
-                psinfo.GetPlayerGameObject(player).GetComponent<Rigidbody2D>().gravityScale = 1;
-                psinfo.GetPlayerGameObject(player).GetComponent<Controller2D>().locked = false;
+                GameObject playerGO = psinfo.GetPlayerGameObject(player);
+                if(playerGO != null)
+                { 
+                    playerGO.GetComponent<Rigidbody2D>().gravityScale = 1;
+                    playerGO.GetComponent<Controller2D>().locked = false;
+                }
             }
         }
     }

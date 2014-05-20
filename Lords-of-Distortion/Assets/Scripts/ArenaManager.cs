@@ -74,7 +74,14 @@ public class ArenaManager : MonoBehaviour {
 
 	[RPC]
 	void NotifyBeginTime(float time, int playerCount){
+
 		beginTime = time;
+		if(time < TimeManager.instance.time)
+		{
+			Debug.LogError("Network time not synched properly. RPC calls might be getting missed." + (time  - TimeManager.instance.time));
+			//Use a temporary fix for incorrect time so that shit don't go crazy
+			beginTime = TimeManager.instance.time + PRE_MATCH_TIME;
+		}
 		
 		timer.countDownTime = beginTime - TimeManager.instance.time;
 		timer.Show();
@@ -199,10 +206,10 @@ public class ArenaManager : MonoBehaviour {
 
 		if(lives == 0){
 		//bring up the dead player placement screen.
-		placementUI.disabledPowers.Add(PowerType.GATE);
-		placementUI.disabledPowers.Add(PowerType.DEFLECTIVE);
-		placementUI.SwitchToLive(true);
-		placementUI.enabled = true;
+			placementUI.disabledPowers.Add(PowerType.GATE);
+			placementUI.disabledPowers.Add(PowerType.DEFLECTIVE);
+			placementUI.SwitchToLive(true);
+			placementUI.enabled = true;
 		}
 	}
 
@@ -341,22 +348,26 @@ public class ArenaManager : MonoBehaviour {
 		powersSynchronized = true;
 	}
 
+	GameObject[] movingPlatforms;
+
 	void FindPlatforms(){
 		GameObject[] arenaplatforms = GameObject.FindGameObjectsWithTag("killplatform");
+
 		for(int i = 0; i < arenaplatforms.Length; i++){
 			platformlist.Add(arenaplatforms[i]);
 		}
-        
-        arenaplatforms = GameObject.FindGameObjectsWithTag("movingPlatform");
-        for (int i = 0; i < arenaplatforms.Length; i++)
+
+		movingPlatforms = GameObject.FindGameObjectsWithTag("movingPlatform");
+
+		for (int i = 0; i < movingPlatforms.Length; i++)
         {
-            platformlist.Add(arenaplatforms[i]);
-        }
+			platformlist.Add(movingPlatforms[i]);
+		}
 	}
 
 	void Awake(){
 		sessionManager = SessionManager.Instance;
-		FindPlatforms();
+
 	
 		playerSpawnVectors = new List<Vector3>();
 
@@ -391,6 +402,7 @@ public class ArenaManager : MonoBehaviour {
 	void Start () {
 
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
+		FindPlatforms();
 		//reset death timers and stuff.
 		sessionManager.psInfo.LevelReset();
 
@@ -449,6 +461,7 @@ public class ArenaManager : MonoBehaviour {
 		currentPhase = Phase.PreGame;
 		//TODO: have something that checks if all players have finished loading.
 	}
+
 	//---Trap Spawning--------------------------------------------
 	private void SpawnTimedTraps(float currentTime){
 		if(allTimedSpawns.Count != 0){
@@ -552,7 +565,9 @@ public class ArenaManager : MonoBehaviour {
 			timer.Hide();
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
-
+			for(int i = 0; i < movingPlatforms.Length; i++){
+				movingPlatforms[i].GetComponent<movingPlatform>().enabled = true;
+			}
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
 			trapsEnabled = true;

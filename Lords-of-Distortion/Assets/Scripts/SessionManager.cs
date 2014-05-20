@@ -25,7 +25,6 @@ public class SessionManager : MonoBehaviour {
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
-	public TimeManager timemanager;
 	
 	void Awake(){
 
@@ -165,8 +164,7 @@ public class SessionManager : MonoBehaviour {
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
-		timemanager = TimeManager.instance;
-		timemanager.SyncTimes();
+		TimeManager.instance.SyncTimes();
 		++playerCounter;
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, localOptions.username,Network.player, (int)localOptions.character);
@@ -181,8 +179,7 @@ public class SessionManager : MonoBehaviour {
 		//timeManager = instance.GetComponent<TimeManager>();
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username, (int)localOptions.character);
-		timemanager = TimeManager.instance;
-		timemanager.SyncTimes();
+		TimeManager.instance.SyncTimes();
 	}
 
 	void OnPlayerConnected(NetworkPlayer player) {

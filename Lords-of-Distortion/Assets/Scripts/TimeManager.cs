@@ -8,7 +8,7 @@ public class TimeManager : MonoBehaviour {
 	private float deltaTime;
 	public float time;
 	
-	void Awake(){
+	void Start(){
 		if(instance != null){
 			Destroy(this);
 			return;
