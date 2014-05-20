@@ -45,6 +45,8 @@ public class Controller2D : MonoBehaviour {
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
 	public float lives = 3;
+	public float respawntime = 3;
+	public bool recentspawn = false;
 	public Vector3 respawnpoint;
 	public float invulntime = 0;
 	public GameObject DeathSpirit;
@@ -120,11 +122,24 @@ public class Controller2D : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(invulntime > 0){
-			invulntime -= Time.deltaTime;
-		} else {
-			powerInvulnerable = false;
-			Destroy(newshield);
+		if(dead){
+
+			if(respawntime > 0){
+				respawntime -= Time.deltaTime;
+			} else {
+				respawn();
+			}
+
+		}
+
+		if(recentspawn){
+			if(invulntime > 0){
+				invulntime -= Time.deltaTime;
+			} else {
+				recentspawn = false;
+				powerInvulnerable = false;
+				Destroy(newshield);
+			}
 		}
 
 		if(!OFFLINE && !networkController.isOwner)
@@ -482,24 +497,32 @@ public class Controller2D : MonoBehaviour {
 	 */
 
 
- void loselife(){
-
-		Instantiate(DeathSpirit, transform.position, transform.rotation);
+	void respawn(){
+		respawntime = 3;
+		var renderer = gameObject.GetComponent<SpriteRenderer>();
+		renderer.enabled = true;
 		dead = false;
 		snared = false;
 		hasbomb = false;
 		status.currentStunMeter = 0;
 		collider2D.enabled = true;
 		invulntime = 3;
+		recentspawn = true;
 		powerInvulnerable = true;
 		status.RemovePlague();
+
+		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
 		newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
 		newshield.transform.parent = gameObject.transform;
-		transform.position = respawnpoint;
-		Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+	}
+
+ void loselife(){
+
+		Instantiate(DeathSpirit, transform.position, transform.rotation);
 		transform.parent = null;
-
-
+		var renderer = gameObject.GetComponent<SpriteRenderer>();
+		renderer.enabled = false;
+		transform.position = respawnpoint;
 	}
 
 	[RPC]
@@ -525,19 +548,7 @@ public class Controller2D : MonoBehaviour {
 			}
 
 		} else {
-			Instantiate(DeathSpirit, transform.position, transform.rotation);
-			dead = false;
-			snared = false;
-			hasbomb = false;
-			status.currentStunMeter = 0;
-			collider2D.enabled = true;
-			invulntime = 3;
-			powerInvulnerable = true;
-            status.RemovePlague();
-			newshield = (GameObject)Instantiate(invulnshield, transform.position, transform.rotation);
-			newshield.transform.parent = gameObject.transform;
-			transform.position = respawnpoint;
-			Instantiate(Respawn, new Vector2(0,0), transform.rotation);
+			loselife ();
 		}
 	}
 
