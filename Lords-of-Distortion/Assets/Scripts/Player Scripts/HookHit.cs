@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class HookHit : MonoBehaviour {
-
-	// Use this for initialization
-	public bool hooked = false;
+	
 	public bool playerhooked = false;
 	public GameObject shooter;
 	public float timer = 4f;
@@ -42,12 +40,14 @@ public class HookHit : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, hookedPlayer.transform.position, 10);
 		}
 
-	if(timer > 0){
-
+		if(timer > 0 && !returning)
+		{
 			timer -= Time.deltaTime;
-	} else {
-
+		} 
+		else 
+		{
 			returning = true;
+			shooter.GetComponent<Hook>().ReturnHook();
 		}
 
         if(shooter.GetComponent<Hook>().currentState == Hook.HookState.GoingOut)
@@ -91,7 +91,7 @@ public class HookHit : MonoBehaviour {
 
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
-			hooked = true;
+			shooter.GetComponent<Hook>().HitPlatform();
             if (!playSound && shooter.GetComponent<Hook>().currentState != Hook.HookState.GoingBack)
             {
                 AudioSource.PlayClipAtPoint(hookWallHitSfx, transform.position);

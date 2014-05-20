@@ -16,7 +16,7 @@ public class Hook : MonoBehaviour {
 	public bool hookDisable;
     private float currentDrag;
 	private Animator animator;
-	const float PLAYER_RELEASE_DISTANCE = .8f;
+	const float PLAYER_RELEASE_DISTANCE = .7f;
 	NetworkController networkController;
 	Controller2D  controller2D;
 
@@ -50,11 +50,14 @@ public class Hook : MonoBehaviour {
 		hookscript.shooter = gameObject;
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
-		Vector3 direction = Vector3.Normalize(target - transform.position);
+		Vector3 difference = target - transform.position;
+		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
+
 		//mousePos = transform.position + 100f * direction;
 		mousePos = target;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		go.rigidbody2D.velocity = direction * speedRatio;
 
 	}
 
@@ -73,36 +76,54 @@ public class Hook : MonoBehaviour {
 	}
 	float hookSpeed = 0f;
 	float speedRatio = 12f;
+
+	void FixedUpdate(){
+		if(currentState == HookState.GoingOut)
+		{
+			hookgoing(hookSpeed);
+		}
+	}
+	public void HitPlatform(){
+		hittimer = 1.5f;
+		currentState = HookState.PullingSelf;
+	}
+
+	public void ReturnHook(){
+		Vector3 difference = transform.position - go.transform.position;
+		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
+		Vector2 velocity = direction * speedRatio;
+		go.rigidbody2D.velocity = velocity;
+		currentState = HookState.GoingBack;
+	}
+
 	void Update(){
 		hookSpeed = Time.deltaTime * speedRatio;
+
+
         if(hooktimer > 0)
         {
             hooktimer -= Time.deltaTime;
         }
+
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(currentState == HookState.GoingOut)
 		{
-			if(hookscript.hooked == true){
-				hittimer = 1.5f;
-				currentState = HookState.PullingSelf;
-			}
-			else if(hookscript.playerhooked == true)
+			if(hookscript.playerhooked == true)
 			{
                 hooktimer = 1.5f;
 				if(Network.isServer){
 					hittimer = 2f;
 					currentState = HookState.PullingPlayer;
-					//If the server got hit it doesnt need to send this.
+
 					if(!OFFLINE){
+						//Tell clone of this player on hooked players screen to start pulling him.
 						if(hitPlayer != Network.player)
-							networkView.RPC ("PullPlayer", hitPlayer); 
+							networkView.RPC ("PullPlayer", hitPlayer);
+						//tell actual owner of this player that he's hooking someoene
+						if(networkView.owner != Network.player)
+							networkView.RPC("PullPlayer", networkView.owner);
 					}
 				}
-			}
-			//check playerhooked before doing this
-			else if(hookscript.returning == true)
-			{
-				currentState = HookState.GoingBack;
 			}
 		}
 
@@ -136,10 +157,7 @@ public class Hook : MonoBehaviour {
 			}
 		}
 
-		if(currentState == HookState.GoingOut)
-		{
-			hookgoing(hookSpeed);
-		}
+
 		
 		//Pull the player to us but destroy the hook after a fixed amount of time.
 		if(currentState == HookState.PullingPlayer)
@@ -167,15 +185,7 @@ public class Hook : MonoBehaviour {
 		if(currentState == HookState.GoingBack){
 			hookmovingback(hookSpeed);
 		}
-		
-		
 	}
-
-	[RPC]
-	void HookReturn(){
-		hookscript.returning = true;
-	}
-
 	//Gives players the option to hook players to them or pull themselves to the hooked player.
 	
 	[RPC]
@@ -285,11 +295,12 @@ public class Hook : MonoBehaviour {
 	Vector3 targetLocation;
 	//Instantiates links while the hook is traveling
 	void hookgoing(float speed){
-		go.transform.position = Vector2.MoveTowards(go.transform.position, mousePos, hookSpeed);
+		//go.transform.position = Vector2.MoveTowards(go.transform.position, mousePos, hookSpeed);
 		float distance = Vector2.Distance(go.transform.position, mousePos);
-		if(distance <= .05f){
+		if(distance <= .25f){
 			//Reached destination
 			hookscript.returning = true;
+			ReturnHook();
 		}
 	}
 
@@ -310,11 +321,8 @@ public class Hook : MonoBehaviour {
 
 	//Moves the hook back to the player and deletes links as the hook comes into contact with them.
 	void hookmovingback(float speed){
-		var distance = Vector2.Distance(transform.position, go.transform.position);
-		if(distance > 1f){
-			go.transform.position = Vector2.MoveTowards(go.transform.position, transform.position, hookSpeed);
-
-		} else {
+		float distance = Vector2.Distance(transform.position, go.transform.position);
+		if(distance <= 1f){
 			DestroyHookPossible();
 		}
 	}

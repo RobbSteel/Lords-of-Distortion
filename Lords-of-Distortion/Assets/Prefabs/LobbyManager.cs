@@ -300,7 +300,6 @@ public class LobbyManager : MonoBehaviour {
 			placementUI.Initialize(powerPrefabs);
 			placementUI.SwitchToLive(false);
 			placementUI.Enable();
-			print ("got here");
 		} 
 	}
 	
