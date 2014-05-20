@@ -41,7 +41,7 @@ public class Melee : MonoBehaviour {
 	void Update ()
 	{
 		//this.GetComponent<BoxCollider2D>().enabled = false;
-		if (!meleeDisable && !myhook.hookthrown && !controller.locked && !controller.crouching ) {
+		if (!meleeDisable && !myhook.HitSomething && !controller.locked && !controller.crouching ) {
 			// If the fire button is pressed...
 			if (Input.GetButtonDown ("Melee") && !controller.stunned && networkController.isOwner) {
 				startMelee ();

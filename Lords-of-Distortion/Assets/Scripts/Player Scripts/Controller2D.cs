@@ -223,15 +223,14 @@ public class Controller2D : MonoBehaviour {
 }
 
 	private void Jump(){
-		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Jump") && canJump){
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Jump") && canJump){
 			jumpRequested = true;
 		}
 	}
-
-
+	
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
 	private void Crouch(){
-		if(!snared && !locked && !stunned && grounded && !myHook.hookthrown && Input.GetButtonDown("Crouch") && !crouchDisable ){
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Crouch") && !crouchDisable ){
 			moveDisable = true;
 
 			canJump = false;
@@ -265,7 +264,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		if( !stunned && !snared && !myHook.hookthrown){
+		if( !stunned && !snared && !myHook.HitSomething){
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled
@@ -323,7 +322,7 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            if (myHook.hookthrown)
+            if (myHook.currentState != Hook.HookState.None)
                 transform.parent = null;
             else
                 transform.parent = other.transform;
@@ -339,7 +338,7 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            if (myHook.hookthrown)
+            if (myHook.currentState != Hook.HookState.None)
                 transform.parent = null;
             else
                 transform.parent = other.transform;

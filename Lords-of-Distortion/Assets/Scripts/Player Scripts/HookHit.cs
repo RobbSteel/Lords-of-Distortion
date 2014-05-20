@@ -50,7 +50,7 @@ public class HookHit : MonoBehaviour {
 			returning = true;
 		}
 
-        if(shooter.GetComponent<Hook>().going == true)
+        if(shooter.GetComponent<Hook>().currentState == Hook.HookState.GoingOut)
         {
             playSound = false;
         }
@@ -92,7 +92,7 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			hooked = true;
-            if (!playSound && !shooter.GetComponent<Hook>().movingback)
+            if (!playSound && shooter.GetComponent<Hook>().currentState != Hook.HookState.GoingBack)
             {
                 AudioSource.PlayClipAtPoint(hookWallHitSfx, transform.position);
                 playSound = true;
