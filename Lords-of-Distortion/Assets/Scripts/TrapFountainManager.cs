@@ -12,8 +12,8 @@ public class TrapFountainManager : MonoBehaviour {
 	public PlacementUI placementUI;
 	private bool activated;
 
-	float spawnTime = 15f;
-	float interval = 13f;
+	float spawnTime = 10f;
+	float interval = 10f;
 
 	System.Random random;
 
