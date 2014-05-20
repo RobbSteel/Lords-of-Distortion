@@ -389,20 +389,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
-  hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
+  hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 0
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
   hookDisable: 0
+  currentState: 4
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,12 +443,16 @@ MonoBehaviour:
   hooked: 0
   deathOnHit: 0
   canJump: 1
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 0
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
   lives: 3
+  respawntime: 3
+  recentspawn: 0
   respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
