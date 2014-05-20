@@ -176,7 +176,11 @@ public class PlacementUI : MonoBehaviour {
 				slot.GetComponent<UIWidget>().depth = 2;
 				slots.Add(slot);
 				board.SetChild(slot.GetComponent<PowerSlot>());
-				buttons.Add(slot.GetComponent<UIButton>());
+				UIButton button = slot.GetComponent<UIButton>();
+				buttons.Add(button);
+				//disable button with the rest of em
+				if(state != PlacementState.Default)
+					button.isEnabled = false;
 				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
 				//Make boards accessible by current power type
