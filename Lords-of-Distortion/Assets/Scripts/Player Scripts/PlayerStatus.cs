@@ -28,9 +28,9 @@ public class PlayerStatus : MonoBehaviour {
 	public float timemelee;
 	
 	int hitCount = 0;
-	public GameObject hitMarks;
-	SpriteRenderer hitMarkSprites;
-	public Sprite firstMark, secondMark, thirdMark;
+	//public GameObject hitMarks;
+	//SpriteRenderer hitMarkSprites;
+	//public Sprite firstMark, secondMark, thirdMark;
 	public GameObject punchParticles;
 	public GameObject shieldParticles;
 	bool knockBackPending = false;
@@ -71,7 +71,7 @@ public class PlayerStatus : MonoBehaviour {
 		MashIcon = (GameObject)Instantiate (Resources.Load ("MashAlertIcon"));
 		MashIcon.SetActive (false);
 
-		hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
+		//hitMarkSprites = hitMarks.GetComponent<SpriteRenderer>();
 		punchEffect = punchParticles.GetComponent<ParticleSystem>();
 		shield = shieldParticles.GetComponent<ParticleSystem>();
 		shield.enableEmission = false;
@@ -80,7 +80,7 @@ public class PlayerStatus : MonoBehaviour {
 
 	void Start(){
 		networkController = GetComponent<NetworkController>();
-		hitMarkSprites.enabled = false;
+		//hitMarkSprites.enabled = false;
 	}
 
 	//used to turn on MashAlertIcon

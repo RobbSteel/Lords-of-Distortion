@@ -5408,7 +5408,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 549148172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.9660616, y: -3.41214752, z: 0}
+  m_LocalPosition: {x: -15.6415653, y: -1.38563609, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 31097071}
@@ -10004,6 +10004,10 @@ Prefab:
       propertyPath: secondPower
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
   m_RootGameObject: {fileID: 758807771}
@@ -10242,10 +10246,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 1283761363}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 892350941}
   shieldParticles: {fileID: 1408738494}
   MashIconYOffset: 0
@@ -10273,20 +10273,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
-  hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
+  hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
   hookDisable: 1
+  currentState: 4
 --- !u!148 &798778593
 NetworkView:
   m_ObjectHideFlags: 0
@@ -10347,12 +10342,16 @@ MonoBehaviour:
   hooked: 0
   deathOnHit: 0
   canJump: 1
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 0
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
   lives: 3
+  respawntime: 3
+  recentspawn: 0
   respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
@@ -10586,10 +10585,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 2012275042}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 876018889}
   shieldParticles: {fileID: 417296726}
   MashIconYOffset: 0
@@ -10617,20 +10612,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
   hookDisable: 1
+  currentState: 4
 --- !u!148 &846833892
 NetworkView:
   m_ObjectHideFlags: 0
@@ -10691,12 +10681,16 @@ MonoBehaviour:
   hooked: 0
   deathOnHit: 0
   canJump: 0
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 1
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
   lives: 3
+  respawntime: 3
+  recentspawn: 0
   respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
@@ -12005,11 +11999,11 @@ MonoBehaviour:
   - {fileID: 1813422814}
   - {fileID: 1317657907}
   currentObjective: 0
-  firstMessage: Resupply gives you a trap.
+  firstMessage: Power gems supply you with traps
   secondMessage: Click and place the trap anywhere.
-  thirdMessage: The number key triggers the trap.
-  fourthMessage: Some traps kill directly, others kill indirectly...
-  fifthMessage: Traps can be placed even after death.
+  thirdMessage: Use number keys to activate traps.
+  fourthMessage: Traps can kill either directly or indirectly.
+  fifthMessage: You can still place traps after death.
   deathMessage: You've died.
   finishedMessage: Tutorial Complete!
   powerToKillPlayer: {fileID: 2022412592}
@@ -12055,7 +12049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5800ebb0229185641a0682157cea38ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeSpeed: 1.5
+  fadeSpeed: 1
 --- !u!1 &880335672
 GameObject:
   m_ObjectHideFlags: 0
@@ -17348,7 +17342,7 @@ Transform:
   m_PrefabInternal: {fileID: 2039152507}
   m_GameObject: {fileID: 1144640172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.9853897, y: 3.43761539, z: 0}
+  m_LocalPosition: {x: 12.4598446, y: 3.52605295, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 500813278}
@@ -17412,10 +17406,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 1796159894}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 741036387}
   shieldParticles: {fileID: 1972064855}
   MashIconYOffset: 0
@@ -17443,20 +17433,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
   hookDisable: 1
+  currentState: 4
 --- !u!148 &1144640179
 NetworkView:
   m_ObjectHideFlags: 0
@@ -17517,12 +17502,16 @@ MonoBehaviour:
   hooked: 0
   deathOnHit: 0
   canJump: 0
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 1
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
   lives: 3
+  respawntime: 3
+  recentspawn: 0
   respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
@@ -18545,7 +18534,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1317657907}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.81999969, y: -1.83999991, z: 0}
+  m_LocalPosition: {x: -5.22364235, y: -1.65574706, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1435317088}
@@ -20235,10 +20224,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 1654530793}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 1954638034}
   shieldParticles: {fileID: 1538278822}
   MashIconYOffset: 0
@@ -20266,20 +20251,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
   hookDisable: 1
+  currentState: 4
 --- !u!148 &1435317094
 NetworkView:
   m_ObjectHideFlags: 0
@@ -20340,12 +20320,16 @@ MonoBehaviour:
   hooked: 0
   deathOnHit: 0
   canJump: 0
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 1
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
   lives: 3
+  respawntime: 3
+  recentspawn: 0
   respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
@@ -20812,7 +20796,7 @@ Transform:
   m_PrefabInternal: {fileID: 1561280529}
   m_GameObject: {fileID: 1467403428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.96279907, y: 1.10022962, z: 0}
+  m_LocalPosition: {x: 5.73996019, y: 1.93956232, z: 0}
   m_LocalScale: {x: .75, y: .75, z: 1}
   m_Children:
   - {fileID: 1468492753}
@@ -21237,7 +21221,7 @@ Transform:
   m_PrefabInternal: {fileID: 1660106300}
   m_GameObject: {fileID: 1522817885}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .389999986, y: .0599999987, z: 0}
+  m_LocalPosition: {x: .389999866, y: .0599999428, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 798778587}
@@ -21276,8 +21260,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .208806068, y: .662578285}
-  m_Center: {x: .0165247917, y: .109546095}
+  m_Size: {x: .360180229, y: .662578285}
+  m_Center: {x: .00986289978, y: .109546185}
 --- !u!82 &1522817890
 AudioSource:
   m_ObjectHideFlags: 0
@@ -22724,11 +22708,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 4.96279907
+      value: 5.73996019
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.10022962
+      value: 1.93956232
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
       propertyPath: m_LocalPosition.z
@@ -26945,7 +26929,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2022412593
 Transform:
   m_ObjectHideFlags: 0
@@ -27180,11 +27164,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400006, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 13.9853897
+      value: 12.4598446
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.43761539
+      value: 3.52605295
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
       propertyPath: m_LocalPosition.z
