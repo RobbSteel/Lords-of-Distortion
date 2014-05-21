@@ -64,7 +64,6 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
-
 		if(col.gameObject.tag == "HookGate" & !poweredUp){
 			renderer.material.color = Color.red;
 			//Added powerhook component and copy info from respective hook gate
@@ -73,6 +72,7 @@ public class HookHit : MonoBehaviour {
 			pH.spawnInfo = new PowerSpawn(hookGate.spawnInfo);
 			//just change the type on the fly
 			pH.spawnInfo.type = PowerType.POWERHOOK;
+			pH.spawnInfo.owner = networkController.theOwner;
 			gameObject.tag = "PowerHook";
 			poweredUp = true;
 			GameObject hookfire = (GameObject)Instantiate(fireeffect, transform.position, transform.rotation);
@@ -82,7 +82,6 @@ public class HookHit : MonoBehaviour {
 
 
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
-
 			if(!OFFLINE){
 				if(GameObject.Find("CollectData") != null){
 					GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
@@ -122,8 +121,6 @@ public class HookHit : MonoBehaviour {
 
 				animator.SetTrigger("Hooked");
 				shooter.GetComponent<Hook>().HitPlayerLocal(transform.position, affectedPlayerNC.theOwner);
-
-
 			}
 		}
 	}
