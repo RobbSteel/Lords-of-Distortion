@@ -250,7 +250,7 @@ public class Hook : MonoBehaviour {
 		var hookedPlayer = hookscript.hookedPlayer;
 		var playercontrol = hookedPlayer.GetComponent<Controller2D>();
 		///player died
-		if(playercontrol.dead){
+		if(playercontrol.dead || hookedPlayer == null){
 			DestroyHookPossible();
 			return;
 		}
