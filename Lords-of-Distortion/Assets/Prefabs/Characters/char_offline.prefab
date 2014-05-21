@@ -146,7 +146,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .389999986, y: .0599999987, z: 0}
+  m_LocalPosition: {x: .389999866, y: .0599999428, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
@@ -202,7 +202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.81593609, y: 1.27030325, z: 0}
+  m_LocalPosition: {x: -5.21866179, y: -1.6487124, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -246,8 +246,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .208806068, y: .662578285}
-  m_Center: {x: .0165247917, y: .109546095}
+  m_Size: {x: .360180229, y: .662578285}
+  m_Center: {x: .00986289978, y: .109546185}
 --- !u!61 &6100002
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -362,15 +362,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b29afb5793691f40b8cce90dd5c9549, type: 3}
+  m_Script: {fileID: 11500000, guid: 89de928a67a893b4d9080782e27ba388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 100010}
-  meleeTimer: 0
-  coolDownTimer: .5
+  meleeDisable: 0
   damageDealt: 15
   meleeing: 0
-  meleeDisable: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -396,10 +394,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 100006}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 100004}
   shieldParticles: {fileID: 100002}
   MashIconYOffset: 0
@@ -414,20 +408,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  going: 0
-  movingtowards: 0
-  movingback: 0
-  hookpull: 0
-  hookthrown: 0
   mousePos: {x: 0, y: 0, z: 0}
   hookscript: {fileID: 0}
-  hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
+  hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
-  pushpull: 0
   hittimer: 0
-  hookDisable: 0
+  hookDisable: 1
+  currentState: 4
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -440,8 +429,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG: 1
-  instanceManager: {fileID: 0}
   isOwner: 1
+  ping: 0
   interpolationPercentage: 0
 --- !u!114 &11400012
 MonoBehaviour:
@@ -459,6 +448,7 @@ MonoBehaviour:
   OFFLINE: 1
   maxSpeed: 5
   anim: {fileID: 0}
+  move: 0
   dead: 0
   grounded: 0
   groundCheck: {fileID: 400006}
@@ -471,12 +461,18 @@ MonoBehaviour:
   snared: 0
   hooked: 0
   deathOnHit: 0
-  canJump: 0
+  canJump: 1
+  crouching: 0
   hasbomb: 0
   locked: 0
   moveDisable: 0
+  crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
+  lives: 3
+  respawntime: 3
+  recentspawn: 0
+  respawnpoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
   Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}

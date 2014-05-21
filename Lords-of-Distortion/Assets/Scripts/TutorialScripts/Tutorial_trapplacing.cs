@@ -33,6 +33,7 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
 		fade = false;
 		durationOfFading = 2;
 		fadeTimer = 2;
@@ -149,7 +150,9 @@ public class Tutorial_trapplacing: MonoBehaviour {
 		yield return new WaitForSeconds (durationOfFading);
 		setFadeSolid ();
 		changeText (secondMessage);
+
 		player.GetComponent<Controller2D> ().locked = false;
+
 	}
 	
 	//teach active
@@ -161,7 +164,6 @@ public class Tutorial_trapplacing: MonoBehaviour {
 		setFadeSolid ();
 		changeText (thirdMessage);
 		player.GetComponent<Controller2D> ().locked = false;
-
 
 	}
 	
