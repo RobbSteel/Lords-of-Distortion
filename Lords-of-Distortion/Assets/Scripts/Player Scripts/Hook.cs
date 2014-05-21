@@ -248,8 +248,9 @@ public class Hook : MonoBehaviour {
 	void pullingplayer(float speed){
 
 		var hookedPlayer = hookscript.hookedPlayer;
+		var playercontrol = hookedPlayer.GetComponent<Controller2D>();
 		///player died
-		if(hookedPlayer == null){
+		if(playercontrol.dead){
 			DestroyHookPossible();
 			return;
 		}

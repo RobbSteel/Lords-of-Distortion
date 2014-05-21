@@ -410,12 +410,14 @@ public class Controller2D : MonoBehaviour {
 
 
 	public void Die(DeathType deathType = DeathType.CRUSH){
+
 		if(networkController.isOwner && !dead){
 
 
+			collider2D.enabled = false;
 			dead = true;
 			locked = true;
-			collider2D.enabled = false;
+
 			myHook.DestroyHookPossible();
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
@@ -476,9 +478,10 @@ public class Controller2D : MonoBehaviour {
 
 	public void DieSimple(DeathType deathType, float lives = 0){
 		if(!networkController.isOwner && !dead){
-			if(lives == 0){
+
+
 			dead = true;
-			}
+			collider2D.enabled = false;
 			DeathAnimation(deathType);
 		}
 	}
