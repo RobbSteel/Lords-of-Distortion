@@ -416,6 +416,7 @@ public class Controller2D : MonoBehaviour {
 			dead = true;
 			locked = true;
 			collider2D.enabled = false;
+			myHook.DestroyHookPossible();
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
@@ -503,7 +504,7 @@ public class Controller2D : MonoBehaviour {
 		dead = false;
 		locked = false;
 		hasbomb = false;
-		status.currentStunMeter = 0;
+
 		collider2D.enabled = true;
 		invulntime = 3;
 		recentspawn = true;
@@ -519,6 +520,7 @@ public class Controller2D : MonoBehaviour {
 
 		Instantiate(DeathSpirit, transform.position, transform.rotation);
 		transform.parent = null;
+		status.currentStunMeter = 0;
 		var renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 		transform.position = respawnpoint;
