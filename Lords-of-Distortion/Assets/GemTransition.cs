@@ -17,6 +17,8 @@ public class GemTransition : MonoBehaviour {
     public GameObject Part2;
     public PlayerServerInfo psinfo;
 
+    private SpriteRenderer renderer;
+
     //private CameraShake shake;
     public Camera mainCam;
 
@@ -31,6 +33,7 @@ public class GemTransition : MonoBehaviour {
 
     void Awake()
     {
+        renderer = gameObject.GetComponent<SpriteRenderer>();
         psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
         Part2.SetActive(false);
     }
@@ -42,6 +45,8 @@ public class GemTransition : MonoBehaviour {
         {
             timeBetweenDamage -= Time.deltaTime;
         }
+
+        GemColorUpdate();
 
 	    if(gemHealth <= 0)
         {
@@ -122,7 +127,7 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == explosion.name && explosion.tag == "Power")
             {
-                gemHealth -= 100; //50
+                gemHealth -= 30;
             }
         }
     }
@@ -134,7 +139,7 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == earthquake.name && earthquake.tag == "Power")
             {
-                gemHealth -= 100; //25
+                gemHealth -= 25;
             }
         }
     }
@@ -182,7 +187,7 @@ public class GemTransition : MonoBehaviour {
     {
         if(collision.gameObject.name == "Boulder(Clone)")
         {
-            gemHealth -= 100;// 20;
+            gemHealth -= 20;
         }
     }
 
@@ -217,6 +222,35 @@ public class GemTransition : MonoBehaviour {
 
                 index += 1;
             }
+        }
+    }
+
+    void GemColorUpdate()
+    {
+        if(gemHealth >= 100)
+        {
+            renderer.color = new Color(0, 0, 255);
+        }
+        else if(gemHealth >= 80 && gemHealth < 100)
+        {
+            renderer.color = new Color(0, 130, 255);
+        }
+        else if(gemHealth >= 60 && gemHealth < 80)
+        {
+            renderer.color = new Color(0, 100, 0);
+        }
+        else if(gemHealth >= 40 && gemHealth < 60)
+        {
+            renderer.color = new Color(158, 162, 54);
+        }
+        else if(gemHealth >= 20 && gemHealth < 40)
+        {
+            renderer.color = new Color(255, 75, 0);
+        }
+        else if(gemHealth > 20)
+        {
+            renderer.color = new Color(162, 54, 54);
+            
         }
     }
 
