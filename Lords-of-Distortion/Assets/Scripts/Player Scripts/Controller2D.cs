@@ -414,7 +414,7 @@ public class Controller2D : MonoBehaviour {
 
 
 			dead = true;
-			snared = true;
+			locked = true;
 			collider2D.enabled = false;
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
@@ -501,7 +501,7 @@ public class Controller2D : MonoBehaviour {
 		var renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = true;
 		dead = false;
-		snared = false;
+		locked = false;
 		hasbomb = false;
 		status.currentStunMeter = 0;
 		collider2D.enabled = true;
