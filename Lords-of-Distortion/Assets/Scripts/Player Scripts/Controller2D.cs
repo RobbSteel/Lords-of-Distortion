@@ -90,8 +90,10 @@ public class Controller2D : MonoBehaviour {
     }
     
 	public void Hooked(){
+		rigidbody2D.velocity = Vector2.zero;
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
+		anim.SetFloat("Speed", 0);
 	}
 
 	public void UnHooked(){
