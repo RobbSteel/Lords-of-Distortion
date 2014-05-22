@@ -33,7 +33,7 @@ public class FreezeTrap : Power {
             }
             if(freezeExplosionActivated)
             {
-                if(trapDuration > 2.5)
+                if(trapDuration > 2.8)
                 {
                     GetComponent<CircleCollider2D>().radius = 0f;
                 }
@@ -62,8 +62,8 @@ public class FreezeTrap : Power {
             {
                 used = true;
 
-                player.rigidbody2D.drag = 0;
-                applyDmg.Frozen();
+				player.rigidbody2D.drag = 0;
+				applyDmg.Frozen();
                 frozenEffect = (GameObject)Instantiate(Resources.Load("FrozenEffect"), player.transform.position, Quaternion.identity);
                 frozenEffect.GetComponent<FrozenEffect>().checkStun = controller;
                 frozenplayer = controller;
