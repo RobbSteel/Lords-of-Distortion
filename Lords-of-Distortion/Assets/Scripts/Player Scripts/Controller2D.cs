@@ -413,7 +413,7 @@ public class Controller2D : MonoBehaviour {
 
 		if(networkController.isOwner && !dead){
 
-
+			status.currentStunMeter = 0;
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
@@ -502,7 +502,7 @@ public class Controller2D : MonoBehaviour {
 		dead = false;
 		locked = false;
 		hasbomb = false;
-
+		status.currentStunMeter = 0;
 		collider2D.enabled = true;
 		invulntime = 3;
 		recentspawn = true;
@@ -518,7 +518,7 @@ public class Controller2D : MonoBehaviour {
 
 		Instantiate(DeathSpirit, transform.position, transform.rotation);
 		transform.parent = null;
-		status.currentStunMeter = 0;
+
 		var renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 		transform.position = respawnpoint;
@@ -535,7 +535,7 @@ public class Controller2D : MonoBehaviour {
 	{
 		if(GameObject.Find("LobbyGUI") == null){
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
-
+			status.currentStunMeter = 0;
 			if(lives == 0){
 			Destroy (gameObject);
 				networkView.RPC("DeadPlayer", RPCMode.Others);
@@ -547,6 +547,7 @@ public class Controller2D : MonoBehaviour {
 			}
 
 		} else {
+			status.currentStunMeter = 0;
 			loselife ();
 		}
 	}
