@@ -32,11 +32,12 @@ public class TransferExplosive : Power
 		if (firstTime) 
         {
 			firststick = false;
-		
-			//because we are now moving the rigidbody manually as opposed to letting physics do the work
-			//make it kinematic.
+
 			rigidbody2D.isKinematic = true;
 			collider2D.isTrigger = true;
+			//because we are now moving the rigidbody manually as opposed to letting physics do the work
+			//make it kinematic.
+		
 		} else {
 			//set hasbomb of previous player to false
 			playerstuck.GetComponent<Controller2D> ().hasbomb = false;
@@ -96,7 +97,32 @@ public class TransferExplosive : Power
 			//print("exited");
 			//controller.hasbomb = false;
 	}
-	
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+	rigidbody2D.isKinematic = true;
+	collider2D.isTrigger = true;
+	}
+
+	void OnTriggerEnter2D(Collider2D col){
+
+
+
+			if (col.transform.name == "Boulder(Clone)" && col.transform.tag == "Power") {  
+		
+
+				GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+				explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+				Vector3 charMarkLoc = transform.position;
+				charMarkLoc.z = 1.4f;
+				var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
+				Destroy (gameObject);
+
+			
+		}
+	}
+
+
 	// Update is called once per frame
 	void  Update ()
 	{
