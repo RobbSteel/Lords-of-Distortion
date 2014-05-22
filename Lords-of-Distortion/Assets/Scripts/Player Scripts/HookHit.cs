@@ -85,7 +85,7 @@ public class HookHit : MonoBehaviour {
 		}
 
 
-		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger){
+		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger && !returning){
 			if(!OFFLINE){
 				if(GameObject.Find("CollectData") != null){
 					GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
@@ -95,14 +95,14 @@ public class HookHit : MonoBehaviour {
 			rigidbody2D.velocity = Vector2.zero;
 			animator.SetTrigger("Hooked");
 			shooter.GetComponent<Hook>().HitPlatform();
-            if (!playSound && shooter.GetComponent<Hook>().currentState != Hook.HookState.GoingBack)
+            if (!playSound)
             {
                 AudioSource.PlayClipAtPoint(hookWallHitSfx, transform.position);
                 playSound = true;
             }
 		}
 
-		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && returning != true){
+		else if(!poweredUp && col.gameObject.tag == "Player" && col.gameObject != shooter && !returning){
 
 			if(Network.isServer){
 

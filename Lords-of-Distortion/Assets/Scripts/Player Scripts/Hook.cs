@@ -95,6 +95,7 @@ public class Hook : MonoBehaviour {
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		Vector2 velocity = direction * speedRatio;
 		currentHook.gameObject.rigidbody2D.velocity = velocity;
+		currentHook.returning = true;
 	}
 
 	void Update(){

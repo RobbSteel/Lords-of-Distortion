@@ -189,10 +189,10 @@ public class SessionManager : MonoBehaviour {
 
 	void OnDisconnectedFromServer(){
 		//if(Network.isServer)
-		Application.LoadLevel(offlineLevel);
 		Destroy (TimeManager.instance.gameObject);
-		Destroy (this.gameObject);
+		Destroy (gameObject);
 		Destroy (psInfo.gameObject);
+		Application.LoadLevel(offlineLevel);
 	}
 
 	[RPC]

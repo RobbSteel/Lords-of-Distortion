@@ -10,7 +10,7 @@ public class TimeManager : MonoBehaviour {
 	
 	void Start(){
 		if(instance != null){
-			Destroy(this);
+			Destroy(gameObject);
 			return;
 		}
 		instance = this;
