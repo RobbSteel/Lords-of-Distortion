@@ -284,17 +284,15 @@ public class Hook : MonoBehaviour {
 		}
 
 		currentState = HookState.PullingPlayer;
-
+		this.hitPlayer = hitPlayer;
 		Vector3 playerLocation = new Vector3(playerLocationX, playerLocationY, transform.position.z);
-
 		currentHook.gameObject.transform.position = playerLocation;
 		currentHook.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
 		currentHook.affectedPlayerC2D = currentHook.hookedPlayer.GetComponent<Controller2D>();
 		currentHook.affectedPlayerC2D.Hooked();
 		currentHook.targetPosition = playerLocation;
 		currentHook.playerhooked = true;
-		this.hitPlayer = hitPlayer;
-		//TODO: make this animation appear on all players screens
+
 		currentHook.animator.SetTrigger("Hooked");
 		hittimer = 2f;
 		hooktimer = 1.5f;
