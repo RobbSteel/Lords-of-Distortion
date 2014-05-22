@@ -2069,11 +2069,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
       propertyPath: firstPower
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
       propertyPath: secondPower
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97a94af488ec7da4da9c13aabf046098, type: 2}
@@ -2127,14 +2127,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   list:
-  - {fileID: 100000, guid: b49dd82d161806c4f82a92e01cf2d8d4, type: 2}
+  - {fileID: 0}
   - {fileID: 100000, guid: 8d355e452f66a9d4b975a79129eebc4b, type: 2}
   - {fileID: 100000, guid: 64c41a466df2f3b4aa2e69b02dfd786b, type: 2}
   - {fileID: 100000, guid: 61dce44a7cdf12e4e947b879bb38251a, type: 2}
   - {fileID: 100000, guid: b0bfe78a6e8b4744a8b806d6381a3301, type: 2}
   - {fileID: 100000, guid: a7396905615ee79439f9e25e31b15434, type: 2}
   - {fileID: 100002, guid: 7e0b659d989623f45ac62d4e837d0dc1, type: 2}
-  - {fileID: 100000, guid: 47839959c09bc5b4e802192850c3a39d, type: 2}
+  - {fileID: 0}
   - {fileID: 100000, guid: 5714feed25a0789429841ad095d32272, type: 2}
   - {fileID: 100000, guid: 7e6c255855139b94ab41c8b702212ac9, type: 2}
   - {fileID: 100000, guid: 8b00768c197448c438dc444a2d59c667, type: 2}
@@ -2154,8 +2154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlacementUIPrefab: {fileID: 100020, guid: 3c6a5a850dbdfd6469423bd3ce5c7509, type: 2}
   alertSymbolPrefab: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
-  firstPower: 17
-  secondPower: 17
+  firstPower: 18
+  secondPower: 18
 --- !u!4 &758807777
 Transform:
   m_ObjectHideFlags: 0
@@ -4423,15 +4423,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1319096263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b29afb5793691f40b8cce90dd5c9549, type: 3}
+  m_Script: {fileID: 11500000, guid: 89de928a67a893b4d9080782e27ba388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meleeObject: {fileID: 2142243897}
-  meleeTimer: 0
-  coolDownTimer: .5
+  meleeDisable: 0
   damageDealt: 15
   meleeing: 0
-  meleeDisable: 0
 --- !u!58 &1319096266
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4470,10 +4468,6 @@ MonoBehaviour:
   timesmoke: 0
   timehook: 0
   timemelee: 0
-  hitMarks: {fileID: 1105602001}
-  firstMark: {fileID: 21300000, guid: 0740ac00c86a6284aa00547fb57c7754, type: 3}
-  secondMark: {fileID: 21300000, guid: 7ea0e4d65bb209a44818d21ca04ab74a, type: 3}
-  thirdMark: {fileID: 21300000, guid: bdf41ad7d15d4d74fb6d69b21bd96f00, type: 3}
   punchParticles: {fileID: 1751287207}
   shieldParticles: {fileID: 1046799650}
   MashIconYOffset: 0
@@ -4502,8 +4496,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mousePos: {x: 0, y: 0, z: 0}
-  hookscript: {fileID: 0}
-  hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
+  currentHook: {fileID: 0}
+  hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 1
   hooktimer: 0
   chainspawner: 1
@@ -7368,8 +7362,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .208806068, y: .662578285}
-  m_Center: {x: .0165247917, y: .109546095}
+  m_Size: {x: .360180229, y: .662578285}
+  m_Center: {x: .00986289978, y: .109546185}
 --- !u!82 &2142243901
 AudioSource:
   m_ObjectHideFlags: 0

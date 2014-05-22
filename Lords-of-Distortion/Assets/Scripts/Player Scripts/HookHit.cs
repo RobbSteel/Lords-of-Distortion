@@ -23,7 +23,8 @@ public class HookHit : MonoBehaviour {
 	public bool OFFLINE;
 	bool poweredUp = false;
 
-	void Awake(){
+	void Awake()
+	{
 		returning = false;
 		lr = gameObject.AddComponent<LineRenderer>();
 		lr.SetWidth(.1f, .1f);
@@ -56,10 +57,7 @@ public class HookHit : MonoBehaviour {
         }
 
 		lr.SetPosition(0, transform.position);
-		if(shooter == null)
-			Destroy (this.gameObject);
-		else
-			lr.SetPosition(1, shooter.transform.position);
+		lr.SetPosition(1, shooter.transform.position);
 	}
 
 	//On collision stops the hook from moving and tells the player to come to the hook

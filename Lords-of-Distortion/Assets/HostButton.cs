@@ -4,7 +4,6 @@ using System.Collections;
 public class HostButton : MonoBehaviour {
 
     public MainGui playerscript;
-    public PlayerServerInfo infoscript;
 
     void OnPress()
     {
@@ -15,8 +14,8 @@ public class HostButton : MonoBehaviour {
         }
         else
         {
-            infoscript.localOptions.username = playerscript.playerName;
-            infoscript.choice = "Host";
+			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
+			PlayerServerInfo.instance.choice = "Host";
             Application.LoadLevel("HostMenu");
         }
     }	
