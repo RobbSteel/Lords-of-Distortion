@@ -7,11 +7,13 @@ public class PowerHook : Power {
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
 		if(gameObject.GetComponent<HookHit>().shooter != player){
-
-			if (GameObject.Find ("CollectData") != null) {
-				GA.API.Design.NewEvent ("Empowered Hook Kills", player.transform.position);
-			}
+			var invulncheck = player.GetComponent<Controller2D>();
+			if(!invulncheck.powerInvulnerable){
+				if (GameObject.Find ("CollectData") != null) {
+					GA.API.Design.NewEvent ("Empowered Hook Kills", player.transform.position);
+				}
 			controller.Die(DeathType.FIRE);
+			}
 		}
 	}
 
