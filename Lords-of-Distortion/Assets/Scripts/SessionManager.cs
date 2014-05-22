@@ -160,11 +160,13 @@ public class SessionManager : MonoBehaviour {
 		}
 	}
 
+
+
 	//TODO: Instead of having buffered calls, send rpcs when new player joins.
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
-		TimeManager.instance.SyncTimes();
+		TimeManager.instance.ResetToZero();
 		++playerCounter;
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, localOptions.username,Network.player, (int)localOptions.character);
@@ -179,7 +181,7 @@ public class SessionManager : MonoBehaviour {
 		//timeManager = instance.GetComponent<TimeManager>();
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username, (int)localOptions.character);
-		TimeManager.instance.SyncTimes();
+		TimeManager.instance.SynchToServer();
 	}
 
 	void OnPlayerConnected(NetworkPlayer player) {
@@ -233,6 +235,7 @@ public class SessionManager : MonoBehaviour {
 		Network.isMessageQueueRunning = true;
 		Network.SetSendingEnabled(GAMEPLAY, true);
 		finishedLoading = true;
+		TimeManager.instance.UpdateClients();
 		
 		/*Because we don't want to call network specific functions until we've set the level prefix
 		 avoid using Start() in other gameobjects to do networking tasks. Instead call OnNetworkLoadedLevel*/
