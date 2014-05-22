@@ -91,10 +91,13 @@ public class Hook : MonoBehaviour {
 
 	public void ReturnHook(){
 		currentState = HookState.GoingBack;
+		/* Physics.
 		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		Vector2 velocity = direction * speedRatio;
-		currentHook.gameObject.rigidbody2D.velocity = velocity;
+		*/
+		currentHook.rigidbody2D.isKinematic = true;
+		currentHook.rigidbody2D.velocity = Vector2.zero;
 		currentHook.returning = true;
 	}
 
@@ -347,6 +350,9 @@ public class Hook : MonoBehaviour {
 			if(!Network.isServer)
 				DestroyHookSoft();
 			DestroyHookPossible(Authority.SERVER);
+		}
+		else {
+			currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, transform.position, hookSpeed);
 		}
 	}
 
