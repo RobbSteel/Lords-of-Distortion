@@ -233,14 +233,22 @@ public class Hook : MonoBehaviour {
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
 
-		var hookedPlayer = currentHook.hookedPlayer;
-		var playercontrol = hookedPlayer.GetComponent<Controller2D>();
-		///player died
-		if(playercontrol.dead || hookedPlayer == null){
+		GameObject hookedPlayer = currentHook.hookedPlayer;
+
+		///player died or dcd
+		if(hookedPlayer == null){
 			DestroyHookPossible(Authority.SERVER);
 			return;
 		}
+	
+		Controller2D playercontrol = hookedPlayer.GetComponent<Controller2D>();
 
+		if(playercontrol.dead)
+		{
+			DestroyHookPossible(Authority.SERVER);
+			return;
+		}
+	
 		float distance = Vector3.Distance(hookedPlayer.transform.position, transform.position);
 
 		if(distance < PLAYER_RELEASE_DISTANCE && Network.isServer)
