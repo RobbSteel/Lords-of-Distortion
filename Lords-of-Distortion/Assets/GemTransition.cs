@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GemTransition : MonoBehaviour {
 
-    private int gemHealth = 100;
+    public int gemHealth = 100;
     private bool transition = false;
     private bool broken = false;
     private float timeBetweenDamage = 3f;
@@ -16,8 +16,6 @@ public class GemTransition : MonoBehaviour {
     public GameObject Part1;
     public GameObject Part2;
     public PlayerServerInfo psinfo;
-
-    private SpriteRenderer renderer;
 
     //private CameraShake shake;
     public Camera mainCam;
@@ -33,7 +31,6 @@ public class GemTransition : MonoBehaviour {
 
     void Awake()
     {
-        renderer = gameObject.GetComponent<SpriteRenderer>();
         psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
         Part2.SetActive(false);
     }
@@ -45,8 +42,6 @@ public class GemTransition : MonoBehaviour {
         {
             timeBetweenDamage -= Time.deltaTime;
         }
-
-        GemColorUpdate();
 
 	    if(gemHealth <= 0)
         {
@@ -127,7 +122,8 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == explosion.name && explosion.tag == "Power")
             {
-                gemHealth -= 30;
+                //gemHealth -= 30;
+                GemColorUpdate(30);
             }
         }
     }
@@ -139,7 +135,8 @@ public class GemTransition : MonoBehaviour {
         {
             if (collider.transform.name == earthquake.name && earthquake.tag == "Power")
             {
-                gemHealth -= 25;
+                //gemHealth -= 25;
+                GemColorUpdate(25);
             }
         }
     }
@@ -187,7 +184,9 @@ public class GemTransition : MonoBehaviour {
     {
         if(collision.gameObject.name == "Boulder(Clone)")
         {
-            gemHealth -= 20;
+            //gemHealth -= 20;
+            GemColorUpdate(20);
+            timeBetweenDamage = 1f;
         }
     }
 
@@ -225,33 +224,39 @@ public class GemTransition : MonoBehaviour {
         }
     }
 
-    void GemColorUpdate()
+    void GemColorUpdate(int damage)
     {
+        gemHealth -= damage;
+        
         if(gemHealth >= 100)
         {
-            renderer.color = new Color(0, 0, 255);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
         }
         else if(gemHealth >= 80 && gemHealth < 100)
         {
-            renderer.color = new Color(0, 130, 255);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         }
         else if(gemHealth >= 60 && gemHealth < 80)
         {
-            renderer.color = new Color(0, 100, 0);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
         }
         else if(gemHealth >= 40 && gemHealth < 60)
         {
-            renderer.color = new Color(158, 162, 54);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
         else if(gemHealth >= 20 && gemHealth < 40)
         {
-            renderer.color = new Color(255, 75, 0);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
         }
-        else if(gemHealth > 20)
+        else if(gemHealth >= 1 && gemHealth < 20)
         {
-            renderer.color = new Color(162, 54, 54);
-            
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
         }
+        else if(gemHealth <= 0)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
     }
 
 }
