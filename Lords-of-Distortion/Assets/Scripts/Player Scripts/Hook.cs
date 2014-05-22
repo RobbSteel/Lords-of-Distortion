@@ -37,7 +37,8 @@ public class Hook : MonoBehaviour {
 		PullingPlayer,
 		GoingOut,
 		GoingBack,
-		None
+		None,
+		Hidden
 	}
 
 	public HookState currentState = HookState.None;
@@ -82,25 +83,18 @@ public class Hook : MonoBehaviour {
 
 	float hookSpeed = 0f;
 	float speedRatio = 12f;
-
-	void FixedUpdate(){
-		if(currentState == HookState.GoingOut)
-		{
-			hookgoing(hookSpeed);
-		}
-	}
-
+	
 	public void HitPlatform(){
 		hittimer = 1.5f;
 		currentState = HookState.PullingSelf;
 	}
 
 	public void ReturnHook(){
+		currentState = HookState.GoingBack;
 		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		Vector2 velocity = direction * speedRatio;
 		currentHook.gameObject.rigidbody2D.velocity = velocity;
-		currentState = HookState.GoingBack;
 	}
 
 	void Update(){
@@ -112,33 +106,9 @@ public class Hook : MonoBehaviour {
             hooktimer -= Time.deltaTime;
         }
 
-		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
-		if(currentState == HookState.GoingOut)
-		{
-			if(currentHook.playerhooked == true)
-			{
-                hooktimer = 1.5f;
-				if(Network.isServer){
-					hittimer = 2f;
-					currentState = HookState.PullingPlayer;
-
-					if(!OFFLINE){
-						//Tell clone of this player on hooked players screen to start pulling him.
-						if(hitPlayer != Network.player)
-							networkView.RPC ("PullPlayer", hitPlayer);
-						//tell actual owner of this player that he's hooking someoene
-						if(networkView.owner != Network.player)
-							networkView.RPC("PullPlayer", networkView.owner);
-					}
-				}
-			}
-		}
-
-
-
 		currentDrag = controller2D.rigidbody2D.drag;
 		//Get input from user and set cooldown to avoid repeated use.
-		if(currentState == HookState.None){
+		if(currentState == HookState.None || currentState == HookState.Hidden){
 			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable && !controller2D.crouching )
 			{
 				animator.SetFloat("Speed", 0);
@@ -164,7 +134,10 @@ public class Hook : MonoBehaviour {
 			}
 		}
 
-
+		if(currentState == HookState.GoingOut)
+		{
+			hookgoing(hookSpeed);
+		}
 		
 		//Pull the player to us but destroy the hook after a fixed amount of time.
 		if(currentState == HookState.PullingPlayer)
@@ -206,16 +179,24 @@ public class Hook : MonoBehaviour {
 		DestroyHook(); //actually destroy the hook now that you have permission
 	}
 
+
+	private void DestroyHookSoft()
+	{
+		transform.rigidbody2D.gravityScale = 1;
+		currentHook.renderer.enabled = false;
+		currentHook.lr.enabled = false;
+		currentState = HookState.Hidden;
+	}
+
 	private void DestroyHook(){
 		transform.rigidbody2D.gravityScale = 1;
 		currentState = HookState.None;
 		if(currentHook != null){
 			if(currentHook.affectedPlayerC2D != null){
 				currentHook.affectedPlayerC2D.UnHooked();
-				currentHook.affectedPlayerC2D = null;
 			}
-			currentHook.playerhooked = false;
 			Destroy(currentHook.gameObject);
+			currentHook = null;
 		}
 	}
 	
@@ -233,6 +214,7 @@ public class Hook : MonoBehaviour {
 				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 				DestroyHook();
 			}
+
 			/*
 			if(Network.isServer){
 				foreach(NetworkPlayer player in SessionManager.Instance.psInfo.players){
@@ -249,7 +231,6 @@ public class Hook : MonoBehaviour {
 		else {
 			DestroyHook();
 		}
-
 	}
 
 	//Player pulling opponent to himself
@@ -264,26 +245,39 @@ public class Hook : MonoBehaviour {
 		}
 
 		float distance = Vector3.Distance(hookedPlayer.transform.position, transform.position);
+
+		if(distance < PLAYER_RELEASE_DISTANCE && Network.isServer)
+		{
+			DestroyHookPossible(Authority.SERVER);
+		}
+
 		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
-		if(!networkController.isOwner && Network.player == hookedPlayer.GetComponent<NetworkController>().theOwner){
+		else if(!networkController.isOwner && Network.player == hookedPlayer.GetComponent<NetworkController>().theOwner){
 			if(distance > PLAYER_RELEASE_DISTANCE)
 				hookedPlayer.transform.position = Vector3.MoveTowards(hookedPlayer.transform.position, transform.position, hookSpeed);
 			else{
 				//we're free. tell everyone else too
-				currentHook.affectedPlayerC2D.FreeFromSnare();
-				DestroyHookPossible(Authority.OTHER, true);
+				currentHook.affectedPlayerC2D.UnHooked();
+				if(!Network.isServer)
+					DestroyHookSoft();
 			}
-		}
-		//we dont want to wait for the hooked player to tell us to destroy this thing
-		else if(networkController.isOwner && distance < PLAYER_RELEASE_DISTANCE)
-		{
-			DestroyHook();
 		}
 	}
 
 	NetworkPlayer hitPlayer;
 	[RPC]
 	void HitPlayer(float playerLocationX, float playerLocationY, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+
+		if(currentHook == null){
+			print ("too late");
+			return;
+		}
+		if(currentState == HookState.Hidden)
+		{
+			currentHook.renderer.enabled = false;
+			currentHook.lr.enabled = false;
+		}
+
 		currentState = HookState.PullingPlayer;
 
 		Vector3 playerLocation = new Vector3(playerLocationX, playerLocationY, transform.position.z);
@@ -291,6 +285,7 @@ public class Hook : MonoBehaviour {
 		currentHook.gameObject.transform.position = playerLocation;
 		currentHook.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
 		currentHook.affectedPlayerC2D = currentHook.hookedPlayer.GetComponent<Controller2D>();
+		currentHook.affectedPlayerC2D.Hooked();
 		currentHook.targetPosition = playerLocation;
 		currentHook.playerhooked = true;
 		this.hitPlayer = hitPlayer;
@@ -302,6 +297,20 @@ public class Hook : MonoBehaviour {
 	public void HitPlayerLocal(NetworkPlayer hitPlayer)
 	{
 		this.hitPlayer = hitPlayer;
+		hooktimer = 1.5f;
+		if(Network.isServer){
+			hittimer = 2f;
+			currentState = HookState.PullingPlayer;
+			
+			if(!OFFLINE){
+				//Tell clone of this player on hooked players screen to start pulling him.
+				if(hitPlayer != Network.player)
+					networkView.RPC ("PullPlayer", hitPlayer);
+				//tell actual owner of this player that he's hooking someoene
+				if(networkView.owner != Network.player)
+					networkView.RPC("PullPlayer", networkView.owner);
+			}
+		}
 	}
 	
 	//Instantiates links while the hook is traveling
@@ -317,7 +326,7 @@ public class Hook : MonoBehaviour {
 
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
-		if(networkController.isOwner){
+		if(networkController.isOwner || Network.isServer){
 			transform.rigidbody2D.velocity = Vector2.zero;
 			transform.rigidbody2D.gravityScale = 0;
 			var distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
@@ -334,6 +343,8 @@ public class Hook : MonoBehaviour {
 	void hookmovingback(float speed){
 		float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 		if(distance <= .8f){
+			if(!Network.isServer)
+				DestroyHookSoft();
 			DestroyHookPossible(Authority.SERVER);
 		}
 	}

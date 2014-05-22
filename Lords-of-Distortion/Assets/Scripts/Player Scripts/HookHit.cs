@@ -19,10 +19,10 @@ public class HookHit : MonoBehaviour {
 	public AudioClip hookHitSfx;
 	public AudioClip hookWallHitSfx;
 	private bool metriconce = false;
-
 	public bool OFFLINE;
 	bool poweredUp = false;
 
+	private bool hitPlatform = false;
 	void Awake()
 	{
 		returning = false;
@@ -48,7 +48,10 @@ public class HookHit : MonoBehaviour {
 		else 
 		{
 			returning = true;
-			shooter.GetComponent<Hook>().ReturnHook();
+			if(shooter.GetComponent<Hook>().currentState == Hook.HookState.GoingOut)
+			{
+				shooter.GetComponent<Hook>().ReturnHook();
+			}
 		}
 
         if(shooter.GetComponent<Hook>().currentState == Hook.HookState.GoingOut)
@@ -62,6 +65,9 @@ public class HookHit : MonoBehaviour {
 
 	//On collision stops the hook from moving and tells the player to come to the hook
 	void OnTriggerEnter2D(Collider2D col){
+		if(hitPlatform || playerhooked)
+			return;
+
 		if(col.gameObject.tag == "HookGate" & !poweredUp){
 			renderer.material.color = Color.red;
 			//Added powerhook component and copy info from respective hook gate
@@ -114,11 +120,12 @@ public class HookHit : MonoBehaviour {
 				targetPosition = transform.position;
 				if(!OFFLINE)
 					shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position.x, transform.position.y, affectedPlayerNC.theOwner);
+				shooter.GetComponent<Hook>().HitPlayerLocal(affectedPlayerNC.theOwner);
 				playerhooked = true; 
 				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
 
 				animator.SetTrigger("Hooked");
-				shooter.GetComponent<Hook>().HitPlayerLocal(affectedPlayerNC.theOwner);
+
 			}
 		}
 	}
