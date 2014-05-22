@@ -418,7 +418,7 @@ public class Controller2D : MonoBehaviour {
 			dead = true;
 			locked = true;
 
-			myHook.DestroyHookPossible();
+			myHook.DestroyHookPossible(Hook.Authority.OWNER);
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
@@ -485,11 +485,6 @@ public class Controller2D : MonoBehaviour {
 			DeathAnimation(deathType);
 		}
 	}
-
-	void OnDisable(){
-		myHook.DestroyHookPossible();
-	}
-
 
 	/*
 	 * Sequence of events:

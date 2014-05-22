@@ -42,18 +42,24 @@ public class Hook : MonoBehaviour {
 	}
 
 	public HookState currentState = HookState.None;
-	void ShootHookLocal(Vector3 target){
-		go  = (GameObject)Instantiate(hook, transform.position, transform.rotation);
+
+
+	//TODO: allow owner of hook to destroy it if he hooks a platform, synchornize this somehow.
+	void ShootHookLocal(float originX, float originY, float targetX, float targetY){
+		Vector3 origin = new Vector3(originX, originY, transform.position.z);
+		go  = (GameObject)Instantiate(hook, origin, transform.rotation);
 		currentState = HookState.GoingOut;
 		hookscript = go.GetComponent<HookHit>();
 		hookscript.networkController = networkController;
 		hookscript.shooter = gameObject;
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
-		Vector3 difference = target - transform.position;
+		Vector3 target =  new Vector3(targetX, targetY, transform.position.z);
+		Vector3 difference = target - origin;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 
 		//mousePos = transform.position + 100f * direction;
+
 		mousePos = target;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -63,17 +69,18 @@ public class Hook : MonoBehaviour {
 
 	//Called on server
 	[RPC]
-	void NotifyShootHook(Vector3 target){
-		networkView.RPC("ShootHookSimulate", RPCMode.Others, target);
-		ShootHookLocal(target);
+	void NotifyShootHook(float originX, float originY, float targetX, float targetY){
+		networkView.RPC("ShootHookSimulate", RPCMode.Others,  originX, originY, targetX, targetY);
+		ShootHookLocal(originX, originY, targetX, targetY);
 	}
 
 	[RPC]
-	void ShootHookSimulate(Vector3 target){
+	void ShootHookSimulate(float originX, float originY, float targetX, float targetY){
 		if(networkController.isOwner)
 			return;
-		ShootHookLocal(target);
+		ShootHookLocal(originX, originY, targetX, targetY);
 	}
+
 	float hookSpeed = 0f;
 	float speedRatio = 12f;
 
@@ -147,13 +154,13 @@ public class Hook : MonoBehaviour {
 					}
 					
 					if(Network.isServer)
-						networkView.RPC("ShootHookSimulate", RPCMode.Others, mouseClick);
+						networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 					
 					else
-						networkView.RPC("NotifyShootHook", RPCMode.Server,mouseClick);
+						networkView.RPC("NotifyShootHook", RPCMode.Server, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 				}
 				
-				ShootHookLocal(mouseClick);
+				ShootHookLocal(transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 			}
 		}
 
@@ -165,7 +172,7 @@ public class Hook : MonoBehaviour {
 			if(hittimer > 0){
 				pullingplayer(hookSpeed);
 			} else {	
-				DestroyHookPossible();
+				DestroyHookPossible(Authority.SERVER);
 			}
 			hittimer -= Time.deltaTime; 
 		}
@@ -177,7 +184,7 @@ public class Hook : MonoBehaviour {
 				movingtohook(hookSpeed);
 				
 			} else {
-				DestroyHookPossible();
+				DestroyHookPossible(Authority.OWNER);
 			}
 			hittimer -= Time.deltaTime;
 		}
@@ -213,10 +220,21 @@ public class Hook : MonoBehaviour {
 			Destroy(go);
 		}
 	}
+	
+	public enum Authority
+	{
+		SERVER, OWNER, OTHER
+	}
 
-
-	public void DestroyHookPossible(bool polite = false){
+	public void DestroyHookPossible(Authority authority, bool polite = false){
 		if(!OFFLINE){
+			if((authority == Authority.SERVER && Network.isServer)
+			   || (authority == Authority.OWNER && networkController.isOwner)
+			   || (authority == Authority.OTHER && polite))
+			{
+				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
+				DestroyHook();
+			}
 			/*
 			if(Network.isServer){
 				foreach(NetworkPlayer player in SessionManager.Instance.psInfo.players){
@@ -229,10 +247,6 @@ public class Hook : MonoBehaviour {
 
 			}
 			 * */
-			if(networkController.isOwner || Network.isServer){
-				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
-				DestroyHook();
-			}
 			else if(polite){
 				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 				DestroyHook();
@@ -251,7 +265,7 @@ public class Hook : MonoBehaviour {
 		var playercontrol = hookedPlayer.GetComponent<Controller2D>();
 		///player died
 		if(playercontrol.dead || hookedPlayer == null){
-			DestroyHookPossible();
+			DestroyHookPossible(Authority.SERVER);
 			return;
 		}
 
@@ -263,19 +277,19 @@ public class Hook : MonoBehaviour {
 			else{
 				//we're free. tell everyone else too
 				hookscript.affectedPlayerC2D.FreeFromSnare();
-				DestroyHookPossible(true);
+				DestroyHookPossible(Authority.OTHER, true);
 			}
 		}
 		//we dont want to wait for the hooked player to tell us to destroy this thing
 		else if(networkController.isOwner && distance < PLAYER_RELEASE_DISTANCE)
 		{
-			DestroyHookPossible(true);
+			DestroyHook();
 		}
 	}
 
 	NetworkPlayer hitPlayer;
 	[RPC]
-	void HitPlayer( Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+	void HitPlayer(Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
 		go.transform.position = playerLocation;
 		hookscript.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
 		hookscript.affectedPlayerC2D = hookscript.hookedPlayer.GetComponent<Controller2D>();
@@ -315,7 +329,7 @@ public class Hook : MonoBehaviour {
 			if(distance > .8f){
 				transform.position = Vector2.MoveTowards(transform.position, go.transform.position, hookSpeed);
 			} else {
-				DestroyHookPossible();
+				DestroyHookPossible(Authority.OWNER);
 			}
 		}
 	}
@@ -324,7 +338,7 @@ public class Hook : MonoBehaviour {
 	void hookmovingback(float speed){
 		float distance = Vector2.Distance(transform.position, go.transform.position);
 		if(distance <= 1f){
-			DestroyHookPossible();
+			DestroyHookPossible(Authority.OWNER);
 		}
 	}
 
