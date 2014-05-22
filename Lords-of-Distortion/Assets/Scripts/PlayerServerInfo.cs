@@ -17,8 +17,17 @@ public class PlayerServerInfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
 	public List<NetworkPlayer> players;
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
-	
+
+	public static PlayerServerInfo instance = null;
+
 	void Awake () {
+
+		if(instance != null){
+			Destroy(gameObject);
+			return;
+		}
+
+		instance = this;
 		DontDestroyOnLoad(this);
 		localOptions = new PlayerOptions();
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();

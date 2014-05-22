@@ -5,7 +5,6 @@ public class FindGames : MonoBehaviour {
 
 	GameObject mainscript;
 	public MainGui playerscript;
-	public PlayerServerInfo infoscript;
 	
 	// Update is called once per frame
 	void Update () {
@@ -18,10 +17,10 @@ public class FindGames : MonoBehaviour {
 
 			print("Nope");
 
-	} else {
+		} else {
 
-			infoscript.localOptions.username = playerscript.playerName;
-			infoscript.servername = playerscript.gameName;
+			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
+			PlayerServerInfo.instance.servername = playerscript.gameName;
 			Application.LoadLevel("FindingGames");
 		}
 	}

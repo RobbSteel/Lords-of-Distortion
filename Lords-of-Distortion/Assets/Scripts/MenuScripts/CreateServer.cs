@@ -5,13 +5,11 @@ public class CreateServer : MonoBehaviour {
 
 	//public GameObject mainscript;
 	public MainGui playerscript;
-	public PlayerServerInfo infoscript;
     public GameObject playerName;
 
 	// Use this for initialization
 	void Start () {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
-        playerName.GetComponent<UILabel>().text = infoscript.localOptions.username;
+		playerName.GetComponent<UILabel>().text = PlayerServerInfo.instance.localOptions.username;
 	}
 
 	void OnPress(){
@@ -23,8 +21,8 @@ public class CreateServer : MonoBehaviour {
         else
         {
 			//infoscript.localOptions.username = playerscript.playerName;
-			infoscript.servername = playerscript.gameName;
-			infoscript.choice = "Host";
+			PlayerServerInfo.instance.servername = playerscript.gameName;
+			PlayerServerInfo.instance.choice = "Host";
 			Application.LoadLevel("LobbyArena");
 		}
 	}	

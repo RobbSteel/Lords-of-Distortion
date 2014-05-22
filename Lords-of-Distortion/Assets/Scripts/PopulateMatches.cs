@@ -14,8 +14,8 @@ public class PopulateMatches : MonoBehaviour {
 		playertitle = GameObject.Find("PlayerName");
 		information = GameObject.Find("PSInfo");
 		infoscript = information.GetComponent<PlayerServerInfo>();
-		UILabel playerlabel = playertitle.GetComponentInChildren<UILabel>();
-		playerlabel.text = infoscript.localOptions.username;
+		//UILabel playerlabel = playertitle.GetComponentInChildren<UILabel>();
+		//playerlabel.text = infoscript.localOptions.username;
 	}
 	
 	// Update is called once per frame
