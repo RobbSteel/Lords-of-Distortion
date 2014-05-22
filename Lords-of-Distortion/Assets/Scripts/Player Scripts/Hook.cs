@@ -170,13 +170,6 @@ public class Hook : MonoBehaviour {
 			hookmovingback(hookSpeed);
 		}
 	}
-	//Gives players the option to hook players to them or pull themselves to the hooked player.
-	
-	[RPC]
-	void PullPlayer(){
-		hittimer = 2f;
-		currentState = HookState.PullingPlayer;
-	}
 
 	[RPC]
 	void NotifyDestroyHook(){
@@ -295,6 +288,8 @@ public class Hook : MonoBehaviour {
 		this.hitPlayer = hitPlayer;
 		//TODO: make this animation appear on all players screens
 		currentHook.animator.SetTrigger("Hooked");
+		hittimer = 2f;
+		hooktimer = 1.5f;
 	}
 
 	//To be called by HookHit
@@ -302,19 +297,10 @@ public class Hook : MonoBehaviour {
 	{
 		this.hitPlayer = hitPlayer;
 		hooktimer = 1.5f;
-		if(Network.isServer){
-			hittimer = 2f;
-			currentState = HookState.PullingPlayer;
-			
-			if(!OFFLINE){
-				//Tell clone of this player on hooked players screen to start pulling him.
-				if(hitPlayer != Network.player)
-					networkView.RPC ("PullPlayer", hitPlayer);
-				//tell actual owner of this player that he's hooking someoene
-				if(networkView.owner != Network.player)
-					networkView.RPC("PullPlayer", networkView.owner);
-			}
-		}
+		hittimer = 2f;
+		currentState = HookState.PullingPlayer;
+		if(!OFFLINE)
+			networkView.RPC ("HitPlayer", RPCMode.Others, currentHook.transform.position.x, currentHook.transform.position.y, hitPlayer);
 	}
 	
 	//Instantiates links while the hook is traveling

@@ -118,8 +118,6 @@ public class HookHit : MonoBehaviour {
 				affectedPlayerC2D.Hooked();
 				rigidbody2D.velocity = Vector2.zero;
 				targetPosition = transform.position;
-				if(!OFFLINE)
-					shooter.networkView.RPC ("HitPlayer", RPCMode.Others, transform.position.x, transform.position.y, affectedPlayerNC.theOwner);
 				shooter.GetComponent<Hook>().HitPlayerLocal(affectedPlayerNC.theOwner);
 				playerhooked = true; 
 				AudioSource.PlayClipAtPoint( hookHitSfx , transform.position );
