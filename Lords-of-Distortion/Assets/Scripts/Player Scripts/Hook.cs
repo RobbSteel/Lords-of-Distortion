@@ -4,9 +4,8 @@ using System.Collections;
 public class Hook : MonoBehaviour {
 
 	public Vector3 mousePos = new Vector3(0,0, 0);
-	public HookHit hookscript;
-
-	private GameObject go;
+	public HookHit currentHook;
+	
 	public  GameObject hook;
 	public bool OFFLINE;
 	
@@ -47,11 +46,11 @@ public class Hook : MonoBehaviour {
 	//TODO: allow owner of hook to destroy it if he hooks a platform, synchornize this somehow.
 	void ShootHookLocal(float originX, float originY, float targetX, float targetY){
 		Vector3 origin = new Vector3(originX, originY, transform.position.z);
-		go  = (GameObject)Instantiate(hook, origin, transform.rotation);
+		GameObject go  = (GameObject)Instantiate(hook, origin, transform.rotation);
 		currentState = HookState.GoingOut;
-		hookscript = go.GetComponent<HookHit>();
-		hookscript.networkController = networkController;
-		hookscript.shooter = gameObject;
+		currentHook = go.GetComponent<HookHit>();
+		currentHook.networkController = networkController;
+		currentHook.shooter = gameObject;
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 target =  new Vector3(targetX, targetY, transform.position.z);
@@ -90,16 +89,17 @@ public class Hook : MonoBehaviour {
 			hookgoing(hookSpeed);
 		}
 	}
+
 	public void HitPlatform(){
 		hittimer = 1.5f;
 		currentState = HookState.PullingSelf;
 	}
 
 	public void ReturnHook(){
-		Vector3 difference = transform.position - go.transform.position;
+		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		Vector2 velocity = direction * speedRatio;
-		go.rigidbody2D.velocity = velocity;
+		currentHook.gameObject.rigidbody2D.velocity = velocity;
 		currentState = HookState.GoingBack;
 	}
 
@@ -115,7 +115,7 @@ public class Hook : MonoBehaviour {
 		//If hook has hit something, initialize moving towards, otherwise, move the hook back to player
 		if(currentState == HookState.GoingOut)
 		{
-			if(hookscript.playerhooked == true)
+			if(currentHook.playerhooked == true)
 			{
                 hooktimer = 1.5f;
 				if(Network.isServer){
@@ -209,15 +209,13 @@ public class Hook : MonoBehaviour {
 	private void DestroyHook(){
 		transform.rigidbody2D.gravityScale = 1;
 		currentState = HookState.None;
-		if(hookscript != null){
-			if(hookscript.affectedPlayerC2D != null){
-				hookscript.affectedPlayerC2D.UnHooked();
-				hookscript.affectedPlayerC2D = null;
+		if(currentHook != null){
+			if(currentHook.affectedPlayerC2D != null){
+				currentHook.affectedPlayerC2D.UnHooked();
+				currentHook.affectedPlayerC2D = null;
 			}
-			hookscript.playerhooked = false;
-		}
-		if(go != null){
-			Destroy(go);
+			currentHook.playerhooked = false;
+			Destroy(currentHook.gameObject);
 		}
 	}
 	
@@ -247,10 +245,6 @@ public class Hook : MonoBehaviour {
 
 			}
 			 * */
-			else if(polite){
-				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
-				DestroyHook();
-			}
 		}
 		else {
 			DestroyHook();
@@ -261,7 +255,7 @@ public class Hook : MonoBehaviour {
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
 
-		var hookedPlayer = hookscript.hookedPlayer;
+		var hookedPlayer = currentHook.hookedPlayer;
 		var playercontrol = hookedPlayer.GetComponent<Controller2D>();
 		///player died
 		if(playercontrol.dead || hookedPlayer == null){
@@ -276,7 +270,7 @@ public class Hook : MonoBehaviour {
 				hookedPlayer.transform.position = Vector3.MoveTowards(hookedPlayer.transform.position, transform.position, hookSpeed);
 			else{
 				//we're free. tell everyone else too
-				hookscript.affectedPlayerC2D.FreeFromSnare();
+				currentHook.affectedPlayerC2D.FreeFromSnare();
 				DestroyHookPossible(Authority.OTHER, true);
 			}
 		}
@@ -289,32 +283,34 @@ public class Hook : MonoBehaviour {
 
 	NetworkPlayer hitPlayer;
 	[RPC]
-	void HitPlayer(Vector3 playerLocation, NetworkPlayer hitPlayer, NetworkMessageInfo info){
-		go.transform.position = playerLocation;
-		hookscript.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
-		hookscript.affectedPlayerC2D = hookscript.hookedPlayer.GetComponent<Controller2D>();
-		targetLocation = playerLocation;
-		hookscript.targetPosition = playerLocation;
-		hookscript.playerhooked = true;
+	void HitPlayer(float playerLocationX, float playerLocationY, NetworkPlayer hitPlayer, NetworkMessageInfo info){
+		currentState = HookState.PullingPlayer;
+
+		Vector3 playerLocation = new Vector3(playerLocationX, playerLocationY, transform.position.z);
+
+		currentHook.gameObject.transform.position = playerLocation;
+		currentHook.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
+		currentHook.affectedPlayerC2D = currentHook.hookedPlayer.GetComponent<Controller2D>();
+		currentHook.targetPosition = playerLocation;
+		currentHook.playerhooked = true;
 		this.hitPlayer = hitPlayer;
 		//TODO: make this animation appear on all players screens
-		hookscript.animator.SetTrigger("Hooked");
+		currentHook.animator.SetTrigger("Hooked");
 	}
 
-	//to be called by hookhit
-	public void HitPlayerLocal(Vector3 playerLocation, NetworkPlayer hitPlayer){
-		targetLocation = playerLocation;
+	//To be called by HookHit
+	public void HitPlayerLocal(NetworkPlayer hitPlayer)
+	{
 		this.hitPlayer = hitPlayer;
 	}
-
-	Vector3 targetLocation;
+	
 	//Instantiates links while the hook is traveling
 	void hookgoing(float speed){
 		//go.transform.position = Vector2.MoveTowards(go.transform.position, mousePos, hookSpeed);
-		float distance = Vector2.Distance(go.transform.position, mousePos);
+		float distance = Vector2.Distance(currentHook.gameObject.transform.position, mousePos);
 		if(distance <= .25f){
 			//Reached destination
-			hookscript.returning = true;
+			currentHook.returning = true;
 			ReturnHook();
 		}
 	}
@@ -324,10 +320,10 @@ public class Hook : MonoBehaviour {
 		if(networkController.isOwner){
 			transform.rigidbody2D.velocity = Vector2.zero;
 			transform.rigidbody2D.gravityScale = 0;
-			var distance = Vector2.Distance(transform.position, go.transform.position);
+			var distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 			
 			if(distance > .8f){
-				transform.position = Vector2.MoveTowards(transform.position, go.transform.position, hookSpeed);
+				transform.position = Vector2.MoveTowards(transform.position, currentHook.gameObject.transform.position, hookSpeed);
 			} else {
 				DestroyHookPossible(Authority.OWNER);
 			}
@@ -336,14 +332,14 @@ public class Hook : MonoBehaviour {
 
 	//Moves the hook back to the player and deletes links as the hook comes into contact with them.
 	void hookmovingback(float speed){
-		float distance = Vector2.Distance(transform.position, go.transform.position);
-		if(distance <= 1f){
-			DestroyHookPossible(Authority.OWNER);
+		float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
+		if(distance <= .8f){
+			DestroyHookPossible(Authority.SERVER);
 		}
 	}
 
 	void OnDestroy(){
-		if(go != null)
-			Destroy (go);
+		if(currentHook != null)
+			Destroy (currentHook.gameObject);
 	}
 }
