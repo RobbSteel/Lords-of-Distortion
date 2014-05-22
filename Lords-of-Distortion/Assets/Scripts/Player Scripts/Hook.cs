@@ -317,13 +317,17 @@ public class Hook : MonoBehaviour {
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
 		if(networkController.isOwner || Network.isServer){
-			transform.rigidbody2D.velocity = Vector2.zero;
+
+			Vector3 difference = currentHook.gameObject.transform.position - transform.position;
+			Vector2 direction = new Vector2(difference.x, difference.y).normalized;
+			Vector2 velocity = direction * speedRatio;
+			transform.rigidbody2D.velocity = velocity;
 			transform.rigidbody2D.gravityScale = 0;
-			var distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
+
+			float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 			
-			if(distance > .8f){
-				transform.position = Vector2.MoveTowards(transform.position, currentHook.gameObject.transform.position, hookSpeed);
-			} else {
+			if(distance <= .8f){
+				transform.rigidbody2D.velocity = Vector2.zero;
 				DestroyHookPossible(Authority.OWNER);
 			}
 		}
