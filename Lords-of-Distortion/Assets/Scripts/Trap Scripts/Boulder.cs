@@ -33,7 +33,7 @@ public class Boulder : Power {
     }
 
 	Vector2 force = new Vector2(-200f, 50);
-	Vector2 velocity = new Vector2(8f, 0f); 
+	Vector2 velocity = new Vector2(7f, 0f); 
 
 	// Use this for initialization
 	void Start () {

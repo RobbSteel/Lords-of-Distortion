@@ -15,6 +15,7 @@ public class PlayerStatus : MonoBehaviour {
 	public float UIoffsetX;
 	public float UIoffsetY;
 	public float recoverRate;
+	public float frozenrecover;
 
     //variables for Plague
     public bool insidePlague = false;
@@ -389,7 +390,7 @@ public class PlayerStatus : MonoBehaviour {
 		playerControl.stunned = true;
 		currentStunMeter = maxStun;
 		playerControl.anim.SetTrigger ("Frozen");
-		//playerControl.anim.enabled = false;
+		recoverRate = 5.0f;
 		playerControl.deathOnHit = true;
 
 	}
@@ -401,6 +402,7 @@ public class PlayerStatus : MonoBehaviour {
 	}
 
 	public void UnStunSimple(){
+		recoverRate = 10.0f;
 		playerControl.snared = false;
 		//playerControl.meleeStunned = false;
 		playerControl.stunned = false;

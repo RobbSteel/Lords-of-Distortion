@@ -90,8 +90,10 @@ public class Controller2D : MonoBehaviour {
     }
     
 	public void Hooked(){
+		rigidbody2D.velocity = Vector2.zero;
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
+		anim.SetFloat("Speed", 0);
 	}
 
 	public void UnHooked(){
@@ -264,7 +266,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		if( !stunned && !snared && !myHook.HitSomething){
+		if( !stunned && !snared && !myHook.HitSomething && !hooked){
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled
@@ -413,12 +415,12 @@ public class Controller2D : MonoBehaviour {
 
 		if(networkController.isOwner && !dead){
 
-
+			status.currentStunMeter = 0;
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
 
-			myHook.DestroyHookPossible();
+			myHook.DestroyHookPossible(Hook.Authority.OWNER);
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");
@@ -486,11 +488,6 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 
-	void OnDisable(){
-		myHook.DestroyHookPossible();
-	}
-
-
 	/*
 	 * Sequence of events:
 	 * Die or DieSimple is called
@@ -507,7 +504,7 @@ public class Controller2D : MonoBehaviour {
 		dead = false;
 		locked = false;
 		hasbomb = false;
-
+		status.currentStunMeter = 0;
 		collider2D.enabled = true;
 		invulntime = 3;
 		recentspawn = true;
@@ -523,7 +520,7 @@ public class Controller2D : MonoBehaviour {
 
 		Instantiate(DeathSpirit, transform.position, transform.rotation);
 		transform.parent = null;
-		status.currentStunMeter = 0;
+
 		var renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.enabled = false;
 		transform.position = respawnpoint;
@@ -540,7 +537,7 @@ public class Controller2D : MonoBehaviour {
 	{
 		if(GameObject.Find("LobbyGUI") == null){
 			Instantiate(DeathSpirit, transform.position, transform.rotation);
-
+			status.currentStunMeter = 0;
 			if(lives == 0){
 			Destroy (gameObject);
 				networkView.RPC("DeadPlayer", RPCMode.Others);
@@ -552,6 +549,7 @@ public class Controller2D : MonoBehaviour {
 			}
 
 		} else {
+			status.currentStunMeter = 0;
 			loselife ();
 		}
 	}
