@@ -297,7 +297,7 @@ public class ScoreDisplay : MonoBehaviour {
 			var timelabel = (GameObject)Instantiate(TimeLabel, new Vector2(0,0), transform.rotation);
 			timelabel.transform.parent = GameObject.Find("UI Root").transform;
 			timelabel.transform.localScale = new Vector3(1,1,1);
-			timelabel.transform.localPosition = new Vector2 (190,-320);
+			timelabel.transform.localPosition = new Vector2 (130,-320);
 			timeLabelReference.GetComponent<UILabel>().text =  timeLabelDescription + Mathf.CeilToInt( timeleft ).ToString();
 			timeLabelReference = timelabel;
 
