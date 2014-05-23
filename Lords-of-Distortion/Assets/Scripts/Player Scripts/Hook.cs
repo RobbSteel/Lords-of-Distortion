@@ -32,6 +32,12 @@ public class Hook : MonoBehaviour {
 		}
 	}
 
+	public bool HookOut{
+		get {
+			return currentState != HookState.None;
+		}
+	}
+
 	public enum HookState{
 		PullingSelf,
 		PullingPlayer,
@@ -268,6 +274,7 @@ public class Hook : MonoBehaviour {
 			}
 		}
 	}
+
 
 	NetworkPlayer hitPlayer;
 	[RPC]
