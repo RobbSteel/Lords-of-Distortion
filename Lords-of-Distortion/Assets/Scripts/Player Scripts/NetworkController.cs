@@ -159,10 +159,24 @@ public class NetworkController : MonoBehaviour {
 						controller2D.Flip();
 
 					//If player is in air, play jump animation, otherwise play ground animation.
-					if(newerState.inAir)
-						controller2D.anim.SetTrigger("Jump");
+					//if(newerState.inAir)
 
-					float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
+                    if (newerState.velocity.y > 3f)
+                    {
+                        if (!controller2D.grounded)
+                        {
+                            controller2D.anim.SetTrigger("Jump");
+                            controller2D.anim.SetBool("Ground", false);
+                        }
+                    } 
+                    else
+                    {
+                        controller2D.anim.StopPlayback();
+                        controller2D.anim.SetBool("Ground", true);
+                    }
+                    
+                    
+                    float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
 					controller2D.anim.SetFloat( "Speed", unit);
 
 					interpolations++;
