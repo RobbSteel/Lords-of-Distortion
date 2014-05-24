@@ -90,8 +90,10 @@ public class Controller2D : MonoBehaviour {
     }
     
 	public void Hooked(){
+		rigidbody2D.velocity = Vector2.zero;
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
+		anim.SetFloat("Speed", 0);
 	}
 
 	public void UnHooked(){
@@ -268,7 +270,7 @@ public class Controller2D : MonoBehaviour {
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
-		if( !stunned && !snared && !myHook.HitSomething){
+		if( !stunned && !snared && !myHook.HitSomething && !hooked){
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled

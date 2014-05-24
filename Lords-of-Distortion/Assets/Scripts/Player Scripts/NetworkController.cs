@@ -119,7 +119,8 @@ public class NetworkController : MonoBehaviour {
 	float updates = 0f;
 
 	public float interpolationPercentage;
-
+	
+	bool jumped = false;
 	void Update () {
 
 		if (isOwner)
@@ -158,27 +159,23 @@ public class NetworkController : MonoBehaviour {
 					if(newerState.facingRight != controller2D.facingRight)
 						controller2D.Flip();
 
+
 					//If player is in air, play jump animation, otherwise play ground animation.
-					//if(newerState.inAir)
+					if (newerState.velocity.y > 1f)
+					{
+						if (!controller2D.grounded && !jumped && !GetComponent<Hook>().HookOut)
+						{
+							jumped = true;
+							controller2D.anim.SetTrigger("Jump");
+						}
+					} 
+					else if(controller2D.grounded)
+					{ 
+						jumped = false;
+					}
 
-                    if (newerState.velocity.y > 3f)
-                    {
-                        if (!controller2D.grounded)
-                        {
-                            controller2D.anim.SetTrigger("Jump");
-                            controller2D.anim.SetBool("Ground", false);
-                        }
-                    } 
-                    else
-                    {
-                        controller2D.anim.StopPlayback();
-                        controller2D.anim.SetBool("Ground", true);
-                    }
-                    
-                    
-                    float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
+					float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
 					controller2D.anim.SetFloat( "Speed", unit);
-
 					interpolations++;
 					return;
 				}

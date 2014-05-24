@@ -15,6 +15,7 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject AssistLabel;
 	public GameObject WinLabel;
 	public GameObject FavorLabel;
+	public GameObject TimeLabel;
 	public List<NetworkPlayer> tielist;
 	public bool tie = false;
 	public bool finish = false;
@@ -38,20 +39,17 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject alive;
 	public GameObject deflecticon;
 
-
 	PlayerServerInfo infoscript;
-
+	private string timeLabelDescription;
+	private GameObject timeLabelReference;
 
 	// Use this for initialization
 	void Start () {
-
-	
 	}
 
 	//On Level Loaded tries to spawn the labels of player scores.
 
 	void OnNetworkLoadedLevel(){
-
 
 		sessionManager = GameObject.FindWithTag ("SessionManager").GetComponent<SessionManager>();
 		infoscript = sessionManager.psInfo;
@@ -62,8 +60,10 @@ public class ScoreDisplay : MonoBehaviour {
 
 		if(sessionManager.matchfinish){
 			timeleft = 12;
+			timeLabelDescription = "Returning to Lobby: ";
 		} else {
 			timeleft = 6;
+			timeLabelDescription = "Next Round in: ";
 		}
 
 		//If the Match is finished check who was the winner and set up tie logic
@@ -188,27 +188,29 @@ public class ScoreDisplay : MonoBehaviour {
 		var playerlabel = (GameObject)Instantiate(PlayerLabel, new Vector2(0,0), transform.rotation);
 		var killlabel = (GameObject)Instantiate(KillLabel, new Vector2(0,0), transform.rotation);
 		var favorlabel = (GameObject)Instantiate(FavorLabel, new Vector2(0,0), transform.rotation);
-
+		var timelabel = (GameObject)Instantiate (TimeLabel, new Vector2 (0, 0), transform.rotation);
 
 		//Add them to the UI
 		playerlabel.transform.parent = GameObject.Find("UI Root").transform;
 		playerpose.transform.parent = GameObject.Find ("UI Root").transform;
 		killlabel.transform.parent = GameObject.Find("UI Root").transform;
 		favorlabel.transform.parent = GameObject.Find("UI Root").transform;
-
+		timelabel.transform.parent = GameObject.Find ("UI Root").transform;
 
 		//Rescale them to fit properly
 		playerlabel.transform.localScale = new Vector3(1, 1, 1);
 		playerpose.transform.localScale = new Vector3(100,100,1);
 		favorlabel.transform.localScale = new Vector3(1,1,1);
 		killlabel.transform.localScale = new Vector3(1,1,1);
+		timelabel.transform.localScale = new Vector3(1,1,1);
 
 		//Locate them to the proper locations
 		playerlabel.transform.localPosition = new Vector2(-444, 350+(-150*playernumber));
 		playerpose.transform.localPosition = new Vector2(-200, 350+(-150*playernumber));
 		killlabel.transform.localPosition = new Vector2(350, 350+(-150*playernumber));
 		favorlabel.transform.localPosition = new Vector2(520, 350+(-150*playernumber));
-		
+		timelabel.transform.localPosition = new Vector2 (-590,285);
+
 		//Find the Text component
 		var playertext = playerlabel.GetComponent<UILabel>();
 		var killstext = killlabel.GetComponent<UILabel>();
@@ -218,7 +220,9 @@ public class ScoreDisplay : MonoBehaviour {
 		playertext.text = playername;
 		killstext.text = "+" + roundscore;
 		favortext.text = "" + totalscore;
-		
+		//need ref to time label since it is constantly updated 
+		timeLabelReference = timelabel;
+
 		
 	}
 
@@ -289,6 +293,13 @@ public class ScoreDisplay : MonoBehaviour {
 			loselabel.transform.localPosition = new Vector2(300, 300);
 			var losetext = loselabel.GetComponent<UILabel>();
 			losetext.text = "LOSERS";
+
+			var timelabel = (GameObject)Instantiate(TimeLabel, new Vector2(0,0), transform.rotation);
+			timelabel.transform.parent = GameObject.Find("UI Root").transform;
+			timelabel.transform.localScale = new Vector3(1,1,1);
+			timelabel.transform.localPosition = new Vector2 (130,-320);
+			timeLabelReference.GetComponent<UILabel>().text =  timeLabelDescription + Mathf.CeilToInt( timeleft ).ToString();
+			timeLabelReference = timelabel;
 
 
 
@@ -553,6 +564,7 @@ public class ScoreDisplay : MonoBehaviour {
 				Destroy(objectdestroy);
 
 			}
+		
 			MatchFinish(infoscript);
 			finish = true;
 		}
@@ -562,9 +574,14 @@ public class ScoreDisplay : MonoBehaviour {
 
 		   if(timeleft > 0){
 
-			   timeleft -= Time.deltaTime;
-				 
+			timeleft -= Time.deltaTime;
+
+			//display correct time text
+			if( timeLabelReference != null )
+			timeLabelReference.GetComponent<UILabel>().text =  timeLabelDescription + Mathf.CeilToInt( timeleft ).ToString();
+
 		    } else if(!sentLevelLoadRPC){
+
 				if(Network.isServer){
 			   		sessionManager.LoadNextLevel(false);
 			   		sentLevelLoadRPC = true;
