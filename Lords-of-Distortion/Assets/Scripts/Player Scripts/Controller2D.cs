@@ -181,9 +181,12 @@ public class Controller2D : MonoBehaviour {
         }
 
 		if(!hooked){
-		    IsGrounded();
+
+            IsGrounded();
+
 		    if(!OFFLINE && !networkController.isOwner)
 			    return;
+            
 
             if(!locked && !moveDisable )
 		        MovePlayer();
@@ -257,7 +260,8 @@ public class Controller2D : MonoBehaviour {
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
-		anim.SetBool( "Ground", grounded );
+		if(networkController.isOwner)
+            anim.SetBool( "Ground", grounded );
 		if(inAir && grounded){
 			inAir = false;
 			rigidbody2D.gravityScale = 1f;
