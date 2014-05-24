@@ -3,64 +3,72 @@ using System.Collections;
 
 public class PlagueScript : Power 
 {
-    private float timer = 0f;
-	private float timeTilDrag = 1f;
-    private float dragGiven = 5f;
-    private PlayerStatus status;
+
+	public GameObject targetplayer;
+	public GameObject[] possibletargets;
+	public float plaguespeed;
+	public float closestdistance = 100;
+
 
     void Start () 
     {
         //particleSystem.renderer.sortingLayerName = "Foreground";
+	    possibletargets = GameObject.FindGameObjectsWithTag("Player");
         Destroy(gameObject, 8f);
+		AcquireTarget();
+		plaguespeed = 0.02f;
 	}
 
     void OnDestroy()
     {
-        if(status != null)
-        { 
-            status.RemovePlague();
-        }
+      
     }
+
+	void Update(){
+
+		if(targetplayer != null){
+			print ("moving there");
+			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed);
+
+				if(targetplayer.GetComponent<Controller2D>().dead){
+
+				AcquireTarget();
+			}
+		}
+	}
+
+	void AcquireTarget(){
+
+		for(int i = 0; i < possibletargets.Length; i++){
+
+			var currplayer = possibletargets[i];
+			var distance = Vector2.Distance(transform.position, currplayer.transform.position);
+			print (distance);
+			if((distance < closestdistance) && !currplayer.GetComponent<Controller2D>().dead){
+				targetplayer = currplayer;
+				closestdistance = distance;
+				print ("got ya");
+			}
+
+		}
+
+		closestdistance = 100;
+	}
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
-        if(status == null)
-        {
-            status = controller.GetComponent<PlayerStatus>();
-        }
+   
+		controller.Die(DeathType.PLAGUE);
 
-        if (status.PlagueAmount() == 0)
-        {
-            status.AddPlague(25f);
-        }
     }
 
     public override void PowerActionStay(GameObject player, Controller2D controller)
     {
-        if (status == null)
-        {
-            status = controller.GetComponent<PlayerStatus>();
-        }
-
-        timer += Time.deltaTime;
     
-        if (timer > timeTilDrag)
-        {
-            status.AddPlague(12f);
-            timer = 0;
-            
-            if (status.PlagueAmount() > 50)
-            {
-				if (GameObject.Find ("CollectData") != null) {
-					GA.API.Design.NewEvent ("Plague Deaths", player.transform.position);
-				}
-				controller.Die(DeathType.PLAGUE);
-            }
-        }
     }
 
     public override void PowerActionExit(GameObject player, Controller2D controller)
     {
-        status.RemovePlague();
+     
     }
 }
