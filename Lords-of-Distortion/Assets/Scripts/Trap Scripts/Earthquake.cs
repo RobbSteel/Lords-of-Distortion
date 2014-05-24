@@ -127,7 +127,7 @@ public class Earthquake : Power {
 							
 					if(networkscript.isOwner){
 								
-						if(controller.grounded){
+						if(controller.grounded && !controller.powerInvulnerable){
 							Instantiate(groundshatter, currplayer.transform.position, currplayer.transform.rotation);
 							networkView.RPC("QuakeParticle", RPCMode.Others, currplayer.transform.position, currplayer.transform.rotation);
 							if (GameObject.Find ("CollectData") != null) {

@@ -260,7 +260,7 @@ public class Controller2D : MonoBehaviour {
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
-		if(networkController.isOwner)
+
             anim.SetBool( "Ground", grounded );
 		if(inAir && grounded){
 			inAir = false;
