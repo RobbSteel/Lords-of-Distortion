@@ -22,7 +22,7 @@ public class ArenaManager : MonoBehaviour {
 	float beginTime = float.PositiveInfinity;
 	float finalPlayerTime = float.PositiveInfinity;
 	float endTime = float.PositiveInfinity;
-	float totallives = 3;
+	public float totallives;
 
 	public LivesUI livesUI;
 	int? livePlayerCount;
@@ -179,7 +179,6 @@ public class ArenaManager : MonoBehaviour {
 	//Called on clients not controlling the player who just died.
 	[RPC]
 	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
-		print ("he dead");
 		if(lives == 0){
 		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		}
@@ -217,10 +216,7 @@ public class ArenaManager : MonoBehaviour {
 
 	//Server should do calculations of who to give points to.
 	void HandlePlayerEvent(NetworkPlayer affected, PlayerEvent playerEvent){
-		print(playerEvent.PowerType + " happened");
-
 		if(playerEvent.Attacker != null){
-			print ("Attacked by " + playerEvent.Attacker.Value);
 			networkView.RPC("SynchEvent", RPCMode.Others, (int)playerEvent.PowerType, 
 		                playerEvent.TimeOfContact, playerEvent.Attacker, affected);
 		}
@@ -367,8 +363,8 @@ public class ArenaManager : MonoBehaviour {
 
 	void Awake(){
 		sessionManager = SessionManager.Instance;
-
-	
+		totallives = GameObject.Find ("PSInfo").GetComponent<PlayerServerInfo>().lives;
+		
 		playerSpawnVectors = new List<Vector3>();
 
 		foreach(Transform location in spawnPositions){
@@ -522,7 +518,6 @@ public class ArenaManager : MonoBehaviour {
         Vector3 yieldSpawnLocation = spawn.position;
         yieldSpawnLocation.z = -8;
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
-		print ("Warning duration is " + warningDuration);
 		yield return new WaitForSeconds(warningDuration);
 		Destroy(instantiatedSymbol);
 		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;

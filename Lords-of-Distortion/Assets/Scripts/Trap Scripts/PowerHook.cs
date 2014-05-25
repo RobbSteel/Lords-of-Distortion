@@ -9,7 +9,7 @@ public class PowerHook : Power {
 		if(gameObject.GetComponent<HookHit>().shooter != player){
 			var invulncheck = player.GetComponent<Controller2D>();
 			if(!invulncheck.powerInvulnerable){
-				if (GameObject.Find ("CollectData") != null) {
+				if (Analytics.Enabled) {
 					GA.API.Design.NewEvent ("Empowered Hook Kills", player.transform.position);
 				}
 			controller.Die(DeathType.FIRE);

@@ -23,6 +23,13 @@ public class CreateServer : MonoBehaviour {
 			//infoscript.localOptions.username = playerscript.playerName;
 			PlayerServerInfo.instance.servername = playerscript.gameName;
 			PlayerServerInfo.instance.choice = "Host";
+			var liveslabel = GameObject.Find("enterLives");
+			var lives = liveslabel.GetComponent<UILabel>().text;
+			var convert = float.Parse(lives);
+			if(convert == 0){
+				convert = 1;
+			}
+			PlayerServerInfo.instance.lives = convert;
 			Application.LoadLevel("LobbyArena");
 		}
 	}	

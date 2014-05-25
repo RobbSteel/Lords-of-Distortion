@@ -129,7 +129,7 @@ public class Hook : MonoBehaviour {
 				
 				if(!OFFLINE)
 				{
-					if(GameObject.Find("CollectData") != null){
+					if(Analytics.Enabled){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);
 					}
 					
