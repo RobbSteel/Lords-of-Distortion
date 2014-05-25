@@ -131,8 +131,8 @@ public class ListGames : MonoBehaviour {
 				currentEntry++;
 			}
 
-			//were done
-			if(currentEntry == entries.Count - 1){
+			//we're done
+			if(currentEntry == entries.Count){
 				testingConnections = false;
 			}
 		}

@@ -55,6 +55,12 @@ public class SpikeTrap : Power {
 	
 	public override void PowerActionStay(GameObject player, Controller2D controller){
 
+		if(GameObject.Find("CollectData") != null){
+			GA.API.Design.NewEvent("Spike Death", player.transform.position);
+		}
+		
+		controller.Die(DeathType.RIPPED);
+
 	}
 	
 	public override void PowerActionExit(GameObject player, Controller2D controller){
