@@ -27,7 +27,6 @@ public class PlagueScript : Power
 	void Update(){
 
 		if(targetplayer != null){
-			print ("moving there");
 			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed);
 
 				if(targetplayer.GetComponent<Controller2D>().dead){
@@ -43,11 +42,9 @@ public class PlagueScript : Power
 			if(possibletargets[i] != null){
 				var currplayer = possibletargets[i];
 				var distance = Vector2.Distance(transform.position, currplayer.transform.position);
-				print (distance);
 					if((distance < closestdistance) && !currplayer.GetComponent<Controller2D>().dead){
 						targetplayer = currplayer;
 						closestdistance = distance;
-						print ("got ya");
 					}
 			}
 		}

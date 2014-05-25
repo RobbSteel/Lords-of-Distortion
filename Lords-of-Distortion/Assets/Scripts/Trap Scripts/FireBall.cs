@@ -79,7 +79,6 @@ public class FireBall : Power
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		print (col.transform);
         gField = GameObject.Find("gravityField(Clone)");
 		if (gField != null) {
 			if (col.transform.name == gField.name && gField.tag == "Power") {  
