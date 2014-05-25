@@ -32,7 +32,6 @@ public class FireBall : Power
 
 	[RPC]
 	void FireExplosion(){
-		print ("destroy fireball attempt");
 		Destroy (gameObject);
 		Instantiate(fireparticle, transform.position, transform.rotation);
 	}
@@ -79,13 +78,10 @@ public class FireBall : Power
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-        gField = GameObject.Find("gravityField(Clone)");
-		if (gField != null) {
-			if (col.transform.name == gField.name && gField.tag == "Power") {  
-                Debug.Log("Col. Name" + col.transform.name);
-                Debug.Log("GField. Name" + col.transform.name);
-				transform.rotation = Quaternion.AngleAxis (90, new Vector3 (0, 0, 1));
-			}
+
+		if(col.GetComponent<GravityField>() != null){
+			float angle = Random.Range(60f, 120f);
+			transform.rotation = Quaternion.AngleAxis (angle, new Vector3 (0, 0, 1));
 		}
 
 		if(Network.isServer){
@@ -109,13 +105,11 @@ public class FireBall : Power
 
 				Destroy (newwall, 3.0f);
 				Destroy(col.gameObject);
-				Destroy(gameObject);
 				networkView.RPC("BurnPlatform", RPCMode.Others, index);
-			
+				Destroy(gameObject);
 			}
 		}
 	}
-
 }
 
 
