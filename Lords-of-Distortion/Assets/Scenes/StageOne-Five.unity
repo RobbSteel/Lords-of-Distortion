@@ -1210,7 +1210,7 @@ Transform:
   m_PrefabInternal: {fileID: 122229995}
   m_GameObject: {fileID: 21038807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.97001743, y: 1.153229, z: 0}
+  m_LocalPosition: {x: -8.94240093, y: 3.16917968, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 426225300}
@@ -1621,11 +1621,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 42c7b387a6b4d8a4d9a49645ef586259, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -8.97001743
+      value: -8.94240093
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 42c7b387a6b4d8a4d9a49645ef586259, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1.153229
+      value: 3.16917968
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 42c7b387a6b4d8a4d9a49645ef586259, type: 2}
       propertyPath: m_LocalPosition.z
@@ -3749,7 +3749,7 @@ GameObject:
   - 212: {fileID: 624362499}
   - 198: {fileID: 624362498}
   - 199: {fileID: 624362497}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4053,7 +4053,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 10
+      scalar: 20
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4863,7 +4863,7 @@ SpriteRenderer:
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_SortingLayerID: 0
   m_Sprite: {fileID: 21300000, guid: 6931dbe64b91a0b4dbf0fe048aad0dbb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4874,7 +4874,7 @@ Transform:
   m_PrefabInternal: {fileID: 1542816494}
   m_GameObject: {fileID: 624362496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.9867258, y: .564269781, z: 0}
+  m_LocalPosition: {x: -12.2687235, y: 3.87816167, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 100}
   m_Children: []
   m_Father: {fileID: 426225300}
@@ -6494,6 +6494,7 @@ MonoBehaviour:
   - {fileID: 1275668511}
   - {fileID: 1618300449}
   platformlist: []
+  totallives: 0
   livesUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   placementRootPrefab: {fileID: 100004, guid: d3cd913089056b345bd90fad246e4797, type: 2}
@@ -8450,11 +8451,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -12.9867258
+      value: -12.2687235
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .564269781
+      value: 3.87816167
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
       propertyPath: m_LocalPosition.z
@@ -8479,6 +8480,18 @@ Prefab:
     - target: {fileID: 19800000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
       propertyPath: InitialModule.startColor.maxColor.rgba
       value: 979986793
+      objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
+      propertyPath: EmissionModule.rate.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c2ae31899339d27498579846f4bc6076, type: 2}
@@ -9788,9 +9801,9 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
+  m_SortingLayer: -1
   m_SortingOrder: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 980281895
   m_Sprite: {fileID: 21300000, guid: 1f6469c4d61d10e4aaa1569bf4a9eb96, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &2076142332
@@ -9800,8 +9813,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2076142330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.349617, y: 4.4569416, z: 1}
-  m_LocalScale: {x: 1.39999998, y: 1.39999998, z: 1}
+  m_LocalPosition: {x: 4.05092144, y: 4.85141516, z: 1}
+  m_LocalScale: {x: 1.50957668, y: 1.50957584, z: 1}
   m_Children: []
   m_Father: {fileID: 247814958}
 --- !u!1001 &2118674341
