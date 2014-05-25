@@ -44,7 +44,7 @@ public class Controller2D : MonoBehaviour {
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
-	public float lives = 3;
+	public float lives;
 	public float respawntime = 3;
 	public bool recentspawn = false;
 	public Vector3 respawnpoint;
@@ -107,6 +107,9 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
+		if(GameObject.Find("LobbyGUI") == null){
+		lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
+		}
 		crouchDisable = true;
 		powerInvulnerable = false;
 		deathOnHit = false;
@@ -424,7 +427,7 @@ public class Controller2D : MonoBehaviour {
 			dead = true;
 			locked = true;
 
-			myHook.DestroyHookPossible(Hook.Authority.OWNER);
+			myHook.DestroyHookPossible(Hook.Authority.SERVER);
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");

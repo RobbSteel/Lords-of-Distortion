@@ -4,14 +4,6 @@ using System.Collections;
 public class JoinServer : MonoBehaviour {
 	
 	public HostData hostData;
-	public PlayerServerInfo infoscript;
-
-	// Use this for initialization
-	void Start () {
-		var information = GameObject.Find("PSInfo");
-		infoscript = information.GetComponent<PlayerServerInfo>();
-
-	}
 
 	public void CheckButton()
 	{
@@ -21,6 +13,8 @@ public class JoinServer : MonoBehaviour {
 		else if(hostData.connectedPlayers > 3)
 			button.isEnabled = false;
 	}
+
+	bool askedForConnection = false;
 
 	void OnPress(bool isDown){
 		//do once only
@@ -35,24 +29,33 @@ public class JoinServer : MonoBehaviour {
 			print ("There's too many players");
 		}
 		else{
-			infoscript.choice = "Find";
-			infoscript.chosenHost = hostData;
-			infoscript.servername = hostData.gameName;
+			askedForConnection = true;
+			PlayerServerInfo.instance.choice = "Find";
+			PlayerServerInfo.instance.chosenHost = hostData;
+			PlayerServerInfo.instance.servername = hostData.gameName;
 			var error = Network.Connect(hostData); //Attempt connecting, even though we might not have latest hostdata
 		}
 	}
 	
 	void OnFailedToConnect(NetworkConnectionError error){
+		if(!askedForConnection)
+			return;
 		print (error);
 
 		//TODO Update label to show that the game is in progress (even though the error is too many players)
 	}
+	
 	void OnDisconnectedFromServer(){
+		if(!askedForConnection)
+			return;
+		askedForConnection = false;
 		//Actually load lobby were we connect for realsies
 		Application.LoadLevel("LobbyArena");
 	}
 
 	void OnConnectedToServer(){
+		if(!askedForConnection)
+			return;
 		Network.Disconnect();
 	}
 }

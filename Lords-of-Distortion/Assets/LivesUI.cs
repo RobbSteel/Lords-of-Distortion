@@ -6,6 +6,11 @@ public class LivesUI : MonoBehaviour {
 
 	public GameObject PlayerLivesPrefab;
 	public GameObject heartParticles;
+	public Texture finalchar;
+
+	public Texture Mummy;
+	public Texture Colossus;
+	public Texture Blue;
 
 	public Camera UICamera;
 
@@ -14,6 +19,57 @@ public class LivesUI : MonoBehaviour {
 	PlayerServerInfo psInfo;
 	
 	Dictionary<NetworkPlayer, GameObject> entry  = new Dictionary<NetworkPlayer, GameObject>();
+
+	string ColorCheck(PlayerOptions.CharacterStyle playercolor){
+		string color = "white";
+		if(playercolor == PlayerOptions.CharacterStyle.DEFAULT){
+			color = "white";
+		} else if(playercolor == PlayerOptions.CharacterStyle.RED){
+			color = "red";
+		} else if(playercolor == PlayerOptions.CharacterStyle.GREEN){
+			color = "green";
+		} else if(playercolor == PlayerOptions.CharacterStyle.BLUE){
+			color = "blue";
+		}
+		
+		return color;
+	}
+
+	void DetermineColor(string color, PlayerOptions.Character playchar, GameObject playeravatar){
+		print ("determinecolor");
+		GameObject tempplayer = playeravatar;
+		var playertex = playeravatar.GetComponent<UITexture>().mainTexture;
+
+		if(playchar == PlayerOptions.Character.Blue){
+			finalchar = Blue;
+		}else if(playchar == PlayerOptions.Character.Mummy){
+			finalchar = Mummy;
+		} else {
+			finalchar = Colossus;
+		}
+
+		playeravatar.GetComponent<UITexture>().mainTexture = finalchar;
+		print (playertex);
+		var tempcolor = tempplayer.GetComponent<UITexture>().color;
+		
+		if(color == "white"){
+			tempcolor = Color.white;
+		}
+		
+		if(color == "red"){
+			tempcolor = Color.red;
+		}
+		
+		if(color == "green"){
+			tempcolor = Color.green;
+		}
+		
+		if(color == "blue"){
+			tempcolor = Color.blue;
+		}
+
+		tempplayer.GetComponent<UITexture>().color = tempcolor;
+	}
 
 	//Uses psinfo to generate player score grid.
 	public void Initialize(PlayerServerInfo psInfo, float lives){
@@ -24,8 +80,13 @@ public class LivesUI : MonoBehaviour {
 			livesUI.transform.localEulerAngles = new Vector3(0f, 0f, 3f);
 			GameObject childLabel = livesUI.transform.GetChild(0).gameObject;
 			childLabel.GetComponent<UILabel>().text = lives.ToString();
-			string playerName = psInfo.GetPlayerOptions(player).username;
-			livesUI.GetComponent<UILabel>().text = playerName;
+			//string playerName = psInfo.GetPlayerOptions(player).username;
+		//	livesUI.GetComponent<UILabel>().text = playerName;
+			GameObject playeravatar = childLabel.transform.GetChild(0).gameObject;
+
+			var playertype = ColorCheck(psInfo.GetPlayerOptions(player).style);
+			var playerchar = psInfo.GetPlayerOptions(player).character;
+			DetermineColor(playertype, playerchar, playeravatar);
 			entry.Add(player, livesUI);
 		}
 	}

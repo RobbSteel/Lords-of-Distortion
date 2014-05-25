@@ -194,7 +194,7 @@ Transform:
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
   - {fileID: 400006}
@@ -224,7 +224,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 394, y: 32, z: 0}
+  m_Size: {x: 412, y: 50, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -297,7 +297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c88a168df6f597d4d8c03374eb73ad0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoscript: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -697,8 +696,11 @@ MonoBehaviour:
   LobbyName: {fileID: 11400016}
   Players: {fileID: 11400012}
   Status: {fileID: 11400014}
-  Ping: {fileID: 11400000}
+  PingLabel: {fileID: 11400000}
   JoinServer: {fileID: 11400002}
+  finishedConnection: 0
+  unableToConnect: 0
+  testing: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -22,7 +22,7 @@ public class ArenaManager : MonoBehaviour {
 	float beginTime = float.PositiveInfinity;
 	float finalPlayerTime = float.PositiveInfinity;
 	float endTime = float.PositiveInfinity;
-	float totallives = 3;
+	public float totallives;
 
 	public LivesUI livesUI;
 	int? livePlayerCount;
@@ -367,8 +367,8 @@ public class ArenaManager : MonoBehaviour {
 
 	void Awake(){
 		sessionManager = SessionManager.Instance;
-
-	
+		totallives = GameObject.Find ("PSInfo").GetComponent<PlayerServerInfo>().lives;
+		
 		playerSpawnVectors = new List<Vector3>();
 
 		foreach(Transform location in spawnPositions){
