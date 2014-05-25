@@ -715,7 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d3ab1ff8ef2ed45b0b511fb4ebff55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMusic: {fileID: 8300000, guid: fd7f270181bc62f48a3f9f8597d7adaf, type: 3}
+  newMusic: {fileID: 8300000, guid: 98700ac8948bd5b4c8bf5d0f55a5bc40, type: 3}
 --- !u!4 &212337267
 Transform:
   m_ObjectHideFlags: 0
@@ -2139,6 +2139,10 @@ Prefab:
       propertyPath: m_Volume
       value: .300000012
       objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 98700ac8948bd5b4c8bf5d0f55a5bc40, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
   m_RootGameObject: {fileID: 1552190345}
@@ -2183,7 +2187,7 @@ AudioSource:
   m_GameObject: {fileID: 1552190345}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: fd7f270181bc62f48a3f9f8597d7adaf, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 98700ac8948bd5b4c8bf5d0f55a5bc40, type: 3}
   m_PlayOnAwake: 1
   m_Volume: .300000012
   m_Pitch: 1
@@ -2645,6 +2649,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: a80a12e0d681ec34aa23b65ec1f71830, type: 2}
+      propertyPath: newMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 98700ac8948bd5b4c8bf5d0f55a5bc40, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a80a12e0d681ec34aa23b65ec1f71830, type: 2}
   m_RootGameObject: {fileID: 212337265}
