@@ -350,9 +350,7 @@ public class Hook : MonoBehaviour {
 	void hookmovingback(float speed){
 		float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 		if(distance <= .8f){
-			if(!Network.isServer)
-				DestroyHookSoft();
-			DestroyHookPossible(Authority.SERVER);
+			DestroyHookPossible(Authority.OWNER);
 		}
 		else {
 			currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, transform.position, hookSpeed);

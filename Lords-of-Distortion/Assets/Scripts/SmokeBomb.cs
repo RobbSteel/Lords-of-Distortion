@@ -24,6 +24,8 @@ public class SmokeBomb : Power {
 	private bool switchMove;
 	private Vector3 original;
 	private Vector3 end;
+	private bool playerEnteredSmoke;
+	private GameObject trackPlayerDeath;
 
 	void Awake(){
 		targets = new List<GameObject> ();
@@ -43,6 +45,7 @@ public class SmokeBomb : Power {
 
 		smoke = GetComponent<ParticleSystem>();
 		smoke.enableEmission = true;
+		playerEnteredSmoke = true;
 	}
 	
 	// Use this for initialization
@@ -58,6 +61,17 @@ public class SmokeBomb : Power {
 		//needs to move a a very minium speed otherwise it wonts colide with traps
 		//that are static sense both are static one needs to be moving in order to cause a collision
 		this.transform.position = Vector3.Lerp( original , end ,Mathf.PingPong(Time.time , 1f));
+		ResetOnPlayerDeath ();
+	}
+
+	//to reset if player dies within the smoke
+	void ResetOnPlayerDeath(){
+		if( !playerEnteredSmoke  ){
+				playerEnteredSmoke = true;
+				levelCamera.SendMessage (cameraFadeInFunctionName);
+				visionReEnabled ();
+				resetTargetLayers ();
+		}
 	}
 
 	void Move(){
@@ -118,10 +132,14 @@ public class SmokeBomb : Power {
 				SetChildrensLayer( col.gameObject , reducedVisionLayer );
 			}
 		}
+
 	}
 
 	void OnTriggerStay2D( Collider2D col ){
-		// (col.name);
+		if( col.CompareTag(playerTag) ){
+			playerEnteredSmoke = true;
+		}
+
 		if (col.CompareTag (powerTag) || col.CompareTag(powerUpTag)) {
 			//Debug.Log ("POWER DETECTED WITHINSMOKE: " + col.name);
 
@@ -139,6 +157,10 @@ public class SmokeBomb : Power {
 			col.gameObject.layer = LayerMask.NameToLayer(powerLayer);
 			SetChildrensLayer( col.gameObject , powerLayer );
 		}
+		if(col.CompareTag(playerTag)){
+			playerEnteredSmoke = false;
+		}
+
 	}
 
 	void OnDestroy(){
