@@ -75,9 +75,20 @@ public class LobbyGUI : MonoBehaviour {
         timer -= Time.deltaTime;
     }
 
-    public void PlayButton(GameObject go)
+   [RPC]
+   void synclives(float lives){
+
+		GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>().lives = lives;
+
+	}
+
+
+	public void PlayButton(GameObject go)
     {
-        Network.RemoveRPCsInGroup(0);
+		var lives = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>().lives;
+		networkView.RPC("synclives", RPCMode.Others, lives);
+
+		Network.RemoveRPCsInGroup(0);
         Network.RemoveRPCsInGroup(1);
 
 		Network.maxConnections = 0;
