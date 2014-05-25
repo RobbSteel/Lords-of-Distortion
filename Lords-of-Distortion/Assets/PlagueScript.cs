@@ -40,16 +40,16 @@ public class PlagueScript : Power
 	void AcquireTarget(){
 
 		for(int i = 0; i < possibletargets.Length; i++){
-
-			var currplayer = possibletargets[i];
-			var distance = Vector2.Distance(transform.position, currplayer.transform.position);
-			print (distance);
-			if((distance < closestdistance) && !currplayer.GetComponent<Controller2D>().dead){
-				targetplayer = currplayer;
-				closestdistance = distance;
-				print ("got ya");
+			if(possibletargets[i] != null){
+				var currplayer = possibletargets[i];
+				var distance = Vector2.Distance(transform.position, currplayer.transform.position);
+				print (distance);
+					if((distance < closestdistance) && !currplayer.GetComponent<Controller2D>().dead){
+						targetplayer = currplayer;
+						closestdistance = distance;
+						print ("got ya");
+					}
 			}
-
 		}
 
 		closestdistance = 100;
