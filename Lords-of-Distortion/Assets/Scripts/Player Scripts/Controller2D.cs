@@ -260,7 +260,7 @@ public class Controller2D : MonoBehaviour {
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
-		if(networkController.isOwner)
+
             anim.SetBool( "Ground", grounded );
 		if(inAir && grounded){
 			inAir = false;
@@ -424,7 +424,7 @@ public class Controller2D : MonoBehaviour {
 			dead = true;
 			locked = true;
 
-			myHook.DestroyHookPossible(Hook.Authority.OWNER);
+			myHook.DestroyHookPossible(Hook.Authority.SERVER);
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
 			var deadlord = GameObject.Find("DeadLordsScreen");

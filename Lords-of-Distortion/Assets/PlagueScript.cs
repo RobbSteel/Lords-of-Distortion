@@ -65,6 +65,7 @@ public class PlagueScript : Power
     public override void PowerActionStay(GameObject player, Controller2D controller)
     {
     
+		controller.Die(DeathType.PLAGUE);
     }
 
     public override void PowerActionExit(GameObject player, Controller2D controller)

@@ -43,7 +43,7 @@ public class BlackHoleRadius : Power
 	void move2BH(float speed){
 		var distance = Vector2.Distance(playerGO.transform.position, transform.position);
 		//Debug.Log (distance);
-		if (distance > 0.1) {
+		if (distance > 0.1 && !playerGO.GetComponent<Controller2D>().dead && !playerGO.GetComponent<Controller2D>().powerInvulnerable) {
 			playerGO.transform.position = Vector2.MoveTowards (playerGO.transform.position, transform.position, BHForce/distance);
 		} else 
 			entered = false;
