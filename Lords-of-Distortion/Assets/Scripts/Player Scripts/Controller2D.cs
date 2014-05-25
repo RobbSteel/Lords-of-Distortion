@@ -44,6 +44,8 @@ public class Controller2D : MonoBehaviour {
 	public bool powerInvulnerable;
 	public delegate void DieAction(GameObject gO, DeathType deathType, float lives);
 	public static event DieAction onDeath; 
+	public delegate void SpawnAction(NetworkPlayer player);
+	public static event SpawnAction onSpawn;
 	public float lives;
 	public float respawntime = 3;
 	public bool recentspawn = false;
@@ -258,6 +260,10 @@ public class Controller2D : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		networkController = GetComponent<NetworkController>();
 		status = GetComponent<PlayerStatus>();
+		if(onSpawn != null)
+		{
+			onSpawn(networkController.theOwner);
+		}
 	}
 
 	//Constantly checks if player is on the ground

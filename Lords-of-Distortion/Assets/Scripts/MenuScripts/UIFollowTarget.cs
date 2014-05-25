@@ -4,11 +4,15 @@ using System.Collections;
 public class UIFollowTarget : MonoBehaviour {
 
 	public Transform Target;
-	public Vector2 offset;
+	public Vector2 offsetScale;
 
-	void Update(){
+	void LateUpdate(){
 		if(Target == null)
+		{
 			this.enabled = false;
+			return;
+		}
+			
 		// Convert the position from world to screen so we know where to position it
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(Target.position);
 		
@@ -19,8 +23,8 @@ public class UIFollowTarget : MonoBehaviour {
 		screenPos.y -= (screenHeight / 2.0f);
 		
 		// Add the offset
-		screenPos.x += offset.x;
-		screenPos.y += offset.y;
+		screenPos.x += offsetScale.x;
+		screenPos.y += screenHeight * offsetScale.y;
 		
 		// Move the element to the right position
 		transform.localPosition = screenPos;

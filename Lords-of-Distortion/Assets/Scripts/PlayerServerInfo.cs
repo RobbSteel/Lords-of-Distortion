@@ -20,7 +20,7 @@ public class PlayerServerInfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
 
 	public static PlayerServerInfo instance = null;
-
+	
 	void Awake () {
 
 		if(instance != null){
@@ -41,6 +41,7 @@ public class PlayerServerInfo : MonoBehaviour {
 		foreach(var stats in playerStats){
 			stats.Value.LevelReset();
 		}
+		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){

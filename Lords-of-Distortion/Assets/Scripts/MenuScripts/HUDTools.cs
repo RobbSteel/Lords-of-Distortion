@@ -6,7 +6,7 @@ public class HUDTools : MonoBehaviour {
 	public GameObject heartParticles;
 
 	public UILabel PointTextPrefab;
-
+	public GameObject PlayerArrow;
 	public UIFont scoreFont;
 
 	// Use this for initialization
@@ -39,6 +39,13 @@ public class HUDTools : MonoBehaviour {
 		label.text = text;
 		StartCoroutine(FadeInOut(label, displayTime));
 	}
+
+	public void ShowPlayerArrow(GameObject player, string text)
+	{
+		GameObject arrow = Instantiate(PlayerArrow) as GameObject;
+		arrow.GetComponent<PlayerArrow>().AttachToPlayer(player.transform, text);
+		Destroy (arrow, 5f);
+	}
 	
 
 	public void ShowPoints(float points, GameObject player)
@@ -59,7 +66,7 @@ public class HUDTools : MonoBehaviour {
 
 
 		//TODO: if a player already is showing points, put above those.
-		followTarget.offset.y = player.renderer.bounds.size.y / 2f;
+		followTarget.offsetScale.y = .1f;
 
 		StartCoroutine(FadeInOut(label, displayTime));
 	}

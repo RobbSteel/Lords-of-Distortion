@@ -101,10 +101,7 @@ public class ArenaManager : MonoBehaviour {
 
 	[RPC]
 	void DecreaseLives(NetworkPlayer player, float lives){
-
 		livesUI.DecreaseLives(player, lives);
-
-
 	}
 	
 	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false, float lives = 0){
@@ -363,6 +360,7 @@ public class ArenaManager : MonoBehaviour {
 
 	void Awake(){
 		sessionManager = SessionManager.Instance;
+		sessionManager.psInfo.LevelReset();
 		totallives = GameObject.Find ("PSInfo").GetComponent<PlayerServerInfo>().lives;
 		
 		playerSpawnVectors = new List<Vector3>();
@@ -400,7 +398,7 @@ public class ArenaManager : MonoBehaviour {
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
 		FindPlatforms();
 		//reset death timers and stuff.
-		sessionManager.psInfo.LevelReset();
+
 
 		//this wont print because finishedloading is only true once all the start functions are called
 		//in every object of the scene.
@@ -416,6 +414,7 @@ public class ArenaManager : MonoBehaviour {
          *http://unity3d.com/learn/tutorials/modules/intermediate/scripting/events*/
 
 		Controller2D.onDeath += LostPlayer; //consider making this non static
+		Controller2D.onSpawn += PlayerSpawned;
 		PlayerStatus.eventAction += PlayerEventOccured;
 		PowerSlot.powerKey += SpawnTriggerPower;
 		placementUI.spawnNow += SpawnTriggerPower;
@@ -424,9 +423,16 @@ public class ArenaManager : MonoBehaviour {
 	
 	void OnDisable(){
 		Controller2D.onDeath -= LostPlayer;
+		Controller2D.onSpawn -= PlayerSpawned;
 		PlayerStatus.eventAction -= PlayerEventOccured;
 		PowerSlot.powerKey -= SpawnTriggerPower;
 		placementUI.spawnNow -= SpawnTriggerPower;
+	}
+
+
+	void PlayerSpawned(NetworkPlayer player){
+		hudTools.ShowPlayerArrow(sessionManager.psInfo.GetPlayerGameObject(player),
+		                         sessionManager.psInfo.GetPlayerOptions(player).username);
 	}
 	/*
        * 1. Load Level Geometry
