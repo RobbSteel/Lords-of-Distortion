@@ -13,7 +13,7 @@ public class SessionManager : MonoBehaviour {
     public LobbyGUI lobbyGUIscript;
 	public bool finishedLoading = false;
 	public const int GAMEPLAY = 0;
-	const int SETUP = 1;
+	public const int SETUP = 1;
 	private int playerCounter;
 	public bool matchfinish = false;
 	public float roundsplayed = 0;
@@ -190,7 +190,6 @@ public class SessionManager : MonoBehaviour {
 	}
 
 	void OnDisconnectedFromServer(){
-		//if(Network.isServer)
 		Destroy (TimeManager.instance.gameObject);
 		Destroy (gameObject);
 		Destroy (psInfo.gameObject);
@@ -227,6 +226,11 @@ public class SessionManager : MonoBehaviour {
 		matchfinish = finished;
 		finishedLoading = false;
 		Network.SetSendingEnabled(GAMEPLAY, false);
+
+		foreach (NetworkPlayer player in Network.connections) {
+			Network.SetReceivingEnabled(player, GAMEPLAY, false);
+		}
+
 		Network.isMessageQueueRunning = false;
 		Network.SetLevelPrefix(commonPrefix);
 		Application.LoadLevel(level);
@@ -234,6 +238,11 @@ public class SessionManager : MonoBehaviour {
 		yield return null;
 		Network.isMessageQueueRunning = true;
 		Network.SetSendingEnabled(GAMEPLAY, true);
+
+		foreach (NetworkPlayer player in Network.connections) {
+			Network.SetReceivingEnabled(player, GAMEPLAY, true);
+		}
+
 		finishedLoading = true;
 		TimeManager.instance.UpdateClients();
 		

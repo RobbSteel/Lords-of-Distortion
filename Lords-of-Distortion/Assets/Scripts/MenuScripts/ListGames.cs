@@ -7,6 +7,7 @@ public class ListGames : MonoBehaviour {
 	private HostData[] hostList;
 
 	List<GameObject> entries = new List<GameObject>();
+	Dictionary<string, int> cachedPings = new Dictionary<string, int>();
 
 	public UIGrid EntryGrid;
 	public GameObject EntryUI;
@@ -52,8 +53,18 @@ public class ListGames : MonoBehaviour {
 			entries.Add(entry);
 			GameEntry gameEntry = entry.GetComponent<GameEntry>();
 
+
 			//Set the buttons server value and send this value to "Join Server" script
-			gameEntry.GetPing(hostList[i]);
+			string ip = string.Concat(hostList[i].ip);
+			if(cachedPings.ContainsKey(ip))
+			{
+				gameEntry.SetPing(cachedPings[ip], ip);
+			}
+			else 
+			{
+				gameEntry.RetrievePing(hostList[i]);
+			}
+
 			gameEntry.JoinServer.hostData = hostList[i];
 			//check if button should be enabled
 			gameEntry.JoinServer.CheckButton();
@@ -73,7 +84,7 @@ public class ListGames : MonoBehaviour {
 			{
 				gameEntry.Status.text = "Lobby";
 			}
-	*/
+			*/
 			//Set the text for the buttons that you press
 			
 			//UILabel server = label.GetComponentInChildren<UILabel>();
@@ -121,14 +132,17 @@ public class ListGames : MonoBehaviour {
 		if(testingConnections && hostList.Length >  0)
 		{
 			GameEntry gameEntry = entries[currentEntry].GetComponent<GameEntry>();
-
-			if(!gameEntry.testing)
-			{
-				gameEntry.GetPing(hostList[currentEntry]);
-			}
-			else if(gameEntry.finishedConnection || gameEntry.unableToConnect)
+			//Skip needless testing if we have ping already.
+			if(gameEntry.hasPing || gameEntry.finishedConnection || gameEntry.unableToConnect)
 			{
 				currentEntry++;
+				//record ping
+				if(!cachedPings.ContainsKey(gameEntry.ip))
+					cachedPings.Add(gameEntry.ip, gameEntry.ping);
+			}
+			else if(!gameEntry.testing)
+			{
+				gameEntry.RetrievePing(hostList[currentEntry]);
 			}
 
 			//we're done

@@ -15,25 +15,34 @@ public class GameEntry : MonoBehaviour {
 	public bool finishedConnection;
 	public bool unableToConnect;
 	public bool testing;
-
-	public void GetPing(HostData host)
+	public bool hasPing = false;
+	public int ping;
+	public string ip;
+	public void RetrievePing(HostData host)
 	{
 		testing = true;
 		Network.Connect(host);
 		PingLabel.text = "--";
+		ip = string.Concat(host.ip);
+	}
+
+
+	public void SetPing(int ping, string ip)
+	{
+		PingLabel.text = ping.ToString();
+		this.ip = ip;
+		if(ping > 200)
+		{
+			PingLabel.color = Color.red;
+		}
+		hasPing = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(connected){
-			int ping = Network.GetAveragePing(Network.connections[0]);
-			PingLabel.text = ping.ToString();
-
-			if(ping > 200)
-			{
-				PingLabel.color = Color.red;
-			}
-
+			ping = Network.GetAveragePing(Network.connections[0]);
+			SetPing(ping, ip);
 			Network.Disconnect();
 			connected = false;
 			testing = false;
