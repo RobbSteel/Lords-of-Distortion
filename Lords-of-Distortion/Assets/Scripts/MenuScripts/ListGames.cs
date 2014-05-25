@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public class ListGames : MonoBehaviour {
-	
+
 	private const string typeName = "Distorton";
 	private HostData[] hostList;
 
@@ -29,7 +29,11 @@ public class ListGames : MonoBehaviour {
 
 		MasterServer.ClearHostList();
 		MasterServer.RequestHostList(typeName);
+		testingConnections = false;
+
 	}
+
+	bool testingConnections = false;
 
 	void GenerateList()
 	{	
@@ -49,7 +53,7 @@ public class ListGames : MonoBehaviour {
 			GameEntry gameEntry = entry.GetComponent<GameEntry>();
 
 			//Set the buttons server value and send this value to "Join Server" script
-			
+			gameEntry.GetPing(hostList[i]);
 			gameEntry.JoinServer.hostData = hostList[i];
 			//check if button should be enabled
 			gameEntry.JoinServer.CheckButton();
@@ -78,8 +82,8 @@ public class ListGames : MonoBehaviour {
 			int numberofplayers = hostList[i].connectedPlayers;
 			gameEntry.Players.text = numberofplayers + "/4";
 		}
-
 		EntryGrid.Reposition();
+
 	}
 
 
@@ -91,11 +95,14 @@ public class ListGames : MonoBehaviour {
 
 			if(hostList != null){
 				GenerateList();
+				testingConnections = true;
+				currentEntry = 0;
 			}
 		}
 	}
 
 
+	int currentEntry = 0;
 
 	// Used for constant refresh of the host list
 	void Update(){
@@ -104,9 +111,30 @@ public class ListGames : MonoBehaviour {
 			MasterServer.RequestHostList(typeName);
 			refreshtime = 5f;
 		}
+
 		else
 		{
 			refreshtime -= Time.deltaTime;
+		}
+
+		//Connect to each host to get ping, might be usefull for other things.
+		if(testingConnections && hostList.Length >  0)
+		{
+			GameEntry gameEntry = entries[currentEntry].GetComponent<GameEntry>();
+
+			if(!gameEntry.testing)
+			{
+				gameEntry.GetPing(hostList[currentEntry]);
+			}
+			else if(gameEntry.finishedConnection || gameEntry.unableToConnect)
+			{
+				currentEntry++;
+			}
+
+			//were done
+			if(currentEntry == entries.Count - 1){
+				testingConnections = false;
+			}
 		}
 	}
 }
