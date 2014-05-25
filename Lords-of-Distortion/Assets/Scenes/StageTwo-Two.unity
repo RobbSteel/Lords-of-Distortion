@@ -112,7 +112,7 @@ Prefab:
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 17dc5fd616fb4c44d8695b3829c1086c, type: 3}
+      objectReference: {fileID: 8300000, guid: b9240d9702641e14d806225662b628d7, type: 3}
     - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
       propertyPath: m_Volume
       value: .349999994
@@ -650,7 +650,7 @@ Prefab:
     - target: {fileID: 11400000, guid: a80a12e0d681ec34aa23b65ec1f71830, type: 2}
       propertyPath: newMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 17dc5fd616fb4c44d8695b3829c1086c, type: 3}
+      objectReference: {fileID: 8300000, guid: b9240d9702641e14d806225662b628d7, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a80a12e0d681ec34aa23b65ec1f71830, type: 2}
   m_RootGameObject: {fileID: 2112768722}
@@ -1800,6 +1800,7 @@ MonoBehaviour:
   - {fileID: 1721048721}
   - {fileID: 1623653795}
   platformlist: []
+  totallives: 0
   livesUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   placementRootPrefab: {fileID: 100004, guid: d3cd913089056b345bd90fad246e4797, type: 2}
@@ -2107,7 +2108,7 @@ AudioSource:
   m_GameObject: {fileID: 659200456}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 17dc5fd616fb4c44d8695b3829c1086c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b9240d9702641e14d806225662b628d7, type: 3}
   m_PlayOnAwake: 1
   m_Volume: .349999994
   m_Pitch: 1
@@ -6619,6 +6620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da9d8244225eb7a46afd0b9e013133ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gemHealth: 100
   earthShatter: {fileID: 19800004, guid: fb639cd72e5f4dd49afc38d15d65f7b1, type: 2}
   gemLighting: {fileID: 1814336261}
   Part1: {fileID: 281724646}
@@ -7445,7 +7447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d3ab1ff8ef2ed45b0b511fb4ebff55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMusic: {fileID: 8300000, guid: 17dc5fd616fb4c44d8695b3829c1086c, type: 3}
+  newMusic: {fileID: 8300000, guid: b9240d9702641e14d806225662b628d7, type: 3}
 --- !u!4 &2112768724
 Transform:
   m_ObjectHideFlags: 0

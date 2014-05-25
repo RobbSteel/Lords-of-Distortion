@@ -87,7 +87,7 @@ public class HookHit : MonoBehaviour {
 
 		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power" && !col.isTrigger && !returning){
 			if(!OFFLINE){
-				if(GameObject.Find("CollectData") != null){
+				if(Analytics.Enabled){
 					GA.API.Design.NewEvent("Hooked Environment", col.transform.position);
 				}
 			}
@@ -106,7 +106,7 @@ public class HookHit : MonoBehaviour {
 
 			if(Network.isServer){
 
-				if(GameObject.Find("CollectData") != null && !metriconce){
+				if(Analytics.Enabled && !metriconce){
 					GA.API.Design.NewEvent("Hook Hits", col.transform.position);
 					metriconce = true;
 				}

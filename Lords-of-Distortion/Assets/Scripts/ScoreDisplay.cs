@@ -401,7 +401,7 @@ public class ScoreDisplay : MonoBehaviour {
 					winlabel.transform.parent = GameObject.Find ("UI Root").transform;
 					
 					playerlabel.transform.localScale = new Vector3(1, 1, 1);
-					playericon.transform.localScale = new Vector3(200,200,1);
+					playericon.transform.localScale = new Vector3(300,300,1);
 					winlabel.transform.localScale = new Vector3(1,1,1);
 					
 					playerlabel.transform.localPosition = new Vector2(-400, 350+(-500));
@@ -422,7 +422,7 @@ public class ScoreDisplay : MonoBehaviour {
 					var playerclr = ColorCheck(playercolor);
 
 					GameObject playericon;
-					playericon = DetermineColorEnd(playerclr, playertype);
+					playericon = DetermineColor(playerclr, playertype);
 					
 					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
 

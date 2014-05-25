@@ -261,7 +261,7 @@ public class PlayerStatus : MonoBehaviour {
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
 
-		if(GameObject.Find("CollectData") != null){
+		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Melee Attack Hits", transform.position);
 		}
 

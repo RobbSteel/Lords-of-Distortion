@@ -165,7 +165,7 @@ public class LobbyGUI : MonoBehaviour {
 			//Check if a player is hosting or joining and execute the appropriate action
 			if(infoscript.choice == "Host")
             {
-				Network.InitializeServer(3, connectionPort, !Network.HavePublicAddress());
+				Network.InitializeServer(20, connectionPort, !Network.HavePublicAddress());
 				MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 			} 
             else if(infoscript.choice == "Find")
@@ -232,7 +232,7 @@ public class LobbyGUI : MonoBehaviour {
 		if(Network.isServer){
 
 			//Tell master server that we are no longer in game.
-			Network.maxConnections = 4;
+			Network.maxConnections = 20;
 			MasterServer.UnregisterHost();
 			MasterServer.RegisterHost(typeName, infoscript.servername, "Lobby");
 		}
