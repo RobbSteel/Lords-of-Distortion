@@ -10,7 +10,7 @@ public class Firewall : Power {
 		
 
 
-		if(GameObject.Find("CollectData") != null){
+		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Firewall Death", player.transform.position);
 		}
 		

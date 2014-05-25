@@ -26,6 +26,9 @@ public class CreateServer : MonoBehaviour {
 			var liveslabel = GameObject.Find("enterLives");
 			var lives = liveslabel.GetComponent<UILabel>().text;
 			var convert = float.Parse(lives);
+			if(convert == 0){
+				convert = 1;
+			}
 			PlayerServerInfo.instance.lives = convert;
 			Application.LoadLevel("LobbyArena");
 		}
