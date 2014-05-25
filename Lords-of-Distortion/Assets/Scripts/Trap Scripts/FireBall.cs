@@ -39,7 +39,7 @@ public class FireBall : Power
     public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
 
-		if(GameObject.Find("CollectData") != null){
+		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Fireball Death", player.transform.position);
 		}
 

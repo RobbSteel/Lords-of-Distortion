@@ -535,7 +535,7 @@ public class PlacementUI : MonoBehaviour {
 
 		spawn.position = activePower.transform.position;
 
-		if(GameObject.Find("CollectData") != null){
+		if(Analytics.Enabled){
 
 			PlacementData(activePower);
 		

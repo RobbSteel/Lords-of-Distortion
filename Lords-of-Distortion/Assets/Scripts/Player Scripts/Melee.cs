@@ -67,7 +67,7 @@ public class Melee : MonoBehaviour {
 	private void startMelee(){
 		meleeing = true;
 
-		if(GameObject.Find("CollectData") != null){
+		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Melee Attack", transform.position);
 		}
 
