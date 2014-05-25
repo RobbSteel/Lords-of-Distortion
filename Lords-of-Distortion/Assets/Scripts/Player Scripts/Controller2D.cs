@@ -448,7 +448,7 @@ public class Controller2D : MonoBehaviour {
 			//play death animation.
 			DeathAnimation(deathType);
            
-			if(GameObject.Find("LobbyGUI") == null){
+			if(GameObject.Find("LobbyGUI") == null && lives == 0){
 				GameObject.Find("UI-death").GetComponent<UISprite>().enabled = true;
 	            GameObject.Find("UI-deathCD").GetComponent<UISprite>().enabled = true;
 			}
