@@ -107,8 +107,8 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
-		if(GameObject.Find("LobbyGUI") == null){
-		lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
+		if(!OFFLINE && GameObject.Find("LobbyGUI") == null){
+			lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
 		}
 		crouchDisable = true;
 		powerInvulnerable = false;
