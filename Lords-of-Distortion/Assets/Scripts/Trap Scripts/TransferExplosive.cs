@@ -35,6 +35,7 @@ public class TransferExplosive : Power
 
 			rigidbody2D.isKinematic = true;
 			collider2D.isTrigger = true;
+			transform.parent = null;
 			//because we are now moving the rigidbody manually as opposed to letting physics do the work
 			//make it kinematic.
 		
@@ -80,7 +81,6 @@ public class TransferExplosive : Power
 						GA.API.Design.NewEvent ("Bomb Transfers", player.transform.position);
 				}
 
-				print ("Entered bomb");
 				sentRPC = true;
 				networkView.RPC ("IThinkIGotStuck", RPCMode.Server);
 			}
@@ -100,25 +100,24 @@ public class TransferExplosive : Power
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-	rigidbody2D.isKinematic = true;
-	collider2D.isTrigger = true;
+		if(col.gameObject.tag != "Player" && col.gameObject.tag != "Power")
+		{
+			rigidbody2D.isKinematic = true;
+			collider2D.isTrigger = true;
+			transform.parent = col.transform;
+		}
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
-
-
-
-			if (col.transform.name == "Boulder(Clone)" && col.transform.tag == "Power") {  
-		
-
-				GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-				explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
-				Vector3 charMarkLoc = transform.position;
-				charMarkLoc.z = 1.4f;
-				var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
-				Destroy (gameObject);
-
-			
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		if (col.transform.name == "Boulder(Clone)" && col.transform.tag == "Power") 
+		{  
+			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+			Vector3 charMarkLoc = transform.position;
+			charMarkLoc.z = 1.4f;
+			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
+			Destroy (gameObject);
 		}
 	}
 
