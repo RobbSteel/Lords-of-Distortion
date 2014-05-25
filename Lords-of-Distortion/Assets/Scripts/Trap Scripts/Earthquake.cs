@@ -32,7 +32,7 @@ public class Earthquake : Power {
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		if (GameObject.Find ("CollectData") != null) {
+		if (Analytics.Enabled) {
 			GA.API.Design.NewEvent ("Earthquake Crushes", player.transform.position);
 		}
 
@@ -130,7 +130,7 @@ public class Earthquake : Power {
 						if(controller.grounded){
 							Instantiate(groundshatter, currplayer.transform.position, currplayer.transform.rotation);
 							networkView.RPC("QuakeParticle", RPCMode.Others, currplayer.transform.position, currplayer.transform.rotation);
-							if (GameObject.Find ("CollectData") != null) {
+							if (Analytics.Enabled) {
 								GA.API.Design.NewEvent ("Earthquake Launches", currplayer.transform.position);
 							}
 

@@ -62,7 +62,7 @@ public class TransferExplosive : Power
 			//No need to confirm getting stuck if you're the server.
 			if (Network.isServer)
             {
-				if (GameObject.Find ("CollectData") != null) 
+				if (Analytics.Enabled) 
                 {
 						GA.API.Design.NewEvent ("Players Stuck", player.transform.position);
 				}
@@ -76,7 +76,7 @@ public class TransferExplosive : Power
 				//Those with lower ping at a disadvantage (since their message gets there first)
 				// but its probably not important for now.
 								
-				if (GameObject.Find ("CollectData") != null) {
+				if (Analytics.Enabled) {
 						GA.API.Design.NewEvent ("Bomb Transfers", player.transform.position);
 				}
 

@@ -12,7 +12,7 @@ public class BlackHoleCenter : Power
 	}
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-		if (GameObject.Find ("CollectData") != null) {
+		if (Analytics.Enabled) {
 			GA.API.Design.NewEvent ("BlackHole Deaths", player.transform.position);
 		}
 		controller.Die();
