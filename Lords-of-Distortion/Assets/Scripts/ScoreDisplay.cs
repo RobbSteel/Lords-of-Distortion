@@ -422,7 +422,7 @@ public class ScoreDisplay : MonoBehaviour {
 					var playerclr = ColorCheck(playercolor);
 
 					GameObject playericon;
-					playericon = DetermineColorEnd(playerclr, playertype);
+					playericon = DetermineColor(playerclr, playertype);
 					
 					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
 
