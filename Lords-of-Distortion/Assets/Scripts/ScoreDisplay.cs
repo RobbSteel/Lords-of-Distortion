@@ -401,7 +401,7 @@ public class ScoreDisplay : MonoBehaviour {
 					winlabel.transform.parent = GameObject.Find ("UI Root").transform;
 					
 					playerlabel.transform.localScale = new Vector3(1, 1, 1);
-					playericon.transform.localScale = new Vector3(200,200,1);
+					playericon.transform.localScale = new Vector3(300,300,1);
 					winlabel.transform.localScale = new Vector3(1,1,1);
 					
 					playerlabel.transform.localPosition = new Vector2(-400, 350+(-500));
