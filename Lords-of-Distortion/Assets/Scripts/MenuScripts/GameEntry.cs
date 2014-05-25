@@ -40,7 +40,7 @@ public class GameEntry : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(connected){
+		if(connected && Network.connections.Length > 0){
 			ping = Network.GetAveragePing(Network.connections[0]);
 			SetPing(ping, ip);
 			Network.Disconnect();
