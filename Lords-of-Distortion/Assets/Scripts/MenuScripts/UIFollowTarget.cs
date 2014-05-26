@@ -7,24 +7,23 @@ public class UIFollowTarget : MonoBehaviour {
 	public Vector2 offsetScale;
 
 	void LateUpdate(){
+
 		if(Target == null)
 		{
 			this.enabled = false;
 			return;
 		}
-			
-		// Convert the position from world to screen so we know where to position it
+
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(Target.position);
-		
-		// need to remove half the width and half the height since our NGUI 0, 0 is in the middle of the screen
-		float screenHeight = Screen.height;
-		float screenWidth = Screen.width;
-		screenPos.x -= (screenWidth / 2.0f);
-		screenPos.y -= (screenHeight / 2.0f);
+		Vector3 viewPos = Camera.main.WorldToViewportPoint(Target.position);
+		Vector3 uiScreenPos = UICamera.currentCamera.ViewportToScreenPoint(viewPos);
+		// Convert the position from world to screen so we know where to position it
+		Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
 		
 		// Add the offset
-		screenPos.x += offsetScale.x;
-		screenPos.y += screenHeight * offsetScale.y;
+		screenPos.y += Screen.height * offsetScale.y;
+		screenPos.x = uiScreenPos.x * 720f / Screen.height;
+		screenPos.x -= Screen.width * 720f / Screen.height /2f;
 		
 		// Move the element to the right position
 		transform.localPosition = screenPos;
