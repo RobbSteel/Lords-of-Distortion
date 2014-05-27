@@ -690,7 +690,7 @@ static public class NGUITools
 			else
 			{
 				cam.orthographic = true;
-				cam.orthographicSize = 1;
+				cam.orthographicSize = 4f;
 				cam.nearClipPlane = -10;
 				cam.farClipPlane = 10;
 			}
