@@ -7,6 +7,8 @@ public class PlayerServerInfo : MonoBehaviour {
 	public string servername;
 	public string choice;
 	public float lives;
+    public int numStages;
+
 	public PlayerOptions localOptions;
 
 	public HostData chosenHost;
