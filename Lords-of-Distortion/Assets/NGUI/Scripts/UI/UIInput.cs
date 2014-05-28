@@ -353,9 +353,6 @@ public class UIInput : MonoBehaviour
 #if UNITY_BLACKBERRY
 				|| Application.platform == RuntimePlatform.BB10Player
 #endif
-#if UNITY_PSM
-			    || Application.platform == RuntimePlatform.PSMPlayer
-#endif
 			)
 			{
 				mKeyboard = (inputType == InputType.Password) ?
