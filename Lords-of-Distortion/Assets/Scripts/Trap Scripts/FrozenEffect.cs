@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FrozenEffect : MonoBehaviour {
 
-	public Controller2D checkStun;
+	public Controller2D player;
 	private bool setupEffect;
 
 
@@ -16,25 +16,30 @@ public class FrozenEffect : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(checkStun != null){
-			transform.position = Vector2.MoveTowards(transform.position, checkStun.transform.position, 10);
+		if(player != null){
+			transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 10);
 		}
 		DestroyEffect();
 	}
 
 	void DestroyEffect(){
-		if (checkStun != null) {
+		if (player != null) {
 			Setup();
-			if (!checkStun.stunned) {
+			if (!player.stunned || player.dead)
+            {
 				Destroy(this.gameObject);
 			}
 		} 
+        else
+        {
+            Destroy(this.gameObject);
+        }
 	}
 
 	void Setup(){
 		if (!setupEffect) {
-			transform.position = checkStun.transform.position;
-			this.transform.parent = checkStun.transform;
+			transform.position = player.transform.position;
+			this.transform.parent = player.transform;
 			setupEffect = true;
 		}
 	}

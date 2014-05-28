@@ -49,8 +49,8 @@ public class FreezeTrap : Power {
 		var playercontroller = playerObject.GetComponent<Controller2D>();
 		applyDmg = playercontroller.GetComponent<PlayerStatus> ();
 		applyDmg.Frozen();
-		tempfreeze.GetComponent<FrozenEffect>().checkStun = playercontroller;
-		print (tempfreeze.GetComponent<FrozenEffect>().checkStun);
+		tempfreeze.GetComponent<FrozenEffect>().player = playercontroller;
+		print (tempfreeze.GetComponent<FrozenEffect>().player);
 	}
 
 	public override void PowerActionEnter(GameObject player, Controller2D controller)
@@ -65,7 +65,7 @@ public class FreezeTrap : Power {
 				player.rigidbody2D.drag = 0;
 				applyDmg.Frozen();
                 frozenEffect = (GameObject)Instantiate(Resources.Load("FrozenEffect"), player.transform.position, Quaternion.identity);
-                frozenEffect.GetComponent<FrozenEffect>().checkStun = controller;
+                frozenEffect.GetComponent<FrozenEffect>().player = controller;
                 frozenplayer = controller;
                 currentplayer = player;
 
@@ -96,7 +96,7 @@ public class FreezeTrap : Power {
                 applyDmg.Frozen();
                 player.rigidbody2D.drag = 0;
                 frozenEffect = (GameObject)Instantiate(Resources.Load("FrozenEffect"), player.transform.position, Quaternion.identity);
-                frozenEffect.GetComponent<FrozenEffect>().checkStun = controller;
+                frozenEffect.GetComponent<FrozenEffect>().player = controller;
                 frozenplayer = controller;
                 currentplayer = player;
 

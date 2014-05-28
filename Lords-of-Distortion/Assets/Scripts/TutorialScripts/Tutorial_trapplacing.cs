@@ -17,7 +17,7 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	public string deathMessage;
 	public string finishedMessage;
 	public GameObject powerToKillPlayer;
-	public GameObject waringSign;
+	public GameObject warningSign;
 	private SceneFadeInOut transitionToNewScene;
 	private bool endScene;
 	private float fadeTimer;
@@ -184,8 +184,8 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	IEnumerator teachDeathScreen(){
 		deathScreenEvent = true;
 		deathscreen = GameObject.Find( "OfflinePlacement(Clone)").GetComponent<PlacementUI>();
-		waringSign.transform.position = player.transform.position;
-		waringSign.SetActive (true);
+		warningSign.transform.position = player.transform.position;
+		warningSign.SetActive (true);
 		yield return new WaitForSeconds (0.5f);
 		//player.GetComponent<Controller2D> ().locked = true;
 		setupPowerToUse();
@@ -199,8 +199,8 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	}
 
 	public void setupPowerToUse(){
-		powerToKillPlayer.transform.position = waringSign.transform.position;
-		Destroy (waringSign);
+		powerToKillPlayer.transform.position = warningSign.transform.position;
+		Destroy (warningSign);
 		powerToKillPlayer.SetActive (true);
 	}
 
