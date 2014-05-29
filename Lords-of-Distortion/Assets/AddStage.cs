@@ -24,7 +24,7 @@ public class AddStage : MonoBehaviour {
         fillGrid.transform.localScale *= 39;
         StageSelect script = fillGrid.GetComponent<StageSelect>();
         Destroy(script);
-		
+        pickselect.LevelGrid.Reposition();
 	}
 
 	void FillBox(){
@@ -74,7 +74,7 @@ public class AddStage : MonoBehaviour {
                         pickselect.numberofpicks++;
                         //FillBox();
                         FillBoxes();
-                        pickselect.LevelGrid.Reposition();
+                        //pickselect.LevelGrid.Reposition();
                         networkView.RPC("FillBoxes", RPCMode.Others);
                         break;
                     }
