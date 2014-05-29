@@ -5,25 +5,20 @@ public class IncrementRoundsNum : MonoBehaviour {
 
     public UILabel enterRoundsLabel;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void OnPress(bool isDown)
     {
         if (isDown)
             return;
-        Debug.Log("PLUS PRESSED");
+        
         int rounds = int.Parse(enterRoundsLabel.text);
-        if (rounds <= 5)
+        
+        if (rounds < 5)
         {
             rounds++;
+        }
+        else if(rounds == 5)
+        {
+            rounds = 1;
         }
         enterRoundsLabel.text = rounds.ToString();
     }
