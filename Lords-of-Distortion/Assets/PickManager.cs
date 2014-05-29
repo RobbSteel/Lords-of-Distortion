@@ -47,7 +47,7 @@ public class PickManager : MonoBehaviour {
 
 			//Play our set of levels
 			if(!sentLevelLoadRPC){
-				if(Network.isServer){
+				if(Network.isServer && manager != null){
 					manager.LoadNextLevel(false);
 					sentLevelLoadRPC = true;
 				}

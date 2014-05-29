@@ -290,7 +290,7 @@ public class SessionManager : MonoBehaviour {
 			}
 		}
 		
-		if(roundsplayed == 4 && scorescreen){
+		if(roundsplayed == arenas.Length && scorescreen){
 			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;

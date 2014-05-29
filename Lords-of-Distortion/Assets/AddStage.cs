@@ -14,12 +14,16 @@ public class AddStage : MonoBehaviour {
 
 
 	[RPC]
-	void FillBoxes(int boxnum){
+	void FillBoxes(){//int boxnum){
 
-		GameObject pickdisplay = (GameObject)Instantiate(stagedisplay, new Vector3(-8.5f +(boxnum * 1.5f),2.5f,0), transform.rotation);
-		pickdisplay.transform.localScale *= .45f;
-		var displayscript = pickdisplay.gameObject.GetComponent<StageSelect>();
-		Destroy(displayscript);
+		//GameObject pickdisplay = (GameObject)Instantiate(stagedisplay, new Vector3(-8.5f +(boxnum * 1.5f),2.5f,0), transform.rotation);
+		//pickdisplay.transform.localScale *= .45f;
+		//var displayscript = pickdisplay.gameObject.GetComponent<StageSelect>();
+		//Destroy(displayscript);
+        GameObject fillGrid = NGUITools.AddChild(pickselect.LevelGrid.gameObject, stagedisplay);
+        fillGrid.transform.localScale *= 39;
+        StageSelect script = fillGrid.GetComponent<StageSelect>();
+        Destroy(script);
 		
 	}
 
@@ -68,10 +72,10 @@ public class AddStage : MonoBehaviour {
                     {
                         pickselect.picks[i] = stagename;
                         pickselect.numberofpicks++;
-                        FillBox();
-                        //GameObject fillGrid = NGUITools.AddChild(pickselect.LevelGrid.gameObject, stagedisplay);
+                        //FillBox();
+                        FillBoxes();
                         pickselect.LevelGrid.Reposition();
-                        networkView.RPC("FillBoxes", RPCMode.Others, i + 1);
+                        networkView.RPC("FillBoxes", RPCMode.Others);
                         break;
                     }
                 }
