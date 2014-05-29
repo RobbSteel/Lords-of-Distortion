@@ -6,7 +6,6 @@ public class CreateServer : MonoBehaviour {
 	//public GameObject mainscript;
 	public MainGui playerscript;
     public GameObject playerName;
-    public UILabel numStages;
 
 	// Use this for initialization
 	void Start () {
@@ -32,9 +31,11 @@ public class CreateServer : MonoBehaviour {
 				convert = 1;
 			}
 
+            var numStages = GameObject.Find("enterRounds").GetComponent<UILabel>().text;
+
 			PlayerServerInfo.instance.lives = convert;
-            PlayerServerInfo.instance.numStages = int.Parse(numStages.text);
-            Debug.Log("NUMBER OF STAGES : " + int.Parse(numStages.text));
+            PlayerServerInfo.instance.numStages = int.Parse(numStages);
+            //Debug.Log("NUMBER OF STAGES : " + PlayerServerInfo.instance.numStages);
 			Application.LoadLevel("LobbyArena");
 		}
 	}	
