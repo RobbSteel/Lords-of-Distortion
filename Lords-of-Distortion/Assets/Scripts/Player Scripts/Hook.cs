@@ -74,18 +74,15 @@ public class Hook : MonoBehaviour {
 
 	}
 
-	//Called on server
-	[RPC]
-	void NotifyShootHook(float originX, float originY, float targetX, float targetY){
-		networkView.RPC("ShootHookSimulate", RPCMode.Others,  originX, originY, targetX, targetY);
-		ShootHookLocal(originX, originY, targetX, targetY);
-	}
-
 	[RPC]
 	void ShootHookSimulate(float originX, float originY, float targetX, float targetY){
 		if(networkController.isOwner)
 			return;
 		ShootHookLocal(originX, originY, targetX, targetY);
+	}
+
+	[RPC] void RetractHookEarly(){
+		ReturnHook();
 	}
 
 	float hookSpeed = 0f;
@@ -140,6 +137,10 @@ public class Hook : MonoBehaviour {
 				else if(currentState == HookState.GoingOut)
 				{
 					ReturnHook();
+					if(!OFFLINE)
+					{
+						networkView.RPC("RetractHookEarly", RPCMode.Others);
+					}
 				}
 			} 
 		}
@@ -158,12 +159,7 @@ public class Hook : MonoBehaviour {
 					if(Analytics.Enabled){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);
 					}
-					
-					if(Network.isServer)
-						networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
-					
-					else
-						networkView.RPC("NotifyShootHook", RPCMode.Server, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
+					networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 				}
 				ShootHookLocal(transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 			}
@@ -256,19 +252,6 @@ public class Hook : MonoBehaviour {
 				networkView.RPC ("NotifyDestroyHook", RPCMode.Others);
 				DestroyHook();
 			}
-
-			/*
-			if(Network.isServer){
-				foreach(NetworkPlayer player in SessionManager.Instance.psInfo.players){
-					if(player != networkController.theOwner && player != Network.player)
-						networkView.RPC ("NotifyDestroyHook", player);
-				}
-				DestroyHook();
-			}
-			else{
-
-			}
-			 * */
 		}
 		else {
 			DestroyHook();
