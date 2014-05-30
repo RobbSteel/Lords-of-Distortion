@@ -584,7 +584,7 @@ public class ArenaManager : MonoBehaviour {
 				FinishGame(true);
 			}
 		}
-		else if(currentPhase == Phase.Finish && currentTime >= endTime){
+		else if(currentPhase == Phase.Finish && currentTime >= endTime + 3){
 			//game ended, load level
 			if(Network.isServer){
 				sessionManager.LoadNextLevel(true);

@@ -167,7 +167,7 @@ public class PlacementUI : MonoBehaviour {
 	void AddToInventory(InventoryPower associatedPower){
 
 		foreach(PowerBoard board in fixedBoards){
-
+            
 			if(board.currentPower == null){
 				//add slot as child to empty board
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
@@ -685,16 +685,25 @@ public class PlacementUI : MonoBehaviour {
 	public void Resupply(){
         // Make sure players can only hold at most 2 powers. In their inventory and on the map.
 		if(inventoryPowers.Count < 2){
-			//avoid giving same power
-			PowerType newPower = PowerType.UNDEFINED;
-			do {
-				newPower =  PowerTypeExtensions.RandomPower();
-			} while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
+            foreach(PowerBoard board in fixedBoards)
+            { 
+			    //avoid giving same power
+                if(board.currentPower == null)
+                { 
+			        PowerType newPower = PowerType.UNDEFINED;
+			        do {
+                        if (board.index == 1)
+                            newPower = PowerTypeExtensions.RandomActivePower();//.RandomPower();
+                        else if (board.index == 2)
+                            newPower = PowerTypeExtensions.RandomPassivePower();
+			        } while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
 
-			InventoryPower freePower = new InventoryPower(newPower, false);
+			        InventoryPower freePower = new InventoryPower(newPower, false);
 
-			inventoryPowers.Add(newPower, freePower);
-			AddToInventory(freePower);
+			        inventoryPowers.Add(newPower, freePower);
+			        AddToInventory(freePower);
+                }
+            }
         }
 	}
 
