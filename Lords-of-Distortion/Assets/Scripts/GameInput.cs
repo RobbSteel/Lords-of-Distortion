@@ -2,13 +2,18 @@
 using System.Collections;
 using InControl;
 
-public class InputUpdater : MonoBehaviour {
 
 
-	public static InputUpdater instance;
+public class GameInput : MonoBehaviour {
+
+
+	public static GameInput instance;
 	// Use this for initialization
 
 	public bool usingGamePad = true;
+
+
+	public KeyCode JumpKey = KeyCode.Space;
 
 	void Awake()
 	{
@@ -30,3 +35,5 @@ public class InputUpdater : MonoBehaviour {
 		InputManager.Update();
 	}
 }
+
+

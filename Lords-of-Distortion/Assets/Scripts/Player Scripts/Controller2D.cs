@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using InControl;
 
 public enum DeathType{
 	CRUSH,
@@ -157,10 +157,11 @@ public class Controller2D : MonoBehaviour {
 
 		if(!OFFLINE && !networkController.isOwner)
 			return;
+
 		if(!hooked && !locked){
 
-		    Jump();
-		    stoppedJump = Input.GetButtonUp("Jump");
+		    JumpInput();
+
 			Crouch();
             if(snared)
             { 
@@ -176,6 +177,31 @@ public class Controller2D : MonoBehaviour {
                 }
             }
         }		
+	}
+
+	private void JumpInput(){
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && canJump)
+		{
+			if(GameInput.instance.usingGamePad)
+			{
+				if(InputManager.ActiveDevice.Action1.WasPressed)
+					jumpRequested = true;
+			}
+			else 
+			{
+				if(Input.GetKeyDown(KeyMapping.JumpKey))
+					jumpRequested = true;
+			}
+		}
+
+		if(GameInput.instance.usingGamePad)
+		{
+			stoppedJump = !InputManager.ActiveDevice.Action1.IsPressed;
+		}
+		else 
+		{
+			stoppedJump = Input.GetKeyUp(KeyMapping.JumpKey);
+		}
 	}
 	
 	float previousY = 0f;
@@ -238,11 +264,7 @@ public class Controller2D : MonoBehaviour {
 		}
 }
 
-	private void Jump(){
-		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Jump") && canJump){
-			jumpRequested = true;
-		}
-	}
+
 	
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
 	private void Crouch(){

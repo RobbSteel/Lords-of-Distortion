@@ -112,7 +112,7 @@ public class Hook : MonoBehaviour {
 	void HandleShootInput()
 	{
 
-		if(InputUpdater.instance.usingGamePad)
+		if(GameInput.instance.usingGamePad)
 		{
 			InputDevice device = InputManager.ActiveDevice;
 			
@@ -129,7 +129,7 @@ public class Hook : MonoBehaviour {
 					{
 						directionInput = device.DPad.Vector;
 					}
-					else if(device.LeftStick.Vector.magnitude > 0.01f) 
+					else if(device.LeftStick.Vector.sqrMagnitude > 0.01f) 
 					{
 						directionInput = device.LeftStick.Vector;
 					}
