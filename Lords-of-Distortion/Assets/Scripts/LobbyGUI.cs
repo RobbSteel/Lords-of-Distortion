@@ -211,6 +211,11 @@ public class LobbyGUI : MonoBehaviour {
     public void CreateReadyLight(NetworkPlayer player)
     {
         GameObject icons = NGUITools.AddChild(IconsGrid.gameObject, readyImagePrefab);
+
+        string playerName = infoscript.GetPlayerOptions(player).username;
+        icons.GetComponentInChildren<UILabel>().text = playerName;
+        icons.GetComponentInChildren<UILabel>().transform.localEulerAngles = new Vector3(0, 0, 6);
+
         readyIcons.Add(icons);
         IconsGrid.Reposition();
         dictionary.Add(player, icons);
