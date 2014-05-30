@@ -125,7 +125,7 @@ public class Hook : MonoBehaviour {
 					directionInput.y = 0;
 					directionInput.z = 0;
 					
-					if(device.DPad.Vector.magnitude > 0f)
+					if(device.DPad.Vector.sqrMagnitude > 0f)
 					{
 						directionInput = device.DPad.Vector;
 					}

@@ -161,8 +161,9 @@ public class Controller2D : MonoBehaviour {
 		if(!hooked && !locked){
 
 		    JumpInput();
-
+			move = GetHorizontalInput();
 			Crouch();
+
             if(snared)
             { 
                 rigidbody2D.gravityScale = 1;
@@ -200,7 +201,38 @@ public class Controller2D : MonoBehaviour {
 		}
 		else 
 		{
-			stoppedJump = Input.GetKeyUp(KeyMapping.JumpKey);
+			stoppedJump = !Input.GetKey(KeyMapping.JumpKey);
+		}
+	}
+
+	private float GetHorizontalInput()
+	{
+		if(GameInput.instance.usingGamePad)
+		{
+			InputDevice device = InputManager.ActiveDevice;
+			if(device.DPad.Left.IsPressed)
+			{
+				return -1f;
+			}
+			else if(device.DPad.Right.IsPressed)
+			{
+				return 1f;
+			}
+			else
+			{
+				return device.LeftStickX.Value;
+			}
+		}
+		else
+		{
+			if(Input.GetKey(KeyMapping.LeftKey))
+			{
+				return -1f;
+			}
+			else if(Input.GetKey(KeyMapping.RightKey))
+			{
+				return 1f;
+			}
 		}
 	}
 	
@@ -311,8 +343,6 @@ public class Controller2D : MonoBehaviour {
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled
-			//if(!grounded) return;
-		    move = Input.GetAxis ( "Horizontal" );
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			//Problem: THis sets velocity to zero.
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
