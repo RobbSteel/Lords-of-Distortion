@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class Hook : MonoBehaviour {
 
@@ -107,19 +108,44 @@ public class Hook : MonoBehaviour {
 		currentHook.returning = true;
 	}
 
-	void Update(){
-		hookSpeed = Time.deltaTime * speedRatio;
 
+	void HandleShootInput()
+	{
 
-        if(hooktimer > 0)
-        {
-            hooktimer -= Time.deltaTime;
-        }
-
-		currentDrag = controller2D.rigidbody2D.drag;
-		//Get input from user and set cooldown to avoid repeated use.
-		if(currentState == HookState.None || currentState == HookState.Hidden){
-			if (Input.GetMouseButtonDown(1) && networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable && !controller2D.crouching )
+		if(InputUpdater.instance.usingGamePad)
+		{
+			InputDevice device = InputManager.ActiveDevice;
+			
+			if(device.Action4.WasPressed)
+			{
+				if(currentState == HookState.None || currentState == HookState.Hidden)
+				{
+					//Default to whatever direction you're facing.
+					Vector3 directionInput = transform.localScale;
+					directionInput.y = 0;
+					directionInput.z = 0;
+					
+					if(device.DPad.Vector.magnitude > 0f)
+					{
+						directionInput = device.DPad.Vector;
+					}
+					else if(device.LeftStick.Vector.magnitude > 0.01f) 
+					{
+						directionInput = device.LeftStick.Vector;
+					}
+					
+					Vector3 targetPosition = transform.position + (directionInput.normalized * 100f);
+					ShootHookLocal(transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
+				}
+				else if(currentState == HookState.GoingOut)
+				{
+					ReturnHook();
+				}
+			} 
+		}
+		else if (Input.GetMouseButtonDown(1))
+		{
+			if(currentState == HookState.None || currentState == HookState.Hidden)
 			{
 				animator.SetFloat("Speed", 0);
 				Vector3 mouseClick = Input.mousePosition;
@@ -139,10 +165,23 @@ public class Hook : MonoBehaviour {
 					else
 						networkView.RPC("NotifyShootHook", RPCMode.Server, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 				}
-				
 				ShootHookLocal(transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
 			}
 		}
+	}
+	//
+	void Update(){
+		hookSpeed = Time.deltaTime * speedRatio;
+
+        if(hooktimer > 0)
+        {
+        	hooktimer -= Time.deltaTime;
+        }
+
+		currentDrag = controller2D.rigidbody2D.drag;
+		//Get input from user and set cooldown to avoid repeated use.
+		if(networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable && !controller2D.crouching)
+			HandleShootInput();
 
 		if(currentState == HookState.GoingOut)
 		{
