@@ -575,7 +575,8 @@ public class PlacementUI : MonoBehaviour {
 		//Either go back to default state or require setting a direction.
 		if(activePowerType.TypeRequiresDirection()){
 			state = PlacementState.ChangingDirection;
-			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
+			dottedLineInstance = Instantiate(dottedLine, spawn.position, dottedLine.transform.rotation) as GameObject;
+			dottedLineInstance.transform.parent = activePower.transform;
             activePower.AddComponent<powerRotate>();
 		}
 		else {
