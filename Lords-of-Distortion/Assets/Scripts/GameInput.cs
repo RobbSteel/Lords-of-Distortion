@@ -14,7 +14,9 @@ public class GameInput : MonoBehaviour {
 
 
 	//Use this instead of Input.mousePosition
-	public Vector2 cursorPosition;
+	private Vector2 cursorPosition;
+	public Vector2 MousePosition;
+
 	public Texture2D CursorTexture;
 	float analogSensitity = 750f;
 
@@ -38,7 +40,8 @@ public class GameInput : MonoBehaviour {
 
 	void Update () {
 		InputManager.Update();
-		GamePadToCursor();
+		if(usingGamePad)
+			GamePadToCursor();
 	}
 
 	bool useCustomCursor = false;
@@ -59,17 +62,23 @@ public class GameInput : MonoBehaviour {
 		InputDevice device = InputManager.ActiveDevice;
 		cursorPosition.x += device.RightStickX.Value * analogSensitity * Time.deltaTime;
 		cursorPosition.y += -device.RightStickY.Value * analogSensitity * Time.deltaTime;
+
+		MousePosition.x = cursorPosition.x;
+		MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y; //flip coordinates
 	}
 
 	void OnGUI()
 	{
-		Vector2 mousePosition = Event.current.mousePosition;
+		Vector2 mousePositionUI = Event.current.mousePosition;
 		//We moved our mouse. Ignore gamepad's cursor location and use mouse's
-		if(oldMousePosition != mousePosition)
+		if(oldMousePosition != mousePositionUI)
 		{
-			cursorPosition = mousePosition;
+			cursorPosition = mousePositionUI;
+			MousePosition.x = cursorPosition.x;
+			MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y;
 		}
-		oldMousePosition = mousePosition;
+
+		oldMousePosition = mousePositionUI;
 
 		if(useCustomCursor)
 		{

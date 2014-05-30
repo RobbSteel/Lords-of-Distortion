@@ -12,12 +12,12 @@ public class MouseFollow : MonoBehaviour {
 	}
 
 	//TODO: Instead of re-centering object, retain offset from mouse.
-	// Update is called once per frame
 	void Update ()
     {
-		transform.position = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.0f));
-		Vector3 temp = new Vector3(0, 0, 10.0f);
-		transform.position += temp;
+		Vector3 worldPosition  = camera.ScreenToWorldPoint(new Vector3(GameInput.instance.MousePosition.x, GameInput.instance.MousePosition.y, 0.0f));
+		worldPosition.z = 10f;
+		transform.position = worldPosition;
+
     }
 
 }
