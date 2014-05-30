@@ -172,16 +172,17 @@ public class PlacementUI : MonoBehaviour {
 				//add slot as child to empty board
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
 
-				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower);
+				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower, board.index);
 				slot.GetComponent<UIWidget>().depth = 2;
 				slots.Add(slot);
+				UIEventListener.Get(slot).onPress  += PowerButtonClick;
+
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				UIButton button = slot.GetComponent<UIButton>();
 				buttons.Add(button);
 				//disable button with the rest of em
 				if(state != PlacementState.Default)
 					button.isEnabled = false;
-				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
 				//Make boards accessible by current power type
 				PowerBoard boardReference = null;
@@ -189,7 +190,7 @@ public class PlacementUI : MonoBehaviour {
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
 				}
-				GiveTrigger(slot, board.index);
+
 				break;
 			}
 		}
@@ -212,14 +213,6 @@ public class PlacementUI : MonoBehaviour {
 			GridEnabled(false);
 		}
 	}
-
-	//Enable text label and set a key
-	void GiveTrigger(GameObject slot, int triggerKey){
-		slot.GetComponent<PowerSlot>().keyText = triggerKey.ToString();
-		slot.GetComponentInChildren<UILabel>().enabled = true;
-		slot.GetComponentInChildren<UILabel>().text = triggerKey.ToString();
-	}
-
 
 	/// <summary>
 	///Place powers instantly without using triggers. 
@@ -450,8 +443,6 @@ public class PlacementUI : MonoBehaviour {
 		spawn.SetTimer(ARM_TIME); //start armament time
 		PowerBoard relevantBoard = boardsByType[spawn.type];
 		PowerSlot slotFromBoard = relevantBoard.currentPower;
-		//Give button a trigger (inital color)
-		GiveTrigger(slotFromBoard.gameObject, relevantBoard.index);
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;

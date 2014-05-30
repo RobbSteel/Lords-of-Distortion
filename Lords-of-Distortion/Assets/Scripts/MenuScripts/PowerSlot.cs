@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class PowerSlot : MonoBehaviour {
-
-    const float FIGHT_COUNT_DOWN_TIME = 5f;
-
     public PowerSpawn linkedSpawn;
     public bool wasSpawned = false;
 	public delegate void KeyPress(PowerSpawn spawnInfo, GameObject button);
@@ -12,27 +10,40 @@ public class PowerSlot : MonoBehaviour {
 	UILabel keyLabel;
 	UIButton button;
 	UI2DSprite powerIcon;
-	public string keyText;
+	public string ActivationKey;
 	bool activationEnabled = false;
 	public bool activationMode = false;
-	
 	public InventoryPower associatedPower;
 
 	static Color Green = new Color(0f, 230f, 0f);
-	void Start(){
+
+
+	InputControlType activationButton;
+
+	void Start()
+	{
 		button = GetComponent<UIButton>();
 	}
 
 
-	public void Initialize(Sprite sprite, InventoryPower power){
+	public void Initialize(Sprite sprite, InventoryPower power, int boardIndex){
+		keyLabel = GetComponentInChildren<UILabel>();
+		keyLabel.enabled = true;
+		keyLabel.text = boardIndex.ToString();
+		ActivationKey = boardIndex.ToString();
+
 		associatedPower = power;
-        if(transform.Find("TriggerKey") != null)
-        { 
-			keyLabel = transform.Find("TriggerKey").GetComponent<UILabel>();
-        }
 		powerIcon = GetComponent<UI2DSprite>();
 		powerIcon.sprite2D = sprite;
-		//powerIcon.width = powerIcon.calc
+
+		if(boardIndex == 1)
+		{
+			activationButton = InputControlType.LeftBumper;
+		}
+		else 
+		{
+			activationButton = InputControlType.RightBumper;
+		}
 	}
 
 	public void SetSpawn(PowerSpawn linkedSpawn){
@@ -61,6 +72,7 @@ public class PowerSlot : MonoBehaviour {
 	}
 
 	void RequestSpawn(GameObject go, bool isDown){
+
 		if(isDown){
 			return;
 		}
@@ -73,17 +85,18 @@ public class PowerSlot : MonoBehaviour {
 
 	// Check for key press and call event .
 	void Update () {
-		if(Input.GetKeyDown(keyText)){
-			if(activationEnabled){
-				wasSpawned = true;
-				powerKey(linkedSpawn, this.gameObject);
-			}
-			else {
-				//simulate a button press
+		if(GameInput.instance.usingGamePad)
+		{
+			if(InputManager.ActiveDevice.GetControl(activationButton).WasPressed)
+			{
 				if(button.isEnabled)
 					UIEventListener.Get(gameObject).onPress(gameObject, false);
 			}
-
+		}
+		else if(Input.GetKeyDown(ActivationKey)){
+			//simulate a button press
+			if(button.isEnabled)
+					UIEventListener.Get(gameObject).onPress(gameObject, false);
 		}
 	}
 }
