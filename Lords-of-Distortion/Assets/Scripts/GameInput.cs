@@ -43,7 +43,8 @@ public class GameInput : MonoBehaviour {
 		InputManager.Update();
 		InputDevice activeDevice = InputManager.ActiveDevice;
 		//Were using the gamepad if its state has changed.
-		usingGamePad = (activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State);
+		usingGamePad = (activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
+		                || activeDevice.RightTrigger.IsPressed || activeDevice.RightBumper.IsPressed);
 		if(usingGamePad)
 			GamePadToCursor();
 	}

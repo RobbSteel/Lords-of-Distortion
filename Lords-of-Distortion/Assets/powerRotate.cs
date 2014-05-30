@@ -14,7 +14,7 @@ public class powerRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
+		Vector3 mousePos = new Vector3(GameInput.instance.MousePosition.x, GameInput.instance.MousePosition.y, 10f);
         Vector3 lookPos = cam.ScreenToWorldPoint(mousePos);
         lookPos = lookPos - transform.position;
         float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;

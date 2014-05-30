@@ -38,11 +38,11 @@ public class PowerSlot : MonoBehaviour {
 
 		if(boardIndex == 1)
 		{
-			activationButton = InputControlType.LeftBumper;
+			activationButton = InputControlType.RightBumper;
 		}
 		else 
 		{
-			activationButton = InputControlType.RightBumper;
+			activationButton = InputControlType.RightTrigger;
 		}
 	}
 
