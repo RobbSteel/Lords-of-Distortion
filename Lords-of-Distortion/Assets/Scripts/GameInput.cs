@@ -39,7 +39,11 @@ public class GameInput : MonoBehaviour {
 	}
 
 	void Update () {
+
 		InputManager.Update();
+		InputDevice activeDevice = InputManager.ActiveDevice;
+		//Were using the gamepad if its state has changed.
+		usingGamePad = (activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State);
 		if(usingGamePad)
 			GamePadToCursor();
 	}
@@ -71,7 +75,7 @@ public class GameInput : MonoBehaviour {
 	{
 		Vector2 mousePositionUI = Event.current.mousePosition;
 		//We moved our mouse. Ignore gamepad's cursor location and use mouse's
-		if(oldMousePosition != mousePositionUI)
+		if(!usingGamePad && oldMousePosition != mousePositionUI)
 		{
 			cursorPosition = mousePositionUI;
 			MousePosition.x = cursorPosition.x;
