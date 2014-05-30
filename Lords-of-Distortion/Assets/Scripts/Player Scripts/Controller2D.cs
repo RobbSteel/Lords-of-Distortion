@@ -162,7 +162,7 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
-			Crouch();
+			CrouchInput();
 
             if(snared)
             { 
@@ -298,24 +298,49 @@ public class Controller2D : MonoBehaviour {
 
 	
 		}
-}
-
+	}
 
 	
-	//checks to see if our player can crouch and resets crouch once Crouch Input is released
-	private void Crouch(){
-		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Crouch") && !crouchDisable ){
-			moveDisable = true;
 
-			canJump = false;
-			crouching = true;
-			anim.SetBool("Crouch", crouching );
+	private void SetCrouchState(bool enabled)
+	{
+		canJump = !enabled;
+		moveDisable = enabled;
+		crouching = enabled;
+		anim.SetBool("Crouch", enabled);
+	}
+
+	//checks to see if our player can crouch and resets crouch once Crouch Input is released
+	private void CrouchInput(){
+		if(crouchDisable)
+			return;
+
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded){
+			if(GameInput.instance.usingGamePad)
+			{
+				if(InputManager.ActiveDevice.DPadDown.WasPressed ||
+				   InputManager.ActiveDevice.LeftStick.Down.Value > .8f)
+				{
+					SetCrouchState(true);
+				}
+					
+			}
+			else if(Input.GetKeyDown(KeyMapping.CrouchKey))
+			{
+				SetCrouchState(true);
+			}
 		}
-		if( Input.GetButtonUp("Crouch") && !crouchDisable ){
-			crouching = false;
-			canJump = true;
-			moveDisable = false;
-			anim.SetBool("Crouch", crouching );
+		if(GameInput.instance.usingGamePad)
+		{
+			if(InputManager.ActiveDevice.DPadDown.WasReleased ||
+			   InputManager.ActiveDevice.LeftStick.Down.Value < .75f)
+			{
+				SetCrouchState(false);
+			}
+		}
+		else if(Input.GetKeyUp(KeyMapping.CrouchKey))
+		{
+			SetCrouchState(false);
 		}
 	}
 
