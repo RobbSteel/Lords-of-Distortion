@@ -233,6 +233,10 @@ public class Controller2D : MonoBehaviour {
 			{
 				return 1f;
 			}
+			else
+			{
+				return 0f;
+			}
 		}
 	}
 	
