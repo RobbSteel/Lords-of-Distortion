@@ -117,11 +117,6 @@ public class TransferExplosive : Power
 	{
 		if (col.transform.name == "Boulder(Clone)" && col.transform.tag == "Power") 
 		{  
-			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
-			Vector3 charMarkLoc = transform.position;
-			charMarkLoc.z = 1.4f;
-			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
 			Destroy (gameObject);
 		}
 	}
@@ -139,18 +134,7 @@ public class TransferExplosive : Power
 		//Blow up if the time is out
 		if (timer <= 0 && !exploded)
         {
-			//var playercontroller = playerstuck.GetComponent<Controller2D>();
-		    //playercontroller.hasbomb = false;
-			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
 			exploded = true;
-			if(playerstuck != null){
-				var playercontroller = playerstuck.GetComponent<Controller2D>();
-			    playercontroller.hasbomb = false;
-			}
-			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
-			Vector3 charMarkLoc = transform.position;
-            charMarkLoc.z = 1.4f;
-			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
 			Destroy (gameObject);
             
 		} else {
@@ -175,11 +159,6 @@ public class TransferExplosive : Power
 			if(playercontroller.dead)
             {
 				playercontroller.hasbomb = false;
-				GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-				explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
-				Vector3 charMarkLoc = transform.position;
-				charMarkLoc.z = 1.4f;
-				var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
 				Destroy (gameObject);
 			}
 
@@ -188,6 +167,22 @@ public class TransferExplosive : Power
 		}  
 		timer -= Time.deltaTime;
 			
+	}
+
+	void OnDisable()
+	{
+		if(spawnInfo != null)
+		{
+			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+			if(playerstuck != null){
+				var playercontroller = playerstuck.GetComponent<Controller2D>();
+				playercontroller.hasbomb = false;
+			}
+			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
+			Vector3 charMarkLoc = transform.position;
+			charMarkLoc.z = 1.4f;
+			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
+		}
 	}
 }
 	
