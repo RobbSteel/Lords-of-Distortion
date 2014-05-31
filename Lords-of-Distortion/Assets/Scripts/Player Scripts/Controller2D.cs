@@ -118,7 +118,7 @@ public class Controller2D : MonoBehaviour {
 		if(!OFFLINE && GameObject.Find("LobbyGUI") == null){
 			lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
 		}
-		crouchDisable = true;
+		crouchDisable = false;
 		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
@@ -189,6 +189,11 @@ public class Controller2D : MonoBehaviour {
                 rigidbody2D.gravityScale = 1;
                 resetGravityTimer = 0;
             }
+        }
+
+        if(transform.parent != null && (myHook.HookOut || inAir || !myHook.HookOut ))
+        {
+            transform.parent = null;
         }
 
 		if(!hooked){
@@ -386,7 +391,10 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            transform.parent = null;
+            if (myHook.currentState != Hook.HookState.None)
+                transform.parent = null;
+            else
+                transform.parent = other.transform;
         }
 	}
 
