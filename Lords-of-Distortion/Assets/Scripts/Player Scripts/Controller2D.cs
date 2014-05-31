@@ -112,7 +112,7 @@ public class Controller2D : MonoBehaviour {
 		if(!OFFLINE && GameObject.Find("LobbyGUI") == null){
 			lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
 		}
-		crouchDisable = true;
+		crouchDisable = false;
 		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
