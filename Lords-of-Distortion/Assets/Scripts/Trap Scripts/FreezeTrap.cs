@@ -12,28 +12,28 @@ public class FreezeTrap : Power {
     private bool freezeExplosionActivated = false;
 
 	public GameObject frozenEffectPrefab;
-
+	const float slowDuration = 1f;
 	void Start()
     {
         GetComponent<ParticleSystem>().loop = false;
-		Destroy(gameObject, 3);
+		Destroy(gameObject, 3f);
 	}
 
 	void Update()
     {
         trapDuration += Time.deltaTime;
-        if(trapDuration > 2.2)
+		if(trapDuration >= slowDuration)
         {
             if(!freezeExplosionActivated)
             {
-                GetComponent<CircleCollider2D>().radius = 1.6f;
+                GetComponent<CircleCollider2D>().radius = 1.8f;
                 GameObject freezeExplosion = (GameObject)Instantiate(Resources.Load("FreezeExplode"));
                 freezeExplosion.transform.position = transform.position;
                 freezeExplosionActivated = true;
             }
             if(freezeExplosionActivated)
             {
-                if(trapDuration > 2.8)
+                if(trapDuration > 1.6)
                 {
                     GetComponent<CircleCollider2D>().radius = 0f;
                 }
@@ -56,7 +56,7 @@ public class FreezeTrap : Power {
 	public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
         applyDmg = controller.GetComponent<PlayerStatus>();
-        if (trapDuration > 2.4)
+		if (trapDuration > slowDuration)
         {
             if (!used)
             {
@@ -77,7 +77,7 @@ public class FreezeTrap : Power {
         }
         else
         { 
-            player.rigidbody2D.drag = 45;
+            player.rigidbody2D.drag = 90;
         }
 
 	
@@ -87,7 +87,7 @@ public class FreezeTrap : Power {
 	public override void PowerActionStay(GameObject player, Controller2D controller)
     {
         applyDmg = controller.GetComponent<PlayerStatus>();
-        if (trapDuration > 2.4)
+		if (trapDuration > slowDuration)
         {
             if(!used)
             {
@@ -106,7 +106,7 @@ public class FreezeTrap : Power {
         }
         else
         {
-            player.rigidbody2D.drag = 45;
+            player.rigidbody2D.drag = 90;
         }
 	}
 	
