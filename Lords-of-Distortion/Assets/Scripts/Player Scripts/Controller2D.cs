@@ -191,6 +191,11 @@ public class Controller2D : MonoBehaviour {
             }
         }
 
+        if(transform.parent != null && (myHook.HookOut || inAir || !myHook.HookOut ))
+        {
+            transform.parent = null;
+        }
+
 		if(!hooked){
 
             IsGrounded();
@@ -386,7 +391,10 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            transform.parent = null;
+            if (myHook.currentState != Hook.HookState.None)
+                transform.parent = null;
+            else
+                transform.parent = other.transform;
         }
 	}
 
