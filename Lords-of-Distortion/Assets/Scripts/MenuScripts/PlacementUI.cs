@@ -630,16 +630,9 @@ public class PlacementUI : MonoBehaviour {
 	private void ChooseDirection(){
 		PowerSpawn spawn = null;
 		placedPowers.TryGetValue(activePower, out spawn);
-
-		Vector3 mousePosition = Camera.main.ScreenToWorldPoint
-			(new Vector3(GameInput.instance.MousePosition.x, GameInput.instance.MousePosition.y, 10.0f));
-
-		Vector3 direction = Vector3.Normalize(mousePosition - spawn.position);
-		direction.z = 0f;
-		spawn.direction = direction;
+		spawn.angle = activePower.GetComponent<powerRotate>().angle;
 		Destroy(dottedLineInstance);
         Destroy(activePower.GetComponent<powerRotate>());
-
 
 		if(live){
 			if(deadScreen){

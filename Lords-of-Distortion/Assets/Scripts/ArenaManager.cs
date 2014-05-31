@@ -500,7 +500,7 @@ public class ArenaManager : MonoBehaviour {
 				newViewID = Network.AllocateViewID();
 			}
 			//Call this function locally on and remotely
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.angle, newViewID,
 			                Network.player);
 			SpawnPowerLocally(spawn, 0f, newViewID);
             //Remove from your inventory and  disable button 
@@ -539,12 +539,12 @@ public class ArenaManager : MonoBehaviour {
 
 	//this function converts parameters into a powerspawn object
 	[RPC]
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
+	void SpawnPowerLocally(int type, Vector3 position, float angle, NetworkViewID optionalViewID,
 	                       NetworkPlayer owner, NetworkMessageInfo info){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
-		requestedSpawn.direction = direction;
+		requestedSpawn.angle = angle;
 		requestedSpawn.owner  = owner;
 
 		float networkDelay = (float)(Network.time - info.timestamp);

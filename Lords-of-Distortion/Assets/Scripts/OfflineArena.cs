@@ -47,11 +47,11 @@ public class OfflineArena : MonoBehaviour {
 
 	}
 
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID){
+	void SpawnPowerLocally(int type, Vector3 position, float angle, NetworkViewID optionalViewID){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
-		requestedSpawn.direction = direction;
+		requestedSpawn.angle = angle;
 		SpawnPowerLocally(requestedSpawn, optionalViewID);
 	}
 	

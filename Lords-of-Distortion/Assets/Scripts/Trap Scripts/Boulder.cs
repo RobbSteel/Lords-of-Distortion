@@ -4,7 +4,7 @@ using System.Collections;
 public class Boulder : Power {
 
     public GameObject rockShatterPrefab;
-	float direction = -1.0f;
+	float direction = 1.0f;
 
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
@@ -31,19 +31,19 @@ public class Boulder : Power {
             GameObject rockShatter = Instantiate(rockShatterPrefab, transform.position, Quaternion.identity) as GameObject;
         }
     }
-
-	Vector2 force = new Vector2(-200f, 50);
+	
 	Vector2 velocity = new Vector2(7f, 0f); 
 
 	// Use this for initialization
 	void Start () {
 
-		//move boulder either right or left.
-		if(spawnInfo.direction.x > 0f){
-			direction = 1.0f;
+		transform.rotation = Quaternion.AngleAxis(spawnInfo.angle, Vector3.forward);
+		//clamp angle to a direction.
+		if(transform.eulerAngles.z >= 90f &&  transform.eulerAngles.z <= 270f)
+		{
+			direction = -1f;
 		}
 
-		force.x = force.x * direction;
 		velocity.x = velocity.x * direction;
         Destroy(gameObject, 10f);
 	}
@@ -51,21 +51,13 @@ public class Boulder : Power {
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		//rigidbody2D.AddForce(force);
 		rigidbody2D.velocity = new Vector2(velocity.x, rigidbody2D.velocity.y);
 	}
 	
     void OnCollisionEnter2D(Collision2D collider)
     {
-        Debug.Log("COLLISION WITH " + collider);
         if(collider.gameObject.tag == "SolidObject" || collider.gameObject.name == gameObject.name)
         {
-            /*      Reverse Direction
-             * direction = -1 * direction;
-             * force.x = force.x * direction;
-             * velocity.x = velocity.x * direction;
-             * rigidbody2D.velocity = new Vector2(velocity.x, rigidbody2D.velocity.y);
-             */
             Destroy(gameObject);
         }
     }
