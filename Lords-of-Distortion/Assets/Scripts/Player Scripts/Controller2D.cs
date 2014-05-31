@@ -24,9 +24,8 @@ public class Controller2D : MonoBehaviour {
 	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
-	private float groundRadius = 0.2f;
+	private float groundRadius = 0.14f;
 	public LayerMask groundLayer;
-	public float jumpForce = 650f;
 	const float jumpVelocity = 12.5f;
 	public bool stunned;
     public bool meleeStunned;

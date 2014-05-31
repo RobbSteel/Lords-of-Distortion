@@ -91,7 +91,7 @@ public class GameInput : MonoBehaviour {
 
 		if(useCustomCursor)
 		{
-			cursorRect.position = new Vector2(cursorPosition.x - 16f, cursorPosition.y - 16f);
+			cursorRect.center = new Vector2(cursorPosition.x, cursorPosition.y);
 			GUI.DrawTexture (cursorRect, CursorTexture);
 		}
 	}
