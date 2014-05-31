@@ -34,7 +34,7 @@ public class GameInput : MonoBehaviour {
 
 	void Start () {
 		InputManager.Setup();
-		UseCustomCursor(true); //TODO: call this in game instead of menu
+		UseCustomCursor(); //TODO: call this in game instead of menu
 		analogSensitity = Screen.width *.90f;
 	}
 
@@ -45,16 +45,20 @@ public class GameInput : MonoBehaviour {
 		//Were using the gamepad if its state has changed.
 		usingGamePad = (activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
 		                || activeDevice.RightTrigger.IsPressed || activeDevice.RightBumper.IsPressed);
-		if(usingGamePad)
+		if(usingGamePad && useCustomCursor)
 			GamePadToCursor();
 	}
 
 	bool useCustomCursor = false;
 
-	public void UseCustomCursor(bool use)
+	public void UseCustomCursor()
 	{
-		Screen.showCursor = !use;
-		useCustomCursor = use;
+		Screen.showCursor = false;
+		useCustomCursor = true;
+	}
+
+	public void HideCustomCursor(){
+		useCustomCursor = false;
 	}
 
 	private Vector2 oldMousePosition;
@@ -71,7 +75,7 @@ public class GameInput : MonoBehaviour {
 		MousePosition.x = cursorPosition.x;
 		MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y; //flip coordinates
 	}
-
+	
 	void OnGUI()
 	{
 		Vector2 mousePositionUI = Event.current.mousePosition;
