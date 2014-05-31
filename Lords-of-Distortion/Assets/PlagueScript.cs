@@ -27,12 +27,10 @@ public class PlagueScript : Power
 	void Update(){
 
 		if(targetplayer != null){
-			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed);
-
-				if(targetplayer.GetComponent<Controller2D>().dead){
-
+			if(targetplayer.GetComponent<Controller2D>().dead){
 				AcquireTarget();
 			}
+			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed);
 		}
 	}
 
