@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using InControl;
 using System.Linq;
 
 public class PlacementUI : MonoBehaviour {
@@ -120,6 +121,7 @@ public class PlacementUI : MonoBehaviour {
 	}
 	
 	void Start(){
+		InputManager.Update();
         stageCamera = Camera.main;
 		currentUICamera = GetComponentInChildren<Camera>();
 		uiRoot = GetComponent<UIRoot>();
@@ -172,16 +174,17 @@ public class PlacementUI : MonoBehaviour {
 				//add slot as child to empty board
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
 
-				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower);
+				slot.GetComponent<PowerSlot>().Initialize(icons[associatedPower.type], associatedPower, board.index);
 				slot.GetComponent<UIWidget>().depth = 2;
 				slots.Add(slot);
+				UIEventListener.Get(slot).onPress  += PowerButtonClick;
+
 				board.SetChild(slot.GetComponent<PowerSlot>());
 				UIButton button = slot.GetComponent<UIButton>();
 				buttons.Add(button);
 				//disable button with the rest of em
 				if(state != PlacementState.Default)
 					button.isEnabled = false;
-				UIEventListener.Get(slot).onPress  += PowerButtonClick;
 
 				//Make boards accessible by current power type
 				PowerBoard boardReference = null;
@@ -189,7 +192,7 @@ public class PlacementUI : MonoBehaviour {
 				if(boardReference == null){
 					boardsByType.Add(associatedPower.type, board);
 				}
-				GiveTrigger(slot, board.index);
+
 				break;
 			}
 		}
@@ -212,14 +215,6 @@ public class PlacementUI : MonoBehaviour {
 			GridEnabled(false);
 		}
 	}
-
-	//Enable text label and set a key
-	void GiveTrigger(GameObject slot, int triggerKey){
-		slot.GetComponent<PowerSlot>().keyText = triggerKey.ToString();
-		slot.GetComponentInChildren<UILabel>().enabled = true;
-		slot.GetComponentInChildren<UILabel>().text = triggerKey.ToString();
-	}
-
 
 	/// <summary>
 	///Place powers instantly without using triggers. 
@@ -260,6 +255,8 @@ public class PlacementUI : MonoBehaviour {
 	bool reEnabledButtons = false;
 	/* Takes care of mouse clicks on this screen, depending on what state we're in.*/
 	void Update(){
+		InputDevice device = InputManager.ActiveDevice;
+
         //UpdateTriggerColor();
         if (deadScreen)
         {
@@ -280,7 +277,32 @@ public class PlacementUI : MonoBehaviour {
 			}
 		}
 
-		if(Input.GetMouseButtonDown(0)){
+		bool inputDetected = false;
+
+		if(GameInput.instance.usingGamePad)
+		{
+			//only count if you hit the key for the right board
+			if(activePower != null)
+			{
+				if(device.RightBumper.WasPressed)
+				{
+					if(boardsByType[activePowerType].index == 1)
+						inputDetected = true;
+				}
+				else if(device.RightTrigger.WasPressed)
+				{
+					if(boardsByType[activePowerType].index == 2)
+						inputDetected = true;
+				}
+			}
+		}
+
+		else if(Input.GetMouseButtonDown(0))
+		{
+			inputDetected = true;
+		}
+
+		if(inputDetected){
 			switch(state){
 			//Checks if we've clicked on a power that was already placed..
 			case PlacementState.Default:
@@ -338,7 +360,7 @@ public class PlacementUI : MonoBehaviour {
 	private bool ClickedOnUI(){
 		int UILayerID = LayerMask.NameToLayer("UI");
 		int layerMask = 1 << UILayerID;
-		Ray mousePoint = currentUICamera.ScreenPointToRay(Input.mousePosition);
+		Ray mousePoint = currentUICamera.ScreenPointToRay(GameInput.instance.MousePosition);
 		RaycastHit hit;
 		if(Physics.Raycast(mousePoint.origin, mousePoint.direction, out hit, Mathf.Infinity, layerMask)){
 			print("hit me");
@@ -350,7 +372,7 @@ public class PlacementUI : MonoBehaviour {
 	//Do a raycast to determine if we've clicked on a power on screen.
 	private bool SelectExistingPower(){
 		//TODO: only hit things in the powers layer
-		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), -Vector2.up);
+		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(GameInput.instance.MousePosition), -Vector2.up);
 		if(hit.collider != null){
 			if(hit.collider.tag.Equals("UIPower")){
 				activePower = hit.transform.gameObject;
@@ -450,8 +472,6 @@ public class PlacementUI : MonoBehaviour {
 		spawn.SetTimer(ARM_TIME); //start armament time
 		PowerBoard relevantBoard = boardsByType[spawn.type];
 		PowerSlot slotFromBoard = relevantBoard.currentPower;
-		//Give button a trigger (inital color)
-		GiveTrigger(slotFromBoard.gameObject, relevantBoard.index);
 		//dont immediately enable key triggering
 		slotFromBoard.UseTimer();
 		spawn.timeUpEvent += PowerArmed;
@@ -555,7 +575,8 @@ public class PlacementUI : MonoBehaviour {
 		//Either go back to default state or require setting a direction.
 		if(activePowerType.TypeRequiresDirection()){
 			state = PlacementState.ChangingDirection;
-			dottedLineInstance = Instantiate(dottedLine, spawn.position, Quaternion.identity) as GameObject;
+			dottedLineInstance = Instantiate(dottedLine, spawn.position, dottedLine.transform.rotation) as GameObject;
+			dottedLineInstance.transform.parent = activePower.transform;
             activePower.AddComponent<powerRotate>();
 		}
 		else {
@@ -609,16 +630,9 @@ public class PlacementUI : MonoBehaviour {
 	private void ChooseDirection(){
 		PowerSpawn spawn = null;
 		placedPowers.TryGetValue(activePower, out spawn);
-
-		Vector3 mousePosition = Camera.main.ScreenToWorldPoint
-			(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-
-		Vector3 direction = Vector3.Normalize(mousePosition - spawn.position);
-		direction.z = 0f;
-		spawn.direction = direction;
+		spawn.angle = activePower.GetComponent<powerRotate>().angle;
 		Destroy(dottedLineInstance);
         Destroy(activePower.GetComponent<powerRotate>());
-
 
 		if(live){
 			if(deadScreen){

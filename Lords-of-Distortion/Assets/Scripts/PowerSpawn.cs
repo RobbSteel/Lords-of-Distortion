@@ -125,7 +125,7 @@ public class PowerSpawn : PriorityQueueNode {
 	public PowerType type;
 	public float spawnTime;
 	public Vector3 position;
-	public Vector3 direction = Vector3.right;
+	public float angle = 0f;
 	public NetworkPlayer owner;
 	public bool createEvents = true;
 
@@ -145,9 +145,8 @@ public class PowerSpawn : PriorityQueueNode {
 		type = original.type;
 		spawnTime = original.spawnTime;
 		position = original.position;
-		direction = original.direction;
+		angle = original.angle;
 		owner = original.owner;
-
 		localID = powersCreated++;
 	}
 

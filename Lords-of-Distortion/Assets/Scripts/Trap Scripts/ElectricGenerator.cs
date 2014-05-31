@@ -56,7 +56,7 @@ public class ElectricGenerator : Power {
 		var ElectricityShot = (GameObject)Instantiate(ElectricShot, transform.position, transform.rotation);
 		ElectricShot shot = ElectricityShot.GetComponent<ElectricShot>();
 		shot.spawnInfo = new PowerSpawn(this.spawnInfo);
-		spawnInfo.direction = direction;
+		spawnInfo.angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		shot.direction = direction;
 	}
 

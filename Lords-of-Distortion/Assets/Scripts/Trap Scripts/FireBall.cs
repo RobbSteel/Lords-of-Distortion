@@ -15,8 +15,7 @@ public class FireBall : Power
 
     void Start()
     {
-		float angle = Mathf.Atan2(spawnInfo.direction.y, spawnInfo.direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.AngleAxis(spawnInfo.angle, Vector3.forward);
 		AudioSource.PlayClipAtPoint( fireAwake , transform.position);
 		AudioSource.PlayClipAtPoint( fireLoop , transform.position);
         Destroy(gameObject, 10f);
@@ -25,9 +24,7 @@ public class FireBall : Power
     void Update ()
 	{
 		//Speed should not be dependant on framerate
-	
 		transform.Translate(Vector3.right * speed * Time.deltaTime);
-		
     }
 
 	[RPC]
@@ -38,7 +35,6 @@ public class FireBall : Power
 
     public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
-
 		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Fireball Death", player.transform.position);
 		}
@@ -50,7 +46,6 @@ public class FireBall : Power
 
 		controller.Die(DeathType.FIRE);
 		Destroy(gameObject);
-
 	}
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)

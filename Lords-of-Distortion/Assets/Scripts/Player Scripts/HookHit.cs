@@ -93,6 +93,9 @@ public class HookHit : MonoBehaviour {
 			}
 
 			rigidbody2D.velocity = Vector2.zero;
+            //If hitting a moving platform, the hook moves with the platform
+            transform.parent = col.transform;
+
 			animator.SetTrigger("Hooked");
 			shooter.GetComponent<Hook>().HitPlatform();
             if (!playSound)
