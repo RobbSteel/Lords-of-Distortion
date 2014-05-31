@@ -10,7 +10,7 @@ public class LoadLevel : MonoBehaviour {
 	{
 		if(!isDown)
 		{
-			Application.LoadLevel (LevelName);
+			Application.LoadLevel(LevelName);
 		}
 	}
 }

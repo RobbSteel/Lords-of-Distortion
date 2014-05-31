@@ -455,7 +455,7 @@ public class PlayerStatus : MonoBehaviour {
 		PlayerEvent playerEvent = null;
 		
 		if(power.spawnInfo != null){
-			if(power.spawnInfo.type.IsPsuedoPower())
+			if(power.spawnInfo.type.IsPsuedoPower() || !power.spawnInfo.createEvents)
 				return;
 			playerEvent = new PlayerEvent(power.spawnInfo.type, 
 			                              TimeManager.instance.time, power.spawnInfo.owner);

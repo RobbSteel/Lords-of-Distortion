@@ -4,6 +4,8 @@ using System.Collections;
 public class HostButton : MonoBehaviour {
 
     public MainGui playerscript;
+	public GameObject transitioner;
+	Transitioner transition;
 
     void OnPress()
     {
@@ -14,9 +16,10 @@ public class HostButton : MonoBehaviour {
         }
         else
         {
+			transition = transitioner.GetComponent<Transitioner>();
 			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
 			PlayerServerInfo.instance.choice = "Host";
-            Application.LoadLevel("HostMenu");
+			transition.Flip("HostMenu", false);
         }
     }	
 }

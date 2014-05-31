@@ -296,7 +296,7 @@ public class Hook : MonoBehaviour {
 		currentHook.gameObject.transform.position = playerLocation;
 		currentHook.hookedPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(hitPlayer);
 		currentHook.affectedPlayerC2D = currentHook.hookedPlayer.GetComponent<Controller2D>();
-		currentHook.affectedPlayerC2D.Hooked();
+		currentHook.affectedPlayerC2D.Hooked(networkController.theOwner);
 		currentHook.targetPosition = playerLocation;
 		currentHook.playerhooked = true;
 

@@ -94,8 +94,14 @@ public class TransferExplosive : Power
 	
 	public override void PowerActionExit (GameObject player, Controller2D controller)
 	{
-			//print("exited");
+		//print("exited");
 			//controller.hasbomb = false;
+	}
+
+	public override void Initialize (PowerSpawn spawn)
+	{
+		this.spawnInfo = spawn;
+		spawn.createEvents = false;
 	}
 
 	void OnCollisionEnter2D(Collision2D col)

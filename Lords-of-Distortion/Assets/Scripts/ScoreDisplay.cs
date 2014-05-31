@@ -68,7 +68,6 @@ public class ScoreDisplay : MonoBehaviour {
 			timelabel.transform.parent = GameObject.Find("UI Root").transform;
 			timelabel.transform.localScale = new Vector3(1,1,1);
 			timelabel.transform.localPosition = new Vector2 (-590,285);
-			//timeLabelReference.GetComponent<UILabel>().text =  timeLabelDescription + Mathf.CeilToInt( timeleft ).ToString();
 			timeLabelReference = timelabel;
 
 		} else {
@@ -344,7 +343,15 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	void MatchFinish(PlayerServerInfo infoscript){
-		
+
+		//make new time label for end match
+		var timelabel = (GameObject)Instantiate(TimeLabel, new Vector2(0,0), transform.rotation);
+		timelabel.transform.parent = GameObject.Find("UI Root").transform;
+		timelabel.transform.localScale = new Vector3(1,1,1);
+		timelabel.transform.localPosition = new Vector2 (125,-320);
+		timeLabelReference = timelabel;
+
+
 		if(tie){
 
 			for(int i = 0; i < tielist.Count; i++){

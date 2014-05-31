@@ -91,11 +91,17 @@ public class Controller2D : MonoBehaviour {
         locked = false;
     }
     
-	public void Hooked(){
+	public void Hooked(NetworkPlayer player){
+
 		rigidbody2D.velocity = Vector2.zero;
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
 		anim.SetFloat("Speed", 0);
+
+		if(networkController.isOwner)
+		{
+			status.GenerateEvent(PowerType.HOOK, TimeManager.instance.time, player);
+		}
 	}
 
 	public void UnHooked(){

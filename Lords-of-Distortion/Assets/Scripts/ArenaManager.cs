@@ -52,8 +52,8 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	Phase currentPhase;
-
 	//Has the additional task of synching phase
+
 	[RPC]
 	void SynchTimer(float time, int phase){
 		currentPhase =  (Phase)phase;
@@ -176,8 +176,9 @@ public class ArenaManager : MonoBehaviour {
 	//Called on clients not controlling the player who just died.
 	[RPC]
 	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
-		if(lives == 0){
-		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
+		if(lives == 0)
+		{
+			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		}
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
 		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
@@ -195,7 +196,7 @@ public class ArenaManager : MonoBehaviour {
 
 		else {
 			if(lives == 0){
-			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
+				sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
 			}
 			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger, lives);
 		}
@@ -268,11 +269,13 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		else {
-			if(playerEvent.Attacker != null){
+			if(playerEvent.Attacker != null)
+			{
 				networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact, playerEvent.Attacker);
 			}
 
-			else{
+			else
+			{
 				networkView.RPC ("SimpleNotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
 			}
 		}
@@ -526,8 +529,8 @@ public class ArenaManager : MonoBehaviour {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
 		yield return new WaitForSeconds(warningDuration);
 		Destroy(instantiatedSymbol);
-		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
-		power.GetComponent<Power>().spawnInfo = spawn;
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
+		power.GetComponent<Power>().Initialize(spawn);
 		//If the networkview id is specified, apply it to the networkview of the new power
 		if(!Equals(optionalViewID, default(NetworkViewID))){
 			power.GetComponent<NetworkView>().viewID = optionalViewID;
@@ -581,7 +584,7 @@ public class ArenaManager : MonoBehaviour {
 				FinishGame(true);
 			}
 		}
-		else if(currentPhase == Phase.Finish && currentTime >= endTime){
+		else if(currentPhase == Phase.Finish && currentTime >= endTime + 3){
 			//game ended, load level
 			if(Network.isServer){
 				sessionManager.LoadNextLevel(true);

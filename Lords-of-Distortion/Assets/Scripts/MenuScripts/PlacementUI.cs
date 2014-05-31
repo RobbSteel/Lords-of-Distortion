@@ -5,7 +5,7 @@ using System.Linq;
 
 public class PlacementUI : MonoBehaviour {
 	public const float ARM_TIME = 2.6f;
-	private Camera UICamera;
+	private Camera currentUICamera;
 	public delegate void SpawnAction(PowerSpawn spawnInfo, GameObject ui);
 	public event SpawnAction spawnNow;
 
@@ -121,7 +121,7 @@ public class PlacementUI : MonoBehaviour {
 	
 	void Start(){
         stageCamera = Camera.main;
-		UICamera = GetComponentInChildren<Camera>();
+		currentUICamera = GetComponentInChildren<Camera>();
 		uiRoot = GetComponent<UIRoot>();
 	}
 
@@ -167,7 +167,7 @@ public class PlacementUI : MonoBehaviour {
 	void AddToInventory(InventoryPower associatedPower){
 
 		foreach(PowerBoard board in fixedBoards){
-
+            
 			if(board.currentPower == null){
 				//add slot as child to empty board
 				GameObject slot = NGUITools.AddChild(board.gameObject, PowerSlot);
@@ -338,7 +338,7 @@ public class PlacementUI : MonoBehaviour {
 	private bool ClickedOnUI(){
 		int UILayerID = LayerMask.NameToLayer("UI");
 		int layerMask = 1 << UILayerID;
-		Ray mousePoint = UICamera.ScreenPointToRay(Input.mousePosition);
+		Ray mousePoint = currentUICamera.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if(Physics.Raycast(mousePoint.origin, mousePoint.direction, out hit, Mathf.Infinity, layerMask)){
 			print("hit me");
@@ -425,18 +425,27 @@ public class PlacementUI : MonoBehaviour {
 		GridEnabled(false);
 	}
 
+	const float fixedHeight = 720f;
 	//called to start the power arm timer, and execute related visual changes.
 	private void LivePlacement(PowerSpawn spawn){
-
 		GameObject armProgress = NGUITools.AddChild(gameObject, progressBar);
 		progressBars.Add(spawn, armProgress.GetComponent<UIProgressBar>());
-		//Move progress bar to position of power.
-		Vector3 screenPosition = stageCamera.WorldToScreenPoint(activePower.transform.position);;
-		//print ("Screen Width: " + Screen.height + "UI Root " + uiRoot.manualHeight);
-		Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
-		screenPosition -= screenCenter;
+		float UIToScreenRatio = fixedHeight / Screen.height;
+		Vector3 viewPos = stageCamera.WorldToViewportPoint(activePower.transform.position);
+		Vector3 uiScreenPos = currentUICamera.ViewportToScreenPoint(viewPos);
 
-		armProgress.transform.localPosition = new Vector3(screenPosition.x, screenPosition.y, 0f);
+		Vector3 screenPos = Vector3.zero;
+
+		screenPos.y = uiScreenPos.y * UIToScreenRatio;
+		//move to center.
+		screenPos.y -= fixedHeight / 2f;
+		
+		screenPos.x = uiScreenPos.x * UIToScreenRatio;
+		//move to center
+		screenPos.x -= Screen.width * UIToScreenRatio /2f;
+
+
+		armProgress.transform.localPosition = screenPos;
 
 		spawn.SetTimer(ARM_TIME); //start armament time
 		PowerBoard relevantBoard = boardsByType[spawn.type];
@@ -676,16 +685,25 @@ public class PlacementUI : MonoBehaviour {
 	public void Resupply(){
         // Make sure players can only hold at most 2 powers. In their inventory and on the map.
 		if(inventoryPowers.Count < 2){
-			//avoid giving same power
-			PowerType newPower = PowerType.UNDEFINED;
-			do {
-				newPower =  PowerTypeExtensions.RandomPower();
-			} while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
+            foreach(PowerBoard board in fixedBoards)
+            { 
+			    //avoid giving same power
+                if(board.currentPower == null)
+                { 
+			        PowerType newPower = PowerType.UNDEFINED;
+			        do {
+                        if (board.index == 1)
+                            newPower = PowerTypeExtensions.RandomActivePower();//.RandomPower();
+                        else if (board.index == 2)
+                            newPower = PowerTypeExtensions.RandomPassivePower();
+			        } while (inventoryPowers.ContainsKey(newPower) || disabledPowers.Contains(newPower));
 
-			InventoryPower freePower = new InventoryPower(newPower, false);
+			        InventoryPower freePower = new InventoryPower(newPower, false);
 
-			inventoryPowers.Add(newPower, freePower);
-			AddToInventory(freePower);
+			        inventoryPowers.Add(newPower, freePower);
+			        AddToInventory(freePower);
+                }
+            }
         }
 	}
 

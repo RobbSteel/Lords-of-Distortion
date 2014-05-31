@@ -127,6 +127,7 @@ public class PowerSpawn : PriorityQueueNode {
 	public Vector3 position;
 	public Vector3 direction = Vector3.right;
 	public NetworkPlayer owner;
+	public bool createEvents = true;
 
 	//keeps track of the order in which these powers were spawned.
 	private static int powersCreated = 0;
