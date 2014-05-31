@@ -64,14 +64,13 @@ public class DefectionShield : Power {
 	//will take care of animation for bubble shield before it explodes
 	//and destroying it
 	public void Explode(){
-		//Destroy (this.gameObject);
 		GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-        //
         explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
         Vector3 charMarkLoc = transform.position;
         charMarkLoc.z = 1.4f;
 		var charmark = Instantiate(CharMark, charMarkLoc, Quaternion.identity) as GameObject;
         Destroy(gameObject);
+		this.collider2D.enabled = false;
 	}
 
 	public void DefectionSheildHit(){

@@ -399,7 +399,7 @@ public class LobbyManager : MonoBehaviour {
 				newViewID = Network.AllocateViewID();
 			}
 			//Call this function locally on and remotely
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.angle, newViewID,
 			                Network.player);
 			SpawnPowerLocally(spawn, newViewID);
 			//Remove from your inventory and  disable button 
@@ -425,7 +425,7 @@ public class LobbyManager : MonoBehaviour {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
 		yield return new WaitForSeconds(0.7f);
 		Destroy(instantiatedSymbol);
-		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
 		power.GetComponent<Power>().spawnInfo = spawn;
 		//If the networkview id is specified, apply it to the networkview of the new power
 		if(!Equals(optionalViewID, default(NetworkViewID))){
@@ -435,12 +435,12 @@ public class LobbyManager : MonoBehaviour {
 	
 	//this function converts parameters into a powerspawn object
 	[RPC]
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
+	void SpawnPowerLocally(int type, Vector3 position, float angle, NetworkViewID optionalViewID,
 	                       NetworkPlayer owner){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
-		requestedSpawn.direction = direction;
+		requestedSpawn.angle = angle;
 		requestedSpawn.owner  = owner;
 		SpawnPowerLocally(requestedSpawn, optionalViewID);
 	}
