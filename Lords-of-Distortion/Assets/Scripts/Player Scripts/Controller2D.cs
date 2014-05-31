@@ -265,7 +265,7 @@ public class Controller2D : MonoBehaviour {
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
-		    if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
+		    if(inAir && (rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump)){
 			    //print ("started falling");
 			    rigidbody2D.gravityScale = 1.8f;
 		    }
@@ -281,12 +281,6 @@ public class Controller2D : MonoBehaviour {
 			    // set the Jump animator trigger parameter
 			    anim.SetTrigger("Jump");
 			    //AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
-			    //Add a vertical force to player
-			    //rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-
-			    //Incase you were walking down a slope, rest gravity before jumping
-			    rigidbody2D.gravityScale = 1f;
-
 			    //I think setting velocity feels better.
 			    rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			    inAir = true;
@@ -295,8 +289,6 @@ public class Controller2D : MonoBehaviour {
 			    jumpRequested = false;
 		    }
 		    previousY = rigidbody2D.velocity.y;
-
-	
 		}
 	}
 

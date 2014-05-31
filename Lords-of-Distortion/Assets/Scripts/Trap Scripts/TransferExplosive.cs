@@ -94,8 +94,7 @@ public class TransferExplosive : Power
 	
 	public override void PowerActionExit (GameObject player, Controller2D controller)
 	{
-		//print("exited");
-			//controller.hasbomb = false;
+
 	}
 
 	public override void Initialize (PowerSpawn spawn)
@@ -127,18 +126,15 @@ public class TransferExplosive : Power
 		}
 	}
 
-
+	bool warned = false;
 	// Update is called once per frame
 	void  Update ()
 	{
-		if (timer <= 3 && !exploded) 
+		if (timer <= 3 && !warned) 
         {
-			//anim.SetTrigger("BombExplo");
-			//var bombExpo = Instantiate (Resources.Load ("BombE"), transform.position, Quaternion.identity) as GameObject;
-			//Destroy (gameObject);
-
-			var bombanim = gameObject.GetComponent<Animator>();
-			bombanim.enabled = true;
+			Animator animator = GetComponent<Animator>();
+			animator.SetBool("Warn", true);
+			warned = true;
 		}
 		//Blow up if the time is out
 		if (timer <= 0 && !exploded)
@@ -146,16 +142,15 @@ public class TransferExplosive : Power
 			//var playercontroller = playerstuck.GetComponent<Controller2D>();
 		    //playercontroller.hasbomb = false;
 			GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
-		    
+			exploded = true;
 			if(playerstuck != null){
-			var playercontroller = playerstuck.GetComponent<Controller2D>();
-		    playercontroller.hasbomb = false;
+				var playercontroller = playerstuck.GetComponent<Controller2D>();
+			    playercontroller.hasbomb = false;
 			}
 			explosion.GetComponent<BlastRadius>().spawnInfo = new PowerSpawn(spawnInfo);
 			Vector3 charMarkLoc = transform.position;
             charMarkLoc.z = 1.4f;
 			var charmark = Instantiate (CharMark, charMarkLoc, Quaternion.identity) as GameObject;
-			exploded = true;
 			Destroy (gameObject);
             
 		} else {

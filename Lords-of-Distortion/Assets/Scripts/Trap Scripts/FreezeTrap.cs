@@ -33,9 +33,9 @@ public class FreezeTrap : Power {
             }
             if(freezeExplosionActivated)
             {
-                if(trapDuration > 1.6)
+                if(trapDuration > slowDuration + .5f)
                 {
-                    GetComponent<CircleCollider2D>().radius = 0f;
+					GetComponent<CircleCollider2D>().enabled = false;
                 }
             }
         }
