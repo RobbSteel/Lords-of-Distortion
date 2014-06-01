@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 /*
  * The general outline for a melee attack (proposal 1):
@@ -43,8 +44,18 @@ public class Melee : MonoBehaviour {
 		//this.GetComponent<BoxCollider2D>().enabled = false;
 		if (!meleeDisable && !myhook.HitSomething && !controller.locked && !controller.crouching ) {
 			// If the fire button is pressed...
-			if (Input.GetButtonDown ("Melee") && !controller.stunned && networkController.isOwner) {
-				startMelee ();
+			if (networkController.isOwner && !controller.stunned) {
+				if(GameInput.instance.usingGamePad)
+				{
+					if(InputManager.ActiveDevice.Action3.WasPressed)
+					{
+						startMelee();
+					}
+				}
+				else if(Input.GetKeyDown(KeyMapping.MeleeKey))
+				{
+					startMelee ();
+				}
 			}
 		}
 

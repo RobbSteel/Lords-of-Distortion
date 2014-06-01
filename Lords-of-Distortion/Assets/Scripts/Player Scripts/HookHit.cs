@@ -93,6 +93,9 @@ public class HookHit : MonoBehaviour {
 			}
 
 			rigidbody2D.velocity = Vector2.zero;
+            //If hitting a moving platform, the hook moves with the platform
+            transform.parent = col.transform;
+
 			animator.SetTrigger("Hooked");
 			shooter.GetComponent<Hook>().HitPlatform();
             if (!playSound)
@@ -115,7 +118,7 @@ public class HookHit : MonoBehaviour {
 				NetworkController  affectedPlayerNC = hookedPlayer.GetComponent<NetworkController>();
 			    
 				affectedPlayerC2D = hookedPlayer.GetComponent<Controller2D>();
-				affectedPlayerC2D.Hooked();
+				affectedPlayerC2D.Hooked(networkController.theOwner);
 				rigidbody2D.velocity = Vector2.zero;
 				targetPosition = transform.position;
 				shooter.GetComponent<Hook>().HitPlayerLocal(affectedPlayerNC.theOwner);

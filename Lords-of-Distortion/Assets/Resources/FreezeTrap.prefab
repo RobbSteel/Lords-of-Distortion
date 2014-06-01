@@ -14,7 +14,6 @@ GameObject:
   - 82: {fileID: 8200000}
   - 198: {fileID: 19800000}
   - 199: {fileID: 19900000}
-  - 50: {fileID: 5000000}
   m_Layer: 9
   m_Name: FreezeTrap
   m_TagString: Power
@@ -29,25 +28,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.9892406, y: -.763884842, z: 0}
+  m_LocalPosition: {x: -5.07185793, y: .73354727, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!50 &5000000
-Rigidbody2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_FixedAngle: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_RootOrder: 0
 --- !u!58 &5800000
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -58,7 +43,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Radius: 1.60000002
-  m_Center: {x: -.469999999, y: 0}
+  m_Center: {x: 0, y: 0}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -148,7 +133,7 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  lengthInSec: 1.5
+  lengthInSec: .400000006
   startDelay: 0
   speed: 1
   randomSeed: 0
@@ -159,7 +144,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1
+      scalar: .800000012
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -313,13 +298,13 @@ ParticleSystem:
         m_NumAlphaKeys: 2
       minColor:
         serializedVersion: 2
-        rgba: 4287072135
+        rgba: 4294964412
       maxColor:
         serializedVersion: 2
         rgba: 4294967295
       minMaxState: 2
     startSize:
-      scalar: .419999987
+      scalar: .5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1237,9 +1222,8 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0

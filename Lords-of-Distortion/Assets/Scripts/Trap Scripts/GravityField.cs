@@ -21,22 +21,12 @@ public class GravityField : Power {
 		//transform.rotation = Quaternion.AngleAxis(angle-90f, Vector3.forward);
 		//need to play audio clip here because audio would play during placement mode
 		audio.Play ();
-		//if(triggered)
      	Destroy(gameObject, 15f);
         Destroy(GetComponent<GravityFieldIndicators>());
     }
-	void Update(){
-		//if(triggered)
-			//Destroy(gameObject, 6f);
-	}
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
     {
-		wind.enableEmission = true;
-		//triggered = true;
-
-		// calling on Trap Trigger function to destory UIpower when triggered
-		//callOnTrapTrigger ();
 		if(Analytics.Enabled){
 			GA.API.Design.NewEvent("Gravity Touches", player.transform.position);
 
@@ -48,13 +38,14 @@ public class GravityField : Power {
 
     public override void PowerActionStay(GameObject player, Controller2D controller)
     {
-		//Debug.Log (transform.up);
-		//player.rigidbody2D.AddForce(transform.up * force);
+		player.rigidbody2D.gravityScale = -3;
+		playerGO = player;
 	}
 
     public override void PowerActionExit(GameObject player, Controller2D controller)
     {
         player.rigidbody2D.gravityScale = 1;
+		playerGO = null;
     }
   
     void OnDestroy()

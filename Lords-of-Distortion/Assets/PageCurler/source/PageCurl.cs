@@ -15,7 +15,7 @@ public class PageCurl : MonoBehaviour
     public float endRotation = 270.0f;  //end page rotation
     [Range(0f, 1f)]
     public float rotRatio = 0f;     //rotation progress
-
+	public string level;
     [Range(0f, 90f)]
     public float theta = 0f;    //cone angle
     [Range(0f, -50f)]
@@ -58,9 +58,10 @@ public class PageCurl : MonoBehaviour
 	}
 
     //Play the default page flip animation, and return its duration
-    public float Flip(bool backwards = false)
+	public float Flip(string newlevel, bool backwards = false)
     {
-        string animId = backwards ? "PageFlip_Inv" : "PageFlip";
+		level = newlevel;
+		string animId = backwards ? "PageFlip_Inv" : "PageFlip";
         animation.Stop();
         animation.Play(animId);
         return animation[animId].length;
@@ -104,7 +105,7 @@ public class PageCurl : MonoBehaviour
     //Animation event called when the page flip motion has ended
     public void OnPageFlip()
     {
-        //Do nothing
+		Application.LoadLevel(level);
     }
 
     //Return the material list

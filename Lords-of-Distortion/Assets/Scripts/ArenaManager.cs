@@ -52,8 +52,8 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	Phase currentPhase;
-
 	//Has the additional task of synching phase
+
 	[RPC]
 	void SynchTimer(float time, int phase){
 		currentPhase =  (Phase)phase;
@@ -176,8 +176,9 @@ public class ArenaManager : MonoBehaviour {
 	//Called on clients not controlling the player who just died.
 	[RPC]
 	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
-		if(lives == 0){
-		sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
+		if(lives == 0)
+		{
+			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		}
 		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
 		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
@@ -195,7 +196,7 @@ public class ArenaManager : MonoBehaviour {
 
 		else {
 			if(lives == 0){
-			sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
+				sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
 			}
 			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger, lives);
 		}
@@ -268,11 +269,13 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		else {
-			if(playerEvent.Attacker != null){
+			if(playerEvent.Attacker != null)
+			{
 				networkView.RPC ("NotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact, playerEvent.Attacker);
 			}
 
-			else{
+			else
+			{
 				networkView.RPC ("SimpleNotifyServerOfEvent", RPCMode.Server, (int)playerEvent.PowerType, playerEvent.TimeOfContact);
 			}
 		}
@@ -497,7 +500,7 @@ public class ArenaManager : MonoBehaviour {
 				newViewID = Network.AllocateViewID();
 			}
 			//Call this function locally on and remotely
-			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.direction, newViewID,
+			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.angle, newViewID,
 			                Network.player);
 			SpawnPowerLocally(spawn, 0f, newViewID);
             //Remove from your inventory and  disable button 
@@ -526,8 +529,8 @@ public class ArenaManager : MonoBehaviour {
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
 		yield return new WaitForSeconds(warningDuration);
 		Destroy(instantiatedSymbol);
-		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;;
-		power.GetComponent<Power>().spawnInfo = spawn;
+		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
+		power.GetComponent<Power>().Initialize(spawn);
 		//If the networkview id is specified, apply it to the networkview of the new power
 		if(!Equals(optionalViewID, default(NetworkViewID))){
 			power.GetComponent<NetworkView>().viewID = optionalViewID;
@@ -536,12 +539,12 @@ public class ArenaManager : MonoBehaviour {
 
 	//this function converts parameters into a powerspawn object
 	[RPC]
-	void SpawnPowerLocally(int type, Vector3 position, Vector3 direction, NetworkViewID optionalViewID,
+	void SpawnPowerLocally(int type, Vector3 position, float angle, NetworkViewID optionalViewID,
 	                       NetworkPlayer owner, NetworkMessageInfo info){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
-		requestedSpawn.direction = direction;
+		requestedSpawn.angle = angle;
 		requestedSpawn.owner  = owner;
 
 		float networkDelay = (float)(Network.time - info.timestamp);
@@ -581,7 +584,7 @@ public class ArenaManager : MonoBehaviour {
 				FinishGame(true);
 			}
 		}
-		else if(currentPhase == Phase.Finish && currentTime >= endTime){
+		else if(currentPhase == Phase.Finish && currentTime >= endTime + 3){
 			//game ended, load level
 			if(Network.isServer){
 				sessionManager.LoadNextLevel(true);

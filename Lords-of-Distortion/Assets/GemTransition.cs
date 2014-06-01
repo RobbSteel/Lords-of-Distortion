@@ -91,7 +91,7 @@ public class GemTransition : MonoBehaviour {
                 GameObject playerGO = psinfo.GetPlayerGameObject(player);
                 if(playerGO != null)
                 { 
-                    playerGO.GetComponent<Rigidbody2D>().gravityScale = -0.25f;
+                    playerGO.GetComponent<Rigidbody2D>().gravityScale = -0.2f;
                     playerGO.GetComponent<Controller2D>().locked = true;
                 }
             }

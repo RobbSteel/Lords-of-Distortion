@@ -12,7 +12,7 @@ public class LoadLevel : MonoBehaviour {
 		audio.PlayOneShot (buttonclick);
 		if(!isDown)
 		{
-			Application.LoadLevel (LevelName);
+			Application.LoadLevel(LevelName);
 		}
 	}
 	void OnHover(bool isOver){

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using InControl;
 
 public enum DeathType{
 	CRUSH,
@@ -24,9 +24,8 @@ public class Controller2D : MonoBehaviour {
 	public bool dead = false;
 	public bool grounded = false;
 	public Transform groundCheck;
-	private float groundRadius = 0.2f;
+	private float groundRadius = 0.14f;
 	public LayerMask groundLayer;
-	public float jumpForce = 650f;
 	const float jumpVelocity = 12.5f;
 	public bool stunned;
     public bool meleeStunned;
@@ -91,11 +90,17 @@ public class Controller2D : MonoBehaviour {
         locked = false;
     }
     
-	public void Hooked(){
+	public void Hooked(NetworkPlayer player){
+
 		rigidbody2D.velocity = Vector2.zero;
 		hooked = true;
 		rigidbody2D.gravityScale = 0;
 		anim.SetFloat("Speed", 0);
+
+		if(networkController.isOwner)
+		{
+			status.GenerateEvent(PowerType.HOOK, TimeManager.instance.time, player);
+		}
 	}
 
 	public void UnHooked(){
@@ -112,7 +117,7 @@ public class Controller2D : MonoBehaviour {
 		if(!OFFLINE && GameObject.Find("LobbyGUI") == null){
 			lives = GameObject.FindGameObjectWithTag("ArenaManager").GetComponent<ArenaManager>().totallives;
 		}
-		crouchDisable = true;
+		crouchDisable = false;
 		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
@@ -151,11 +156,13 @@ public class Controller2D : MonoBehaviour {
 
 		if(!OFFLINE && !networkController.isOwner)
 			return;
+
 		if(!hooked && !locked){
 
-		    Jump();
-		    stoppedJump = Input.GetButtonUp("Jump");
-			Crouch();
+		    JumpInput();
+			move = GetHorizontalInput();
+			CrouchInput();
+
             if(snared)
             { 
                 rigidbody2D.gravityScale = 1;
@@ -171,6 +178,66 @@ public class Controller2D : MonoBehaviour {
             }
         }		
 	}
+
+	private void JumpInput(){
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && canJump)
+		{
+			if(GameInput.instance.usingGamePad)
+			{
+				if(InputManager.ActiveDevice.Action1.WasPressed)
+					jumpRequested = true;
+			}
+			else 
+			{
+				if(Input.GetKeyDown(KeyMapping.JumpKey))
+					jumpRequested = true;
+			}
+		}
+
+		if(GameInput.instance.usingGamePad)
+		{
+			stoppedJump = !InputManager.ActiveDevice.Action1.IsPressed;
+		}
+		else 
+		{
+			stoppedJump = !Input.GetKey(KeyMapping.JumpKey);
+		}
+	}
+
+	private float GetHorizontalInput()
+	{
+		if(GameInput.instance.usingGamePad)
+		{
+			InputDevice device = InputManager.ActiveDevice;
+			if(device.DPad.Left.IsPressed)
+			{
+				return -1f;
+			}
+			else if(device.DPad.Right.IsPressed)
+			{
+				return 1f;
+			}
+			else
+			{
+				return device.LeftStickX.Value;
+			}
+		}
+		else
+		{
+			if(Input.GetKey(KeyMapping.LeftKey))
+			{
+				return -1f;
+			}
+			else if(Input.GetKey(KeyMapping.RightKey))
+			{
+				return 1f;
+			}
+			else
+			{
+				return 0f;
+			}
+		}
+	}
 	
 	float previousY = 0f;
 	void FixedUpdate(){
@@ -185,6 +252,11 @@ public class Controller2D : MonoBehaviour {
             }
         }
 
+        if(transform.parent != null && (myHook.HookOut || inAir || !myHook.HookOut ))
+        {
+            transform.parent = null;
+        }
+
 		if(!hooked){
 
             IsGrounded();
@@ -197,7 +269,7 @@ public class Controller2D : MonoBehaviour {
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
-		    if(rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump){
+		    if(inAir && (rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump)){
 			    //print ("started falling");
 			    rigidbody2D.gravityScale = 1.8f;
 		    }
@@ -213,12 +285,6 @@ public class Controller2D : MonoBehaviour {
 			    // set the Jump animator trigger parameter
 			    anim.SetTrigger("Jump");
 			    //AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
-			    //Add a vertical force to player
-			    //rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-
-			    //Incase you were walking down a slope, rest gravity before jumping
-			    rigidbody2D.gravityScale = 1f;
-
 			    //I think setting velocity feels better.
 			    rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			    inAir = true;
@@ -227,31 +293,50 @@ public class Controller2D : MonoBehaviour {
 			    jumpRequested = false;
 		    }
 		    previousY = rigidbody2D.velocity.y;
-
-	
-		}
-}
-
-	private void Jump(){
-		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Jump") && canJump){
-			jumpRequested = true;
 		}
 	}
-	
-	//checks to see if our player can crouch and resets crouch once Crouch Input is released
-	private void Crouch(){
-		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded && Input.GetButtonDown("Crouch") && !crouchDisable ){
-			moveDisable = true;
 
-			canJump = false;
-			crouching = true;
-			anim.SetBool("Crouch", crouching );
+	
+
+	private void SetCrouchState(bool enabled)
+	{
+		canJump = !enabled;
+		moveDisable = enabled;
+		crouching = enabled;
+		anim.SetBool("Crouch", enabled);
+	}
+
+	//checks to see if our player can crouch and resets crouch once Crouch Input is released
+	private void CrouchInput(){
+		if(crouchDisable)
+			return;
+
+		if(!snared && !locked && !myHook.HitSomething && !stunned && grounded){
+			if(GameInput.instance.usingGamePad)
+			{
+				if(InputManager.ActiveDevice.DPadDown.WasPressed ||
+				   InputManager.ActiveDevice.LeftStick.Down.Value > .8f)
+				{
+					SetCrouchState(true);
+				}
+					
+			}
+			else if(Input.GetKeyDown(KeyMapping.CrouchKey))
+			{
+				SetCrouchState(true);
+			}
 		}
-		if( Input.GetButtonUp("Crouch") && !crouchDisable ){
-			crouching = false;
-			canJump = true;
-			moveDisable = false;
-			anim.SetBool("Crouch", crouching );
+		if(GameInput.instance.usingGamePad)
+		{
+			if(InputManager.ActiveDevice.DPadDown.WasReleased ||
+			   InputManager.ActiveDevice.LeftStick.Down.Value < .75f)
+			{
+				SetCrouchState(false);
+			}
+		}
+		else if(Input.GetKeyUp(KeyMapping.CrouchKey))
+		{
+			SetCrouchState(false);
 		}
 	}
 
@@ -283,8 +368,6 @@ public class Controller2D : MonoBehaviour {
 			//anim.SetFloat ( "vSpeed" , rigidbody2D.velocity.y );
 			
 			//to make jumping and changing direction is disabled
-			//if(!grounded) return;
-		    move = Input.GetAxis ( "Horizontal" );
 			anim.SetFloat("Speed", Mathf.Abs(move));
 			//Problem: THis sets velocity to zero.
 			rigidbody2D.velocity = new Vector2( move * maxSpeed, rigidbody2D.velocity.y );
@@ -380,7 +463,10 @@ public class Controller2D : MonoBehaviour {
 
         if (other.gameObject.tag == "movingPlatform")
         {
-            transform.parent = null;
+            if (myHook.currentState != Hook.HookState.None)
+                transform.parent = null;
+            else
+                transform.parent = other.transform;
         }
 	}
 

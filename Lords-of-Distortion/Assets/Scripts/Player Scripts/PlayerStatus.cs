@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using InControl;
 using System.Collections;
 
 public class PlayerStatus : MonoBehaviour {
@@ -46,9 +47,6 @@ public class PlayerStatus : MonoBehaviour {
 	private GameObject UI;					// Reference UI GUI
 	private UISlider stunBarUI;				// Reference UI slider values
 	private Camera levelCamera;
-	private bool horizontalPressedUp;		//tracks horizontal keyup
-	private bool horizontalPressedDown;		//tracks horizontal keydown
-	private int horizontalMoveCheck;		//tracks horizontal current key
 
 	private NetworkController networkController;
     //public UISprite shieldIcon;
@@ -60,8 +58,6 @@ public class PlayerStatus : MonoBehaviour {
 	void Awake(){
         //shieldIcon = GameObject.Find("UI-Passive").GetComponent<UISprite>();
 		recoverRate = 10f;
-		horizontalPressedUp = false;
-		horizontalPressedDown = false;
 		playerControl = GetComponent<Controller2D>();
 
 		/*
@@ -103,37 +99,26 @@ public class PlayerStatus : MonoBehaviour {
 		Destroy( MashIcon );
 	}
 
-	//this function acts as unitys input keydown and up for "Horizontal" input
-	//**unity does not have this functionality yet needed to do this way 
-	//**because if we change movement for keys it wont apply correctly 
-	void StunRecover(){
-		horizontalMoveCheck = (int)Input.GetAxisRaw("Horizontal");
-		if( horizontalMoveCheck < 0 ){
-			if(!horizontalPressedDown){
-				currentStunMeter -= recoverRate;
-				horizontalPressedDown = true;
+	void StunRecover()
+	{
+		if(GameInput.instance.usingGamePad)
+		{
+			InputDevice device = InputManager.ActiveDevice;
+			if(device.LeftStick.HasChanged || device.DPad.HasChanged)
+			{
+				currentStunMeter -= recoverRate * 2f; //it's harder to do this so increase recover rate
 			}
-			if( horizontalPressedUp ){
-				horizontalPressedUp = false;
-			}
-		}
-		else if( horizontalMoveCheck > 0 ){
-			if( !horizontalPressedDown){
-				currentStunMeter -= recoverRate;
-				horizontalPressedDown = true;
-			}
-			if( horizontalPressedUp ){
-				horizontalPressedUp = false;
+			else if(device.AnyButton.WasPressed){
+				currentStunMeter -= recoverRate/2f; //incredibily easy
 			}
 		}
-		else if( horizontalMoveCheck == 0 ){
-			if( horizontalPressedUp ){
-				horizontalPressedUp = false;
+		else
+		{
+			if(Input.GetKeyDown(KeyMapping.LeftKey) || Input.GetKeyDown(KeyMapping.RightKey))
+			{
+				currentStunMeter -= recoverRate;
 			}
-			if( horizontalPressedDown ){
-				horizontalPressedDown = false;
-			}
-		}	
+		}
 	}
 	
 	//Updates StunBar UI and tints color relative to danger
@@ -402,7 +387,7 @@ public class PlayerStatus : MonoBehaviour {
 	}
 
 	public void UnStunSimple(){
-		recoverRate = 10.0f;
+		recoverRate = 12.0f;
 		playerControl.snared = false;
 		//playerControl.meleeStunned = false;
 		playerControl.stunned = false;
@@ -455,7 +440,7 @@ public class PlayerStatus : MonoBehaviour {
 		PlayerEvent playerEvent = null;
 		
 		if(power.spawnInfo != null){
-			if(power.spawnInfo.type.IsPsuedoPower())
+			if(power.spawnInfo.type.IsPsuedoPower() || !power.spawnInfo.createEvents)
 				return;
 			playerEvent = new PlayerEvent(power.spawnInfo.type, 
 			                              TimeManager.instance.time, power.spawnInfo.owner);

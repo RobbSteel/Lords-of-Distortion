@@ -8,7 +8,8 @@ public class SessionManager : MonoBehaviour {
 	public GameObject DeathSpirit;
 	private int levelPrefix; //for networking purposes
 	private int arenaIndex; //for loading level purposes.
-	public string[] arenas = new string[4]{"empty", "empty", "empty", "empty"}; //an array of arenas
+    //TODO: Set this up with arena length from PickManager.cs
+	public string[] arenas;// = new string[4]{"empty", "empty", "empty", "empty"}; //an array of arenas
 	public PlayerServerInfo psInfo;
     public LobbyGUI lobbyGUIscript;
 	public bool finishedLoading = false;
@@ -17,6 +18,7 @@ public class SessionManager : MonoBehaviour {
 	private int playerCounter;
 	public bool matchfinish = false;
 	public float roundsplayed = 0;
+    private int numberOfRounds;
 	//public TimeManager timeManager;
 	
 	String offlineLevel = "MainMenu";
@@ -41,6 +43,13 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = -1;
 		levelPrefix = 0;
 		arenaIndex = -2;// lobby is -1
+
+        numberOfRounds = psInfo.numStages;
+        arenas = new string[numberOfRounds];
+        for (int i = 0; i < arenas.Length; i++)
+        {
+            arenas[i] = "empty";
+        }
 	}
 	
 	//NetworkController myPlayer;
@@ -281,7 +290,7 @@ public class SessionManager : MonoBehaviour {
 			}
 		}
 		
-		if(roundsplayed == 4 && scorescreen){
+		if(roundsplayed == arenas.Length && scorescreen){
 			print("Match Done");
 			matchfinish = true;
 			roundsplayed = 0;
