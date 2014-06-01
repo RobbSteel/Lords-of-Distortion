@@ -101,7 +101,7 @@ public class Earthquake : Power {
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
 		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject" || col.transform.tag == "movingPlatform"){
-			audio.PlayOneShot(earthhit, 0.55f);
+			audio.PlayOneShot(earthhit, 0.45f);
             if (col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform")
             {
 

@@ -523,7 +523,6 @@ public class Controller2D : MonoBehaviour {
 	public void Die(DeathType deathType = DeathType.CRUSH){
 
 		if(networkController.isOwner && !dead){
-
 			status.currentStunMeter = 0;
 			collider2D.enabled = false;
 			dead = true;
@@ -576,6 +575,7 @@ public class Controller2D : MonoBehaviour {
             anim.SetTrigger("CrushedDeath");
             break;
 		default:
+			//audio.PlayOneShot(deathSfx);
 			anim.SetTrigger("Die"); //not gonna work
 			break;
 		}
