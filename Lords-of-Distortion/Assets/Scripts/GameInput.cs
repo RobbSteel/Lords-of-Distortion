@@ -38,13 +38,26 @@ public class GameInput : MonoBehaviour {
 		analogSensitity = Screen.width *.90f;
 	}
 
+	int inactiveFrames = 0;
 	void Update () {
 
 		InputManager.Update();
 		InputDevice activeDevice = InputManager.ActiveDevice;
 		//Were using the gamepad if its state has changed.
-		usingGamePad = (activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
-		                || activeDevice.RightTrigger.IsPressed || activeDevice.RightBumper.IsPressed);
+		if(activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
+		                || activeDevice.RightTrigger.IsPressed || activeDevice.RightBumper.IsPressed)
+		{
+			inactiveFrames = 0;
+			usingGamePad = true;
+		}
+		else 
+		{
+			inactiveFrames++;
+		}
+		if(inactiveFrames > 1)
+			usingGamePad = false;
+
+
 		if(usingGamePad && useCustomCursor)
 			GamePadToCursor();
 	}

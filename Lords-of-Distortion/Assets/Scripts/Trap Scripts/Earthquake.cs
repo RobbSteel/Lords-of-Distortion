@@ -6,6 +6,8 @@ public class Earthquake : Power {
 	public float risetime;
 	public GameObject groundshatter;
 	public GameObject leafshatter;
+	public AudioClip earthhit;
+	public AudioClip earthrise;
 	public int reps = 0;
 	// Use this for initialization
 	void Start () {
@@ -22,9 +24,10 @@ public class Earthquake : Power {
 
 		} else {
 
-
+			audio.PlayOneShot(earthrise, 0.4f);
 			transform.Translate (Vector3.up * 0.5f * Time.deltaTime);
 			risetime -= Time.deltaTime;
+
 		}
 
 	}
@@ -100,7 +103,7 @@ public class Earthquake : Power {
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
 		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject" || col.transform.tag == "movingPlatform"){
-
+			audio.PlayOneShot(earthhit, 0.7f);
             if (col.transform.tag == "killplatform" || col.transform.tag == "movingPlatform")
             {
 

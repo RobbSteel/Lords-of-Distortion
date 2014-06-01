@@ -22,10 +22,11 @@ public class DefectionShield : Power {
 	private Vector3 end;
 
 	public GameObject CharMark;
-	
+	public AudioClip wubwub;
 
 	// Use this for initialization
 	void Start () {
+
 		this.renderer.material.SetColor ("_TintColor", shieldshaderColor);
         particleSystem.renderer.sortingLayerName = "Foreground";
 		currentColor = shieldshaderColor;
@@ -33,11 +34,15 @@ public class DefectionShield : Power {
 		timer = 0;
 		original = this.transform.position;
 		end = this.transform.position + Vector3.left* 0.1f;
+		audio.loop = true;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		DefectionShieldTimer();
+
+
 	}
 
 	//might not need

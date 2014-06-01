@@ -199,7 +199,7 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	}
 
 	public void setupPowerToUse(){
-		powerToKillPlayer.transform.position = warningSign.transform.position;
+		powerToKillPlayer.transform.position = player.transform.position;
 		Destroy (warningSign);
 		powerToKillPlayer.SetActive (true);
 	}

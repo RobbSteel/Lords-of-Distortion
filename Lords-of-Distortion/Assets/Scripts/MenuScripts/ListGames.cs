@@ -11,6 +11,8 @@ public class ListGames : MonoBehaviour {
 
 	public UIGrid EntryGrid;
 	public GameObject EntryUI;
+	public AudioClip buttonhover;
+	public AudioClip buttonclick;
 
 	private float refreshtime = 0f;
 	
@@ -25,15 +27,20 @@ public class ListGames : MonoBehaviour {
 
 	void OnPress(bool isDown)
 	{
-		if(isDown)
+		if (isDown) {
+			audio.PlayOneShot(buttonclick);
 			return;
-
+		}
 		MasterServer.ClearHostList();
 		MasterServer.RequestHostList(typeName);
 		testingConnections = false;
 
 	}
-
+	void OnHover(bool isOver){
+		if (isOver){
+			audio.PlayOneShot(buttonhover, 0.35f);
+		}
+	}
 	bool testingConnections = false;
 
 	void GenerateList()

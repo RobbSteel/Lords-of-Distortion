@@ -14,13 +14,13 @@ public class CharSelectScript : MonoBehaviour {
         {
             if (charList[i].GetComponent<CharSelected>().characterNum == charNum)
             {
-                charList[i].GetComponent<UIButton>().defaultColor = Color.green;
-                textureList[i].GetComponent<UITexture>().color = Color.green;
+                charList[i].GetComponent<UIButton>().defaultColor = Color.yellow;
+                textureList[i].GetComponent<UITexture>().color = Color.yellow;
             }
             else 
             {
-                charList[i].GetComponent<UIButton>().defaultColor = Color.white;
-                textureList[i].GetComponent<UITexture>().color = Color.white;
+                charList[i].GetComponent<UIButton>().defaultColor = Color.grey;
+                textureList[i].GetComponent<UITexture>().color = Color.grey;
                 charList[i].GetComponent<UIButton>().UpdateColor(true, true);
             }
         }

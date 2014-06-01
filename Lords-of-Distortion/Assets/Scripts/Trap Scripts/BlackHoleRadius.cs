@@ -9,12 +9,13 @@ public class BlackHoleRadius : Power
 	GameObject playerGO;
 	Controller2D controller;
 	public float BHForce;
-
+	public AudioClip bhsound;
 
 	void Start () 
 	{
 		Destroy(gameObject, 8f);
 		BHForce = 0.16f;
+		audio.loop = true;
 	}
 
 	void FixedUpdate(){

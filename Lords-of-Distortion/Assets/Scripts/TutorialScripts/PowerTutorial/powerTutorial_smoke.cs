@@ -4,7 +4,8 @@ using System.Collections;
 public class powerTutorial_smoke : MonoBehaviour {
 
 	public Animator anim;
-	//public GameObject powerDemo;
+	public AudioClip buttonhover;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -17,6 +18,7 @@ public class powerTutorial_smoke : MonoBehaviour {
 	
 	void OnHover(bool isOver){
 		if (isOver) {
+			audio.PlayOneShot(buttonhover, 0.35f);
 			anim.SetBool("smokebomb_hover", isOver);
 		}
 		if (!isOver) {
