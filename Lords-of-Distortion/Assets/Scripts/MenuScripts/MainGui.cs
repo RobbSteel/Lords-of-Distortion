@@ -20,6 +20,11 @@ public class MainGui : MonoBehaviour {
 
 //Saves player name and server name
 
+	void Start()
+	{
+		Screen.showCursor = true;
+		GameInput.instance.HideCustomCursor();
+	}
 	void Update(){
 		
 		playerName = playerbutton.GetComponent<UIInput>().value;
