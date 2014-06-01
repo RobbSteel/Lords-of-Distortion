@@ -26,6 +26,7 @@ public class PlagueScript : Power
 
 	void Update(){
 
+		//If plague kills someone reacquire new targets
 		if(targetplayer != null){
 			if(targetplayer.GetComponent<Controller2D>().dead){
 				AcquireTarget();
@@ -36,6 +37,7 @@ public class PlagueScript : Power
 
 	void AcquireTarget(){
 
+		//Look through alive players and target one
 		for(int i = 0; i < possibletargets.Length; i++){
 			if(possibletargets[i] != null){
 				var currplayer = possibletargets[i];
@@ -44,6 +46,21 @@ public class PlagueScript : Power
 						targetplayer = currplayer;
 						closestdistance = distance;
 					}
+			}
+		}
+
+		//If no players are alive, reselect a dead player
+		if(targetplayer == null){
+
+			for(int i = 0; i < possibletargets.Length; i++){
+				if(possibletargets[i] != null){
+					var currplayer = possibletargets[i];
+					var distance = Vector2.Distance(transform.position, currplayer.transform.position);
+						if((distance < closestdistance)){
+							targetplayer = currplayer;
+							closestdistance = distance;
+						}
+				}
 			}
 		}
 
