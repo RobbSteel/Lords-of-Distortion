@@ -21,7 +21,7 @@ public class HookHit : MonoBehaviour {
 	private bool metriconce = false;
 	public bool OFFLINE;
 	bool poweredUp = false;
-
+	public AudioClip flamehook;
 	private bool hitPlatform = false;
 	void Awake()
 	{
@@ -79,6 +79,7 @@ public class HookHit : MonoBehaviour {
 			pH.spawnInfo.owner = networkController.theOwner;
 			gameObject.tag = "PowerHook";
 			poweredUp = true;
+			audio.PlayOneShot(flamehook);
 			GameObject hookfire = (GameObject)Instantiate(fireeffect, transform.position, transform.rotation);
 			hookfire.transform.parent = gameObject.transform;
 			return;
