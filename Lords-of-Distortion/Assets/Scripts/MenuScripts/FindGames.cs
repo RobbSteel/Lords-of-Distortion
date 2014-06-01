@@ -22,7 +22,7 @@ public class FindGames : MonoBehaviour {
 		} else {
 			transition = transitioner.GetComponent<Transitioner>();
 			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
-			PlayerServerInfo.instance.servername = playerscript.gameName;
+			//PlayerServerInfo.instance.servername = playerscript.gameName;
 			audio.PlayOneShot(pageturn);
 			transition.Flip("FindingGames", false);
 		}

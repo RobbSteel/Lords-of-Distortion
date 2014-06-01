@@ -106,7 +106,7 @@ public class PlayerStatus : MonoBehaviour {
 			InputDevice device = InputManager.ActiveDevice;
 			if(device.LeftStick.HasChanged || device.DPad.HasChanged)
 			{
-				currentStunMeter -= recoverRate * 2f; //it's harder to do this so increase recover rate
+				currentStunMeter -= recoverRate * 1.1f; //it's harder to do this so increase recover rate
 			}
 			else if(device.AnyButton.WasPressed){
 				currentStunMeter -= recoverRate/2f; //incredibily easy

@@ -15,13 +15,13 @@ public class Host : MonoBehaviour {
 
 	void OnPress(){
 
-		if(playerscript.playerName == "" || playerscript.playerName == "Player Name" || playerscript.gameName == "" || playerscript.gameName == "Server Name"){
-			
+		if(playerscript.playerName == "" || playerscript.playerName == "Player Name")
+        {
 			print("Nope");
-			
-		} else {
+		} 
+        else
+        {
 			infoscript.localOptions.username = playerscript.playerName;
-			infoscript.servername = playerscript.gameName;
 			infoscript.choice = "Host";
 			Application.LoadLevel("LobbyArena");
 			
