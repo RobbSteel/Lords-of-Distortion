@@ -7,7 +7,8 @@ public class FlipLevel : MonoBehaviour {
 	private string LevelName = "MainMenu";
 	public bool flipleft = false;
 	public GameObject transitioner;
-	
+	public AudioClip buttonhover;
+	public AudioClip buttonclick;
 	
 	Transitioner fader;
 	
@@ -24,7 +25,13 @@ public class FlipLevel : MonoBehaviour {
 	{
 		if(!isDown)
 		{
+			audio.PlayOneShot(buttonclick);
 			fader.Flip(LevelName, flipleft);
+		}
+	}
+	void OnHover(bool isOver){
+		if (isOver) {
+			audio.PlayOneShot(buttonhover, 0.35f);
 		}
 	}
 }
