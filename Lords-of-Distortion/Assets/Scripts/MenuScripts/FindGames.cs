@@ -7,7 +7,7 @@ public class FindGames : MonoBehaviour {
 	public MainGui playerscript;
 	public GameObject transitioner;
 	Transitioner transition;
-
+	public AudioClip pageturn;
 	// Update is called once per frame
 	void Update () {
 		//print(playerscript.playerName);
@@ -23,6 +23,7 @@ public class FindGames : MonoBehaviour {
 			transition = transitioner.GetComponent<Transitioner>();
 			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
 			PlayerServerInfo.instance.servername = playerscript.gameName;
+			audio.PlayOneShot(pageturn);
 			transition.Flip("FindingGames", false);
 		}
 

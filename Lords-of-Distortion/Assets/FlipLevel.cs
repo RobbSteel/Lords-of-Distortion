@@ -31,7 +31,7 @@ public class FlipLevel : MonoBehaviour {
 	}
 	void OnHover(bool isOver){
 		if (isOver) {
-			audio.PlayOneShot(buttonhover, 0.35f);
+			audio.PlayOneShot(buttonhover, 0.3f);
 		}
 	}
 }

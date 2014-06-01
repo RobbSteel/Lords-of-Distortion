@@ -9,10 +9,12 @@ public class LoadLevel : MonoBehaviour {
 	public AudioClip buttonclick;
 	void OnPress(bool isDown)
 	{
-		audio.PlayOneShot (buttonclick);
+
 		if(!isDown)
 		{
+			audio.PlayOneShot (buttonclick);
 			Application.LoadLevel(LevelName);
+
 		}
 	}
 	void OnHover(bool isOver){
