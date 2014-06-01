@@ -26,7 +26,7 @@ public class SmokeBomb : Power {
 	private Vector3 end;
 	private bool playerEnteredSmoke;
 	private GameObject trackPlayerDeath;
-
+	public AudioClip smokebomb;
 	void Awake(){
 		targets = new List<GameObject> ();
 		cameraFadeInFunctionName = "fadeIn";
@@ -54,6 +54,7 @@ public class SmokeBomb : Power {
 		Destroy(gameObject, duration);
 		original = this.transform.position;
 		end = this.transform.position + Vector3.left* 0.1f;
+		audio.loop = true;
 	}
 	
 	// Update is called once per frame
