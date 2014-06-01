@@ -605,7 +605,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
 --- !u!114 &19396099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1442,7 +1442,7 @@ Transform:
   m_LocalScale: {x: .00619195029, y: .00619195029, z: .00619195029}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
 --- !u!1 &212337265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,9 +1923,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2982c19e9f37160469655ab04b3ef2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClickTexture: {fileID: 0}
-  onHoverTexture: {fileID: 2800000, guid: 056b02cf334afe24f9e844adc89dd0cb, type: 3}
-  defaultTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
   buttonhover: {fileID: 8300000, guid: 5b9cf962025186e48ab3b5f76a74afce, type: 3}
 --- !u!114 &557924230
 MonoBehaviour:
@@ -2181,6 +2178,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
+      propertyPath: m_Volume
+      value: .25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
   m_RootGameObject: {fileID: 1552190345}
@@ -2380,9 +2381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2982c19e9f37160469655ab04b3ef2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClickTexture: {fileID: 0}
-  onHoverTexture: {fileID: 2800000, guid: 056b02cf334afe24f9e844adc89dd0cb, type: 3}
-  defaultTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
   buttonhover: {fileID: 8300000, guid: 5b9cf962025186e48ab3b5f76a74afce, type: 3}
 --- !u!114 &850810892
 MonoBehaviour:
@@ -2786,9 +2784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2982c19e9f37160469655ab04b3ef2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClickTexture: {fileID: 0}
-  onHoverTexture: {fileID: 2800000, guid: 056b02cf334afe24f9e844adc89dd0cb, type: 3}
-  defaultTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
   buttonhover: {fileID: 8300000, guid: 5b9cf962025186e48ab3b5f76a74afce, type: 3}
 --- !u!114 &1396803626
 MonoBehaviour:
@@ -3133,7 +3128,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: f6e448e55f03bf94e8026de2b7a3931f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .200000003
+  m_Volume: .25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3693,7 +3688,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1 &1870565335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3804,9 +3799,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2982c19e9f37160469655ab04b3ef2a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClickTexture: {fileID: 0}
-  onHoverTexture: {fileID: 2800000, guid: 056b02cf334afe24f9e844adc89dd0cb, type: 3}
-  defaultTexture: {fileID: 2800000, guid: 66900474cab787246b02462c66a62a94, type: 3}
   buttonhover: {fileID: 8300000, guid: 5b9cf962025186e48ab3b5f76a74afce, type: 3}
 --- !u!114 &1870565342
 MonoBehaviour:
@@ -4066,7 +4058,7 @@ Transform:
   - {fileID: 1870565336}
   - {fileID: 1411885662}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 7
 --- !u!54 &1979524389
 Rigidbody:
   m_ObjectHideFlags: 0

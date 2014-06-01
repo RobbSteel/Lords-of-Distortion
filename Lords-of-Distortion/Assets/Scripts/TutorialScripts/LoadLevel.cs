@@ -5,7 +5,7 @@ public class LoadLevel : MonoBehaviour {
 
 	[SerializeField]
 	private string LevelName = "MainMenu";
-	public AudioClip buttonhover;
+	//public AudioClip buttonhover;
 	public AudioClip buttonclick;
 	void OnPress(bool isDown)
 	{
@@ -17,9 +17,5 @@ public class LoadLevel : MonoBehaviour {
 
 		}
 	}
-	void OnHover(bool isOver){
-		if (isOver) {
-			audio.PlayOneShot(buttonhover, 0.35f);
-		}
-	}
+
 }
