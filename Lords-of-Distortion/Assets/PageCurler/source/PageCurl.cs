@@ -13,9 +13,10 @@ public class PageCurl : MonoBehaviour
 {
     public GameObject ForestStages;
     public GameObject MineStages;
-
+	public UIPanel StageUI;
     public GameObject ForestSelectBtn;
     public GameObject MineSelectBtn;
+	public GameObject levelgrid;
 
     //private GameObject SelectUI;
 
@@ -121,7 +122,9 @@ public class PageCurl : MonoBehaviour
         //SelectUI = GameObject.Find("SelectUI(Clone)"); 
         if(level == "None-Gem")
         {
-            MineStages.SetActive(true);
+			StageUI.alpha = 1;
+			levelgrid.SetActive(true);
+			MineStages.SetActive(true);
             MineSelectBtn.SetActive(false);
             ForestSelectBtn.SetActive(true);
             //if (SelectUI != null)
@@ -129,7 +132,9 @@ public class PageCurl : MonoBehaviour
         }
         else if (level == "None-Forest")
         {
-            ForestStages.SetActive(true);
+			StageUI.alpha = 1;
+			levelgrid.SetActive(true);
+			ForestStages.SetActive(true);
             MineSelectBtn.SetActive(true);
             ForestSelectBtn.SetActive(false);
             //if (SelectUI != null)

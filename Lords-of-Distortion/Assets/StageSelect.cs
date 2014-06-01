@@ -5,9 +5,11 @@ public class StageSelect : MonoBehaviour {
 
 	public GameObject difficulty;
 	public GameObject pick;
+	//public GameObject tracker;
 	public string difficultyrating;
 	public string stagename;
 	public string currentstage;
+	public StageTracker trackmaster;
 
 	[RPC]
 	void HostPickInfo(){
@@ -32,30 +34,28 @@ public class StageSelect : MonoBehaviour {
 
 	GameObject difflabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, -2.1f), transform.rotation);
 	difflabel.tag = "Display";
-	difflabel.transform.parent = GameObject.Find("SelectUI(Clone)").transform;
+	difflabel.transform.parent = GameObject.Find("SelectUI").transform;
 	difflabel.transform.localScale = new Vector3(1, 1, 1);
 	difflabel.transform.localPosition = new Vector2(325, -100);
 	var difficultytext = difflabel.GetComponent<UILabel>();
 	difficultytext.text = difficultyrating;
 	GameObject stagelabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, -2.1f), transform.rotation);
 	stagelabel.tag = "Display";
-	stagelabel.transform.parent = GameObject.Find("SelectUI(Clone)").transform;
+	stagelabel.transform.parent = GameObject.Find("SelectUI").transform;
 	stagelabel.transform.localScale = new Vector3(1, 1, 1);
 	stagelabel.transform.localPosition = new Vector2(325, -40);
 	var stagetext = stagelabel.GetComponent<UILabel>();
 	stagetext.text = stagename;
+
+	trackmaster.stagename = stagelabel;
+	trackmaster.stagedifficulty = difflabel;
  }
 
 //Used for deletion of information when a new button is pressed
  void DeleteInfo(){
 
-    if(GameObject.FindGameObjectWithTag("Display") != null){
-		var deletion = GameObject.FindGameObjectsWithTag("Display");
-				
-			for(int i = 0; i < deletion.Length; i++){
-				Destroy(deletion[i]);
-			}
-	}
+		trackmaster.Destroy();
+
  }
 
 //Enlarges the display of the chosen stage
@@ -66,6 +66,7 @@ public class StageSelect : MonoBehaviour {
 	var displayscript = displaymap.gameObject.GetComponent<StageSelect>();
 	Destroy(displayscript);
 	displaymap.tag = "Display";
+	trackmaster.stagedisplay = displaymap;
  }
 
  void OnMouseDown(){
