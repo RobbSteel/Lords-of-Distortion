@@ -11,6 +11,14 @@ using System.Collections;
 [ExecuteInEditMode]
 public class PageCurl : MonoBehaviour 
 {
+    public GameObject ForestStages;
+    public GameObject MineStages;
+
+    public GameObject ForestSelectBtn;
+    public GameObject MineSelectBtn;
+
+    //private GameObject SelectUI;
+
     public float initRotation = 90.0f;  //initial page rotation
     public float endRotation = 270.0f;  //end page rotation
     [Range(0f, 1f)]
@@ -32,6 +40,11 @@ public class PageCurl : MonoBehaviour
     {
         initTheta = theta;
         initApex = apex;
+    }
+
+    void Awake()
+    {
+        
     }
 
 	void Update () 
@@ -105,7 +118,26 @@ public class PageCurl : MonoBehaviour
     //Animation event called when the page flip motion has ended
     public void OnPageFlip()
     {
-		Application.LoadLevel(level);
+        //SelectUI = GameObject.Find("SelectUI(Clone)"); 
+        if(level == "None-Gem")
+        {
+            MineStages.SetActive(true);
+            MineSelectBtn.SetActive(false);
+            ForestSelectBtn.SetActive(true);
+            //if (SelectUI != null)
+              //  SelectUI.SetActive(true);
+        }
+        else if (level == "None-Forest")
+        {
+            ForestStages.SetActive(true);
+            MineSelectBtn.SetActive(true);
+            ForestSelectBtn.SetActive(false);
+            //if (SelectUI != null)
+              //  SelectUI.SetActive(true);
+        }
+        else 
+            Application.LoadLevel(level);
+        
     }
 
     //Return the material list
