@@ -4,6 +4,7 @@ using System.Collections;
 public class powerTutorial_sticky : MonoBehaviour {
 
 	public Animator anim;
+	public AudioClip buttonhover;
 	//public GameObject powerDemo;
 	// Use this for initialization
 	void Start () {
@@ -14,9 +15,11 @@ public class powerTutorial_sticky : MonoBehaviour {
 	void Update () {
 		
 	}
-	
+
+
 	void OnHover(bool isOver){
 		if (isOver) {
+			audio.PlayOneShot(buttonhover, 0.35f);
 			anim.SetBool("sticky_hover", isOver);
 		}
 		if (!isOver) {

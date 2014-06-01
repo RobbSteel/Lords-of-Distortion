@@ -4,7 +4,7 @@ using System.Collections;
 public class HostButton : MonoBehaviour {
 
     public MainGui playerscript;
-
+	public AudioClip buttonclick;
     void OnPress()
     {
 
@@ -14,6 +14,7 @@ public class HostButton : MonoBehaviour {
         }
         else
         {
+			audio.PlayOneShot(buttonclick);
 			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
 			PlayerServerInfo.instance.choice = "Host";
             Application.LoadLevel("HostMenu");

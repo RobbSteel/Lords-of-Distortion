@@ -4,6 +4,7 @@ using System.Collections;
 public class pwoerTutorial_electric : MonoBehaviour {
 
 	public Animator anim;
+	public AudioClip buttonhover;
 	//public GameObject powerDemo;
 	// Use this for initialization
 	void Start () {
@@ -17,6 +18,8 @@ public class pwoerTutorial_electric : MonoBehaviour {
 	
 	void OnHover(bool isOver){
 		if (isOver) {
+			audio.PlayOneShot(buttonhover, 0.35f);
+
 			anim.SetBool("electric_hover", isOver);
 		}
 		if (!isOver) {

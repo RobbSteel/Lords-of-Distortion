@@ -7,6 +7,7 @@ public class CustomButton : MonoBehaviour {
 	public Texture onHoverTexture;
 	public Texture defaultTexture;
 	private GameObject currentTexture;
+	public AudioClip buttonhover;
 	//private bool pressed;
 
 	void OnAwake(){
@@ -42,8 +43,11 @@ public class CustomButton : MonoBehaviour {
 
 
 	void OnHover( bool isOver ){
-		if (isOver )
+	
+		if (isOver){
+			audio.PlayOneShot(buttonhover, 0.35f);
 			currentTexture.GetComponent<UITexture> ().mainTexture = onHoverTexture;
+		}
 		else 
 			currentTexture.GetComponent<UITexture> ().mainTexture = defaultTexture;
 	}
