@@ -19,16 +19,9 @@ public class MeleeHit : MonoBehaviour {
 			onHitDeath = col.GetComponent<Controller2D>();
 			melee.HandleCollision(col.gameObject);
 			AudioSource.PlayClipAtPoint( onHitDeath.meleeHitSfx , transform.position);
-
-			Debug.Log ("Player hit");
 			// Disable BoxCollider2D so that only one hit registers.
 			GetComponent<BoxCollider2D>().enabled = false;
 		
 		}
-		// ...else melee hits nothing
-		else
-			Debug.Log ("Hit something other than player");
-
-
 	}
 }
