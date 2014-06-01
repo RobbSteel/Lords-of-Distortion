@@ -303,7 +303,10 @@ public class Controller2D : MonoBehaviour {
 		canJump = !enabled;
 		moveDisable = enabled;
 		crouching = enabled;
-		anim.SetBool("Crouch", enabled);
+		if(enabled)
+			anim.SetTrigger("Crouch");
+		else 
+			anim.SetTrigger("Default");
 	}
 
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
