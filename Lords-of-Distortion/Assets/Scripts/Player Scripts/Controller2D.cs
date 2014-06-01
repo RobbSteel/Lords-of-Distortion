@@ -193,14 +193,16 @@ public class Controller2D : MonoBehaviour {
 					jumpRequested = true;
 			}
 		}
-
-		if(GameInput.instance.usingGamePad)
+		if(inAir)
 		{
-			stoppedJump = !InputManager.ActiveDevice.Action1.IsPressed;
-		}
-		else 
-		{
-			stoppedJump = !Input.GetKey(KeyMapping.JumpKey);
+			if(GameInput.instance.usingGamePad )
+			{
+				stoppedJump = !InputManager.ActiveDevice.Action1.IsPressed;
+			}
+			else 
+			{
+				stoppedJump = !Input.GetKey(KeyMapping.JumpKey);
+			}
 		}
 	}
 
@@ -269,7 +271,7 @@ public class Controller2D : MonoBehaviour {
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
-		    if(inAir && (rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump)){
+		    if((rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump)){
 			    //print ("started falling");
 			    rigidbody2D.gravityScale = 1.8f;
 		    }
@@ -286,9 +288,9 @@ public class Controller2D : MonoBehaviour {
 			    anim.SetTrigger("Jump");
 			    //AudioSource.PlayClipAtPoint( jumpSfx , transform.position);
 			    //I think setting velocity feels better.
+				rigidbody2D.gravityScale = 1f;
 			    rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			    inAir = true;
-
 			    // player can't jump again until jump conditions from Update are satisfied
 			    jumpRequested = false;
 		    }
