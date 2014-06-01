@@ -34,7 +34,6 @@ public class GameInput : MonoBehaviour {
 
 	void Start () {
 		InputManager.Setup();
-		UseCustomCursor(); //TODO: call this in game instead of menu
 		analogSensitity = Screen.width *.90f;
 	}
 
