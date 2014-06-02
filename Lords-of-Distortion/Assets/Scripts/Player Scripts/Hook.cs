@@ -94,6 +94,9 @@ public class Hook : MonoBehaviour {
 	}
 
 	public void ReturnHook(){
+		if(currentHook == null)
+			return;
+
 		currentState = HookState.GoingBack;
 		/* Physics.
 		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
@@ -132,6 +135,10 @@ public class Hook : MonoBehaviour {
 					}
 					
 					Vector3 targetPosition = transform.position + (directionInput.normalized * 100f);
+					if(!OFFLINE)
+					{
+						networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
+					}
 					ShootHookLocal(transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
 				}
 				else if(currentState == HookState.GoingOut)
