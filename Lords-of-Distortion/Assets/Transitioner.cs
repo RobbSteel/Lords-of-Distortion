@@ -24,7 +24,8 @@ public class Transitioner : MonoBehaviour {
 
 		curler.Flip(loadlevel, flipright);
 		fadeaway = true;
-		Destroy (remove);
+        if(remove != null)
+		    Destroy (remove);
 	}
 
 	void Update(){
