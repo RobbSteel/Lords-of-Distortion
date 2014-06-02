@@ -69,6 +69,7 @@ public static class PowerTypeExtensions{
 		powersWithNetworking.Add(PowerType.EXPLOSIVE);
 		powersWithNetworking.Add(PowerType.FREEZE);
 		powersWithNetworking.Add(PowerType.EARTH);
+		powersWithNetworking.Add(PowerType.PLAGUE);
 	}
 
 	public static bool TypeRequiresDirection(this PowerType type){
