@@ -77,14 +77,25 @@ public class GameInput : MonoBehaviour {
 	private Vector2 oldMousePosition;
 	private Rect cursorRect = new Rect(0f, 0f, 32f, 32f);
 
-
+	bool InScreen(Vector2 coordinates)
+	{
+		Rect screenRect = new Rect(0,0, Screen.width, Screen.height);
+		return screenRect.Contains(coordinates);
+	}
 
 	void GamePadToCursor()
 	{
 		InputDevice device = InputManager.ActiveDevice;
-		cursorPosition.x += device.RightStickX.Value * analogSensitity * Time.deltaTime;
-		cursorPosition.y += -device.RightStickY.Value * analogSensitity * Time.deltaTime;
+		Vector2 newPosition = cursorPosition;
 
+		newPosition.x += device.RightStickX.Value * analogSensitity * Time.deltaTime;
+		if(InScreen(newPosition)){
+			cursorPosition.x = newPosition.x;
+		}
+		newPosition.y += -device.RightStickY.Value * analogSensitity * Time.deltaTime;
+		if(InScreen(newPosition)){
+			cursorPosition.y = newPosition.y;
+		}
 		MousePosition.x = cursorPosition.x;
 		MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y; //flip coordinates
 	}
@@ -95,9 +106,11 @@ public class GameInput : MonoBehaviour {
 		//We moved our mouse. Ignore gamepad's cursor location and use mouse's
 		if(!usingGamePad && oldMousePosition != mousePositionUI)
 		{
-			cursorPosition = mousePositionUI;
-			MousePosition.x = cursorPosition.x;
-			MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y;
+			if(InScreen(mousePositionUI)){
+				cursorPosition = mousePositionUI;
+				MousePosition.x = cursorPosition.x;
+				MousePosition.y = Camera.main.pixelHeight -  cursorPosition.y;
+			}
 		}
 
 		oldMousePosition = mousePositionUI;
