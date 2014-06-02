@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'shoes'
 
 #Usage: CopyMeta File who's meta we want, file who's meta we want to replace
 #Note, both files must have a meta file.
@@ -33,4 +34,27 @@ def copyMeta(from, to)
 end
 
 
-copyMeta(ARGV[0], ARGV[1])
+#copyMeta(ARGV[0], ARGV[1])
+
+Shoes.app{
+	@status = title "Select files.."
+	@openAnim = button "Original"
+	@openSprite = button "Recolored"
+	sheet1 = nil
+	@openAnim.click {
+		sheet1 = ask_open_file
+		@status.replace File.basename(sheet1)
+	}
+	sheet2 = nil
+	@openSprite.click {
+		sheet2 = ask_open_file
+		@status.replace File.basename(sheet2)
+	}
+
+	@process = button "Copy Meta"
+
+	@process.click {
+		copyMeta(sheet1, sheet2)
+		@status.replace "Done"
+	}
+}
