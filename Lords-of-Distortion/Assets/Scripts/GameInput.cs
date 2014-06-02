@@ -44,7 +44,8 @@ public class GameInput : MonoBehaviour {
 		InputDevice activeDevice = InputManager.ActiveDevice;
 		//Were using the gamepad if its state has changed.
 		if(activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
-		                || activeDevice.RightTrigger.IsPressed || activeDevice.RightBumper.IsPressed)
+		                || activeDevice.RightTrigger.IsPressed || activeDevice.LeftTrigger.IsPressed || activeDevice.RightBumper.IsPressed
+		   				|| activeDevice.LeftBumper.IsPressed)
 		{
 			inactiveFrames = 0;
 			usingGamePad = true;
