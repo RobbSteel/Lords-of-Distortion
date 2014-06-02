@@ -31,7 +31,7 @@ public class NetworkController : MonoBehaviour {
 		public Vector3 position;
 		public Vector3 velocity;
 		public bool facingRight;
-		public bool inAir;
+		public bool crouching;
 		public double remoteTime; //the time of this state on the client
 		public float localTime;  //the time we received a copy of this state.
 		public State(Vector3 position, bool facingRight){
@@ -40,7 +40,7 @@ public class NetworkController : MonoBehaviour {
 			this.facingRight = facingRight;
 			this.remoteTime = double.NaN;
 			this.localTime = float.NaN;
-			this.inAir = false;
+			this.crouching = false;
 		}
 	}
 
@@ -121,6 +121,7 @@ public class NetworkController : MonoBehaviour {
 	public float interpolationPercentage;
 	
 	bool jumped = false;
+    bool crouched = false;
 	void Update () {
 
 		if (isOwner)
@@ -174,6 +175,15 @@ public class NetworkController : MonoBehaviour {
 						jumped = false;
 					}
 
+                    if(newerState.crouching && !olderState.crouching && !controller2D.crouching)
+                    {
+                        controller2D.SetCrouchState(true);
+                    }
+                    else if(olderState.crouching && !newerState.crouching && controller2D.crouching)
+                    {
+                        controller2D.SetCrouchState(false);
+                    }
+                
 					float unit = Mathf.Abs(newerState.position.x - olderState.position.x) > .01f ? 1.0f : 0.0f;
 					controller2D.anim.SetFloat( "Speed", unit);
 					interpolations++;
@@ -213,14 +223,14 @@ public class NetworkController : MonoBehaviour {
 		Vector3 syncPosition = Vector3.zero;
 		Vector3 syncVelocity = Vector3.zero;
 		bool syncFacingRight = false;
-		bool syncInAir = false;
+		bool syncCrouch = false;
 		if (stream.isWriting)
 		{
 			//if we have control over this entity, send out our positions to everyone else.
 			syncPosition = transform.position;
 			syncVelocity = rigidbody2D.velocity;
 
-			syncInAir = controller2D.inAir;
+			syncCrouch = controller2D.crouching;
 			syncFacingRight = controller2D.facingRight;
 
 			stream.Serialize(ref syncPosition.x);
@@ -228,7 +238,7 @@ public class NetworkController : MonoBehaviour {
 			stream.Serialize(ref syncVelocity.x);
 			stream.Serialize(ref syncVelocity.y);
 			stream.Serialize(ref syncFacingRight);
-			stream.Serialize(ref syncInAir);
+			stream.Serialize(ref syncCrouch);
 		}
 
 		else {
@@ -260,12 +270,12 @@ public class NetworkController : MonoBehaviour {
 			stream.Serialize(ref syncVelocity.y);
 
 			stream.Serialize(ref syncFacingRight);
-			stream.Serialize(ref syncInAir);
+			stream.Serialize(ref syncCrouch);
 
 
 			State state = new State(syncPosition, syncFacingRight);
 			state.velocity = syncVelocity;
-			state.inAir = syncInAir;
+			state.crouching = syncCrouch;
 			state.remoteTime = info.timestamp;
 			state.localTime = (float)Network.time;
 			states.Add(state); //if we advanced buffer manually, then count < maxsize

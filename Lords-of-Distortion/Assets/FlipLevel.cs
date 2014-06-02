@@ -12,10 +12,6 @@ public class FlipLevel : MonoBehaviour {
 	
 	Transitioner fader;
 	
-	
-	
-	
-	
 	void Awake(){
 		
 		fader = transitioner.GetComponent<Transitioner>();
@@ -23,11 +19,12 @@ public class FlipLevel : MonoBehaviour {
 	
 	void OnPress(bool isDown)
 	{
-		if(!isDown)
-		{
-			audio.PlayOneShot(buttonclick);
-			fader.Flip(LevelName, flipleft);
-		}
+        if (isDown)
+            return;
+		
+		audio.PlayOneShot(buttonclick);
+		fader.Flip(LevelName, flipleft);
+		
 	}
 	void OnHover(bool isOver){
 		if (isOver) {

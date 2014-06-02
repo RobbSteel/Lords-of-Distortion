@@ -43,6 +43,7 @@ public class LobbyGUI : MonoBehaviour {
 		else
 			sessionManager = SessionManager.Instance;
     }
+	
 
     public void SetLocalPlayerNum(int num)
     {
@@ -206,6 +207,7 @@ public class LobbyGUI : MonoBehaviour {
 
         UIEventListener.Get(readyBtn).onClick += ReadyButton;
         
+		GameInput.instance.UseCustomCursor();
 	}
 
     public void CreateReadyLight(NetworkPlayer player)

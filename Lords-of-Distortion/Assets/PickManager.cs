@@ -29,7 +29,7 @@ public class PickManager : MonoBehaviour {
             }
         }
 		if(Network.isServer){
-		    GameObject picklabel = (GameObject)Network.Instantiate(allUI, new Vector3(0, 0, 0), transform.rotation,0);
+		   // GameObject picklabel = (GameObject)Network.Instantiate(allUI, new Vector3(0, 0, 0), transform.rotation, 0);
 		}
 	}
 

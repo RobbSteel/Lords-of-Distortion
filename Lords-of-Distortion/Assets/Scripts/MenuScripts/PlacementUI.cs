@@ -155,11 +155,11 @@ public class PlacementUI : MonoBehaviour {
 		for(int i = 1; i < 3; i++){
 			GameObject entry = NGUITools.AddChild(TriggerGrid.gameObject, PowerBoard);
 			entry.GetComponent<PowerBoard>().index = i;
-			fixedBoards.Add( entry.GetComponent<PowerBoard>());
+			fixedBoards.Add(entry.GetComponent<PowerBoard>());
 		}
 
 		foreach(var inventoryPower in inventoryPowers){
-				AddToInventory(inventoryPower.Value);
+			AddToInventory(inventoryPower.Value);
 		}
 
 		TriggerGrid.Reposition();
@@ -685,12 +685,10 @@ public class PlacementUI : MonoBehaviour {
 	}
 	public void Disable(){
 		GridEnabled(false);
-		this.enabled = false;
 	}
 
 	public void Enable(){
 		GridEnabled(true);
-		this.enabled = true;
 	}
 
 	public bool CanResupply(){

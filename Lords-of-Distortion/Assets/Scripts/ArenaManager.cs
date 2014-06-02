@@ -573,7 +573,6 @@ public class ArenaManager : MonoBehaviour {
 				movingPlatforms[i].GetComponent<movingPlatform>().enabled = true;
 			}
 			placementUI.SwitchToLive(false);
-			placementUI.Enable();
 			trapsEnabled = true;
 		}
 
