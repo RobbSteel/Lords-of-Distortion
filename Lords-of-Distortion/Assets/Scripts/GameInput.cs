@@ -87,11 +87,13 @@ public class GameInput : MonoBehaviour {
 	{
 		InputDevice device = InputManager.ActiveDevice;
 		Vector2 newPosition = cursorPosition;
-
-		newPosition.x += device.RightStickX.Value * analogSensitity * Time.deltaTime;
+		float xDelta = device.RightStickX.Value * analogSensitity * Time.deltaTime;
+		newPosition.x += xDelta;
 		if(InScreen(newPosition)){
 			cursorPosition.x = newPosition.x;
 		}
+		//undo the x addition:
+		newPosition.x -= xDelta;
 		newPosition.y += -device.RightStickY.Value * analogSensitity * Time.deltaTime;
 		if(InScreen(newPosition)){
 			cursorPosition.y = newPosition.y;
