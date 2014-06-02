@@ -1,3 +1,5 @@
+require 'shoes'
+
 def replaceSprites(animation, spriteSheet)
 	if(animation == nil || spriteSheet == nil)
 		return
@@ -23,5 +25,25 @@ def replaceSprites(animation, spriteSheet)
 
 end
 
+Shoes.app{
+	@status = title "Select files.."
+	@openAnim = button "Animation"
+	@openSprite = button "Replacement Sprite Sheet"
+	animationFile = nil
+	@openAnim.click {
+		animationFile = ask_open_file
+		@status.replace File.basename(animationFile)
+	}
+	spriteSheet = nil
+	@openSprite.click {
+		spriteSheet = ask_open_file
+		@status.replace File.basename(spriteSheet)
+	}
+	@process = button "Replace"
 
-replaceSprites(ARGV[0], ARGV[1])
+	@process.click {
+		replaceSprites(animationFile, spriteSheet)
+		@status.replace "Done"
+	}
+}
+#replaceSprites(ARGV[0], ARGV[1])
