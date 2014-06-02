@@ -13,7 +13,10 @@ public class Host : MonoBehaviour {
 	
 	}
 
-	void OnPress(){
+	void OnPress(bool isDown){
+
+        if (isDown)
+            return;
 
 		if(playerscript.playerName == "" || playerscript.playerName == "Player Name")
         {

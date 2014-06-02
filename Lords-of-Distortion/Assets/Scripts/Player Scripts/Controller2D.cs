@@ -298,7 +298,7 @@ public class Controller2D : MonoBehaviour {
 
 	
 
-	private void SetCrouchState(bool enabled)
+	public void SetCrouchState(bool enabled)
 	{
 		canJump = !enabled;
 		moveDisable = enabled;
