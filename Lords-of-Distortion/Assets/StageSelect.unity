@@ -663,6 +663,7 @@ GameObject:
   - 114: {fileID: 452624158}
   - 54: {fileID: 452624157}
   - 114: {fileID: 452624156}
+  - 148: {fileID: 452624165}
   m_Layer: 8
   m_Name: ForestStagesBtn
   m_TagString: Untagged
@@ -876,6 +877,18 @@ Transform:
   - {fileID: 2120514077}
   m_Father: {fileID: 0}
   m_RootOrder: 12
+--- !u!148 &452624165
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 452624155}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 452624164}
+  m_ViewID:
+    m_ID: 12
+    m_Type: 1
 --- !u!1 &472819097
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,6 +2076,7 @@ GameObject:
   - 114: {fileID: 1192201374}
   - 54: {fileID: 1192201373}
   - 114: {fileID: 1192201372}
+  - 148: {fileID: 1192201381}
   m_Layer: 8
   m_Name: GemStagesBtn
   m_TagString: Untagged
@@ -2276,6 +2290,18 @@ Transform:
   - {fileID: 754737186}
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!148 &1192201381
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1192201371}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 1192201380}
+  m_ViewID:
+    m_ID: 10
+    m_Type: 1
 --- !u!1 &1211916011
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,6 +2778,46 @@ Prefab:
   m_RootGameObject: {fileID: 1563678651}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1463094563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1463094565}
+  - 148: {fileID: 1463094564}
+  m_Layer: 0
+  m_Name: TimeTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!148 &1463094564
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1463094563}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 1463094565}
+  m_ViewID:
+    m_ID: 11
+    m_Type: 1
+--- !u!4 &1463094565
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1463094563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
 --- !u!1001 &1486545895
 Prefab:
   m_ObjectHideFlags: 0
@@ -2995,7 +3061,7 @@ MonoBehaviour:
   alwaysOnScreen: 0
   anchorOffset: 0
   renderQueue: 0
-  startingRenderQueue: 3002
+  startingRenderQueue: 3000
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
