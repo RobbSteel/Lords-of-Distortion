@@ -13,7 +13,7 @@ public class TransferExplosive : Power
 	public bool playerdied = false;
 	bool sentRPC = false;
 	bool exploded = false;
-
+	public AudioClip transfersfx;
 	public GameObject CharMark;
 
 	[RPC]
@@ -29,8 +29,10 @@ public class TransferExplosive : Power
 	[RPC] 
 	void AttachToPlayer (NetworkPlayer player, bool firstTime)
 	{
+		audio.PlayOneShot (transfersfx, 0.8f);
 		if (firstTime) 
         {
+			//audio.PlayOneShot (transfersfx, 0.5f);
 			firststick = false;
 
 			rigidbody2D.isKinematic = true;
