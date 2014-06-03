@@ -19,6 +19,7 @@ public class PlayerServerInfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, PlayerOptions> playerOptions;
 	public Dictionary<NetworkPlayer, PlayerStats> playerStats;
 	public List<NetworkPlayer> players;
+	public Dictionary<NetworkPlayer, NetworkViewID> playerViewIDs = new Dictionary<NetworkPlayer, NetworkViewID>();
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
 
 	public static PlayerServerInfo instance = null;
@@ -43,7 +44,9 @@ public class PlayerServerInfo : MonoBehaviour {
 		foreach(var stats in playerStats){
 			stats.Value.LevelReset();
 		}
+		//reset lists that should be empty on every level 
 		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
+		playerViewIDs = new Dictionary<NetworkPlayer, NetworkViewID>();
 	}
 
 	public void AddPlayer(NetworkPlayer player, PlayerOptions options, PlayerStats stats){
@@ -58,6 +61,25 @@ public class PlayerServerInfo : MonoBehaviour {
 		}
 	}
 
+	public void AddPlayerViewID(NetworkPlayer player, NetworkViewID viewID)
+	{
+		playerViewIDs.Add(player, viewID);
+	}
+
+	public NetworkViewID GetPlayerViewId(NetworkPlayer player)
+	{
+		if(playerViewIDs.ContainsKey(player))
+		{
+			return playerViewIDs[player];
+		}
+		else 
+		{
+			Debug.LogError("Player not in ViewID list");
+			return default(NetworkViewID);
+		}
+		  
+	}
+
 	public GameObject GetPlayerGameObject(NetworkPlayer player){
 		GameObject gO = null;
 		if(playerObjects.TryGetValue(player, out gO))
@@ -70,6 +92,7 @@ public class PlayerServerInfo : MonoBehaviour {
 		playerOptions.Remove(player);
 		playerStats.Remove(player);
 		playerObjects.Remove(player);
+		playerViewIDs.Remove(player);
 	}
 
 	public PlayerOptions GetPlayerOptions(NetworkPlayer player){

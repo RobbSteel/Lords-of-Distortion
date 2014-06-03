@@ -29,7 +29,6 @@ public class SessionManager : MonoBehaviour {
 	PlayerOptions myPlayerOptions;
 	
 	void Awake(){
-
 		if(Instance != null && Instance != this){
 			Destroy(gameObject);
 			return;
@@ -58,30 +57,52 @@ public class SessionManager : MonoBehaviour {
     public Transform mummyPrefab;
 
 	public GameObject timeManagerPrefab;
-	
-	//The client requests that the server do the following.
+
+	//Called on the server when player sends his info. We can now synchronize this info with all other players.
+	//Note this must be called first.
 	[RPC]
-	void RequestLocalSpawn(string username, int character, NetworkMessageInfo info){
-		//re-enable buffered rpc sending
-		//Network.SetSendingEnabled(info.sender, SETUP, true);
-		NetworkPlayer original = info.sender;
-		++playerCounter;
-		ConfirmLocalSpawn (playerCounter, username, original, character);
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, username, original, character);
+	void SendOptions(string username, int character, NetworkMessageInfo info){
+		//call on server first.
+		int playerCount = psInfo.players.Count;
+		GeneratePlayerInfo (playerCount, username, info.sender, character);
+
+		//send info about all players to this player
+		SendAllPlayerInfo(info.sender);
 	}
-	
-	
+
+	//Client generates a viewid for his character and sends to server. Server then sends this to all clients.
+	//Should be called second.
+	[RPC]
+	void SendViewID(NetworkViewID viewID, NetworkMessageInfo info)
+	{
+		psInfo.AddPlayerViewID(info.sender, viewID); //only the server needs these.
+		//We now have all we need to instantiate this player acrsos the network.
+		InstantiateAllPlayers(info.sender);
+		
+		//also instantiate on server. this code doesnt look good here though.
+		int characterIndex = (int)psInfo.GetPlayerOptions(info.sender).character;
+		InstantiatePlayer(transform.position, characterIndex,  info.sender, viewID, GAMEPLAY);
+	}
+
 	//This is called by each client when told to by the server. 
 	//Allocates view ID (thereby becoming owner) and tells others to instantiate character clone
 	[RPC]
-	void SpawnPlayer(Vector3 location){
+	void SpawnPlayerOld(Vector3 location){
 		//var timeInstance = (GameObject)Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		NetworkViewID newID = Network.AllocateViewID(); //allocate viewId for communications
 		int group = GAMEPLAY;
 		PlayerOptions localOptions = psInfo.localOptions;
-		networkView.RPC("InstantiatePlayer", RPCMode.OthersBuffered, location, (int)localOptions.character, Network.player, newID, group);
+		networkView.RPC("InstantiatePlayer", RPCMode.Others, location, (int)localOptions.character, Network.player, newID, group);
 		Transform instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
 	}
+
+	[RPC]
+	void GenerateViewID()
+	{
+		NetworkViewID newID = Network.AllocateViewID();
+		networkView.RPC("SendViewID", RPCMode.Server, newID);
+	}
+
 
 	//Actually instantiates the character game object.
 	[RPC]
@@ -115,6 +136,8 @@ public class SessionManager : MonoBehaviour {
 		nwController.SetOwner(owner);
 		psInfo.AddPlayerGameObject(owner, instance.gameObject);
 		SetColor(instance.gameObject, owner);
+
+	
 		return instance;
 	}
 
@@ -148,13 +171,13 @@ public class SessionManager : MonoBehaviour {
 	}
 
 	/*
-	 * Create a local copy of PlayerOptions and PlayerStats for each player in this session
+	 * Create a local copy of PlayerOptions and PlayerStats for each player in this session.
+	 * Also stores in list of connected players.
 	 */
 	
 	[RPC]
-	void ConfirmLocalSpawn(int playerNumber, string username, NetworkPlayer owner, int character){
+	void GeneratePlayerInfo(int playerNumber, string username, NetworkPlayer owner, int character){
 		playerCounter = playerNumber; //unity guarantees that rpcs will be in order
-		
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
@@ -162,26 +185,45 @@ public class SessionManager : MonoBehaviour {
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		psInfo.AddPlayer(owner, options, stats);
-		
-		if(owner == Network.player){
-			//do this at the end so that options are available to the player
-			SpawnPlayer(transform.position);
+	}
+
+	/*
+	 * For every confirm spawn message, store in buffer. When someone joins, send the rpc
+	 * If the player in the buffer DC's, remove from buffer on server.
+	 * Basically keeps newly connected players up to date.
+	 */
+	void SendAllPlayerInfo(NetworkPlayer justJoined)
+	{
+		//not very reliable, but itll do until we do color logic.
+		int playerIndex = 0;
+		foreach(NetworkPlayer connectedPlayer in psInfo.players){
+			PlayerOptions options = psInfo.GetPlayerOptions(connectedPlayer);
+			networkView.RPC("GeneratePlayerInfo", justJoined, playerIndex, options.username, connectedPlayer, (int)options.character);
+			playerIndex++;
 		}
 	}
 
+	//instantiates all players on target client (including his own)
+	void InstantiateAllPlayers(NetworkPlayer targetClient)
+	{
+		foreach(NetworkPlayer ownerOfPlayer in psInfo.players){
+			PlayerOptions options = psInfo.GetPlayerOptions(ownerOfPlayer);
+			NetworkViewID viewID = psInfo.GetPlayerViewId(ownerOfPlayer);
+			networkView.RPC("InstantiatePlayer", targetClient, transform.position, (int)options.character, ownerOfPlayer, viewID, GAMEPLAY);
+		}
+	}
 
-
-	//TODO: Instead of having buffered calls, send rpcs when new player joins.
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
 		TimeManager.instance.ResetToZero();
-		++playerCounter;
+		playerCounter = 0;
 		PlayerOptions localOptions = psInfo.localOptions;
-		networkView.RPC("ConfirmLocalSpawn", RPCMode.OthersBuffered, playerCounter, localOptions.username,Network.player, (int)localOptions.character);
-		//calling this causes problems because playerID will be set after we spawn, which is too late.
-		ConfirmLocalSpawn (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
-		//SpawnPlayer(transform.position);
+		//the core functionality of sendviewid and sendoptions are done here locally
+		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		NetworkViewID viewID = Network.AllocateViewID();
+		psInfo.AddPlayerViewID(Network.player, viewID); 
+		InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
 	}
 	
 	void OnConnectedToServer()
@@ -189,7 +231,9 @@ public class SessionManager : MonoBehaviour {
 		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
 		//timeManager = instance.GetComponent<TimeManager>();
 		PlayerOptions localOptions = psInfo.localOptions;
-		networkView.RPC ("RequestLocalSpawn",  RPCMode.Server, localOptions.username, (int)localOptions.character);
+		NetworkViewID viewID = Network.AllocateViewID(); //view ids created by clients means they have authority over the network view
+		networkView.RPC ("SendOptions", RPCMode.Server, localOptions.username, (int)localOptions.character);
+		networkView.RPC("SendViewID", RPCMode.Server, viewID);
 		TimeManager.instance.SynchToServer();
 	}
 
@@ -219,13 +263,11 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnPlayerDisconnected(NetworkPlayer player){
 		if(psInfo.players.Contains(player)){
-			/* Remember to fix this */
             Network.RemoveRPCs(player);
 			Network.DestroyPlayerObjects(player);
             PlayerDisconnected(player);
 		
 			networkView.RPC("PlayerDisconnected", RPCMode.Others, player);
-			//Network.Destroy(myPlayer.gameObject);
 		}
 	}
 	
@@ -307,12 +349,12 @@ public class SessionManager : MonoBehaviour {
 		foreach(NetworkPlayer player in players){
 			if(Network.player == player){
 				//this means we the player is the server player
-				SpawnPlayer (spawnLocations[i]);
+				SpawnPlayerOld (spawnLocations[i]);
 			}
 			else {
 				//Because playeroptions have already been created, we don't do anything special when spawning
 				//spawning the arena players.
-				networkView.RPC ("SpawnPlayer", player, spawnLocations[i]);
+				networkView.RPC ("SpawnPlayerOld", player, spawnLocations[i]);
 			}
 			i++;
 		}
@@ -331,14 +373,6 @@ public class SessionManager : MonoBehaviour {
 				Network.RemoveRPCsInGroup(SETUP);
 				Network.RemoveRPCsInGroup(GAMEPLAY);
 				OnServerInitialized();
-				/*
-				List<Vector3> tempLocations = new List<Vector3>();
-				tempLocations.Add(transform.position);
-				tempLocations.Add(transform.position);
-				tempLocations.Add(transform.position);
-				tempLocations.Add(transform.position);
-				SpawnPlayers(tempLocations);
-				*/
 			}
 			else{
 				OnConnectedToServer();
