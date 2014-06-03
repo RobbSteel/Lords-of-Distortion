@@ -217,10 +217,10 @@ Transform:
   m_LocalPosition: {x: -3.61075497, y: -3.55753183, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 920950750}
   - {fileID: 936897537}
   - {fileID: 61109746}
   - {fileID: 1779164192}
+  - {fileID: 920950750}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!1 &56620013
@@ -341,7 +341,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 50941194}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &85717272
 GameObject:
   m_ObjectHideFlags: 0
@@ -13779,7 +13779,7 @@ AudioSource:
     type: 2}
   m_PrefabInternal: {fileID: 925681428}
   m_GameObject: {fileID: 920950747}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 0242856f07890454284b56dbe3456ae2, type: 3}
   m_PlayOnAwake: 1
@@ -13842,7 +13842,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 50941194}
-  m_RootOrder: 0
+  m_RootOrder: 3
 --- !u!81 &920950751
 AudioListener:
   m_ObjectHideFlags: 0
@@ -13894,6 +13894,10 @@ Prefab:
       propertyPath: m_Volume
       value: .349999994
       objectReference: {fileID: 0}
+    - target: {fileID: 8200000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 95b8e7fbc7107f64fac8a0e328eef6a5, type: 2}
   m_RootGameObject: {fileID: 920950747}
@@ -13939,7 +13943,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 50941194}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!1001 &944469844
 Prefab:
   m_ObjectHideFlags: 0
@@ -21560,7 +21564,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 50941194}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!114 &1779164193
 MonoBehaviour:
   m_ObjectHideFlags: 0
