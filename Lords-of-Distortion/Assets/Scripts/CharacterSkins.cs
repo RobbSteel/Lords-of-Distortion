@@ -20,6 +20,7 @@ public class CharacterSkins : MonoBehaviour
 	private RuntimeAnimatorController C_RedAnimator;
 	[SerializeField]
 	private RuntimeAnimatorController C_YellowAnimator;
+
 	[SerializeField]
 	private RuntimeAnimatorController B_BlueAnimator;
 	[SerializeField]
@@ -28,6 +29,11 @@ public class CharacterSkins : MonoBehaviour
 	private RuntimeAnimatorController B_RedAnimator;
 	[SerializeField]
 	private RuntimeAnimatorController B_YellowAnimator;
+
+	[SerializeField]
+	private RuntimeAnimatorController M_BlueAnimator;
+	[SerializeField]
+	private RuntimeAnimatorController M_YellowAnimator;
 	[SerializeField]
 	private RuntimeAnimatorController M_RedAnimator;
 	[SerializeField]
@@ -41,29 +47,35 @@ public class CharacterSkins : MonoBehaviour
 	{
 		//Relate combinations to animators.
 		CharacterAndStyle C_Blue = new CharacterAndStyle(Character.Colossus, CharacterStyle.BLUE);
-		animators.Add (C_Blue, C_BlueAnimator);
-
 		CharacterAndStyle C_Green = new CharacterAndStyle(Character.Colossus, CharacterStyle.GREEN);
-		animators.Add(C_Green, C_GreenAnimator);
 		CharacterAndStyle C_Yellow = new CharacterAndStyle(Character.Colossus, CharacterStyle.YELLOW);
-		animators.Add(C_Yellow, C_YellowAnimator);
 		CharacterAndStyle C_Red = new CharacterAndStyle(Character.Colossus, CharacterStyle.RED);
+
+		animators.Add (C_Blue, C_BlueAnimator);
+		animators.Add(C_Green, C_GreenAnimator);
+		animators.Add(C_Yellow, C_YellowAnimator);
 		animators.Add(C_Red, C_RedAnimator);
 
-
 		CharacterAndStyle B_Blue = new CharacterAndStyle(Character.Blue, CharacterStyle.BLUE);
-		animators.Add(B_Blue, B_BlueAnimator);
 		CharacterAndStyle B_Green = new CharacterAndStyle(Character.Blue, CharacterStyle.GREEN);
-		animators.Add(B_Green, B_GreenAnimator);
 		CharacterAndStyle B_Red = new CharacterAndStyle(Character.Blue, CharacterStyle.RED);
-		animators.Add(B_Red, B_RedAnimator);
 		CharacterAndStyle B_Yellow = new CharacterAndStyle(Character.Blue, CharacterStyle.YELLOW);
+
+		animators.Add(B_Blue, B_BlueAnimator);
+		animators.Add(B_Green, B_GreenAnimator);
+		animators.Add(B_Red, B_RedAnimator);
 		animators.Add(B_Yellow, B_YellowAnimator);
 
 		CharacterAndStyle M_Green = new CharacterAndStyle(Character.Mummy, CharacterStyle.GREEN);
-		animators.Add(M_Green, M_GreenAnimator);
 		CharacterAndStyle M_Red = new CharacterAndStyle(Character.Mummy, CharacterStyle.RED);
+		CharacterAndStyle M_Blue = new CharacterAndStyle(Character.Mummy, CharacterStyle.BLUE);
+		CharacterAndStyle M_Yellow = new CharacterAndStyle(Character.Mummy, CharacterStyle.YELLOW);
+
+		animators.Add(M_Green, M_GreenAnimator);
 		animators.Add(M_Red, M_RedAnimator);
+		animators.Add(M_Blue, M_BlueAnimator);
+		animators.Add(M_Yellow, M_YellowAnimator);
+
 	}
 
 	//Selects appropriate prefab and animation controller for character.
