@@ -243,15 +243,15 @@ public class ScoreDisplay : MonoBehaviour {
 		
 	}
 
-	string ColorCheck(PlayerOptions.CharacterStyle playercolor){
+	string ColorCheck(CharacterStyle playercolor){
 		string color = "white";
-		if(playercolor == PlayerOptions.CharacterStyle.DEFAULT){
+		if(playercolor == CharacterStyle.DEFAULT){
 			color = "white";
-		} else if(playercolor == PlayerOptions.CharacterStyle.RED){
+		} else if(playercolor == CharacterStyle.RED){
 			color = "red";
-		} else if(playercolor == PlayerOptions.CharacterStyle.GREEN){
+		} else if(playercolor == CharacterStyle.GREEN){
 			color = "green";
-		} else if(playercolor == PlayerOptions.CharacterStyle.BLUE){
+		} else if(playercolor == CharacterStyle.BLUE){
 			color = "blue";
 		}
 
@@ -259,7 +259,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	//Displays the labels with score and player info
-	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, PlayerOptions.CharacterStyle playercolor, PowerType lastdeath, PlayerOptions.Character playermodel){
+	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, CharacterStyle playercolor, PowerType lastdeath, Character playermodel){
 
 		string color = ColorCheck(playercolor);
 		GameObject playerpose;
@@ -268,13 +268,13 @@ public class ScoreDisplay : MonoBehaviour {
 
      }
 
-	GameObject DetermineColor(string color, PlayerOptions.Character playchar){
+	GameObject DetermineColor(string color, Character playchar){
 		
 		GameObject tempplayer;
 
-		if(playchar == PlayerOptions.Character.Blue){
+		if(playchar == Character.Blue){
 			tempplayer = (GameObject)Instantiate(BluePlayerDisplay, new Vector2(0,0), transform.rotation);
-		}else if(playchar == PlayerOptions.Character.Mummy){
+		}else if(playchar == Character.Mummy){
 			tempplayer = (GameObject)Instantiate(MummyPlayerDisplay, new Vector2(0,0), transform.rotation);
 		} else {
 			tempplayer = (GameObject)Instantiate(PlayerDisplay, new Vector2(0,0), transform.rotation);
@@ -305,13 +305,13 @@ public class ScoreDisplay : MonoBehaviour {
 		return tempplayer; 
 	}
 
-	GameObject DetermineColorEnd(string color, PlayerOptions.Character playchar){
+	GameObject DetermineColorEnd(string color, Character playchar){
 		
 		GameObject tempplayer;
 		
-		if(playchar == PlayerOptions.Character.Blue){
+		if(playchar == Character.Blue){
 			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
-		}else if(playchar == PlayerOptions.Character.Mummy){
+		}else if(playchar == Character.Mummy){
 			tempplayer = (GameObject)Instantiate(MumEnd, new Vector2(0,0), transform.rotation);
 		} else {
 			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);

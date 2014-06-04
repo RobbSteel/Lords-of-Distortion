@@ -27,6 +27,7 @@ public class SessionManager : MonoBehaviour {
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
+
 	
 	void Awake(){
 		if(Instance != null && Instance != this){
@@ -93,7 +94,7 @@ public class SessionManager : MonoBehaviour {
 		int group = GAMEPLAY;
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC("InstantiatePlayer", RPCMode.Others, location, (int)localOptions.character, Network.player, newID, group);
-		Transform instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
+		GameObject instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
 	}
 
 	[RPC]
@@ -106,39 +107,27 @@ public class SessionManager : MonoBehaviour {
 
 	//Actually instantiates the character game object.
 	[RPC]
-	Transform InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
-
-		Transform instance = null;
+	GameObject InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
+		
 		//Instantiate different prefab depending on choice.
-		PlayerOptions.Character characterType = (PlayerOptions.Character)character;
+		Character characterType = (Character)character;
+		CharacterStyle palette  = stylesTemp[psInfo.GetPlayerOptions(owner).PlayerNumber];
+		
+		GameObject characterInstance = GetComponent<CharacterSkins>().GenerateRecolor(characterType, palette);
+		characterInstance.transform.position = location;
+		characterInstance.SetActive(true);
 
-		switch(characterType){
-		case PlayerOptions.Character.Colossus:
-			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
-			break;
-		case PlayerOptions.Character.Blue:
-			instance = (Transform)Instantiate(bluePrefab, location, Quaternion.identity);
-			break;
-        case PlayerOptions.Character.Mummy:
-            instance = (Transform)Instantiate(mummyPrefab, location, Quaternion.identity);
-            break;
-		default:
-			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
-			break;
-		}
-
-		NetworkView charNetworkView = instance.GetComponent<NetworkView>();
+		 
+		NetworkView charNetworkView = characterInstance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
 		charNetworkView.group = group;
 
-		NetworkController nwController = instance.gameObject.GetComponent<NetworkController>();
+		NetworkController nwController = characterInstance.GetComponent<NetworkController>();
 
 		nwController.SetOwner(owner);
-		psInfo.AddPlayerGameObject(owner, instance.gameObject);
-		SetColor(instance.gameObject, owner);
-
+		psInfo.AddPlayerGameObject(owner, characterInstance);
 	
-		return instance;
+		return characterInstance;
 	}
 
 	void SetColor(GameObject playerObject, NetworkPlayer player){
@@ -156,15 +145,15 @@ public class SessionManager : MonoBehaviour {
 
 		switch(playerOptions.style){
 				
-		case PlayerOptions.CharacterStyle.BLUE:
+		case CharacterStyle.BLUE:
 			myRenderer.color = Color.blue;
 			break;
 				
-		case PlayerOptions.CharacterStyle.RED:
+		case CharacterStyle.RED:
 			myRenderer.color = Color.red;
 			break;
 				
-		case PlayerOptions.CharacterStyle.GREEN:
+		case CharacterStyle.GREEN:
 			myRenderer.color = Color.green;
 			break;
 		}
@@ -181,7 +170,7 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
-		options.character = (PlayerOptions.Character)character;
+		options.character = (Character)character;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		psInfo.AddPlayer(owner, options, stats);
@@ -213,6 +202,7 @@ public class SessionManager : MonoBehaviour {
 		}
 	}
 
+	CharacterStyle[] stylesTemp = new CharacterStyle[4]{CharacterStyle.GREEN, CharacterStyle.YELLOW, CharacterStyle.BLUE, CharacterStyle.RED}; 
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
@@ -220,10 +210,14 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = 0;
 		PlayerOptions localOptions = psInfo.localOptions;
 		//the core functionality of sendviewid and sendoptions are done here locally
-		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		//GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		//TEMPORARY:
+
+		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)Character.Colossus);
 		NetworkViewID viewID = Network.AllocateViewID();
 		psInfo.AddPlayerViewID(Network.player, viewID); 
-		InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
+		//InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
+		InstantiatePlayer(transform.position, (int)Character.Colossus,  Network.player, viewID, GAMEPLAY);
 	}
 	
 	void OnConnectedToServer()
@@ -364,7 +358,6 @@ public class SessionManager : MonoBehaviour {
 	//called when we re-enter this scene after a game is over.
 	//TODO: fix so that playeroptions are synched.
 	void OnNetworkLoadedLevel(){
-
 		if(arenaIndex == -2){
 			psInfo.ClearPlayers();
 			playerCounter = -1;
