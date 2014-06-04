@@ -97,7 +97,7 @@ public class Earthquake : Power {
 
 
 	
-
+		if(risetime <= 0){
 
 		//if (col.gameObject.CompareTag ("killplatform")) {
 		if(col.transform.tag =="killplatform" || col.transform.tag == "Ground" || col.transform.tag == "SolidObject" || col.transform.tag == "movingPlatform"){
@@ -113,7 +113,7 @@ public class Earthquake : Power {
 				Instantiate(groundshatter, transform.position, transform.rotation);
 				reps += 1;
 				risetime = 3;
-
+			}
 			
 
 			var players = GameObject.FindGameObjectsWithTag("Player");
