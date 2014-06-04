@@ -25,7 +25,6 @@ public class PlayerOptions{
 		get{ return playerNumber;}
 		set{
 			playerNumber = value;
-			style = (CharacterStyle)value;
 		}
 	}
 

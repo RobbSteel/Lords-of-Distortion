@@ -65,10 +65,17 @@ public class SessionManager : MonoBehaviour {
 	void SendOptions(string username, int character, NetworkMessageInfo info){
 		//call on server first.
 		int playerCount = psInfo.players.Count;
-		GeneratePlayerInfo (playerCount, username, info.sender, character);
+		playerCounter++; //TEMPORARY
+		GeneratePlayerInfo (playerCounter, username, info.sender, character);
 
 		//send info about all players to this player
 		SendAllPlayerInfo(info.sender);
+
+		//Quick fix for not sending new spawns to other players
+		foreach(NetworkPlayer player in psInfo.players){
+			if(player != info.sender && player != Network.player)
+				networkView.RPC("GeneratePlayerInfo", player, playerCounter, username, info.sender, character);
+		}
 	}
 
 	//Client generates a viewid for his character and sends to server. Server then sends this to all clients.
@@ -83,6 +90,12 @@ public class SessionManager : MonoBehaviour {
 		//also instantiate on server. this code doesnt look good here though.
 		int characterIndex = (int)psInfo.GetPlayerOptions(info.sender).character;
 		InstantiatePlayer(transform.position, characterIndex,  info.sender, viewID, GAMEPLAY);
+
+		//Quick fix for not sending new spawns to other players
+		foreach(NetworkPlayer player in psInfo.players){
+			if(player != info.sender && player != Network.player)
+				networkView.RPC("InstantiatePlayer", player, transform.position, characterIndex,  info.sender, viewID, GAMEPLAY);
+		}
 	}
 
 	//This is called by each client when told to by the server. 
@@ -111,7 +124,7 @@ public class SessionManager : MonoBehaviour {
 		
 		//Instantiate different prefab depending on choice.
 		Character characterType = (Character)character;
-		CharacterStyle palette  = stylesTemp[psInfo.GetPlayerOptions(owner).PlayerNumber];
+		CharacterStyle palette  = psInfo.GetPlayerOptions(owner).style;
 		
 		GameObject characterInstance = GetComponent<CharacterSkins>().GenerateRecolor(characterType, palette);
 		characterInstance.transform.position = location;
@@ -170,6 +183,10 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
+		//TEMPORARY
+		options.style = stylesTemp[playerNumber];
+		if(owner == Network.player)
+			psInfo.localOptions.style = stylesTemp[playerNumber];;
 		options.character = (Character)character;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
