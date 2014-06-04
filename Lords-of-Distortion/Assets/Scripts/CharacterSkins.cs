@@ -13,6 +13,8 @@ public class CharacterSkins : MonoBehaviour
 	private GameObject MummyPrefab;
 
 	[SerializeField]
+	private RuntimeAnimatorController C_BlueAnimator;
+	[SerializeField]
 	private RuntimeAnimatorController C_GreenAnimator;
 	[SerializeField]
 	private RuntimeAnimatorController C_YellowAnimator;
@@ -28,6 +30,8 @@ public class CharacterSkins : MonoBehaviour
 	void Awake()
 	{
 		//Relate combinations to animators.
+		CharacterAndStyle C_Blue = new CharacterAndStyle(Character.Colossus, CharacterStyle.BLUE);
+		animators.Add (C_Blue, C_BlueAnimator);
 		CharacterAndStyle C_Green = new CharacterAndStyle(Character.Colossus, CharacterStyle.GREEN);
 		animators.Add(C_Green, C_GreenAnimator);
 		CharacterAndStyle C_Yellow = new CharacterAndStyle(Character.Colossus, CharacterStyle.YELLOW);
@@ -60,7 +64,7 @@ public class CharacterSkins : MonoBehaviour
 			copy = Instantiate(ColossusPrefab) as GameObject;
 				break;
 		}
-
+		print (character + " " + color);
 		RuntimeAnimatorController controller = animators[option];
 		copy.GetComponent<Animator>().runtimeAnimatorController = controller;
 		copy.SetActive(false);

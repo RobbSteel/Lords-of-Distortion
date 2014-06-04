@@ -31,17 +31,25 @@ public class GameInput : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 	}
 
+	private bool EnableGamePad = false;
 
 	void Start () {
 		InputManager.Setup();
+		print (InputManager.ActiveDevice.Name);
 		analogSensitity = Screen.width *.90f;
 	}
 
 	int inactiveFrames = 0;
+
 	void Update () {
 
 		InputManager.Update();
 		InputDevice activeDevice = InputManager.ActiveDevice;
+		if(!EnableGamePad){
+			usingGamePad = false;
+			return;
+		}
+			
 		//Were using the gamepad if its state has changed.
 		if(activeDevice.AnyButton.IsPressed || activeDevice.Direction.State || activeDevice.RightStick.State
 		                || activeDevice.RightTrigger.IsPressed || activeDevice.LeftTrigger.IsPressed || activeDevice.RightBumper.IsPressed
