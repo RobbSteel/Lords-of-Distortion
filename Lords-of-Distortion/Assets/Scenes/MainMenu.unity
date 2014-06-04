@@ -200,6 +200,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2353f41c70ffe444db4dda18d1d887bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ForestStages: {fileID: 0}
+  MineStages: {fileID: 0}
+  StageUI: {fileID: 0}
+  ForestSelectBtn: {fileID: 0}
+  MineSelectBtn: {fileID: 0}
+  levelgrid: {fileID: 0}
   initRotation: 9.99999975e-05
   endRotation: 180
   rotRatio: 0
@@ -1787,7 +1793,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 557924220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -372.090881, y: -190.949997, z: 0}
+  m_LocalPosition: {x: -356, y: -192, z: 0}
   m_LocalScale: {x: 1.94997203, y: 1.42506087, z: 1.000049}
   m_Children:
   - {fileID: 419585863}
@@ -1908,7 +1914,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 95, y: 47, z: 0}
+  m_Size: {x: 126, y: 48, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &557924229
 MonoBehaviour:
@@ -1951,17 +1957,17 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 95
-  mHeight: 47
+  mWidth: 126
+  mHeight: 48
   mDepth: 10
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.02127671
+  aspectRatio: 2.625
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Quit
+  mFont: {fileID: 11400000, guid: 4067bb837ba141b498535e0ae343890e, type: 2}
+  mText: QUIT
   mFontSize: 72
   mFontStyle: 0
   mEncoding: 1
@@ -2617,7 +2623,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1396803619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -254.80513, y: 39.9999962, z: 0}
+  m_LocalPosition: {x: -238, y: 40, z: 0}
   m_LocalScale: {x: 1.94999981, y: 1.42500007, z: 1}
   m_Children:
   - {fileID: 162705907}
@@ -2652,17 +2658,17 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 95
-  mHeight: 47
+  mWidth: 128
+  mHeight: 46
   mDepth: 10
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.02127671
+  aspectRatio: 2.78260875
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Host
+  mFont: {fileID: 11400000, guid: 4067bb837ba141b498535e0ae343890e, type: 2}
+  mText: HOST
   mFontSize: 72
   mFontStyle: 0
   mEncoding: 1
@@ -2711,7 +2717,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 95, y: 47, z: 0}
+  m_Size: {x: 128, y: 46, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &1396803624
 AudioSource:
