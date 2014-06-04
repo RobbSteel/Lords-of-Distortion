@@ -20,29 +20,29 @@ public class LivesUI : MonoBehaviour {
 	
 	Dictionary<NetworkPlayer, GameObject> entry  = new Dictionary<NetworkPlayer, GameObject>();
 
-	string ColorCheck(PlayerOptions.CharacterStyle playercolor){
+	string ColorCheck(CharacterStyle playercolor){
 		string color = "white";
-		if(playercolor == PlayerOptions.CharacterStyle.DEFAULT){
+		if(playercolor == CharacterStyle.DEFAULT){
 			color = "white";
-		} else if(playercolor == PlayerOptions.CharacterStyle.RED){
+		} else if(playercolor == CharacterStyle.RED){
 			color = "red";
-		} else if(playercolor == PlayerOptions.CharacterStyle.GREEN){
+		} else if(playercolor == CharacterStyle.GREEN){
 			color = "green";
-		} else if(playercolor == PlayerOptions.CharacterStyle.BLUE){
+		} else if(playercolor == CharacterStyle.BLUE){
 			color = "blue";
 		}
 		
 		return color;
 	}
 
-	void DetermineColor(string color, PlayerOptions.Character playchar, GameObject playeravatar){
+	void DetermineColor(string color, Character playchar, GameObject playeravatar){
 		print ("determinecolor");
 		GameObject tempplayer = playeravatar;
 		var playertex = playeravatar.GetComponent<UITexture>().mainTexture;
 
-		if(playchar == PlayerOptions.Character.Blue){
+		if(playchar == Character.Blue){
 			finalchar = Blue;
-		}else if(playchar == PlayerOptions.Character.Mummy){
+		}else if(playchar == Character.Mummy){
 			finalchar = Mummy;
 		} else {
 			finalchar = Colossus;

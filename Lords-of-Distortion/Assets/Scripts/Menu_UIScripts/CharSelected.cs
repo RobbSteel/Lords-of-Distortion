@@ -20,7 +20,7 @@ public class CharSelected : MonoBehaviour {
 			audio.PlayOneShot(buttonclick);
 			return;
 		}
-		infoscript.localOptions.character = (PlayerOptions.Character)characterNum;
+		infoscript.localOptions.character = (Character)characterNum;
         charscript.UpdateBackgroundColor(characterNum);
 	}
 	void OnHover(bool isOver){
