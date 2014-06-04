@@ -93,7 +93,7 @@ public class SessionManager : MonoBehaviour {
 		int group = GAMEPLAY;
 		PlayerOptions localOptions = psInfo.localOptions;
 		networkView.RPC("InstantiatePlayer", RPCMode.Others, location, (int)localOptions.character, Network.player, newID, group);
-		Transform instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
+		GameObject instance = InstantiatePlayer(location, (int)localOptions.character, Network.player, newID, group);
 	}
 
 	[RPC]
@@ -106,39 +106,27 @@ public class SessionManager : MonoBehaviour {
 
 	//Actually instantiates the character game object.
 	[RPC]
-	Transform InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
-
-		Transform instance = null;
+	GameObject InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
+		
 		//Instantiate different prefab depending on choice.
-		PlayerOptions.Character characterType = (PlayerOptions.Character)character;
-
-		switch(characterType){
-		case PlayerOptions.Character.Colossus:
-			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
-			break;
-		case PlayerOptions.Character.Blue:
-			instance = (Transform)Instantiate(bluePrefab, location, Quaternion.identity);
-			break;
-        case PlayerOptions.Character.Mummy:
-            instance = (Transform)Instantiate(mummyPrefab, location, Quaternion.identity);
-            break;
-		default:
-			instance = (Transform)Instantiate(colossusPrefab, location, Quaternion.identity);
-			break;
-		}
-
-		NetworkView charNetworkView = instance.GetComponent<NetworkView>();
+		//Character characterType = (Character)character;
+		Character characterType = Character.Colossus;
+		CharacterStyle palette  = CharacterStyle.GREEN;
+		
+		GameObject characterInstance = GetComponent<CharacterSkins>().GenerateRecolor(characterType, palette);
+		characterInstance.SetActive(true);
+		characterInstance.transform.position = Vector3.zero;
+		 
+		NetworkView charNetworkView = characterInstance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
 		charNetworkView.group = group;
 
-		NetworkController nwController = instance.gameObject.GetComponent<NetworkController>();
+		NetworkController nwController = characterInstance.GetComponent<NetworkController>();
 
 		nwController.SetOwner(owner);
-		psInfo.AddPlayerGameObject(owner, instance.gameObject);
-		SetColor(instance.gameObject, owner);
-
+		psInfo.AddPlayerGameObject(owner, characterInstance);
 	
-		return instance;
+		return characterInstance;
 	}
 
 	void SetColor(GameObject playerObject, NetworkPlayer player){
@@ -156,15 +144,15 @@ public class SessionManager : MonoBehaviour {
 
 		switch(playerOptions.style){
 				
-		case PlayerOptions.CharacterStyle.BLUE:
+		case CharacterStyle.BLUE:
 			myRenderer.color = Color.blue;
 			break;
 				
-		case PlayerOptions.CharacterStyle.RED:
+		case CharacterStyle.RED:
 			myRenderer.color = Color.red;
 			break;
 				
-		case PlayerOptions.CharacterStyle.GREEN:
+		case CharacterStyle.GREEN:
 			myRenderer.color = Color.green;
 			break;
 		}
@@ -181,7 +169,7 @@ public class SessionManager : MonoBehaviour {
 		PlayerOptions options = new PlayerOptions();
 		//we can refer to players by number later on
 		options.PlayerNumber = playerNumber;
-		options.character = (PlayerOptions.Character)character;
+		options.character = (Character)character;
 		options.username = username; //This is how we know the usernames of other players
 		PlayerStats stats = new PlayerStats();
 		psInfo.AddPlayer(owner, options, stats);
