@@ -5,7 +5,7 @@ using Priority_Queue;
 
 public class PlagueScript : Power 
 {
-	public bool targetacquired;
+	public bool targetacquired = false;
 	public GameObject targetplayer;
 	public int targetplayernumber;
 	public GameObject[] possibletargets;
@@ -38,7 +38,7 @@ public class PlagueScript : Power
 
 	void AcquireTarget(){
 		if(Network.isServer){
-		
+		if(!targetacquired){
 		//Look through alive players and target one
 		for(int i = 0; i < possibletargets.Length; i++){
 			if(possibletargets[i] != null){
@@ -71,8 +71,9 @@ public class PlagueScript : Power
 		var netview = targetplayer.networkView;
 		var finaltarget = netview.owner;
 		networkView.RPC("RelayTarget", RPCMode.Others, finaltarget);
+		targetacquired = true;
 
-			
+			}
 		}
 		closestdistance = 100;
 		
