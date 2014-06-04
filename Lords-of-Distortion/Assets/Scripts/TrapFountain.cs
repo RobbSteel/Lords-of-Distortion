@@ -50,7 +50,7 @@ public class TrapFountain : MonoBehaviour {
 			placementUI.Resupply(specifiedPower);
 
 			used = true;
-			audio.PlayOneShot(gemPing, 0.5f);
+			audio.PlayOneShot(gemPing, 0.4f);
 			getPowerPSystem.Play();
 	}
 
