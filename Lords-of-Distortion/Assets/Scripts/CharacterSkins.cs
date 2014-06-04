@@ -27,11 +27,15 @@ public class CharacterSkins : MonoBehaviour
 
 	void Awake()
 	{
+		//Relate combinations to animators.
 		CharacterAndStyle C_Green = new CharacterAndStyle(Character.Colossus, CharacterStyle.GREEN);
 		animators.Add(C_Green, C_GreenAnimator);
 		CharacterAndStyle C_Yellow = new CharacterAndStyle(Character.Colossus, CharacterStyle.YELLOW);
 		animators.Add(C_Yellow, C_YellowAnimator);
-
+		CharacterAndStyle B_Blue = new CharacterAndStyle(Character.Blue, CharacterStyle.BLUE);
+		animators.Add(B_Blue, B_BlueAnimator);
+		CharacterAndStyle M_Red = new CharacterAndStyle(Character.Mummy, CharacterStyle.RED);
+		animators.Add(M_Red, M_RedAnimator);
 	}
 
 	//Selects appropriate prefab and animation controller for character.
@@ -59,7 +63,7 @@ public class CharacterSkins : MonoBehaviour
 
 		RuntimeAnimatorController controller = animators[option];
 		copy.GetComponent<Animator>().runtimeAnimatorController = controller;
-
+		copy.SetActive(false);
 		return copy;
 	}
 }

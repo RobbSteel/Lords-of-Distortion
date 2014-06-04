@@ -27,6 +27,7 @@ public class SessionManager : MonoBehaviour {
 
 	//Initially null until you are connected
 	PlayerOptions myPlayerOptions;
+
 	
 	void Awake(){
 		if(Instance != null && Instance != this){
@@ -109,13 +110,13 @@ public class SessionManager : MonoBehaviour {
 	GameObject InstantiatePlayer(Vector3 location, int character,  NetworkPlayer owner, NetworkViewID viewID, int group){
 		
 		//Instantiate different prefab depending on choice.
-		//Character characterType = (Character)character;
-		Character characterType = Character.Colossus;
-		CharacterStyle palette  = CharacterStyle.GREEN;
+		Character characterType = (Character)character;
+		CharacterStyle palette  = stylesTemp[psInfo.GetPlayerOptions(owner).PlayerNumber];
 		
 		GameObject characterInstance = GetComponent<CharacterSkins>().GenerateRecolor(characterType, palette);
+		characterInstance.transform.position = location;
 		characterInstance.SetActive(true);
-		characterInstance.transform.position = Vector3.zero;
+
 		 
 		NetworkView charNetworkView = characterInstance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
@@ -201,6 +202,7 @@ public class SessionManager : MonoBehaviour {
 		}
 	}
 
+	CharacterStyle[] stylesTemp = new CharacterStyle[4]{CharacterStyle.GREEN, CharacterStyle.YELLOW, CharacterStyle.BLUE, CharacterStyle.RED}; 
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
@@ -208,10 +210,14 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = 0;
 		PlayerOptions localOptions = psInfo.localOptions;
 		//the core functionality of sendviewid and sendoptions are done here locally
-		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		//GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		//TEMPORARY:
+
+		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)Character.Colossus);
 		NetworkViewID viewID = Network.AllocateViewID();
 		psInfo.AddPlayerViewID(Network.player, viewID); 
-		InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
+		//InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
+		InstantiatePlayer(transform.position, (int)Character.Colossus,  Network.player, viewID, GAMEPLAY);
 	}
 	
 	void OnConnectedToServer()
@@ -352,7 +358,6 @@ public class SessionManager : MonoBehaviour {
 	//called when we re-enter this scene after a game is over.
 	//TODO: fix so that playeroptions are synched.
 	void OnNetworkLoadedLevel(){
-
 		if(arenaIndex == -2){
 			psInfo.ClearPlayers();
 			playerCounter = -1;
