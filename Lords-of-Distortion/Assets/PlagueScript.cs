@@ -25,15 +25,7 @@ public class PlagueScript : Power
 
 	//Clients search for the host selected player, both check for dead players and move the plague
 	void Update(){
-		//Client attempts to acquire target from server rpc of player number
-		if(Network.isClient){
-			if(!targetacquired){
-				targetplayer = possibletargets[targetplayernumber];
-					if(targetplayer != null){
-						targetacquired = true;
-					}
-			}
-		}
+	
 		//If plague kills someone reacquire new targets
 		if(targetplayer != null){
 			if(targetplayer.GetComponent<Controller2D>().dead){
@@ -46,7 +38,7 @@ public class PlagueScript : Power
 
 	void AcquireTarget(){
 		if(Network.isServer){
-		if(!targetacquired){
+		
 		//Look through alive players and target one
 		for(int i = 0; i < possibletargets.Length; i++){
 			if(possibletargets[i] != null){
@@ -76,10 +68,11 @@ public class PlagueScript : Power
 			}
 		}
 		
+		var netview = targetplayer.networkView;
+		var finaltarget = netview.owner;
+		networkView.RPC("RelayTarget", RPCMode.Others, finaltarget);
 
-		networkView.RPC("RelayTarget", RPCMode.Others, targetplayernumber);
-		targetacquired = true;
-			}
+			
 		}
 		closestdistance = 100;
 		
@@ -88,9 +81,10 @@ public class PlagueScript : Power
 
 	//Relay the target player number
 	[RPC]
-	void RelayTarget(int targeted){
-		targetacquired = false;
-		targetplayernumber = targeted;
+	void RelayTarget(NetworkPlayer playertarget){
+	
+		targetplayer = PlayerServerInfo.instance.GetPlayerGameObject(playertarget);
+		print (targetplayer);
 	}
 
     public override void PowerActionEnter(GameObject player, Controller2D controller)
