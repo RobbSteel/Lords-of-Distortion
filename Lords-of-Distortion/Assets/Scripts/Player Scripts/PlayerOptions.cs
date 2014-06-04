@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+public enum CharacterStyle
+{
+	DEFAULT = 0, RED, GREEN, BLUE, YELLOW
+}
+
+public enum Character{
+	Colossus = 0, Blue , Mummy
+}
+
 public class PlayerOptions{
 
-	public enum CharacterStyle
-	{
-		DEFAULT = 0, RED, GREEN, BLUE, YELLOW
-	}
 
-	public enum Character{
-		Colossus = 0, Blue , Mummy
-	}
 
 	public CharacterStyle style;
 	public string username;
@@ -22,7 +25,6 @@ public class PlayerOptions{
 		get{ return playerNumber;}
 		set{
 			playerNumber = value;
-			style = (CharacterStyle)value;
 		}
 	}
 

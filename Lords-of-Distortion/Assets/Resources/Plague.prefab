@@ -99,7 +99,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.113759, y: -5.49551582, z: -9}
+  m_LocalPosition: {x: .434413701, y: -8.89613533, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -180,7 +180,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Radius: 1
+  m_Radius: .699999988
   m_Center: {x: 0, y: 0}
 --- !u!82 &8200000
 AudioSource:
@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OFFLINE: 0
+  targetacquired: 0
   targetplayer: {fileID: 0}
   targetplayernumber: 0
   possibletargets: []
@@ -503,8 +504,8 @@ ParticleSystem:
     radius: .200000003
     angle: 80
     length: 5
-    boxX: 1.5
-    boxY: 1.5
+    boxX: 1
+    boxY: 1
     boxZ: 0
     placementMode: 0
     m_Mesh: {fileID: 0}

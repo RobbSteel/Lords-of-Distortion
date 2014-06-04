@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: SessionManager
   m_TagString: SessionManager
@@ -28,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -50,11 +52,29 @@ MonoBehaviour:
   finishedLoading: 0
   matchfinish: 0
   roundsplayed: 0
-  timemanager: {fileID: 0}
   colossusPrefab: {fileID: 400002, guid: c22bc8f079b01cd43839e156d60e88f2, type: 2}
   bluePrefab: {fileID: 400012, guid: be99fd025a9228b4da11f2c788d00cb6, type: 2}
   mummyPrefab: {fileID: 400000, guid: 35dc8edb86cbc004e86bbe9d88ea37a3, type: 2}
   timeManagerPrefab: {fileID: 100000, guid: cb5c59ecdb830b543b4a385ee95d0c80, type: 2}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3112eaea48c404791aab4e07636b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ColossusPrefab: {fileID: 100002, guid: c22bc8f079b01cd43839e156d60e88f2, type: 2}
+  BluePrefab: {fileID: 100012, guid: be99fd025a9228b4da11f2c788d00cb6, type: 2}
+  MummyPrefab: {fileID: 100012, guid: 35dc8edb86cbc004e86bbe9d88ea37a3, type: 2}
+  C_BlueAnimator: {fileID: 9100000, guid: 46ca47ad5403fb34eb330b57d387836c, type: 2}
+  C_GreenAnimator: {fileID: 9100000, guid: 3903b9e2eea02cb4aa10edc540e817fc, type: 2}
+  C_YellowAnimator: {fileID: 9100000, guid: 60c0567c4bb313542b7159e45210a2a3, type: 2}
+  B_BlueAnimator: {fileID: 9100000, guid: aa8cd7b9cb2aa1f43bdd5f6835b62f2d, type: 2}
+  M_RedAnimator: {fileID: 9100000, guid: 7d362056df357174c913eddfc1b6e688, type: 2}
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
