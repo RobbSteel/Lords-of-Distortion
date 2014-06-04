@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class CharacterSkins : MonoBehaviour 
 {
 
+	public static CharacterSkins instance = null;
 	[SerializeField]
 	private GameObject ColossusPrefab;
 	[SerializeField]
@@ -12,39 +13,37 @@ public class CharacterSkins : MonoBehaviour
 	[SerializeField]
 	private GameObject MummyPrefab;
 
-	[SerializeField]
-	private RuntimeAnimatorController C_BlueAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController C_GreenAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController C_RedAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController C_YellowAnimator;
+	//Animation controllers
+	public RuntimeAnimatorController C_BlueAnimator;
+	public RuntimeAnimatorController C_GreenAnimator;
+	public RuntimeAnimatorController C_RedAnimator;
+	public RuntimeAnimatorController C_YellowAnimator;
+	
+	public RuntimeAnimatorController B_BlueAnimator;
+	public RuntimeAnimatorController B_GreenAnimator;
+	public RuntimeAnimatorController B_RedAnimator;
+	public RuntimeAnimatorController B_YellowAnimator;
+	
+	public RuntimeAnimatorController M_BlueAnimator;
+	public RuntimeAnimatorController M_YellowAnimator;
+	public RuntimeAnimatorController M_RedAnimator;
+	public RuntimeAnimatorController M_GreenAnimator;
 
-	[SerializeField]
-	private RuntimeAnimatorController B_BlueAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController B_GreenAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController B_RedAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController B_YellowAnimator;
+	//HeadTextures
+	public UITexture C_GreenHead;
 
-	[SerializeField]
-	private RuntimeAnimatorController M_BlueAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController M_YellowAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController M_RedAnimator;
-	[SerializeField]
-	private RuntimeAnimatorController M_GreenAnimator;
-
-
+	//Body Sprites
+	public GameObject C_GreenBody;
 
 	private Dictionary<CharacterAndStyle, RuntimeAnimatorController> animators = new Dictionary<CharacterAndStyle, RuntimeAnimatorController>();
+	private Dictionary<CharacterAndStyle, UITexture> headTextures = new Dictionary<CharacterAndStyle, UITexture>();
+	private Dictionary<CharacterAndStyle, GameObject> bodySprites = new Dictionary<CharacterAndStyle, GameObject>();
 
 	void Awake()
 	{
+
+		instance = this;
+
 		//Relate combinations to animators.
 		CharacterAndStyle C_Blue = new CharacterAndStyle(Character.Colossus, CharacterStyle.BLUE);
 		CharacterAndStyle C_Green = new CharacterAndStyle(Character.Colossus, CharacterStyle.GREEN);
@@ -76,6 +75,13 @@ public class CharacterSkins : MonoBehaviour
 		animators.Add(M_Blue, M_BlueAnimator);
 		animators.Add(M_Yellow, M_YellowAnimator);
 
+
+		//Example for head textures. Note keys are already available
+		headTextures.Add(C_Green, C_GreenHead);
+
+		//Example for body sprites
+		bodySprites.Add(C_Green, C_GreenBody);
+
 	}
 
 	//Selects appropriate prefab and animation controller for character.
@@ -106,7 +112,21 @@ public class CharacterSkins : MonoBehaviour
 		copy.SetActive(false);
 		return copy;
 	}
+
+	public UITexture GetHeadTexture(Character character, CharacterStyle color)
+	{
+		CharacterAndStyle option = new CharacterAndStyle(character, color);
+		return headTextures[option];
+	}
+
+	public GameObject GetBodyGameObjet(Character character, CharacterStyle color)
+	{
+		CharacterAndStyle option = new CharacterAndStyle(character, color);
+		return bodySprites[option];
+	}
 }
+
+
 //for use in dictionary
 public struct CharacterAndStyle{
 	public  Character character;
