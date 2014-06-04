@@ -20,6 +20,7 @@ public class Firewall : Power {
 
 	public override void PowerActionStay (GameObject player, Controller2D controller)
 	{
+		controller.Die(DeathType.FIRE);
 	}
 	
 	public override void PowerActionExit (GameObject player, Controller2D controller)
