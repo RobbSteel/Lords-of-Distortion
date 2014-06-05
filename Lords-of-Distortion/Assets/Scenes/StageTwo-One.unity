@@ -1134,7 +1134,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!199 &168417787
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -2592,6 +2592,10 @@ Prefab:
       propertyPath: m_Size.y
       value: .419999987
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
   m_RootGameObject: {fileID: 1828888988}
@@ -3074,7 +3078,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!199 &408873215
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -5072,7 +5076,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1686701308}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1001 &634177509
 Prefab:
   m_ObjectHideFlags: 0
@@ -5128,6 +5132,10 @@ Prefab:
     - target: {fileID: 100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
       propertyPath: m_Layer
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e72b4c28f4a0a9a4c9e9f0bc968188d1, type: 2}
@@ -5895,7 +5903,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!199 &727816685
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -7551,7 +7559,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 0
+  m_RootOrder: 6
 --- !u!199 &901516751
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -9670,7 +9678,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1686701308}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!1001 &1073502584
 Prefab:
   m_ObjectHideFlags: 0
@@ -10390,7 +10398,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1686701308}
-  m_RootOrder: 3
+  m_RootOrder: 0
 --- !u!1 &1288183926
 GameObject:
   m_ObjectHideFlags: 0
@@ -11782,13 +11790,13 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 901516750}
   - {fileID: 1549548575}
   - {fileID: 1584292926}
   - {fileID: 168417786}
   - {fileID: 408873214}
   - {fileID: 1885835570}
   - {fileID: 727816684}
+  - {fileID: 901516750}
   m_Father: {fileID: 0}
   m_RootOrder: 8
 --- !u!114 &1486530063
@@ -11985,7 +11993,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!199 &1549548576
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -14104,7 +14112,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &1586435859
 GameObject:
   m_ObjectHideFlags: 0
@@ -14628,10 +14636,10 @@ Transform:
   m_LocalPosition: {x: -3.61075497, y: -3.55753183, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1285335471}
   - {fileID: 611539467}
   - {fileID: 1820920316}
   - {fileID: 1060607046}
-  - {fileID: 1285335471}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!1001 &1687092601
@@ -15256,7 +15264,7 @@ GameObject:
   - 61: {fileID: 1787796620}
   m_Layer: 17
   m_Name: floor-long
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15554,7 +15562,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1686701308}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1 &1828888988
 GameObject:
   m_ObjectHideFlags: 0
@@ -15567,7 +15575,7 @@ GameObject:
   - 61: {fileID: 1828888990}
   m_Layer: 17
   m_Name: floor-long
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15823,7 +15831,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1486530062}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!199 &1885835571
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
