@@ -227,14 +227,12 @@ public class SessionManager : MonoBehaviour {
 		playerCounter = 0;
 		PlayerOptions localOptions = psInfo.localOptions;
 		//the core functionality of sendviewid and sendoptions are done here locally
-		//GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
+		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)localOptions.character);
 		//TEMPORARY:
 
-		GeneratePlayerInfo (playerCounter, localOptions.username,  Network.player, (int)Character.Colossus);
 		NetworkViewID viewID = Network.AllocateViewID();
 		psInfo.AddPlayerViewID(Network.player, viewID); 
-		//InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
-		InstantiatePlayer(transform.position, (int)Character.Colossus,  Network.player, viewID, GAMEPLAY);
+		InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
 	}
 	
 	void OnConnectedToServer()

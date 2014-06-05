@@ -129,6 +129,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400014}
+  m_Layer: 8
+  m_Name: ShootLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -148,7 +163,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .0156594515, z: 0}
+  m_LocalPosition: {x: -5.93589163, y: .156288505, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -156,6 +171,7 @@ Transform:
   - {fileID: 400008}
   - {fileID: 400004}
   - {fileID: 400006}
+  - {fileID: 400014}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400004
@@ -219,6 +235,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 1
+--- !u!4 &400014
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .171872139, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400002}
+  m_RootOrder: 5
 --- !u!50 &5000000
 Rigidbody2D:
   m_ObjectHideFlags: 1
@@ -460,6 +488,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 0
+  shootFrom: {fileID: 400014}
   currentState: 4
 --- !u!114 &11400006
 MonoBehaviour:

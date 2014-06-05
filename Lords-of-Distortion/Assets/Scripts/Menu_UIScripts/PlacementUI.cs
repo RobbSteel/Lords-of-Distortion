@@ -284,12 +284,12 @@ public class PlacementUI : MonoBehaviour {
 			//only count if you hit the key for the right board
 			if(activePower != null)
 			{
-				if(device.RightBumper.WasPressed)
+				if(device.LeftBumper.WasPressed)
 				{
 					if(boardsByType[activePowerType].index == 1)
 						inputDetected = true;
 				}
-				else if(device.RightTrigger.WasPressed)
+				else if(device.RightBumper.WasPressed)
 				{
 					if(boardsByType[activePowerType].index == 2)
 						inputDetected = true;

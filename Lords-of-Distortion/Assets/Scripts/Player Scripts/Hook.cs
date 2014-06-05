@@ -4,7 +4,7 @@ using InControl;
 
 public class Hook : MonoBehaviour {
 
-	public Vector3 mousePos = new Vector3(0,0, 0);
+	public Vector3 targetPosition = new Vector3(0,0, 0);
 	public HookHit currentHook;
 	
 	public  GameObject hook;
@@ -19,9 +19,10 @@ public class Hook : MonoBehaviour {
 	const float PLAYER_RELEASE_DISTANCE = .7f;
 	NetworkController networkController;
 	Controller2D  controller2D;
+	
+	public Transform shootFrom;
 
 	void Start () {
-
 		networkController = GetComponent<NetworkController>();
 		controller2D = GetComponent<Controller2D>();
 		animator = GetComponent<Animator>();
@@ -50,11 +51,13 @@ public class Hook : MonoBehaviour {
 
 	public HookState currentState = HookState.None;
 
+	private float targetDistanceSqrd = 0f;
+	Vector3 shootOrigin;
 
 	//TODO: allow owner of hook to destroy it if he hooks a platform, synchornize this somehow.
 	void ShootHookLocal(float originX, float originY, float targetX, float targetY){
-		Vector3 origin = new Vector3(originX, originY, transform.position.z);
-		GameObject go  = (GameObject)Instantiate(hook, origin, transform.rotation);
+		shootOrigin = new Vector3(originX, originY, transform.position.z);
+		GameObject go  = (GameObject)Instantiate(hook, shootOrigin, transform.rotation);
 		currentState = HookState.GoingOut;
 		currentHook = go.GetComponent<HookHit>();
 		currentHook.networkController = networkController;
@@ -62,12 +65,12 @@ public class Hook : MonoBehaviour {
 		//hooktimer = 1.5f;
 		//Calculate angle from player to mouse and rotate hook that way.
 		Vector3 target =  new Vector3(targetX, targetY, transform.position.z);
-		Vector3 difference = target - origin;
+		Vector3 difference = target - shootOrigin;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
-
+		targetDistanceSqrd = difference.sqrMagnitude;
 		//mousePos = transform.position + 100f * direction;
 
-		mousePos = target;
+		targetPosition = target;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		go.rigidbody2D.velocity = direction * speedRatio;
@@ -134,12 +137,12 @@ public class Hook : MonoBehaviour {
 						directionInput = device.LeftStick.Vector;
 					}
 					
-					Vector3 targetPosition = transform.position + (directionInput.normalized * 100f);
+					Vector3 targetPosition = shootFrom.position + (directionInput.normalized * 100f);
 					if(!OFFLINE)
 					{
 						networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
 					}
-					ShootHookLocal(transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
+					ShootHookLocal(shootFrom.position.x, shootFrom.position.y,  targetPosition.x, targetPosition.y);
 				}
 				else if(currentState == HookState.GoingOut)
 				{
@@ -348,8 +351,8 @@ public class Hook : MonoBehaviour {
 	//Instantiates links while the hook is traveling
 	void hookgoing(float speed){
 		//go.transform.position = Vector2.MoveTowards(go.transform.position, mousePos, hookSpeed);
-		float distance = Vector2.Distance(currentHook.gameObject.transform.position, mousePos);
-		if(distance <= .25f){
+		float distanceSqrd = (currentHook.gameObject.transform.position - shootOrigin).sqrMagnitude;
+		if(distanceSqrd >= targetDistanceSqrd + .9f){ //distance of click plus width of hook
 			//Reached destination
 			currentHook.returning = true;
 			ReturnHook();
