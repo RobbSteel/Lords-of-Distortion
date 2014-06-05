@@ -19,7 +19,7 @@ public class PlagueScript : Power
 	    possibletargets = GameObject.FindGameObjectsWithTag("Player");
 		Destroy(gameObject, 8f);
 		AcquireTarget();
-		plaguespeed = 0.02f;
+		plaguespeed = 0.7f;
 	}
 
 
@@ -32,7 +32,7 @@ public class PlagueScript : Power
 				targetacquired = false;
 				AcquireTarget();
 			}
-			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed);
+			transform.position = Vector2.MoveTowards(transform.position, targetplayer.transform.position, plaguespeed * Time.deltaTime);
 		}
 	}
 

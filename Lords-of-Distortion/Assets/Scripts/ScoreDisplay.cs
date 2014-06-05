@@ -18,7 +18,8 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject WinLabel;
 	public GameObject FavorLabel;
 	public GameObject TimeLabel;
-	public List<NetworkPlayer> tielist;
+	public List<NetworkPlayer> tielist = new List<NetworkPlayer>();
+	public bool firsttie = true;
 	public bool tie = false;
 	public bool finish = false;
 	SessionManager sessionManager;
@@ -88,12 +89,26 @@ public class ScoreDisplay : MonoBehaviour {
 				var score = infoscript.GetPlayerStats(listed[v]).totalScore;
 						
 				        if(score > winningscore){
+							
 							winningscore = score;
 							winningplayer = listed[v];
-						} 
+							tie = false;
+							firsttie = false;
+
+						} else if(score == winningscore) {
+							if(firsttie){
+								tie = true;
+								tielist.Add(winningplayer);
+								tielist.Add(listed[v]);
+								firsttie = false;
+							} else {
+								tielist.Add(listed[v]);
+					    }
+					}
+				}
 			}
 
-		}
+
 
 		//Calculate scores for each player
 		for(int i = 0; i < listed.Count; i++){
@@ -184,7 +199,7 @@ public class ScoreDisplay : MonoBehaviour {
 				label = (GameObject)Instantiate(freezeicon, new Vector2(0,0), transform.rotation);
 
 			} else {
-
+				print ("Trophy Bug" + lastdeath);
 				label = (GameObject)Instantiate(alive, new Vector2(0,0), transform.rotation);
 			}
 
