@@ -612,6 +612,7 @@ public class Controller2D : MonoBehaviour {
 		renderer.enabled = true;
 		dead = false;
 		locked = false;
+        crouching = false;
 		hasbomb = false;
 		status.currentStunMeter = 0;
 		collider2D.enabled = true;
