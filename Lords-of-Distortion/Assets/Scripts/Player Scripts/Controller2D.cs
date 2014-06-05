@@ -527,7 +527,7 @@ public class Controller2D : MonoBehaviour {
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
-
+            
 			myHook.DestroyHookPossible(Hook.Authority.SERVER);
 			/*Upon Death, tell the DeadLord Script that the player is dead by setting
 			the boolean to true*
@@ -612,6 +612,8 @@ public class Controller2D : MonoBehaviour {
 		renderer.enabled = true;
 		dead = false;
 		locked = false;
+        crouching = false;
+        SetCrouchState(false);
 		hasbomb = false;
 		status.currentStunMeter = 0;
 		collider2D.enabled = true;
