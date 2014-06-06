@@ -295,7 +295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &175494779
 Renderer:
   m_ObjectHideFlags: 0
@@ -477,9 +477,9 @@ MonoBehaviour:
   aspectRatio: 2.13636374
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
   mText: 4
-  mFontSize: 72
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 0
   mMaxLineCount: 1
@@ -1399,12 +1399,12 @@ MonoBehaviour:
   aspectRatio: 2.02127671
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Back
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: BACK
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
-  mMaxLineCount: 0
+  mMaxLineCount: 1
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
@@ -1528,9 +1528,9 @@ MonoBehaviour:
   aspectRatio: 2.46428561
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Lives
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: LIVES
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
   mMaxLineCount: 1
@@ -2027,9 +2027,9 @@ MonoBehaviour:
   aspectRatio: 2.46428561
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Settings
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: SETTINGS
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
   mMaxLineCount: 1
@@ -2227,9 +2227,9 @@ MonoBehaviour:
   aspectRatio: 2.13636374
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
   mText: 3
-  mFontSize: 72
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 0
   mMaxLineCount: 1
@@ -2397,12 +2397,12 @@ MonoBehaviour:
   aspectRatio: 2.02127671
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Start
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: START
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
-  mMaxLineCount: 0
+  mMaxLineCount: 1
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
@@ -2699,9 +2699,9 @@ MonoBehaviour:
   aspectRatio: 2.46428561
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Player Name
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: PLAYER NAME
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
   mMaxLineCount: 1
@@ -2827,9 +2827,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ForestStages: {fileID: 0}
   MineStages: {fileID: 0}
+  CageStages: {fileID: 0}
   StageUI: {fileID: 0}
   ForestSelectBtn: {fileID: 0}
-  MineSelectBtn: {fileID: 0}
+  MineSelectBtnRight: {fileID: 0}
+  MineSelectBtnLeft: {fileID: 0}
+  CageSelectBtn: {fileID: 0}
   levelgrid: {fileID: 0}
   initRotation: 9.99999975e-05
   endRotation: 180
@@ -4334,9 +4337,9 @@ MonoBehaviour:
   aspectRatio: 2.13636374
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Server Name
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: SERVER NAME
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 0
   mMaxLineCount: 1
@@ -4737,9 +4740,9 @@ MonoBehaviour:
   aspectRatio: 2.46428561
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: bfd2ca87ce4f0e84299cbefadea107a9, type: 2}
-  mText: Rounds
-  mFontSize: 72
+  mFont: {fileID: 11400000, guid: 2ddd9fe55cad96e41a5fc27b27fb24f5, type: 2}
+  mText: ROUNDS
+  mFontSize: 48
   mFontStyle: 0
   mEncoding: 1
   mMaxLineCount: 1
