@@ -112,14 +112,13 @@ public class LobbyManager : MonoBehaviour {
 	//Called on clients not controlling the player who just died.
 	[RPC]
 	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
-		print ("he dead");
 		SessionManager.Instance.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
 		GameObject deadPlayer = SessionManager.Instance.psInfo.GetPlayerGameObject(deadPlayerID);
-		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
+		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger, true);
 	}
 	
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer, DeathType deathType, float lives){
+	void LostPlayer(Controller2D controller, DeathType deathType){
 		int deathTypeInteger = (int)deathType;
 		if(Network.isServer){
 			//pass network.time because it's going to be adjusted to synched time anyway
@@ -389,7 +388,7 @@ public class LobbyManager : MonoBehaviour {
 	//This is is called when a player presses one of the trigger keys.
 	private void SpawnTriggerPower(PowerSpawn spawn, GameObject uiElement){
 		float currentTime = TimeManager.instance.time;
-		if (placementUI.allTraps.Contains(spawn))
+		if (placementUI.allTraps.Contains(spawn) && currentTime >= beginTime)
 		{
 			spawn.owner = Network.player;
 			//unitiliazed
@@ -401,7 +400,7 @@ public class LobbyManager : MonoBehaviour {
 			//Call this function locally on and remotely
 			networkView.RPC("SpawnPowerLocally", RPCMode.Others, (int)spawn.type, spawn.position, spawn.angle, newViewID,
 			                Network.player);
-			SpawnPowerLocally(spawn, newViewID);
+			SpawnPowerLocally(spawn, 0f, newViewID);
 			//Remove from your inventory and  disable button 
 			placementUI.DestroyUIPower(spawn);
 			if(uiElement.GetComponent<PowerSlot>() != null){
@@ -410,23 +409,26 @@ public class LobbyManager : MonoBehaviour {
 				//remove from grid if power is not infinite.
 				if(!powerSlot.associatedPower.infinite)
 					placementUI.RemoveFromInventory(powerSlot.associatedPower.type);
-				
 			}
 		}
 	}
 	
+	//Player sees the warning symbol for his own powers longer than the other players.
+	const float MaxWarningDuration = 0.8f; //old one was .7f
+	const float MaxLagAdjustment = 0.24f; //The max amount of time the warning can be reduced to account for lag, for fairness.
+	
 	//http://docs.unity3d.com/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html
 	//http://docs.unity3d.com/Documentation/ScriptReference/Coroutine.html
 	//Spawn a warning sign, wait .7 seconds, then spawn power. All of these are done locally on every client.
-	IEnumerator YieldThenPower(PowerSpawn spawn, NetworkViewID optionalViewID)
+	IEnumerator YieldThenPower(PowerSpawn spawn, float warningDuration, NetworkViewID optionalViewID)
 	{
 		Vector3 yieldSpawnLocation = spawn.position;
 		yieldSpawnLocation.z = -8;
 		GameObject instantiatedSymbol = (GameObject)Instantiate(alertSymbol, yieldSpawnLocation, Quaternion.identity);
-		yield return new WaitForSeconds(0.7f);
+		yield return new WaitForSeconds(warningDuration);
 		Destroy(instantiatedSymbol);
 		GameObject power =  Instantiate (powerPrefabs.list[(int)spawn.type], spawn.position, Quaternion.identity) as GameObject;
-		power.GetComponent<Power>().spawnInfo = spawn;
+		power.GetComponent<Power>().Initialize(spawn);
 		//If the networkview id is specified, apply it to the networkview of the new power
 		if(!Equals(optionalViewID, default(NetworkViewID))){
 			power.GetComponent<NetworkView>().viewID = optionalViewID;
@@ -436,20 +438,24 @@ public class LobbyManager : MonoBehaviour {
 	//this function converts parameters into a powerspawn object
 	[RPC]
 	void SpawnPowerLocally(int type, Vector3 position, float angle, NetworkViewID optionalViewID,
-	                       NetworkPlayer owner){
+	                       NetworkPlayer owner, NetworkMessageInfo info){
 		PowerSpawn requestedSpawn = new PowerSpawn();
 		requestedSpawn.type = (PowerType)type;
 		requestedSpawn.position = position;
 		requestedSpawn.angle = angle;
 		requestedSpawn.owner  = owner;
-		SpawnPowerLocally(requestedSpawn, optionalViewID);
+		
+		float networkDelay = (float)(Network.time - info.timestamp);
+		SpawnPowerLocally(requestedSpawn, networkDelay, optionalViewID);
 	}
 	
 	//The function that actually starts the coroutine for spawning powers.
-	void SpawnPowerLocally(PowerSpawn spawn, NetworkViewID optionalViewID){
-		StartCoroutine(YieldThenPower(spawn, optionalViewID));
+	void SpawnPowerLocally(PowerSpawn spawn, float networkDelay,  NetworkViewID optionalViewID){
+		float adjustedWarningDuration = MaxWarningDuration - 
+			Mathf.Min(networkDelay, MaxLagAdjustment) - (float)NetworkController.interpolationDelay;
+		StartCoroutine(YieldThenPower(spawn, adjustedWarningDuration, optionalViewID));
 	}
-	
+
 	bool trapsEnabled = false;
 	
 	void Update () {
