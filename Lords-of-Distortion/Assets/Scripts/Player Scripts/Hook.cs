@@ -370,7 +370,7 @@ public class Hook : MonoBehaviour {
 
 			float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 			
-			if(distance <= .8f){
+			if(distance <= .9f){
 				transform.rigidbody2D.velocity = Vector2.zero;
 				DestroyHookPossible(Authority.OWNER);
 			}
