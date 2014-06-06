@@ -65,7 +65,7 @@ public class FireBall : Power
 		var platform = platformlist[index];
 
 		Instantiate(fireparticle, transform.position, transform.rotation);
-		var newwall = (GameObject)Instantiate(firewall, platform.transform.position, Quaternion.AngleAxis(90,new Vector3(-1,0,0)));
+		var newwall = (GameObject)Instantiate(firewall, platform.transform.position, platform.transform.rotation);
 		newwall.GetComponent<Firewall>().spawnInfo = new PowerSpawn(spawnInfo);
 		Destroy (newwall, 3.0f);
 		Destroy(gameObject);
