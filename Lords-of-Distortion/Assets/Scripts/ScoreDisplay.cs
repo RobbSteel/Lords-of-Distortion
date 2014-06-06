@@ -7,9 +7,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 	public GameObject ScoreLabel;
 	public GameObject PlayerLabel;
-	public GameObject PlayerDisplay;
-	public GameObject BluePlayerDisplay;
-	public GameObject MummyPlayerDisplay;
+
 	public GameObject BlueEnd;
 	public GameObject ColEnd;
 	public GameObject MumEnd;
@@ -19,14 +17,49 @@ public class ScoreDisplay : MonoBehaviour {
 	public GameObject FavorLabel;
 	public GameObject TimeLabel;
 	public List<NetworkPlayer> tielist = new List<NetworkPlayer>();
-	public bool firsttie = true;
+	public List<NetworkPlayer> tielosers = new List<NetworkPlayer>();
+	private bool firsttie = true;
 	public bool tie = false;
 	public bool finish = false;
 	SessionManager sessionManager;
 	public float timeleft;
 	public float winningscore = -1;
 	public float gonethrough = 0;
-	public NetworkPlayer winningplayer;
+	public float tiethrough = 0;
+	private NetworkPlayer winningplayer;
+
+	//Player Icons
+	//Blue normal
+	public GameObject BlueBlue;
+	public GameObject BlueRed;
+	public GameObject BlueGreen;
+	public GameObject BlueYellow;
+	//Blue Win
+	public GameObject BlueBlueWin;
+	public GameObject BlueRedWin;
+	public GameObject BlueGreenWin;
+	public GameObject BlueYellowWin;
+	//Colossus
+	public GameObject ColBlue;
+	public GameObject ColRed;
+	public GameObject ColGreen;
+	public GameObject ColYellow;
+	//Colossus Win
+	public GameObject ColBlueWin;
+	public GameObject ColRedWin;
+	public GameObject ColGreenWin;
+	public GameObject ColYellowWin;
+	//Mummy
+	public GameObject MumBlue;
+	public GameObject MumRed;
+	public GameObject MumGreen;
+	public GameObject MumYellow;
+	//Mummy Win
+	public GameObject MumBlueWin;
+	public GameObject MumRedWin;
+	public GameObject MumGreenWin;
+	public GameObject MumYellowWin;
+
 
 	//Different Death Icons
 	public GameObject electricicon;
@@ -81,32 +114,46 @@ public class ScoreDisplay : MonoBehaviour {
 			timeLabelReference = timelabel;
 		}
 
+		print (winningscore);
+
 		//If the Match is finished check who was the winner and set up tie logic
 		if(sessionManager.matchfinish){
-		
+
 			for(int v = 0; v < listed.Count; v++){
 
 				var score = infoscript.GetPlayerStats(listed[v]).totalScore;
-						
-				        if(score > winningscore){
-							
-							winningscore = score;
-							winningplayer = listed[v];
-							tie = false;
-							firsttie = false;
 
-						} else if(score == winningscore) {
+				        
+				if(score > winningscore){
+							
+					winningscore = score;
+					winningplayer = listed[v];
+					   if(tie){
+						 firsttie = false;
+					   }
+					tie = false;
+					tielist.Clear();
+				} else if(score == winningscore) {
 							if(firsttie){
 								tie = true;
-								tielist.Add(winningplayer);
-								tielist.Add(listed[v]);
+					
+
+								if(winningplayer == listed[v]){
+									tielist.Add(winningplayer);
+								} else {
+									tielist.Add(winningplayer);
+									tielist.Add(listed[v]);
+								}
+								
 								firsttie = false;
 							} else {
-								tielist.Add(listed[v]);
+
+						tielist.Add(listed[v]);
+						tie = true;
 					    }
-					}
 				}
 			}
+		}
 
 
 
@@ -258,20 +305,7 @@ public class ScoreDisplay : MonoBehaviour {
 		
 	}
 
-	string ColorCheck(CharacterStyle playercolor){
-		string color = "white";
-		if(playercolor == CharacterStyle.DEFAULT){
-			color = "white";
-		} else if(playercolor == CharacterStyle.RED){
-			color = "red";
-		} else if(playercolor == CharacterStyle.GREEN){
-			color = "green";
-		} else if(playercolor == CharacterStyle.BLUE){
-			color = "blue";
-		}
 
-		return color;
-	}
 
 	//Displays the labels with score and player info
 	void ShowScoresLocally(float roundscore, float totalscore, string playername, int playernumber, CharacterStyle playercolor, PowerType lastdeath, Character playermodel){
@@ -283,77 +317,204 @@ public class ScoreDisplay : MonoBehaviour {
 
      }
 
+	string ColorCheck(CharacterStyle playercolor){
+		string color = "white";
+		if(playercolor == CharacterStyle.YELLOW){
+			color = "yellow";
+		} else if(playercolor == CharacterStyle.RED){
+			color = "red";
+		} else if(playercolor == CharacterStyle.GREEN){
+			color = "green";
+		} else if(playercolor == CharacterStyle.BLUE){
+			color = "blue";
+		}
+		
+		return color;
+	}
+	
+	GameObject MummyColorCheck(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = MumYellow;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = MumRed;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = MumGreen;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = MumBlue;
+			return tempplayer;
+		}
+	}
+	
+	GameObject ColColorCheck(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = ColYellow;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = ColRed;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = ColGreen;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = ColBlue;
+			return tempplayer;
+		}
+	}
+	
+	GameObject BlueColorCheck(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = BlueYellow;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = BlueRed;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = BlueGreen;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = BlueBlue;
+			return tempplayer;
+		}
+	}
+
+	GameObject MummyColorCheckEnd(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = MumYellowWin;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = MumRedWin;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = MumGreenWin;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = MumBlueWin;
+			return tempplayer;
+		}
+	}
+	
+	GameObject BlueColorCheckEnd(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = BlueYellowWin;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = BlueRedWin;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = BlueGreenWin;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = BlueBlueWin;
+			return tempplayer;
+		}
+	}
+	
+	GameObject ColColorCheckEnd(string color){
+		
+		GameObject tempplayer;
+		
+		if(color == "yellow"){
+			tempplayer = ColYellowWin;
+			return tempplayer;
+		}
+		
+		if(color == "red"){
+			tempplayer = ColRedWin;
+			return tempplayer;
+		}
+		
+		if(color == "green"){
+			tempplayer = ColGreenWin;
+			return tempplayer;
+		}
+		
+		else{
+			tempplayer = ColBlueWin;
+			return tempplayer;
+		}
+	}
+
+	//Handles instantiating the proper color of character
 	GameObject DetermineColor(string color, Character playchar){
 		
 		GameObject tempplayer;
 
 		if(playchar == Character.Blue){
-			tempplayer = (GameObject)Instantiate(BluePlayerDisplay, new Vector2(0,0), transform.rotation);
+			tempplayer = BlueColorCheck(color);
 		}else if(playchar == Character.Mummy){
-			tempplayer = (GameObject)Instantiate(MummyPlayerDisplay, new Vector2(0,0), transform.rotation);
+			tempplayer = MummyColorCheck(color);
 		} else {
-			tempplayer = (GameObject)Instantiate(PlayerDisplay, new Vector2(0,0), transform.rotation);
+			tempplayer = ColColorCheck(color);
 		}
 
-		var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
-
-		if(color == "white"){
-			tempcolor.color = Color.white;
-			return tempplayer;
-		}
-		
-		if(color == "red"){
-			tempcolor.color = Color.red;
-			return tempplayer;
-		}
-		
-		if(color == "green"){
-			tempcolor.color = Color.green;
-			return tempplayer;
-		}
-		
-		if(color == "blue"){
-			tempcolor.color = Color.blue;
-			return tempplayer;
-		}
+		tempplayer = (GameObject)Instantiate(tempplayer, new Vector2(0,0), transform.rotation);
 		
 		return tempplayer; 
 	}
 
+	//Determines and returns which color of player victory is chosen
 	GameObject DetermineColorEnd(string color, Character playchar){
 		
 		GameObject tempplayer;
 		
 		if(playchar == Character.Blue){
-			tempplayer = (GameObject)Instantiate(BlueEnd, new Vector2(0,0), transform.rotation);
+			tempplayer = BlueColorCheckEnd(color);
 		}else if(playchar == Character.Mummy){
-			tempplayer = (GameObject)Instantiate(MumEnd, new Vector2(0,0), transform.rotation);
+			tempplayer = MummyColorCheckEnd(color);
 		} else {
-			tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
+			tempplayer = ColColorCheckEnd(color);
 		}
-		
-		var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
-		
-		if(color == "white"){
-			tempcolor.color = Color.white;
-			return tempplayer;
-		}
-		
-		if(color == "red"){
-			tempcolor.color = Color.red;
-			return tempplayer;
-		}
-		
-		if(color == "green"){
-			tempcolor.color = Color.green;
-			return tempplayer;
-		}
-		
-		if(color == "blue"){
-			tempcolor.color = Color.blue;
-			return tempplayer;
-		}
-		
+
+		tempplayer = (GameObject)Instantiate(tempplayer, new Vector2(0,0), transform.rotation);
+
 		return tempplayer; 
 	}
 
@@ -368,18 +529,57 @@ public class ScoreDisplay : MonoBehaviour {
 
 
 		if(tie){
+			print ("tielength" + tielist.Count);
 
-			for(int i = 0; i < tielist.Count; i++){
+			var tielabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+			tielabel.transform.parent = GameObject.Find ("UI Root").transform;
+			tielabel.transform.localScale = new Vector3(1,1,1);
+			tielabel.transform.localPosition = new Vector2(-300, 300);
+			var tietext = tielabel.GetComponent<UILabel>();
+			tietext.text = "TIE!";
+			var currplayers = infoscript.players;
+
+		
+		
+			for(int i = 0; i < currplayers.Count; i++){
+				if(tielist[i] == currplayers[i]){
 				var playername = infoscript.GetPlayerOptions(tielist[i]).username;
 				var playercolor = infoscript.GetPlayerOptions(tielist[i]).style;
 				var playeravatar = infoscript.GetPlayerOptions(tielist[i]).character;
 				var playerclr = ColorCheck(playercolor);
 				var playericon = DetermineColorEnd(playerclr, playeravatar);
+
+				var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+				playerlabel.transform.parent = GameObject.Find ("UI Root").transform;
+				playerlabel.transform.localScale = new Vector3(1, 1, 1);
+				playerlabel.transform.localPosition = new Vector2(-300, 150+(-150*gonethrough));
+				var playertext = playerlabel.GetComponent<UILabel>();
+				playertext.text = playername;
+
 				playericon.transform.parent = GameObject.Find ("UI Root").transform;
-				playericon.transform.localScale = new Vector3(100,100,1);
-				playericon.transform.localPosition = new Vector2(-200, 350+(-150));
+				playericon.transform.localScale = new Vector3(200,200,1);
+				playericon.transform.localPosition = new Vector2(-400, 150+(-150 * gonethrough));
+				gonethrough++;
+				} else {
 
-
+					var playername = infoscript.GetPlayerOptions(tielist[i]).username;
+					var playercolor = infoscript.GetPlayerOptions(tielist[i]).style;
+					var playeravatar = infoscript.GetPlayerOptions(tielist[i]).character;
+					var playerclr = ColorCheck(playercolor);
+					var playericon = DetermineColorEnd(playerclr, playeravatar);
+					
+					var playerlabel = (GameObject)Instantiate(WinLabel, new Vector2(0,0), transform.rotation);
+					playerlabel.transform.parent = GameObject.Find ("UI Root").transform;
+					playerlabel.transform.localScale = new Vector3(1, 1, 1);
+					playerlabel.transform.localPosition = new Vector2(400, 150+(-150*tiethrough));
+					var playertext = playerlabel.GetComponent<UILabel>();
+					playertext.text = playername;
+					
+					playericon.transform.parent = GameObject.Find ("UI Root").transform;
+					playericon.transform.localScale = new Vector3(200,200,1);
+					playericon.transform.localPosition = new Vector2(300, 150+(-150 * tiethrough));
+					tiethrough++;
+				}
 			}
 
 		} else {
@@ -478,41 +678,6 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 	}
 
-	GameObject DetermineColorEnd(string color){
-		
-		GameObject tempplayer;
-
-	
-		tempplayer = (GameObject)Instantiate(ColEnd, new Vector2(0,0), transform.rotation);
-
-
-		var tempcolor = tempplayer.GetComponent<SpriteRenderer>();
-
-		if(color == "white"){
-			tempcolor.color = Color.white;
-			return tempplayer;
-		}
-		
-		if(color == "red"){
-
-			tempcolor.color = Color.red;
-			return tempplayer;
-		}
-		
-		if(color == "green"){
-
-			tempcolor.color = Color.green;
-			return tempplayer;
-		}
-		
-		if(color == "blue"){
-
-			tempcolor.color = Color.blue;
-			return tempplayer;
-		}
-
-		return tempplayer; 
-	}
 
 	//Instantiate the score pose with the appropriate color and returns it to displaylocally.
 

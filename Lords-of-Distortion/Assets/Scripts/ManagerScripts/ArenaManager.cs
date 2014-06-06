@@ -22,7 +22,7 @@ public class ArenaManager : MonoBehaviour {
 	float beginTime = float.PositiveInfinity;
 	float finalPlayerTime = float.PositiveInfinity;
 	float endTime = float.PositiveInfinity;
-	public float totallives;
+
 
 	public LivesUI livesUI;
 	int? livePlayerCount;
@@ -43,6 +43,9 @@ public class ArenaManager : MonoBehaviour {
 	{"Defeat the Last Player!", "Last Player Survived!",  "Game Finish!", "Vengeance!"};
 
 	List<NetworkPlayer> livePlayers;
+
+	//You can set in inspector
+	public GameObject RespawnPoint;
 
 	enum Phase{
 		PreGame,
@@ -99,21 +102,14 @@ public class ArenaManager : MonoBehaviour {
 		placementUI.Disable();
 	}
 
-	[RPC]
-	void DecreaseLives(NetworkPlayer player, float lives){
-		livesUI.DecreaseLives(player, lives);
-	}
 	
 	void ServerDeathHandler(NetworkPlayer player, bool disconnect = false, float lives = 0){
-		print ("handlerlives" + lives);
-
-		livesUI.DecreaseLives(player, lives);
-		networkView.RPC("DecreaseLives", RPCMode.Others, player, lives);
 
 		if(lives == 0){
-		livePlayerCount--;
-		livePlayers.Remove(player);
+			livePlayerCount--;
+			livePlayers.Remove(player);
 		}
+
 		//The last player was killed
 		if(livePlayerCount == 0){
 			FinishGame(false); //Last player didn't win
@@ -146,71 +142,87 @@ public class ArenaManager : MonoBehaviour {
 		ServerDeathHandler(player, true, 0);
 	}
 
-	//Tells additional players to destroy clone.
-	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
+	//Tells additional players that a player has died.
+	void NotifyOthersOfDeath(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger){
 		if(Network.isServer){
 			//Store the time of death on server
 			float adjustedTime = TimeManager.instance.NetworkToSynched(timeOfDeath);
-			
+
+			PlayerStats deadPlayerStats = sessionManager.psInfo.GetPlayerStats(deadPlayerID);
+			float lives = deadPlayerStats.lives - 1f; //subtract a life
 			//Nofify everyone but dead player
 			foreach(NetworkPlayer player in sessionManager.psInfo.players){
 				if(player != deadPlayerID && player != Network.player){
-					networkView.RPC ("DestroyPlayerClone", player, deadPlayerID, adjustedTime, deathTypeInteger, lives);
+					networkView.RPC ("PlayerCloneDied", player, deadPlayerID, adjustedTime, deathTypeInteger, lives);
 				}
 			}
 			//also destroy player on server
-			DestroyPlayerClone(deadPlayerID, adjustedTime, deathTypeInteger, lives);
+			PlayerCloneDied(deadPlayerID, adjustedTime, deathTypeInteger, lives);
 			//Explicitly pass our network player id
-			ServerDeathHandler(deadPlayerID, false, lives);
+			ServerDeathHandler(deadPlayerID, false, deadPlayerStats.lives);
 		}
 	}
 
 	//Called only on the server. 
 	[RPC]
-	void NotifyServerOfDeath(int deathTypeInteger,float lives, NetworkMessageInfo info){
+	void NotifyServerOfDeath(float timeofDeath, int deathTypeInteger, NetworkMessageInfo info){
 		//Converts networked message to local function call.
-		NotifyOthersOfDeath(info.sender, (float)info.timestamp, deathTypeInteger, lives);
+		NotifyOthersOfDeath(info.sender, timeofDeath, deathTypeInteger);
 	}
 
 
 	//Called on clients not controlling the player who just died.
 	[RPC]
-	void DestroyPlayerClone(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
-		if(lives == 0)
+	void PlayerCloneDied(NetworkPlayer deadPlayerID, float timeOfDeath, int deathTypeInteger, float lives){
+		bool canRespawn = true;
+		PlayerStats deadPlayerStats = sessionManager.psInfo.GetPlayerStats(deadPlayerID);
+		deadPlayerStats.lives = lives;
+
+		if(lives <= 0)
 		{
-			sessionManager.psInfo.GetPlayerStats(deadPlayerID).timeOfDeath = timeOfDeath;
+			deadPlayerStats.timeOfDeath = timeOfDeath;
+			canRespawn = false;
 		}
-		GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
-		deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger);
+
+		if(Network.player != deadPlayerID)
+		{ 	//we dont want to call death twice, altough there is already a safeguard
+			GameObject deadPlayer = sessionManager.psInfo.GetPlayerGameObject(deadPlayerID);
+			deadPlayer.GetComponent<Controller2D>().DieSimple((DeathType)deathTypeInteger, canRespawn);
+		}
+		
+		//update UI
+		livesUI.DecreaseLives(deadPlayerID, lives);
 	}
 
 	//Called only on the client where the player died.
-	void LostPlayer(GameObject deadPlayer, DeathType deathType, float lives){
+	void LostPlayer(Controller2D deadPlayer, DeathType deathType){
 		int deathTypeInteger = (int)deathType;
-		print ("lives" + lives);
 	
 		if(Network.isServer){
 			//pass network.time because it's going to be adjusted to synched time anyway
-			NotifyOthersOfDeath(Network.player, (float)Network.time, deathTypeInteger, lives);
+			NotifyOthersOfDeath(Network.player, TimeManager.instance.time , deathTypeInteger);
 		}
 
 		else {
-			if(lives == 0){
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server,  deathTypeInteger, TimeManager.instance.time);
+
+			//Do some of the things destroyplayerclone does
+			if(deadPlayer.Lives_LOCAL == 0){
 				sessionManager.psInfo.GetPlayerStats(Network.player).timeOfDeath = TimeManager.instance.time;
 			}
-			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, deathTypeInteger, lives);
+
+			sessionManager.psInfo.GetPlayerStats(Network.player).lives = deadPlayer.Lives_LOCAL;
+			livesUI.DecreaseLives(Network.player, deadPlayer.Lives_LOCAL); //decrease lives in local ui
 		}
 
-		if(lives == 0){
-		//bring up the dead player placement screen.
+		if(deadPlayer.Lives_LOCAL == 0){
+			//bring up the dead player placement screen.
 			placementUI.disabledPowers.Add(PowerType.GATE);
 			placementUI.disabledPowers.Add(PowerType.DEFLECTIVE);
 			placementUI.SwitchToLive(true);
 			placementUI.enabled = true;
 		}
 	}
-
-
 
 	//Server should do calculations of who to give points to.
 	void HandlePlayerEvent(NetworkPlayer affected, PlayerEvent playerEvent){
@@ -232,6 +244,7 @@ public class ArenaManager : MonoBehaviour {
 	//Synch event with other players, just for the score screen.
 	[RPC]
 	void SynchEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkPlayer affected){
+		print ("Fireball happened at " + timeOfContact);
 		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
 		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact, attacker);
 		stats.AddEvent(playerEvent);
@@ -362,9 +375,9 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 	void Awake(){
+
 		sessionManager = SessionManager.Instance;
 		sessionManager.psInfo.LevelReset();
-		totallives = GameObject.Find ("PSInfo").GetComponent<PlayerServerInfo>().lives;
 		
 		playerSpawnVectors = new List<Vector3>();
 
@@ -387,7 +400,7 @@ public class ArenaManager : MonoBehaviour {
 		scoreUI.Initialize(sessionManager.psInfo);
 
 		livesUI = placementRoot.GetComponent<LivesUI>();
-		livesUI.Initialize(sessionManager.psInfo, totallives);
+		livesUI.Initialize(sessionManager.psInfo, sessionManager.psInfo.livesPerRound);
 
 		pointTracker = GetComponent<PointTracker>();
 		pointTracker.Initialize(scoreUI);
@@ -400,8 +413,9 @@ public class ArenaManager : MonoBehaviour {
 
 		fountainManager = GameObject.Find("TrapFountainManager").GetComponent<TrapFountainManager>();
 		FindPlatforms();
-		//reset death timers and stuff.
-
+		//if spawn point hasnt been set in inspector, find one
+		if(RespawnPoint == null)
+			RespawnPoint = GameObject.Find ("Respawn");
 
 		//this wont print because finishedloading is only true once all the start functions are called
 		//in every object of the scene.
@@ -433,9 +447,12 @@ public class ArenaManager : MonoBehaviour {
 	}
 
 
-	void PlayerSpawned(NetworkPlayer player){
+	void PlayerSpawned(NetworkPlayer player, Controller2D controller){
 		hudTools.ShowPlayerArrow(sessionManager.psInfo.GetPlayerGameObject(player),
 		                         sessionManager.psInfo.GetPlayerOptions(player).username);
+		//set respawn point
+		controller.respawnPoint = RespawnPoint != null ? RespawnPoint.transform.position : Vector3.zero;
+		controller.Lives_LOCAL = sessionManager.psInfo.livesPerRound;
 	}
 	/*
        * 1. Load Level Geometry
@@ -461,6 +478,7 @@ public class ArenaManager : MonoBehaviour {
 			NotifyBeginTime(TimeManager.instance.time + PRE_MATCH_TIME, livePlayerCount.Value);
 			networkView.RPC ("NotifyBeginTime", RPCMode.Others, beginTime, livePlayerCount.Value);
 		}
+
 
 		hudTools.DisplayText ("Get Ready");
 		currentPhase = Phase.PreGame;

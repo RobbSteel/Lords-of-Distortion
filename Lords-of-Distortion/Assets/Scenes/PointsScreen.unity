@@ -142,8 +142,11 @@ Camera:
     m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
   m_HDR: 0
   m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!4 &30498031
 Transform:
   m_ObjectHideFlags: 0
@@ -156,6 +159,7 @@ Transform:
   m_Children:
   - {fileID: 1945851903}
   m_Father: {fileID: 0}
+  m_RootOrder: 1
 --- !u!82 &30498032
 AudioSource:
   m_ObjectHideFlags: 0
@@ -285,6 +289,7 @@ Transform:
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 1585381398}
+  m_RootOrder: 2
 --- !u!114 &320616253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +502,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!81 &350887710
 AudioListener:
   m_ObjectHideFlags: 0
@@ -592,6 +598,7 @@ Transform:
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 1585381398}
+  m_RootOrder: 3
 --- !u!1 &383739530
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,6 +627,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1585381398}
+  m_RootOrder: 0
 --- !u!114 &383739532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,8 +690,11 @@ Camera:
     m_Bits: 256
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
   m_HDR: 0
   m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!1 &631372528
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,6 +735,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 2
 --- !u!1 &943059243
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,9 +766,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScoreLabel: {fileID: 100002, guid: 075a02053827de14fac6d1bf54f2c04e, type: 2}
   PlayerLabel: {fileID: 100002, guid: 815014eca346da9479b9236d494bec9a, type: 2}
-  PlayerDisplay: {fileID: 100000, guid: 40ef8d0d6124cb44389967d96ffd1c91, type: 2}
-  BluePlayerDisplay: {fileID: 100000, guid: 28e7f64d389e2b047bf44d8b33218c22, type: 2}
-  MummyPlayerDisplay: {fileID: 100000, guid: 04963899c8b96d14bb6e423201978375, type: 2}
   BlueEnd: {fileID: 100000, guid: 8842726fd23049140a4bfa702beffe37, type: 2}
   ColEnd: {fileID: 100002, guid: 428d3e05058a9f44eb3ee134b8bb3bd5, type: 2}
   MumEnd: {fileID: 100000, guid: cfb532101385fa1438f0fc1650734014, type: 2}
@@ -765,11 +774,36 @@ MonoBehaviour:
   WinLabel: {fileID: 100000, guid: a4aa342be14931848b73214fec8ccc17, type: 2}
   FavorLabel: {fileID: 100002, guid: 6a44eabd4483a164eb8c96e3b786155c, type: 2}
   TimeLabel: {fileID: 100000, guid: 5f548159a69f6f94c9b464e02bdcaab8, type: 2}
+  firsttie: 1
   tie: 0
   finish: 0
   timeleft: 5
   winningscore: 0
   gonethrough: 0
+  BlueBlue: {fileID: 100000, guid: 8c8ebbc0ef3e989409c656bef077d294, type: 2}
+  BlueRed: {fileID: 100000, guid: 25ed85370afe7224eaa6d8592ac19ef0, type: 2}
+  BlueGreen: {fileID: 100000, guid: f99fa266057116b488851fa201d637b7, type: 2}
+  BlueYellow: {fileID: 100000, guid: 11e6a7430bd152448a106d7063d54bfb, type: 2}
+  BlueBlueWin: {fileID: 100000, guid: ce2cc59d7e88dbb408b4d6e035f0debc, type: 2}
+  BlueRedWin: {fileID: 100000, guid: df93748468729df4b88f8e3204f9973d, type: 2}
+  BlueGreenWin: {fileID: 100000, guid: 3ddca35ad1ad3a944886bb2800b97e05, type: 2}
+  BlueYellowWin: {fileID: 100000, guid: 25f595a581ed22c439a7cad9ae7cb21f, type: 2}
+  ColBlue: {fileID: 100000, guid: c2fc877345d6d754c948932536075e26, type: 2}
+  ColRed: {fileID: 100000, guid: 1b552b9a3222e6f4ca1e7e6cfe7cefa3, type: 2}
+  ColGreen: {fileID: 100000, guid: efcdbdae60088a14fbf0d75a34752731, type: 2}
+  ColYellow: {fileID: 100000, guid: fe87765254f49e0429dbce63a85f2f4b, type: 2}
+  ColBlueWin: {fileID: 100000, guid: babcf69c2244076449d0556ff79edd1b, type: 2}
+  ColRedWin: {fileID: 100000, guid: dbbc366bfff80714f9b4a44313423602, type: 2}
+  ColGreenWin: {fileID: 100000, guid: bd1b0810d1b54984f892b2de7a8a1a02, type: 2}
+  ColYellowWin: {fileID: 100000, guid: ca77fd02ac50a6645b0354a983b89d7e, type: 2}
+  MumBlue: {fileID: 100000, guid: f0c3841624838cd4e98d1cbcf3e2c4b8, type: 2}
+  MumRed: {fileID: 100000, guid: be28d9486b0f65a4fb214c303c92fefc, type: 2}
+  MumGreen: {fileID: 100000, guid: 5f1fb85eb3c04484289563cf21e8b305, type: 2}
+  MumYellow: {fileID: 100000, guid: fe87765254f49e0429dbce63a85f2f4b, type: 2}
+  MumBlueWin: {fileID: 100000, guid: 339e8a54762bafa4db544e2c2203a360, type: 2}
+  MumRedWin: {fileID: 100000, guid: a2e60c9eadb445a4da7e29a95d7ef316, type: 2}
+  MumGreenWin: {fileID: 100000, guid: 47e19b979b8254e4aab3c8870555929d, type: 2}
+  MumYellowWin: {fileID: 100000, guid: f9ce456f5cfab8d408c2da7ccd01869f, type: 2}
   electricicon: {fileID: 100000, guid: a1100a2fe6f1ada4fbe997e6edfa9435, type: 2}
   plagueicon: {fileID: 100000, guid: 55b56900b52a95b428fa419077d2b05b, type: 2}
   hookicon: {fileID: 100000, guid: ed9ad4c18dae0ce4f86b3a9cedc97091, type: 2}
@@ -806,6 +840,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 3
 --- !u!1 &1585381394
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,6 +945,7 @@ Transform:
   - {fileID: 372247116}
   - {fileID: 1953624100}
   m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!1 &1616399805
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,6 +973,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1585381398}
+  m_RootOrder: 1
 --- !u!114 &1616399807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1031,9 +1068,8 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 79702837144118143a830c58b7ec54d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1945851903
@@ -1047,6 +1083,7 @@ Transform:
   m_LocalScale: {x: 1.4313513, y: 1.43134809, z: 1}
   m_Children: []
   m_Father: {fileID: 30498031}
+  m_RootOrder: 0
 --- !u!1 &1953624099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,6 +1111,7 @@ Transform:
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 1585381398}
+  m_RootOrder: 4
 --- !u!114 &1953624101
 MonoBehaviour:
   m_ObjectHideFlags: 0

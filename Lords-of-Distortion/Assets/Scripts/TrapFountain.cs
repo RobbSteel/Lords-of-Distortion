@@ -9,7 +9,8 @@ public class TrapFountain : MonoBehaviour {
 	public PowerType specifiedPower;
 	public bool randomPowerSupply;
 	ParticleSystem getPowerPSystem;
-	public AudioClip gemPing;
+	public AudioClip gemResupply;
+	//public AudioClip gemPing;
 	bool used = false;
 	public PlacementUI placementUI;
 
@@ -50,7 +51,7 @@ public class TrapFountain : MonoBehaviour {
 			placementUI.Resupply(specifiedPower);
 
 			used = true;
-			audio.PlayOneShot(gemPing, 0.5f);
+			audio.PlayOneShot(gemResupply, 0.6f);
 			getPowerPSystem.Play();
 	}
 

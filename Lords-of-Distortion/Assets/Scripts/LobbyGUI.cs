@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LobbyGUI : MonoBehaviour {
-
+	public static bool inLobby;
 	//public int connectionPort = 23466;
 	public int connectionPort = 25001;
 	private const string typeName = "Distorton";
@@ -32,6 +32,7 @@ public class LobbyGUI : MonoBehaviour {
     Dictionary<NetworkPlayer, GameObject> entries = new Dictionary<NetworkPlayer, GameObject>();
 
 	void Awake(){
+		inLobby = true;
 		//MasterServer.ipAddress = "38.104.224.202";
 		//Important
         playbtn = GameObject.Find("playBtn");
@@ -79,14 +80,14 @@ public class LobbyGUI : MonoBehaviour {
    [RPC]
    void synclives(float lives){
 
-		GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>().lives = lives;
+		PlayerServerInfo.instance.livesPerRound = lives;
 
 	}
 
 
 	public void PlayButton(GameObject go)
     {
-		var lives = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>().lives;
+		var lives = PlayerServerInfo.instance.livesPerRound;
 		networkView.RPC("synclives", RPCMode.Others, lives);
 
 		Network.RemoveRPCsInGroup(0);
@@ -160,7 +161,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Start()
     {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+		infoscript = PlayerServerInfo.instance;
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action
@@ -254,6 +255,11 @@ public class LobbyGUI : MonoBehaviour {
 				sessionManager.LoadNextLevel(false);
 			}
 		}
+	}
+
+	void OnDestroy()
+	{
+		inLobby = false;
 	}
 
 }
