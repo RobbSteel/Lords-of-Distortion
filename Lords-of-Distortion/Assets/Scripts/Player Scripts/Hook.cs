@@ -331,8 +331,7 @@ public class Hook : MonoBehaviour {
 		currentHook.affectedPlayerC2D.Hooked(networkController.theOwner);
 		currentHook.targetPosition = playerLocation;
 		currentHook.playerhooked = true;
-
-		currentHook.animator.SetTrigger("Hooked");
+		
 		hittimer = 2f;
 		hooktimer = 1.5f;
 	}

@@ -6,7 +6,7 @@ public class PlayerServerInfo : MonoBehaviour {
 	
 	public string servername;
 	public string choice;
-	public float lives;
+	public float livesPerRound;
     public int numStages;
 
 	public PlayerOptions localOptions;
@@ -41,8 +41,9 @@ public class PlayerServerInfo : MonoBehaviour {
 	}
 
 	public void LevelReset(){
+
 		foreach(var stats in playerStats){
-			stats.Value.LevelReset();
+			stats.Value.LevelReset(livesPerRound);
 		}
 		//reset lists that should be empty on every level 
 		playerObjects = new Dictionary<NetworkPlayer, GameObject>();

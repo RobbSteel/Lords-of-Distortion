@@ -31,7 +31,7 @@ public class CreateServer : MonoBehaviour {
 
             var numStages = GameObject.Find("enterRounds").GetComponent<UILabel>().text;
 
-            PlayerServerInfo.instance.lives = convert;
+            PlayerServerInfo.instance.livesPerRound = convert;
             PlayerServerInfo.instance.numStages = int.Parse(numStages);
             Application.LoadLevel("LobbyArena");
         }

@@ -4,6 +4,7 @@
 public class PlayerStats {
 	public int deaths = 0;
 	public int kills = 0;
+	public float lives = 0;
 
 	public float roundScore = 0f;
 	public float totalScore = 0f;
@@ -22,10 +23,11 @@ public class PlayerStats {
 		totalScore += points;
 	}
 
-	public void LevelReset(){
+	public void LevelReset(float liveCount){
 		timeOfDeath = float.PositiveInfinity;
 		playerEvents = new CircularBuffer<PlayerEvent>(2);
 		roundScore = 0f;
+		lives = liveCount;
 	}
 
 	public void AddEvent(PlayerEvent playerEvent){
