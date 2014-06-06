@@ -41,7 +41,8 @@ public class PointTracker : MonoBehaviour{
 		this.scoreUI = scoreUI;
 	}
 
-	float timeApart = 2.0f;
+	const float EVENT_WINDOW_DEFAULT = 1f;
+	const float EVENT_WINDOW_HOOK = 2f;
 
 	public void PlayerDied(NetworkPlayer player){
 
@@ -61,7 +62,12 @@ public class PointTracker : MonoBehaviour{
 		CircularBuffer<PlayerEvent> events = deadPlayerStats.playerEvents;
 		//traverse from newest to oldest
 		foreach(PlayerEvent playerEvent in events.Reverse<PlayerEvent>()){
-			if(playerEvent.TimeOfContact >= validTime - timeApart){
+			float eventWindow = EVENT_WINDOW_DEFAULT;
+			if(playerEvent.PowerType == PowerType.HOOK)
+			{
+				eventWindow = EVENT_WINDOW_HOOK;
+			}
+			if(playerEvent.TimeOfContact >= validTime - eventWindow){
 				//Event happened close enough to combo with other event or kill player
 				validTime = playerEvent.TimeOfContact;
 				NetworkPlayer? attacker = playerEvent.Attacker;
@@ -71,7 +77,7 @@ public class PointTracker : MonoBehaviour{
 
 					if(attackerStats.timeOfDeath <= playerEvent.TimeOfContact){
 						//Attacking player died before the event happened, so give half point.
-						GivePoints(5f, attacker.Value);
+						GivePoints(2f, attacker.Value);
 					}
 					else {
 						//Give full point

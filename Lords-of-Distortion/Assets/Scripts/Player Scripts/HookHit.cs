@@ -23,14 +23,13 @@ public class HookHit : MonoBehaviour {
 	bool poweredUp = false;
 	public AudioClip flamehook;
 	private bool hitPlatform = false;
-	void Awake()
+	
+	void Start()
 	{
 		returning = false;
-		lr = gameObject.AddComponent<LineRenderer>();
-		lr.SetWidth(.1f, .1f);
-		lr.material = rope;
+		lr = GetComponent<LineRenderer>();
 		lr.sortingLayerName = "Player";
-		lr.sortingOrder = 1;
+		lr.sortingOrder =-1;
 		animator = GetComponent<Animator>();
 	}
 
@@ -59,8 +58,13 @@ public class HookHit : MonoBehaviour {
             playSound = false;
         }
 
+
+	}
+
+	void LateUpdate()
+	{
 		lr.SetPosition(0, transform.position);
-		lr.SetPosition(1, shooter.transform.position);
+		lr.SetPosition(1, shooter.GetComponent<Hook>().shootFrom.position);
 	}
 
 	//On collision stops the hook from moving and tells the player to come to the hook

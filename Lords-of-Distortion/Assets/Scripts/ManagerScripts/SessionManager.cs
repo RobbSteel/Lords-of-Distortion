@@ -37,8 +37,7 @@ public class SessionManager : MonoBehaviour {
 
 		Instance = this;
 		DontDestroyOnLoad(this);
-		var information = GameObject.Find("PSInfo");
-		psInfo = information.GetComponent<PlayerServerInfo>();
+		psInfo = PlayerServerInfo.instance;
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
