@@ -31,7 +31,7 @@ public class GameInput : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 	}
 
-	private bool EnableGamePad = false;
+	private bool EnableGamePad = true;
 
 	void Start () {
 		InputManager.Setup();
