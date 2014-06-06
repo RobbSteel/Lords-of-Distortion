@@ -318,7 +318,7 @@ public class Controller2D : MonoBehaviour {
 					}
 					
 				}
-				else if(Input.GetKeyDown(KeyMapping.CrouchKey))
+				else if(Input.GetKey(KeyMapping.CrouchKey))
 				{
 					SetCrouchState(true);
 				}
@@ -598,8 +598,8 @@ public class Controller2D : MonoBehaviour {
 		renderer.enabled = true;
 		dead = false;
 		locked = false;
-        crouching = false;
-        SetCrouchState(false);
+        if(crouching)
+			SetCrouchState(false);
 		hasbomb = false;
 		status.currentStunMeter = 0;
 		collider2D.enabled = true;
