@@ -5,6 +5,8 @@ public class AddStage : MonoBehaviour {
 
 	public string stagename = "bodied";
 	public GameObject stagedisplay;
+	public AudioClip buttonhover, buttonclick;
+
 	PickManager pickselect;
 	// Use this for initialization
 	void Start () {
@@ -59,8 +61,10 @@ public class AddStage : MonoBehaviour {
 
     void OnPress(bool isDown)
     {
-        if (isDown)
-            return;
+        if (isDown) {
+			audio.PlayOneShot(buttonclick, 0.35f);
+			return;
+		}
 
         if(Network.isServer)
         {
@@ -82,4 +86,9 @@ public class AddStage : MonoBehaviour {
             }
         }
     }
+	void OnHover(bool isOver){
+		if (isOver) {
+			audio.PlayOneShot(buttonhover, 0.35f);
+		}
+	}
 }
