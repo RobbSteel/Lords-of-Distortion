@@ -5,6 +5,7 @@ using Priority_Queue;
 
 public enum PowerType{
 	STICKY = 0,
+	SMOKE,
 	FIREBALL,
 	GRAVITY,
 	EXPLOSIVE,
