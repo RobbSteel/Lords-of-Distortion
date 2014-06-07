@@ -13,9 +13,12 @@ public class PageCurl : MonoBehaviour
 {
     public GameObject ForestStages;
     public GameObject MineStages;
+    public GameObject CageStages;
 	public UIPanel StageUI;
     public GameObject ForestSelectBtn;
-    public GameObject MineSelectBtn;
+    public GameObject MineSelectBtnRight;
+    public GameObject MineSelectBtnLeft;
+    public GameObject CageSelectBtn;
 	public GameObject levelgrid;
 
     //private GameObject SelectUI;
@@ -124,21 +127,46 @@ public class PageCurl : MonoBehaviour
         {
 			StageUI.alpha = 1;
 			levelgrid.SetActive(true);
-			MineStages.SetActive(true);
-            MineSelectBtn.SetActive(false);
+
+            MineStages.SetActive(true);
+            MineSelectBtnRight.SetActive(false);
+            MineSelectBtnLeft.SetActive(false);
+
+            ForestStages.SetActive(false);
             ForestSelectBtn.SetActive(true);
-            //if (SelectUI != null)
-              //  SelectUI.SetActive(true);
+
+            CageStages.SetActive(false);
+            CageSelectBtn.SetActive(true);
         }
         else if (level == "None-Forest")
         {
 			StageUI.alpha = 1;
 			levelgrid.SetActive(true);
-			ForestStages.SetActive(true);
-            MineSelectBtn.SetActive(true);
+
+            ForestStages.SetActive(true);
             ForestSelectBtn.SetActive(false);
-            //if (SelectUI != null)
-              //  SelectUI.SetActive(true);
+
+            MineSelectBtnRight.SetActive(true);
+            MineSelectBtnLeft.SetActive(false);
+            MineStages.SetActive(false);
+
+            CageSelectBtn.SetActive(false);
+            CageStages.SetActive(false);
+        }
+        else if(level == "None-Cage")
+        {
+            StageUI.alpha = 1;
+            levelgrid.SetActive(true);
+
+            CageStages.SetActive(true);
+            CageSelectBtn.SetActive(false);
+
+            MineStages.SetActive(false);
+            MineSelectBtnRight.SetActive(false);
+            MineSelectBtnLeft.SetActive(true);
+
+            ForestSelectBtn.SetActive(false);
+            ForestStages.SetActive(false);
         }
         else 
             Application.LoadLevel(level);
