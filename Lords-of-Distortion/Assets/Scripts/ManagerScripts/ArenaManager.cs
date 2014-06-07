@@ -588,6 +588,17 @@ public class ArenaManager : MonoBehaviour {
 		victorycontroller.anim.SetTrigger("Victory");
 		victorycontroller.locked = true;
 		victorycontroller.powerInvulnerable = true;
+		networkView.RPC("VictoryDance", RPCMode.Others, victor);
+	}
+
+	[RPC]
+	void VictoryDance(NetworkPlayer victor){
+
+			var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+			var victorycontroller = victoryplayer.GetComponent<Controller2D>();
+			victorycontroller.anim.SetTrigger("Victory");
+			victorycontroller.locked = true;
+			victorycontroller.powerInvulnerable = true;
 
 	}
 
@@ -598,6 +609,7 @@ public class ArenaManager : MonoBehaviour {
 			timer.Hide();
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
+
 			for(int i = 0; i < movingPlatforms.Length; i++){
 				movingPlatforms[i].GetComponent<movingPlatform>().enabled = true;
 			}
@@ -610,7 +622,7 @@ public class ArenaManager : MonoBehaviour {
 			if(Network.isServer){
 			
 				FinishGame(true);
-				//VictoryTaunt();
+				VictoryTaunt();
 			
 
 			}
