@@ -242,7 +242,8 @@ public class PlayerStatus : MonoBehaviour {
 		//hitCount++;
 		//This tells all other players to visually play a hit effect. 
 		//Only the owner of the character does anything with physics or death.
-		GenerateEvent(PowerType.MELEE, TimeManager.instance.time, attacker);
+		if(!playerControl.dead)
+			GenerateEvent(PowerType.MELEE, TimeManager.instance.time, attacker);
 		networkView.RPC ("VisualHitIndicator", RPCMode.Others);
 		VisualHitIndicator();
 
