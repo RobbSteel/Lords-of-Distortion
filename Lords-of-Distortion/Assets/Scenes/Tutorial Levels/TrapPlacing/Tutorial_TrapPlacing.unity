@@ -544,6 +544,7 @@ MonoBehaviour:
   tutorialUse: 1
   specifiedPower: 2
   randomPowerSupply: 0
+  gemResupply: {fileID: 0}
   placementUI: {fileID: 0}
 --- !u!212 &31097070
 SpriteRenderer:
@@ -6772,6 +6773,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1954638035}
   m_RootOrder: 0
+--- !u!1 &693502981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100014, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+  m_PrefabInternal: {fileID: 1660106300}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 693502982}
+  m_Layer: 0
+  m_Name: shootFrom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &693502982
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400014, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+  m_PrefabInternal: {fileID: 1660106300}
+  m_GameObject: {fileID: 693502981}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .150754482, y: .140450433, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 798778587}
+  m_RootOrder: 5
 --- !u!1001 &707851580
 Prefab:
   m_ObjectHideFlags: 0
@@ -8130,6 +8158,7 @@ Transform:
   - {fileID: 2022627912}
   - {fileID: 1283761364}
   - {fileID: 1522817886}
+  - {fileID: 693502982}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!114 &798778588
@@ -8213,7 +8242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
   currentHook: {fileID: 0}
   hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 1
@@ -8221,6 +8250,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 1
+  shootFrom: {fileID: 693502982}
   currentState: 4
 --- !u!148 &798778593
 NetworkView:
@@ -8270,6 +8300,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   move: 0
   dead: 0
+  Lives_LOCAL: 0
   grounded: 0
   groundCheck: {fileID: 2022627912}
   groundLayer:
@@ -8288,13 +8319,12 @@ MonoBehaviour:
   crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
-  lives: 3
   respawntime: 3
   recentspawn: 0
-  respawnpoint: {x: 0, y: 0, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  RespawnHeart: {fileID: 0}
   invulnshield: {fileID: 0}
   newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
@@ -8551,7 +8581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
   currentHook: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
@@ -8559,6 +8589,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 1
+  shootFrom: {fileID: 0}
   currentState: 4
 --- !u!148 &846833892
 NetworkView:
@@ -8608,6 +8639,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   move: 0
   dead: 0
+  Lives_LOCAL: 0
   grounded: 0
   groundCheck: {fileID: 984106546}
   groundLayer:
@@ -8623,16 +8655,15 @@ MonoBehaviour:
   hasbomb: 0
   locked: 0
   moveDisable: 1
-  crouchDisable: 0
-  inAir: 1
+  crouchDisable: 1
+  inAir: 0
   powerInvulnerable: 0
-  lives: 0
-  respawntime: 3
+  respawntime: 2
   recentspawn: 0
-  respawnpoint: {x: 0, y: 0, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  RespawnHeart: {fileID: 0}
   invulnshield: {fileID: 0}
   newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
@@ -9937,13 +9968,6 @@ MonoBehaviour:
   - {fileID: 1813422814}
   - {fileID: 1317657907}
   currentObjective: 0
-  firstMessage: Power gems supply you with traps
-  secondMessage: Click and place the trap anywhere.
-  thirdMessage: Use number keys to activate traps.
-  fourthMessage: Traps can kill either directly or indirectly.
-  fifthMessage: You can still place traps after death.
-  deathMessage: You've died.
-  finishedMessage: Tutorial Complete!
   powerToKillPlayer: {fileID: 2022412592}
   warningSign: {fileID: 1460198190}
 --- !u!4 &877866778
@@ -13120,7 +13144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
   currentHook: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
@@ -13128,6 +13152,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 1
+  shootFrom: {fileID: 0}
   currentState: 4
 --- !u!148 &1144640179
 NetworkView:
@@ -13177,6 +13202,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   move: 0
   dead: 0
+  Lives_LOCAL: 0
   grounded: 0
   groundCheck: {fileID: 515865452}
   groundLayer:
@@ -13192,16 +13218,15 @@ MonoBehaviour:
   hasbomb: 0
   locked: 0
   moveDisable: 1
-  crouchDisable: 0
-  inAir: 1
+  crouchDisable: 1
+  inAir: 0
   powerInvulnerable: 0
-  lives: 0
-  respawntime: 3
+  respawntime: 2
   recentspawn: 0
-  respawnpoint: {x: 0, y: 0, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  RespawnHeart: {fileID: 0}
   invulnshield: {fileID: 0}
   newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
@@ -15578,6 +15603,10 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
   m_RootGameObject: {fileID: 846833886}
@@ -17030,7 +17059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
   currentHook: {fileID: 0}
   hook: {fileID: 100002, guid: cb427319536a5364c8faefd8acf456c7, type: 2}
   OFFLINE: 1
@@ -17038,6 +17067,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 1
+  shootFrom: {fileID: 0}
   currentState: 4
 --- !u!148 &1435317094
 NetworkView:
@@ -17087,6 +17117,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   move: 0
   dead: 0
+  Lives_LOCAL: 0
   grounded: 0
   groundCheck: {fileID: 970657060}
   groundLayer:
@@ -17102,16 +17133,15 @@ MonoBehaviour:
   hasbomb: 0
   locked: 0
   moveDisable: 1
-  crouchDisable: 0
-  inAir: 1
+  crouchDisable: 1
+  inAir: 0
   powerInvulnerable: 0
-  lives: 0
-  respawntime: 3
+  respawntime: 2
   recentspawn: 0
-  respawnpoint: {x: 0, y: 0, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  RespawnHeart: {fileID: 0}
   invulnshield: {fileID: 0}
   newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}
@@ -17371,10 +17401,10 @@ AudioSource:
   m_GameObject: {fileID: 1460198190}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 0c67351e76baf99458b8e95b8daa045a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 888c8627270e87d4ca1a0c03c507cf21, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 2.76999998
+  m_Volume: .300000012
+  m_Pitch: .899999976
   Loop: 0
   Mute: 0
   Priority: 255
@@ -17541,6 +17571,7 @@ MonoBehaviour:
   tutorialUse: 1
   specifiedPower: 3
   randomPowerSupply: 0
+  gemResupply: {fileID: 0}
   placementUI: {fileID: 0}
 --- !u!212 &1467403432
 SpriteRenderer:
@@ -21002,6 +21033,10 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -.578116655
       objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
+      propertyPath: crouchDisable
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400004, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: e4aa4d3f0784051499bc926fe84cbe2a, type: 2}
@@ -24054,6 +24089,10 @@ Prefab:
       propertyPath: m_Name
       value: Dummy2
       objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3af8a9146ceb8c146bde5f157dfc077d, type: 2}
   m_RootGameObject: {fileID: 1144640172}
@@ -24357,6 +24396,7 @@ GameObject:
   - 58: {fileID: 2142414026}
   - 212: {fileID: 2142414025}
   - 50: {fileID: 2142414024}
+  - 82: {fileID: 2142414029}
   m_Layer: 9
   m_Name: BlackHole
   m_TagString: Power
@@ -24429,6 +24469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OFFLINE: 0
   BHForce: 0
+  bhsound: {fileID: 8300000, guid: ac32e16e699e1df41b9ecdf09ba3204f, type: 3}
 --- !u!4 &2142414028
 Transform:
   m_ObjectHideFlags: 0
@@ -24442,3 +24483,62 @@ Transform:
   - {fileID: 1643480173}
   m_Father: {fileID: 2022412593}
   m_RootOrder: 0
+--- !u!82 &2142414029
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 8200000, guid: 1a6a28209911f5b4d8f5aaa21afefcd4,
+    type: 2}
+  m_PrefabInternal: {fileID: 707851580}
+  m_GameObject: {fileID: 2142414023}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: ac32e16e699e1df41b9ecdf09ba3204f, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2

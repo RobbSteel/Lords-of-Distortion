@@ -115,7 +115,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	void Awake(){
-		crouchDisable = false;
+		//crouchDisable = false;
 		powerInvulnerable = false;
 		deathOnHit = false;
 		stunned = false;
