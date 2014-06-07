@@ -230,6 +230,7 @@ public class Hook : MonoBehaviour {
 
 	private void DestroyHookSoft()
 	{
+		slowFrames = 0;
 		transform.rigidbody2D.gravityScale = 1;
 		currentHook.renderer.enabled = false;
 		currentHook.lr.enabled = false;
@@ -237,6 +238,7 @@ public class Hook : MonoBehaviour {
 	}
 
 	private void DestroyHook(){
+		slowFrames = 0;
 		transform.rigidbody2D.gravityScale = 1;
 		currentState = HookState.None;
 		if(currentHook != null){
@@ -358,21 +360,26 @@ public class Hook : MonoBehaviour {
 		}
 	}
 
+	int slowFrames = 0;
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
 		if(networkController.isOwner || Network.isServer){
-
-			Vector3 difference = currentHook.gameObject.transform.position - transform.position;
-			Vector2 direction = new Vector2(difference.x, difference.y).normalized;
-			Vector2 velocity = direction * speedRatio;
-			transform.rigidbody2D.velocity = velocity;
-			transform.rigidbody2D.gravityScale = 0;
-
 			float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
-			
-			if(distance <= .9f){
+			transform.rigidbody2D.gravityScale = 0;
+			if(rigidbody2D.velocity.sqrMagnitude <= 2f)
+				slowFrames++;
+			else 
+				slowFrames = 0;
+
+			if(distance <= .7f || slowFrames > 5){
 				transform.rigidbody2D.velocity = Vector2.zero;
 				DestroyHookPossible(Authority.OWNER);
+			}
+			else {
+				Vector3 difference = currentHook.gameObject.transform.position - transform.position;
+				Vector2 direction = new Vector2(difference.x, difference.y).normalized;
+				Vector2 velocity = direction * speedRatio;
+				transform.rigidbody2D.velocity = velocity;
 			}
 		}
 	}
