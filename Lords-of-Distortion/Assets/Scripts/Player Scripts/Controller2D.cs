@@ -62,6 +62,12 @@ public class Controller2D : MonoBehaviour {
 	public AudioClip deathSfx;
 	public AudioClip jumpSfx;
 
+    public PhysicsMaterial2D playerMaterial;
+    public PhysicsMaterial2D slipperyMaterial;
+
+    public BoxCollider2D boxCollider;
+    public CircleCollider2D circleCollider;
+
 	NetworkController networkController;
 	PlayerStatus status;
 	Hook myHook;
@@ -98,7 +104,7 @@ public class Controller2D : MonoBehaviour {
 		rigidbody2D.gravityScale = 0;
 		anim.SetFloat("Speed", 0);
 		//TODO: anim.SetTrigger("Hooked"); 
-		if(networkController.isOwner)
+		if(networkController.isOwner && !dead)
 		{
 			status.GenerateEvent(PowerType.HOOK, TimeManager.instance.time, player);
 		}
@@ -122,6 +128,7 @@ public class Controller2D : MonoBehaviour {
         meleeStunned = false;
 		facingRight = true;
 		hasbomb = false;
+        
 		myHook = GetComponent<Hook>();
 	}
 
@@ -282,6 +289,8 @@ public class Controller2D : MonoBehaviour {
 				rigidbody2D.gravityScale = 1f;
 			    rigidbody2D.velocity  = new Vector2(rigidbody2D.velocity.x, jumpVelocity);
 			    inAir = true;
+                boxCollider.sharedMaterial = slipperyMaterial;
+                circleCollider.sharedMaterial = slipperyMaterial;
 			    // player can't jump again until jump conditions from Update are satisfied
 			    jumpRequested = false;
 		    }
@@ -360,6 +369,8 @@ public class Controller2D : MonoBehaviour {
 		if(inAir && grounded){
 			inAir = false;
 			rigidbody2D.gravityScale = 1f;
+            boxCollider.sharedMaterial = playerMaterial;
+            circleCollider.sharedMaterial = null;
 		}
 	}
 
