@@ -104,7 +104,7 @@ public class Controller2D : MonoBehaviour {
 		rigidbody2D.gravityScale = 0;
 		anim.SetFloat("Speed", 0);
 		//TODO: anim.SetTrigger("Hooked"); 
-		if(networkController.isOwner)
+		if(networkController.isOwner && !dead)
 		{
 			status.GenerateEvent(PowerType.HOOK, TimeManager.instance.time, player);
 		}
