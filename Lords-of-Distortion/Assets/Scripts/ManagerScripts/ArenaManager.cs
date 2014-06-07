@@ -580,6 +580,28 @@ public class ArenaManager : MonoBehaviour {
 	
 	bool trapsEnabled = false;
 
+	void VictoryTaunt(){
+
+		var victor = livePlayers[0];
+		var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+		var victorycontroller = victoryplayer.GetComponent<Controller2D>();
+		victorycontroller.anim.SetTrigger("Victory");
+		victorycontroller.locked = true;
+		victorycontroller.powerInvulnerable = true;
+		networkView.RPC("VictoryDance", RPCMode.Others, victor);
+	}
+
+	[RPC]
+	void VictoryDance(NetworkPlayer victor){
+
+			var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+			var victorycontroller = victoryplayer.GetComponent<Controller2D>();
+			victorycontroller.anim.SetTrigger("Victory");
+			victorycontroller.locked = true;
+			victorycontroller.powerInvulnerable = true;
+
+	}
+
 	void Update () {
         float currentTime = TimeManager.instance.time;
 
@@ -587,6 +609,7 @@ public class ArenaManager : MonoBehaviour {
 			timer.Hide();
 			currentPhase = Phase.InGame;
 			hudTools.DisplayText("GO!");
+
 			for(int i = 0; i < movingPlatforms.Length; i++){
 				movingPlatforms[i].GetComponent<movingPlatform>().enabled = true;
 			}
@@ -597,8 +620,11 @@ public class ArenaManager : MonoBehaviour {
 
 		else if(currentPhase == Phase.FinalPlayer && currentTime >= finalPlayerTime){
 			if(Network.isServer){
-				//nobody killed this dude
+			
 				FinishGame(true);
+				VictoryTaunt();
+			
+
 			}
 		}
 		else if(currentPhase == Phase.Finish && currentTime >= endTime + 3){

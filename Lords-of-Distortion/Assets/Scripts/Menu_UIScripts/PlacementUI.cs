@@ -98,7 +98,7 @@ public class PlacementUI : MonoBehaviour {
 
 		/* Boring Initialization code for icons.*/
 		icons.Add(PowerType.STICKY, glueSprite);
-		icons.Add(PowerType.SMOKE, smokeSprite);
+		//icons.Add(PowerType.SMOKE, smokeSprite);
 		icons.Add(PowerType.FIREBALL, inkSprite);
 		icons.Add(PowerType.GRAVITY, windSprite);
 		icons.Add(PowerType.EXPLOSIVE, transferSprite);

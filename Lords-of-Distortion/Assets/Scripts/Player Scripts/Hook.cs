@@ -3,7 +3,7 @@ using System.Collections;
 using InControl;
 
 public class Hook : MonoBehaviour {
-
+	
 	public Vector3 targetPosition = new Vector3(0,0, 0);
 	public HookHit currentHook;
 	
@@ -14,32 +14,32 @@ public class Hook : MonoBehaviour {
 	public float chainspawner = 1;
 	public float hittimer = 0;
 	public bool hookDisable;
-    private float currentDrag;
+	private float currentDrag;
 	private Animator animator;
 	const float PLAYER_RELEASE_DISTANCE = .7f;
 	NetworkController networkController;
 	Controller2D  controller2D;
 	
 	public Transform shootFrom;
-
+	
 	void Start () {
 		networkController = GetComponent<NetworkController>();
 		controller2D = GetComponent<Controller2D>();
 		animator = GetComponent<Animator>();
 	}
-
+	
 	public bool HitSomething{
 		get {
 			return currentState == HookState.PullingPlayer || currentState == HookState.PullingSelf;
 		}
 	}
-
+	
 	public bool HookOut{
 		get {
 			return currentState != HookState.None;
 		}
 	}
-
+	
 	public enum HookState{
 		PullingSelf,
 		PullingPlayer,
@@ -48,12 +48,12 @@ public class Hook : MonoBehaviour {
 		None,
 		Hidden
 	}
-
+	
 	public HookState currentState = HookState.None;
-
+	
 	private float targetDistanceSqrd = 0f;
 	Vector3 shootOrigin;
-
+	
 	//TODO: allow owner of hook to destroy it if he hooks a platform, synchornize this somehow.
 	void ShootHookLocal(float originX, float originY, float targetX, float targetY){
 		shootOrigin = new Vector3(originX, originY, transform.position.z);
@@ -69,25 +69,25 @@ public class Hook : MonoBehaviour {
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		targetDistanceSqrd = difference.sqrMagnitude;
 		//mousePos = transform.position + 100f * direction;
-
+		
 		targetPosition = target;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		go.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		go.rigidbody2D.velocity = direction * speedRatio;
-
+		
 	}
-
+	
 	[RPC]
 	void ShootHookSimulate(float originX, float originY, float targetX, float targetY){
 		if(networkController.isOwner)
 			return;
 		ShootHookLocal(originX, originY, targetX, targetY);
 	}
-
+	
 	[RPC] void RetractHookEarly(){
 		ReturnHook();
 	}
-
+	
 	float hookSpeed = 0f;
 	float speedRatio = 12f;
 	
@@ -95,11 +95,11 @@ public class Hook : MonoBehaviour {
 		hittimer = 1.5f;
 		currentState = HookState.PullingSelf;
 	}
-
+	
 	public void ReturnHook(){
 		if(currentHook == null)
 			return;
-
+		
 		currentState = HookState.GoingBack;
 		/* Physics.
 		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
@@ -110,11 +110,11 @@ public class Hook : MonoBehaviour {
 		currentHook.rigidbody2D.velocity = Vector2.zero;
 		currentHook.returning = true;
 	}
-
-
+	
+	
 	void HandleShootInput()
 	{
-
+		
 		if(GameInput.instance.usingGamePad)
 		{
 			InputDevice device = InputManager.ActiveDevice;
@@ -178,17 +178,17 @@ public class Hook : MonoBehaviour {
 	//
 	void Update(){
 		hookSpeed = Time.deltaTime * speedRatio;
-
-        if(hooktimer > 0)
-        {
-        	hooktimer -= Time.deltaTime;
-        }
-
+		
+		if(hooktimer > 0)
+		{
+			hooktimer -= Time.deltaTime;
+		}
+		
 		currentDrag = controller2D.rigidbody2D.drag;
 		//Get input from user and set cooldown to avoid repeated use.
 		if(networkController.isOwner && !controller2D.snared && !controller2D.locked && hooktimer <= 0 && !hookDisable && !controller2D.crouching)
 			HandleShootInput();
-
+		
 		if(currentState == HookState.GoingOut)
 		{
 			hookgoing(hookSpeed);
@@ -221,24 +221,24 @@ public class Hook : MonoBehaviour {
 			hookmovingback(hookSpeed);
 		}
 	}
-
+	
 	[RPC]
 	void NotifyDestroyHook(){
 		DestroyHook(); //actually destroy the hook now that you have permission
 	}
-
-
+	
+	
 	private void DestroyHookSoft()
 	{
-		slowFrames = 0;
+		slowedTime = 0f;
 		transform.rigidbody2D.gravityScale = 1;
 		currentHook.renderer.enabled = false;
 		currentHook.lr.enabled = false;
 		currentState = HookState.Hidden;
 	}
-
+	
 	private void DestroyHook(){
-		slowFrames = 0;
+		slowedTime = 0f;
 		transform.rigidbody2D.gravityScale = 1;
 		currentState = HookState.None;
 		if(currentHook != null){
@@ -254,7 +254,7 @@ public class Hook : MonoBehaviour {
 	{
 		SERVER, OWNER, OTHER
 	}
-
+	
 	public void DestroyHookPossible(Authority authority, bool polite = false){
 		if(!OFFLINE){
 			if((authority == Authority.SERVER && Network.isServer)
@@ -269,33 +269,33 @@ public class Hook : MonoBehaviour {
 			DestroyHook();
 		}
 	}
-
+	
 	//Player pulling opponent to himself
 	void pullingplayer(float speed){
-
+		
 		GameObject hookedPlayer = currentHook.hookedPlayer;
-
+		
 		///player died or dcd
 		if(hookedPlayer == null){
 			DestroyHookPossible(Authority.SERVER);
 			return;
 		}
-	
+		
 		Controller2D playercontrol = hookedPlayer.GetComponent<Controller2D>();
-
+		
 		if(playercontrol.dead)
 		{
 			DestroyHookPossible(Authority.SERVER);
 			return;
 		}
-	
+		
 		float distance = Vector3.Distance(hookedPlayer.transform.position, transform.position);
-
+		
 		if(distance < PLAYER_RELEASE_DISTANCE && Network.isServer)
 		{
 			DestroyHookPossible(Authority.SERVER);
 		}
-
+		
 		//Because you don't have authority over the other player's position, only do this on the hooked player's client.
 		else if(!networkController.isOwner && Network.player == hookedPlayer.GetComponent<NetworkController>().theOwner){
 			if(distance > PLAYER_RELEASE_DISTANCE)
@@ -308,12 +308,12 @@ public class Hook : MonoBehaviour {
 			}
 		}
 	}
-
-
+	
+	
 	NetworkPlayer hitPlayer;
 	[RPC]
 	void HitPlayer(float playerLocationX, float playerLocationY, NetworkPlayer hitPlayer, NetworkMessageInfo info){
-
+		
 		if(currentHook == null){
 			print ("too late");
 			return;
@@ -323,7 +323,7 @@ public class Hook : MonoBehaviour {
 			currentHook.renderer.enabled = false;
 			currentHook.lr.enabled = false;
 		}
-
+		
 		currentState = HookState.PullingPlayer;
 		this.hitPlayer = hitPlayer;
 		Vector3 playerLocation = new Vector3(playerLocationX, playerLocationY, transform.position.z);
@@ -337,7 +337,7 @@ public class Hook : MonoBehaviour {
 		hittimer = 2f;
 		hooktimer = 1.5f;
 	}
-
+	
 	//To be called by HookHit
 	public void HitPlayerLocal(NetworkPlayer hitPlayer)
 	{
@@ -359,19 +359,19 @@ public class Hook : MonoBehaviour {
 			ReturnHook();
 		}
 	}
-
-	int slowFrames = 0;
+	const float LOCKED_LIMIT = 0.033f;
+	float slowedTime = 0f;
 	//Moves the player to hooked position and deletes links as they player comes into contact with them
 	void movingtohook(float speed){
 		if(networkController.isOwner || Network.isServer){
 			float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
 			transform.rigidbody2D.gravityScale = 0;
 			if(rigidbody2D.velocity.sqrMagnitude <= 2f)
-				slowFrames++;
+				slowedTime += Time.deltaTime;
 			else 
-				slowFrames = 0;
-
-			if(distance <= .7f || slowFrames > 5){
+				slowedTime = 0f;
+			
+			if(distance <= .7f || slowedTime > LOCKED_LIMIT){
 				transform.rigidbody2D.velocity = Vector2.zero;
 				DestroyHookPossible(Authority.OWNER);
 			}
@@ -383,7 +383,7 @@ public class Hook : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	//Moves the hook back to the player and deletes links as the hook comes into contact with them.
 	void hookmovingback(float speed){
 		float distance = Vector2.Distance(transform.position, currentHook.gameObject.transform.position);
@@ -394,7 +394,7 @@ public class Hook : MonoBehaviour {
 			currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, transform.position, hookSpeed);
 		}
 	}
-
+	
 	void OnDestroy(){
 		if(currentHook != null)
 			Destroy (currentHook.gameObject);
