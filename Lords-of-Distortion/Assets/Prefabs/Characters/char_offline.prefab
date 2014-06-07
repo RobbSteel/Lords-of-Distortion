@@ -128,6 +128,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400014}
+  m_Layer: 0
+  m_Name: shootFrom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -208,7 +223,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.21866179, y: -1.6487124, z: 0}
+  m_LocalPosition: {x: 0, y: .0897297859, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -216,8 +231,21 @@ Transform:
   - {fileID: 400006}
   - {fileID: 400004}
   - {fileID: 400002}
+  - {fileID: 400014}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &400014
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .150754482, y: .140450433, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400012}
+  m_RootOrder: 5
 --- !u!50 &5000000
 Rigidbody2D:
   m_ObjectHideFlags: 1
@@ -416,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414436b34ae85da4b84822819847d3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
   currentHook: {fileID: 0}
   hook: {fileID: 100002, guid: 29bd75f5d0bfd5a459b49e4e6f993024, type: 2}
   OFFLINE: 1
@@ -424,6 +452,7 @@ MonoBehaviour:
   chainspawner: 1
   hittimer: 0
   hookDisable: 1
+  shootFrom: {fileID: 400014}
   currentState: 4
 --- !u!114 &11400010
 MonoBehaviour:
@@ -458,12 +487,12 @@ MonoBehaviour:
   anim: {fileID: 0}
   move: 0
   dead: 0
+  Lives_LOCAL: 0
   grounded: 0
   groundCheck: {fileID: 400006}
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
-  jumpForce: 650
   stunned: 0
   meleeStunned: 0
   snared: 0
@@ -477,13 +506,12 @@ MonoBehaviour:
   crouchDisable: 0
   inAir: 1
   powerInvulnerable: 0
-  lives: 3
   respawntime: 3
   recentspawn: 0
-  respawnpoint: {x: 0, y: 0, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   invulntime: 0
   DeathSpirit: {fileID: 100000, guid: 1b5f67ae5b4b9584fb29a5e32575d1af, type: 2}
-  Respawn: {fileID: 100000, guid: eb52cf51d0018c14cb8b9c751e17c7ca, type: 2}
+  RespawnHeart: {fileID: 0}
   invulnshield: {fileID: 0}
   newshield: {fileID: 0}
   hookSfx: {fileID: 8300000, guid: 31a2291584fc1d246854882f3c825c6d, type: 3}

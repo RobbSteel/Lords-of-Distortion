@@ -5,7 +5,7 @@ using Priority_Queue;
 
 public enum PowerType{
 	STICKY = 0,
-	SMOKE, //chalk dust?
+	SMOKE,
 	FIREBALL,
 	GRAVITY,
 	EXPLOSIVE,
@@ -58,7 +58,7 @@ public static class PowerTypeExtensions{
 		powersPassive = new List<PowerType>();
 		powersPassive.Add(PowerType.GRAVITY);
 		powersPassive.Add(PowerType.EARTH);
-		powersPassive.Add(PowerType.SMOKE);
+		//powersPassive.Add(PowerType.SMOKE);
 		powersPassive.Add(PowerType.FREEZE);
 		powersPassive.Add(PowerType.GATE);
 		powersPassive.Add(PowerType.DEFLECTIVE);

@@ -20,7 +20,7 @@ public class tempArray : MonoBehaviour {
     {
         icons = new Dictionary<PowerType, Sprite>();
         icons.Add(PowerType.STICKY, glue);
-        icons.Add(PowerType.SMOKE, smoke);
+       // icons.Add(PowerType.SMOKE, smoke);
         icons.Add(PowerType.FIREBALL, ink);
         icons.Add(PowerType.GRAVITY, wind);
 

@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 212: {fileID: 21200000}
+  - 60: {fileID: 6000000}
+  m_Layer: 17
+  m_Name: Camel
+  m_TagString: SolidObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.38960552, y: -4.44719076, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!60 &6000000
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Material: {fileID: 6200000, guid: 66781c3e51c95964db0eb8b2ad94cbb8, type: 2}
+  m_IsTrigger: 0
+  m_Poly:
+    m_Paths:
+    - - {x: -.159768105, y: 2.14208221}
+      - {x: .242986917, y: 1.66691542}
+      - {x: .390036821, y: 1.50710738}
+      - {x: .589067936, y: 1.43268943}
+      - {x: .717839003, y: 1.35823429}
+      - {x: .858231068, y: 1.28444469}
+      - {x: .989647865, y: 1.1654824}
+      - {x: 1.12919688, y: 1.02315414}
+      - {x: 1.20692658, y: .962316632}
+      - {x: 1.34515381, y: .90679884}
+      - {x: 1.46787691, y: .906273365}
+      - {x: 1.65731287, y: .948301435}
+      - {x: 1.79345417, y: 1.03649211}
+      - {x: 2.12113476, y: 1.62934208}
+      - {x: 2.26727152, y: 1.91902006}
+      - {x: 3.17572975, y: 1.91523492}
+      - {x: 3.17505741, y: 1.67358172}
+      - {x: 3.05721045, y: 1.65714741}
+      - {x: 2.88251448, y: 1.56693423}
+      - {x: 2.7128191, y: 1.52301621}
+      - {x: 2.55777979, y: 1.45770741}
+      - {x: 2.42374659, y: 1.18693316}
+      - {x: 2.33598709, y: .903434515}
+      - {x: 2.12605238, y: .571524501}
+      - {x: 1.93436098, y: .36598596}
+      - {x: 1.75900388, y: .251930594}
+      - {x: 1.57618523, y: .221375644}
+      - {x: 1.40831161, y: .202289343}
+      - {x: 1.17441225, y: .194173127}
+      - {x: .983158588, y: .243051827}
+      - {x: .762629032, y: .059874177}
+      - {x: .696801662, y: .08870399}
+      - {x: .446013927, y: .0216858387}
+      - {x: -.0193943977, y: -.0596349537}
+      - {x: -.167586088, y: -.0610433817}
+      - {x: -.323346615, y: -.034335196}
+      - {x: -.449273586, y: -.0411629677}
+      - {x: -.558821678, y: -.022228688}
+      - {x: -.680458069, y: -.0186612904}
+      - {x: -.829453707, y: .0378967524}
+      - {x: -1.09729719, y: .120135069}
+      - {x: -1.23534417, y: .168077588}
+      - {x: -1.37932944, y: .280242682}
+      - {x: -1.50325441, y: .426529884}
+      - {x: -1.5074718, y: .27641207}
+      - {x: -1.67247486, y: .284681678}
+      - {x: -2.22861576, y: .292090654}
+      - {x: -2.21166134, y: .622000992}
+      - {x: -2.2098732, y: .638607264}
+      - {x: -2.16181612, y: .819470525}
+      - {x: -2.10604954, y: .970627308}
+      - {x: -2.06308365, y: 1.05104804}
+      - {x: -1.93873596, y: 1.17601514}
+      - {x: -1.82570934, y: 1.24195099}
+      - {x: -1.61671925, y: 1.33148932}
+      - {x: -1.49547052, y: 1.42472816}
+      - {x: -1.00094461, y: 2.1267817}
+--- !u!212 &21200000
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 135bf4363ca9eba429a1db647d58ef7b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1
