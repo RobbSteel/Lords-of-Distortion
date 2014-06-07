@@ -3,39 +3,39 @@ using System.Collections;
 
 public class SelectGemStages : MonoBehaviour {
 
-    public GameObject ForestSelection;
+    public GameObject PreviousSelection;
     public Transitioner Transition;
 	public StageTracker trackmaster;
 	public UIPanel SelectUI;
 	public GameObject levelgrid;
-    //private GameObject SelectUI;
+    public bool turnBackwards;
+    public GameObject otherButton;
 
 	[RPC]
 	void Flip(){
 		
-		ForestSelection.SetActive(false);
+		PreviousSelection.SetActive(false);
 		levelgrid.SetActive(false);
 		SelectUI.alpha = 0;
 		trackmaster.Destroy();
-		Transition.Flip("None-Gem", false);
-		gameObject.SetActive(false);
-		
+		Transition.Flip("None-Gem", turnBackwards);
+        if(otherButton != null)
+            otherButton.SetActive(false);
+        gameObject.SetActive(false);
 	}
-
-
+    
     void OnClick()
     {
         if(Network.isServer){
-		ForestSelection.SetActive(false);
-		levelgrid.SetActive(false);
-		SelectUI.alpha = 0;
-		trackmaster.Destroy();
-        Transition.Flip("None-Gem", false);
-		networkView.RPC("Flip", RPCMode.Others);
-        gameObject.SetActive(false);
+	        PreviousSelection.SetActive(false);
+	        levelgrid.SetActive(false);
+	        SelectUI.alpha = 0;
+	        trackmaster.Destroy();
+            Transition.Flip("None-Gem", turnBackwards);
+	        networkView.RPC("Flip", RPCMode.Others);
+            if (otherButton != null)
+                otherButton.SetActive(false);
+            gameObject.SetActive(false);
 		}
-        /*SelectUI = GameObject.Find("SelectUI(Clone)");
-        if (SelectUI != null)
-            SelectUI.SetActive(false);*/
     }
 }

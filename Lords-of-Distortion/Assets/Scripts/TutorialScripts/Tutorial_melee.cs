@@ -9,10 +9,10 @@ public class Tutorial_melee: MonoBehaviour {
 	public UILabel guiText;
 	public GameObject[] objectives;
 	public int currentObjective;
-	public string firstMessage;
-	public string secondMessage;
-	public string deathMessage;
-	public string finishedMessage;
+	private string firstMessage = "Melee Lesson";
+	private string secondMessage = "Knock the dummies \n into the spikes";
+	private string deathMessage = "Try again";
+	private string finishedMessage = "Tutorial Complete!";
 	private SceneFadeInOut transitionToNewScene;
 	private bool endScene;
 	private float fadeTimer;

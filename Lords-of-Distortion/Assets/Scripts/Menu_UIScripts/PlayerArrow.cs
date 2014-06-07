@@ -10,7 +10,7 @@ public class PlayerArrow : MonoBehaviour {
 	public void AttachToPlayer(Transform player, string name)
 	{
 		GetComponent<UIFollowTarget>().Target = player;
-		nameLabel.text = name;
+		nameLabel.text = name.ToUpper();
 		nameLabel.gameObject.SetActive(true);
 	}
 }
