@@ -9,10 +9,10 @@ public class Tutorial_moving: MonoBehaviour {
 	public UILabel guiText;
 	public GameObject[] objectives;
 	public int currentObjective;
-	public string firstMessage;
-	public string secondMessage;
-	public string deathMessage;
-	public string finishedMessage;
+	private string firstMessage = "Moving Tutorial";
+	private string secondMessage = "Get to each arrow";
+	private string deathMessage = "You died...?";
+	private string finishedMessage = "Tutorial Complete!";
 	private SceneFadeInOut transitionToNewScene;
 	private bool endScene;
 	private float fadeTimer;
