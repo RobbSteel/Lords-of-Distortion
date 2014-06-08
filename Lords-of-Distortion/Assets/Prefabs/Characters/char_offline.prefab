@@ -162,7 +162,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .389999866, y: .0599999428, z: 0}
+  m_LocalPosition: {x: -3.66735268, y: .704804242, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
@@ -223,7 +223,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .0897297859, z: 0}
+  m_LocalPosition: {x: -2.51608515, y: -2.10894823, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -451,7 +451,7 @@ MonoBehaviour:
   hooktimer: 0
   chainspawner: 1
   hittimer: 0
-  hookDisable: 1
+  hookDisable: 0
   shootFrom: {fileID: 400014}
   currentState: 4
 --- !u!114 &11400010
@@ -482,6 +482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facingRight: 0
   jumpRequested: 0
+  characterType: 0
   OFFLINE: 1
   maxSpeed: 5
   anim: {fileID: 0}
@@ -519,6 +520,10 @@ MonoBehaviour:
   meleeHitSfx: {fileID: 8300000, guid: 3ca6f24882e01c64fb9b2898ef4ed7fc, type: 3}
   deathSfx: {fileID: 0}
   jumpSfx: {fileID: 8300000, guid: 189659795ee8c5c4db76f81b31ed0c56, type: 3}
+  playerMaterial: {fileID: 6200000, guid: 3257cd551cc0a0b44a313388a624346f, type: 2}
+  slipperyMaterial: {fileID: 6200000, guid: 8016251ab96c497429ba289a84a4cbbe, type: 2}
+  boxCollider: {fileID: 6100002}
+  circleCollider: {fileID: 5800000}
   knockedBack: 0
 --- !u!148 &14800000
 NetworkView:
