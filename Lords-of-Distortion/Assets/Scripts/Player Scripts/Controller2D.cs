@@ -191,7 +191,7 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
-			if(move != 0 && !snared)
+			if(move != 0 && !snared && !crouching)
 			{
 				boxCollider.sharedMaterial = slipperyMaterial;
 				circleCollider.sharedMaterial = slipperyMaterial;
@@ -346,17 +346,19 @@ public class Controller2D : MonoBehaviour {
 	{
 		canJump = !enabled;
 		moveDisable = enabled;
-		crouching = enabled;
-		if(enabled){
+
+		if(!crouching && enabled){
+			print ("trigger");
 			anim.SetTrigger("Crouch");
 			boxCollider.size = crouchBounds.size;
 			boxCollider.center = crouchBounds.center;
 		}
-		else {
+		else if (!enabled){
 			anim.SetTrigger("Default");
 			boxCollider.size = originalBounds.size;
 			boxCollider.center = originalBounds.center;
 		}
+		crouching = enabled;
 	}
 
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
