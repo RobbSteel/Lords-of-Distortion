@@ -14,10 +14,13 @@ public class PageCurl : MonoBehaviour
     public GameObject ForestStages;
     public GameObject MineStages;
     public GameObject CageStages;
+    public GameObject DesertStages;
 	public UIPanel StageUI;
     public GameObject ForestSelectBtn;
     public GameObject MineSelectBtnRight;
     public GameObject MineSelectBtnLeft;
+    public GameObject DesertSelectBtnLeft;
+    public GameObject DesertSelectBtnRight;
     public GameObject CageSelectBtn;
 	public GameObject levelgrid;
 
@@ -135,8 +138,12 @@ public class PageCurl : MonoBehaviour
             ForestStages.SetActive(false);
             ForestSelectBtn.SetActive(true);
 
+            DesertStages.SetActive(false);
+            DesertSelectBtnLeft.SetActive(false);
+            DesertSelectBtnRight.SetActive(true);
+
             CageStages.SetActive(false);
-            CageSelectBtn.SetActive(true);
+            CageSelectBtn.SetActive(false);
         }
         else if (level == "None-Forest")
         {
@@ -160,6 +167,30 @@ public class PageCurl : MonoBehaviour
 
             CageStages.SetActive(true);
             CageSelectBtn.SetActive(false);
+
+            MineStages.SetActive(false);
+            MineSelectBtnRight.SetActive(false);
+            MineSelectBtnLeft.SetActive(false);
+
+            ForestSelectBtn.SetActive(false);
+            ForestStages.SetActive(false);
+
+            DesertStages.SetActive(false);
+            DesertSelectBtnLeft.SetActive(true);
+            DesertSelectBtnRight.SetActive(false);
+
+        }
+        else if (level == "None-Desert")
+        {
+            StageUI.alpha = 1;
+            levelgrid.SetActive(true);
+
+            DesertStages.SetActive(true);
+            DesertSelectBtnLeft.SetActive(false);
+            DesertSelectBtnRight.SetActive(false);
+
+            CageStages.SetActive(false);
+            CageSelectBtn.SetActive(true);
 
             MineStages.SetActive(false);
             MineSelectBtnRight.SetActive(false);
