@@ -159,6 +159,17 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
+			if(move != 0 && !snared)
+			{
+				boxCollider.sharedMaterial = slipperyMaterial;
+				circleCollider.sharedMaterial = slipperyMaterial;
+			}
+
+			else 
+			{
+				boxCollider.sharedMaterial = playerMaterial;
+				circleCollider.sharedMaterial = playerMaterial;
+			}
 			CrouchInput();
 
             if(snared)
