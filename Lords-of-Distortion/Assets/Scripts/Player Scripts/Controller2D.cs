@@ -17,6 +17,9 @@ public class Controller2D : MonoBehaviour {
 	[HideInInspector]
 	public bool jumpRequested = false;
 
+	[SerializeField]
+	private Character characterType;
+
 	public bool OFFLINE;
 	public float maxSpeed = 10f;
 	public Animator anim;
@@ -97,6 +100,7 @@ public class Controller2D : MonoBehaviour {
         locked = false;
     }
     
+
 	public void Hooked(NetworkPlayer player){
 
 		rigidbody2D.velocity = Vector2.zero;
@@ -108,6 +112,7 @@ public class Controller2D : MonoBehaviour {
 		{
 			status.GenerateEvent(PowerType.HOOK, TimeManager.instance.time, player);
 		}
+
 	}
 
 	public void UnHooked(){
@@ -130,6 +135,33 @@ public class Controller2D : MonoBehaviour {
 		hasbomb = false;
         
 		myHook = GetComponent<Hook>();
+	}
+	Bounds originalBounds;
+	Bounds crouchBounds;
+	// Use this for initialization
+	void Start () {
+		anim = GetComponent<Animator>();
+		networkController = GetComponent<NetworkController>();
+		status = GetComponent<PlayerStatus>();
+		originalBounds = new Bounds(boxCollider.center, boxCollider.size);
+		if(onSpawn != null)
+		{
+			onSpawn(networkController.theOwner, this);
+		}
+
+
+		switch(characterType)
+		{
+		case Character.Colossus:
+			crouchBounds = new Bounds(new Vector3(0f, -.24f, 0f), new Vector3(.38f, .6f, 0f));
+			break;
+		case Character.Blue:
+			crouchBounds = new Bounds(new Vector3(-.03f, -.34f, 0f), new Vector3(.46f, .54f, 0f));
+			break;
+		case Character.Mummy:
+			crouchBounds = new Bounds(new Vector3(0.0352f, -0.2f, 0f), new Vector3(0.5432f, 0.57f, 0f));
+			break;
+		}
 	}
 
 	// Update is called once per frame
@@ -159,6 +191,16 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
+			if(move != 0 && !snared)
+			{
+				boxCollider.sharedMaterial = slipperyMaterial;
+				circleCollider.sharedMaterial = slipperyMaterial;
+			}
+			else 
+			{
+				boxCollider.sharedMaterial = playerMaterial;
+				circleCollider.sharedMaterial = playerMaterial;
+			}
 			CrouchInput();
 
             if(snared)
@@ -305,10 +347,16 @@ public class Controller2D : MonoBehaviour {
 		canJump = !enabled;
 		moveDisable = enabled;
 		crouching = enabled;
-		if(enabled)
+		if(enabled){
 			anim.SetTrigger("Crouch");
-		else 
+			boxCollider.size = crouchBounds.size;
+			boxCollider.center = crouchBounds.center;
+		}
+		else {
 			anim.SetTrigger("Default");
+			boxCollider.size = originalBounds.size;
+			boxCollider.center = originalBounds.center;
+		}
 	}
 
 	//checks to see if our player can crouch and resets crouch once Crouch Input is released
@@ -350,16 +398,6 @@ public class Controller2D : MonoBehaviour {
 
 	}
 
-	// Use this for initialization
-	void Start () {
-		anim = GetComponent<Animator>();
-		networkController = GetComponent<NetworkController>();
-		status = GetComponent<PlayerStatus>();
-		if(onSpawn != null)
-		{
-			onSpawn(networkController.theOwner, this);
-		}
-	}
 
 	//Constantly checks if player is on the ground
 	void IsGrounded(){
@@ -531,6 +569,7 @@ public class Controller2D : MonoBehaviour {
 	public void Die(DeathType deathType = DeathType.CRUSH){
 		if(networkController.isOwner && !dead){
 			status.currentStunMeter = 0;
+			rigidbody2D.velocity = Vector2.zero;
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
