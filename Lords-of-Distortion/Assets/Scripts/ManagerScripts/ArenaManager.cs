@@ -614,11 +614,12 @@ public class ArenaManager : MonoBehaviour {
                 if(movingPlatforms[i].GetComponent<movingPlatform>() != null)
                 { 
 				    movingPlatforms[i].GetComponent<movingPlatform>().enabled = true;
-				    if(movingPlatforms[i].GetComponent<FireballSpawner>() != null)
-				    {
-					    movingPlatforms[i].GetComponent<FireballSpawner>().enabled = true;
-				    }
+
                 }
+				if(movingPlatforms[i].GetComponent<FireballSpawner>() != null)
+				{
+					movingPlatforms[i].GetComponent<FireballSpawner>().enabled = true;
+				}
 			}
 			placementUI.SwitchToLive(false);
 			trapsEnabled = true;
