@@ -1004,7 +1004,7 @@ Transform:
   m_PrefabInternal: {fileID: 1834898160}
   m_GameObject: {fileID: 253039130}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.16802788, y: -1.51451015, z: 0}
+  m_LocalPosition: {x: -6.2667222, y: -3.44141293, z: 0}
   m_LocalScale: {x: .200000003, y: .200000003, z: 1}
   m_Children:
   - {fileID: 1888287718}
@@ -1038,7 +1038,7 @@ MonoBehaviour:
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
   difficultyrating: 'Difficulty: Moderate'
-  stagename: N/A
+  stagename: Stormfront
   currentstage: 
   trackmaster: {fileID: 1211916012}
 --- !u!61 &253039134
@@ -2922,6 +2922,57 @@ Transform:
   - {fileID: 1523671782}
   m_Father: {fileID: 0}
   m_RootOrder: 19
+--- !u!1 &911036591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100006, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 911036592}
+  - 212: {fileID: 911036593}
+  m_Layer: 0
+  m_Name: Lobby Button hover_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &911036592
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400006, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 911036591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .0369105153, y: -.0471857339, z: 0}
+  m_LocalScale: {x: 1.01736581, y: 1.16270423, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1189103237}
+  m_RootOrder: 0
+--- !u!212 &911036593
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 21200006, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 911036591}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 66900474cab787246b02462c66a62a94, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &921350185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3843,6 +3894,104 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: d43fa631de507e84a8bf2cb6f610e16a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &1189103236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100012, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1189103237}
+  - 212: {fileID: 1189103241}
+  - 61: {fileID: 1189103240}
+  - 114: {fileID: 1189103239}
+  - 148: {fileID: 1189103238}
+  m_Layer: 0
+  m_Name: StageThree-Four
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1189103237
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400012, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1189103236}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.40266609, y: -3.44218755, z: 0}
+  m_LocalScale: {x: .200000003, y: .200000018, z: 1}
+  m_Children:
+  - {fileID: 911036592}
+  m_Father: {fileID: 1601570457}
+  m_RootOrder: 3
+--- !u!148 &1189103238
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 14800004, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1189103236}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 1189103237}
+  m_ViewID:
+    m_ID: 21
+    m_Type: 1
+--- !u!114 &1189103239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1189103236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e663352ae96e4034d86350c1b71dca8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
+  pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
+  difficultyrating: 'Difficulty: Easy'
+  stagename: Cloud Cover
+  currentstage: 
+  trackmaster: {fileID: 1211916012}
+--- !u!61 &1189103240
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6100004, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1189103236}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Size: {x: 12.8399992, y: 7.26000023}
+  m_Center: {x: 0, y: 0}
+--- !u!212 &1189103241
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 21200010, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1189103236}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 149758e8a239df0488903a9c69b1ed32, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1209541781
 GameObject:
   m_ObjectHideFlags: 0
@@ -4838,7 +4987,7 @@ MonoBehaviour:
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
   difficultyrating: 'Difficulty: Easy'
-  stagename: N/A
+  stagename: Skybox
   currentstage: 
   trackmaster: {fileID: 1211916012}
 --- !u!61 &1371129375
@@ -4936,7 +5085,7 @@ MonoBehaviour:
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
   difficultyrating: 'Difficulty: Easy'
-  stagename: N/A
+  stagename: Caged In
   currentstage: 
   trackmaster: {fileID: 1211916012}
 --- !u!61 &1375528776
@@ -5962,6 +6111,7 @@ Transform:
   - {fileID: 1371129372}
   - {fileID: 1375528773}
   - {fileID: 253039131}
+  - {fileID: 1189103237}
   m_Father: {fileID: 0}
   m_RootOrder: 6
 --- !u!1 &1658300407
@@ -6789,7 +6939,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
       propertyPath: stagename
-      value: N/A
+      value: Stormfront
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
       propertyPath: trackmaster
@@ -6803,6 +6953,22 @@ Prefab:
       propertyPath: trackmaster
       value: 
       objectReference: {fileID: 1211916012}
+    - target: {fileID: 11400004, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+      propertyPath: stagename
+      value: Caged In
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+      propertyPath: stagename
+      value: Skybox
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -3.44141293
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -6.2667222
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0dc2f45a0bf8e654fa3098eb9c34ab15, type: 2}
   m_RootGameObject: {fileID: 1601570456}
