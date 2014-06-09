@@ -26,14 +26,4 @@ public class Firewall : Power {
 	public override void PowerActionExit (GameObject player, Controller2D controller)
 	{
 	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
