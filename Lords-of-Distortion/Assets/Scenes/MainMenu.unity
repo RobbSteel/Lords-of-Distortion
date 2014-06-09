@@ -243,7 +243,6 @@ GameObject:
   - 65: {fileID: 17105183}
   - 114: {fileID: 17105182}
   - 114: {fileID: 17105181}
-  - 114: {fileID: 17105187}
   - 82: {fileID: 17105192}
   m_Layer: 8
   m_Name: Colossus
@@ -320,8 +319,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1814446587}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
+  hover: {r: 1, g: 1, b: 1, a: 1}
+  pressed: {r: 1, g: 0, b: 0, a: 1}
   duration: .00999999978
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   dragHighlight: 0
@@ -355,25 +354,6 @@ MonoBehaviour:
   characterNum: 0
   buttonhover: {fileID: 8300000, guid: 5b9cf962025186e48ab3b5f76a74afce, type: 3}
   buttonclick: {fileID: 8300000, guid: cd3b2c724fbf8904bbaa7a5f0d4a753b, type: 3}
---- !u!114 &17105187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400010, guid: 4bbf9f536d612a14e902feb31819f22d,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 17105179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 17105179}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
-  duration: .00999999978
-  disabledColor: {r: .5, g: .5, b: .5, a: 1}
-  dragHighlight: 0
-  onClick: []
 --- !u!82 &17105192
 AudioSource:
   m_ObjectHideFlags: 0
@@ -563,7 +543,6 @@ GameObject:
   - 114: {fileID: 94676021}
   - 65: {fileID: 94676020}
   - 82: {fileID: 94676016}
-  - 114: {fileID: 94676017}
   m_Layer: 8
   m_Name: Blu
   m_TagString: Untagged
@@ -643,24 +622,6 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
---- !u!114 &94676017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 94676014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 94676014}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
-  duration: .00999999978
-  disabledColor: {r: .5, g: .5, b: .5, a: 1}
-  dragHighlight: 0
-  onClick: []
 --- !u!114 &94676018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,8 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1681419888}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
+  hover: {r: 1, g: 1, b: 1, a: 1}
+  pressed: {r: 1, g: 0, b: 0, a: 1}
   duration: .00999999978
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   dragHighlight: 0
@@ -875,7 +836,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .545098066, g: .65882355, b: .647058845, a: 1}
   mPivot: 4
   mWidth: 254
   mHeight: 555
@@ -905,7 +866,6 @@ GameObject:
   - 65: {fileID: 198644686}
   - 114: {fileID: 198644685}
   - 114: {fileID: 198644684}
-  - 114: {fileID: 198644693}
   - 82: {fileID: 198644688}
   m_Layer: 8
   m_Name: Mummy
@@ -982,8 +942,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 193658920}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
+  hover: {r: 1, g: 1, b: 1, a: 1}
+  pressed: {r: 1, g: 0, b: 0, a: 1}
   duration: .00999999978
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   dragHighlight: 0
@@ -1076,25 +1036,6 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
---- !u!114 &198644693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400008, guid: 4bbf9f536d612a14e902feb31819f22d,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 198644682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 198644682}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: 1, g: 1, b: 0, a: 1}
-  duration: .00999999978
-  disabledColor: {r: .5, g: .5, b: .5, a: 1}
-  dragHighlight: 0
-  onClick: []
 --- !u!1 &203184955
 GameObject:
   m_ObjectHideFlags: 0
@@ -2005,7 +1946,7 @@ MonoBehaviour:
   playerscript: {fileID: 203184956}
   transitioner: {fileID: 19396097}
   pageturn: {fileID: 8300000, guid: 9ba531f5ab32aa0459307e77330c399b, type: 3}
-  error: {fileID: 0}
+  error: {fileID: 8300000, guid: 31040e6171db6db4795ca5633bf55ede, type: 3}
 --- !u!114 &850810891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2602,7 +2543,7 @@ MonoBehaviour:
   playerscript: {fileID: 203184956}
   transitioner: {fileID: 19396097}
   pageturn: {fileID: 8300000, guid: 9ba531f5ab32aa0459307e77330c399b, type: 3}
-  error: {fileID: 0}
+  error: {fileID: 8300000, guid: 31040e6171db6db4795ca5633bf55ede, type: 3}
 --- !u!114 &1396803629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2778,7 +2719,7 @@ MonoBehaviour:
   characterLimit: 8
   savedAs: 
   selectOnTab: {fileID: 0}
-  activeTextColor: {r: .882352948, g: .784313738, b: .588235319, a: 1}
+  activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   caretColor: {r: 1, g: 1, b: 1, a: .800000012}
   selectionColor: {r: 1, g: .91922003, b: 0, a: .501960814}
   onSubmit: []
@@ -3254,7 +3195,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .568627477, g: .678431392, b: .639215708, a: 1}
   mPivot: 4
   mWidth: 254
   mHeight: 555
@@ -3455,7 +3396,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .56078434, g: .670588255, b: .650980413, a: 1}
   mPivot: 4
   mWidth: 254
   mHeight: 555
@@ -3684,7 +3625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1870565335}
-  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
+  hover: {r: 1, g: 1, b: 1, a: 1}
   pressed: {r: .654411793, g: .654411793, b: .654411793, a: 1}
   duration: .100000001
   disabledColor: {r: 1, g: 0, b: 0, a: 1}
