@@ -8,7 +8,8 @@ public class FlipLevel : MonoBehaviour {
 	public bool flipleft = false;
 	public GameObject transitioner;
 	public AudioClip buttonclick;
-	
+	public AudioClip buttonhover;
+
 	Transitioner fader;
 	
 	void Awake(){
@@ -22,5 +23,9 @@ public class FlipLevel : MonoBehaviour {
             return;
 		audio.PlayOneShot(buttonclick);
 		fader.Flip(LevelName, flipleft);
+	}
+	void OnHover(bool isOver){
+		if (isOver)
+			audio.PlayOneShot (buttonhover, 0.2f);
 	}
 }

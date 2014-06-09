@@ -87,6 +87,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	public void Snare(){
+		circleCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
 
@@ -348,7 +349,9 @@ public class Controller2D : MonoBehaviour {
 		moveDisable = enabled;
 
 		if(!crouching && enabled){
-			print ("trigger");
+			circleCollider.sharedMaterial = playerMaterial;
+			boxCollider.sharedMaterial = playerMaterial;
+			rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
 			anim.SetTrigger("Crouch");
 			boxCollider.size = crouchBounds.size;
 			boxCollider.center = crouchBounds.center;
@@ -572,6 +575,7 @@ public class Controller2D : MonoBehaviour {
 		if(networkController.isOwner && !dead){
 			status.currentStunMeter = 0;
 			rigidbody2D.velocity = Vector2.zero;
+			circleCollider.sharedMaterial = playerMaterial;
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
