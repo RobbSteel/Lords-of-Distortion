@@ -4,12 +4,14 @@ using System.Collections;
 public class IncrementRoundsNum : MonoBehaviour {
 
     public UILabel enterRoundsLabel;
+	public AudioClip clicked;
 
     void OnPress(bool isDown)
     {
         if (isDown)
             return;
-        
+		if (!isDown) audio.PlayOneShot(clicked);
+
         int rounds = int.Parse(enterRoundsLabel.text);
         
         if (rounds < 5)
