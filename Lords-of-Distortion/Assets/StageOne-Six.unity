@@ -14458,6 +14458,38 @@ Prefab:
       propertyPath: glowTweenLength
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: colorAnimation[0].rgba
+      value: 167772415
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: colorAnimation[1].rgba
+      value: 3019899135
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: colorAnimation[2].rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: colorAnimation[3].rgba
+      value: 3019899135
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: colorAnimation[4].rgba
+      value: 167772415
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a7f1cbc2ef093934b8c4cc5e06ccc008, type: 2}
   m_RootGameObject: {fileID: 1677643358}
@@ -27059,10 +27091,10 @@ MonoBehaviour:
   - {fileID: 1941172819}
   - {fileID: 1930593}
   platformlist: []
-  totallives: 0
   livesUI: {fileID: 0}
   alertSymbol: {fileID: 100000, guid: e2e6be7c3c2d6e0459018846fd61aec8, type: 2}
   placementRootPrefab: {fileID: 100004, guid: d3cd913089056b345bd90fad246e4797, type: 2}
+  RespawnPoint: {fileID: 0}
 --- !u!4 &1318985894
 Transform:
   m_ObjectHideFlags: 0
@@ -31983,19 +32015,19 @@ ParticleAnimator:
   Does Animate Color?: 1
   colorAnimation[0]:
     serializedVersion: 2
-    rgba: 184549375
+    rgba: 167772415
   colorAnimation[1]:
     serializedVersion: 2
-    rgba: 3036676095
+    rgba: 3019899135
   colorAnimation[2]:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190335
   colorAnimation[3]:
     serializedVersion: 2
-    rgba: 3036676095
+    rgba: 3019899135
   colorAnimation[4]:
     serializedVersion: 2
-    rgba: 184549375
+    rgba: 167772415
   worldRotationAxis: {x: 0, y: 0, z: 0}
   localRotationAxis: {x: 0, y: 0, z: 0}
   sizeGrow: 1
@@ -36807,7 +36839,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 3
   m_Type: 2
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 3.61999989
   m_Range: 14
   m_SpotAngle: 30
