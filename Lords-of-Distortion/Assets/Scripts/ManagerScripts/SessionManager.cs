@@ -129,7 +129,6 @@ public class SessionManager : MonoBehaviour {
 		characterInstance.transform.position = location;
 		characterInstance.SetActive(true);
 
-		 
 		NetworkView charNetworkView = characterInstance.GetComponent<NetworkView>();
 		charNetworkView.viewID = viewID;
 		charNetworkView.group = group;
@@ -138,7 +137,17 @@ public class SessionManager : MonoBehaviour {
 
 		nwController.SetOwner(owner);
 		psInfo.AddPlayerGameObject(owner, characterInstance);
-	
+
+        PlayerOptions playerOptions = psInfo.GetPlayerOptions(owner);
+
+        //Used for Ready button
+        if (GameObject.Find("LobbyGUI") != null)
+        {
+            LobbyGUI lobbyGuiScript = GameObject.Find("LobbyGUI").GetComponent<LobbyGUI>();
+            lobbyGuiScript.SetLocalPlayerNum(playerOptions.PlayerNumber);
+            lobbyGuiScript.CreateReadyLight(owner);
+        }
+
 		return characterInstance;
 	}
 
