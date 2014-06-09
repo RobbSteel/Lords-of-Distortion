@@ -251,7 +251,7 @@ public class ScoreDisplay : MonoBehaviour {
 			}
 
 			label.transform.parent = GameObject.Find("UI Root").transform;
-			label.transform.localScale = new Vector3(70,70,1);
+			label.transform.localScale = new Vector3(60,60,1);
 			label.transform.localPosition = new Vector2(600, 1200+(-600*playernumber));
 		}
 	
