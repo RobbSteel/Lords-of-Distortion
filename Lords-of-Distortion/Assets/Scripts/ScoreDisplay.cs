@@ -168,9 +168,9 @@ public class ScoreDisplay : MonoBehaviour {
 			PlayerStats stats = infoscript.GetPlayerStats(listed[i]);
 
 			//only want last event if player died.
-			if(stats.isDead()){
+
 				lastdeath = stats.LastEvent().PowerType;
-			}
+			
 
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playermodel = infoscript.GetPlayerOptions(listed[i]).character;
@@ -196,7 +196,7 @@ public class ScoreDisplay : MonoBehaviour {
 	//Visually display death for players
 	void DisplayDeath(PowerType lastdeath, int playernumber){
 
-
+		print ("goober");
 		if(lastdeath != PowerType.UNDEFINED){
 			GameObject label;
 			if(PowerType.ELECTRIC == lastdeath){
@@ -251,8 +251,8 @@ public class ScoreDisplay : MonoBehaviour {
 			}
 
 			label.transform.parent = GameObject.Find("UI Root").transform;
-			label.transform.localScale = new Vector3(80,80,1);
-			label.transform.localPosition = new Vector2(800, 1800+(-800*playernumber));
+			label.transform.localScale = new Vector3(70,70,1);
+			label.transform.localPosition = new Vector2(600, 1200+(-600*playernumber));
 		}
 	
 

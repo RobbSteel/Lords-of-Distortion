@@ -204,7 +204,7 @@ public class ArenaManager : MonoBehaviour {
 		}
 
 		else {
-			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server,  deathTypeInteger, TimeManager.instance.time);
+			networkView.RPC ("NotifyServerOfDeath", RPCMode.Server, TimeManager.instance.time,  deathTypeInteger);
 
 			//Do some of the things destroyplayerclone does
 			if(deadPlayer.Lives_LOCAL == 0){

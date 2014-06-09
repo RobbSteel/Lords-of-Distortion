@@ -349,7 +349,9 @@ public class Controller2D : MonoBehaviour {
 		moveDisable = enabled;
 
 		if(!crouching && enabled){
-			print ("trigger");
+			circleCollider.sharedMaterial = playerMaterial;
+			boxCollider.sharedMaterial = playerMaterial;
+			rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
 			anim.SetTrigger("Crouch");
 			boxCollider.size = crouchBounds.size;
 			boxCollider.center = crouchBounds.center;
