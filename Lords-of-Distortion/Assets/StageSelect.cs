@@ -32,18 +32,18 @@ public class StageSelect : MonoBehaviour {
 //Instantiate Stage Name and corresponding difficulty
  void StageInfo(){
 
-	GameObject difflabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, -2.1f), transform.rotation);
+	GameObject difflabel = (GameObject)Instantiate(difficulty, new Vector3(400, -10f, -2.1f), transform.rotation);
 	difflabel.tag = "Display";
 	difflabel.transform.parent = GameObject.Find("SelectUI").transform;
 	difflabel.transform.localScale = new Vector3(1, 1, 1);
-	difflabel.transform.localPosition = new Vector2(325, -100);
+	difflabel.transform.localPosition = new Vector2(325, -160);
 	var difficultytext = difflabel.GetComponent<UILabel>();
 	difficultytext.text = difficultyrating;
-	GameObject stagelabel = (GameObject)Instantiate(difficulty, new Vector3(400, 0, -2.1f), transform.rotation);
+	GameObject stagelabel = (GameObject)Instantiate(difficulty, new Vector3(400, -10f, -2.1f), transform.rotation);
 	stagelabel.tag = "Display";
 	stagelabel.transform.parent = GameObject.Find("SelectUI").transform;
 	stagelabel.transform.localScale = new Vector3(1, 1, 1);
-	stagelabel.transform.localPosition = new Vector2(325, -40);
+	stagelabel.transform.localPosition = new Vector2(325, -80);
 	var stagetext = stagelabel.GetComponent<UILabel>();
 	stagetext.text = stagename;
 
@@ -61,7 +61,7 @@ public class StageSelect : MonoBehaviour {
 //Enlarges the display of the chosen stage
  void MapDisplay(){
 
-	GameObject displaymap = (GameObject)Instantiate(this.gameObject, new Vector3(4.5f, 2, -2.1f), transform.rotation);
+	GameObject displaymap = (GameObject)Instantiate(this.gameObject, new Vector3(4.5f, 1.5f, -2.1f), transform.rotation);
 	displaymap.transform.localScale *= 2.5f;
 	var displayscript = displaymap.gameObject.GetComponent<StageSelect>();
 	Destroy(displayscript);

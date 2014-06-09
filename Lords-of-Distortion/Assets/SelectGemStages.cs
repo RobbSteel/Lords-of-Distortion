@@ -10,7 +10,7 @@ public class SelectGemStages : MonoBehaviour {
 	public GameObject levelgrid;
     public bool turnBackwards;
     public GameObject otherButton;
-
+	public AudioClip pageturn;
 	[RPC]
 	void Flip(){
 		
@@ -26,6 +26,7 @@ public class SelectGemStages : MonoBehaviour {
     
     void OnClick()
     {
+
         if(Network.isServer){
 	        PreviousSelection.SetActive(false);
 	        levelgrid.SetActive(false);
@@ -37,5 +38,9 @@ public class SelectGemStages : MonoBehaviour {
                 otherButton.SetActive(false);
             gameObject.SetActive(false);
 		}
+
     }
+	void OnPress(bool isDown){
+		if(isDown) audio.PlayOneShot(pageturn);
+	}
 }

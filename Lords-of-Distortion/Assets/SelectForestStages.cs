@@ -10,6 +10,7 @@ public class SelectForestStages : MonoBehaviour {
     public GameObject levelgrid; 
     public bool turnBackwards;
     public GameObject otherButton;
+	public AudioClip pageturn;
 
 	[RPC]
 	void Flip(){
@@ -26,6 +27,9 @@ public class SelectForestStages : MonoBehaviour {
 
     void OnClick()
     {
+		audio.PlayOneShot(pageturn);
+
+
 		if(Network.isServer){
 		    PreviousSelection.SetActive(false);
 		    levelgrid.SetActive(false);
@@ -38,4 +42,7 @@ public class SelectForestStages : MonoBehaviour {
             gameObject.SetActive(false);
 		}
     }
+	void OnPress(bool isDown){
+		if(isDown) audio.PlayOneShot(pageturn);
+	}
 }
