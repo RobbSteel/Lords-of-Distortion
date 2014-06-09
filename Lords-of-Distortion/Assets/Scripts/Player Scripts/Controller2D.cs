@@ -87,6 +87,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	public void Snare(){
+		circleCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
 
@@ -572,6 +573,7 @@ public class Controller2D : MonoBehaviour {
 		if(networkController.isOwner && !dead){
 			status.currentStunMeter = 0;
 			rigidbody2D.velocity = Vector2.zero;
+			circleCollider.sharedMaterial = playerMaterial;
 			collider2D.enabled = false;
 			dead = true;
 			locked = true;
