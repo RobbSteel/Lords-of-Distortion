@@ -572,11 +572,12 @@ public class Controller2D : MonoBehaviour {
 	private bool wantRespawn = false;
 
 	public void Die(DeathType deathType = DeathType.CRUSH){
+		collider2D.enabled = false;
 		if(networkController.isOwner && !dead){
 			status.currentStunMeter = 0;
 			rigidbody2D.velocity = Vector2.zero;
 			circleCollider.sharedMaterial = playerMaterial;
-			collider2D.enabled = false;
+
 			dead = true;
 			locked = true;
 			myHook.DestroyHookPossible(Hook.Authority.SERVER);
