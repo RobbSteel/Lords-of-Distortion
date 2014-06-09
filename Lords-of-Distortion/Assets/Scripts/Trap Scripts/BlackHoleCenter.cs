@@ -8,7 +8,7 @@ public class BlackHoleCenter : Power
 		//copy spawn info from parent.
 		spawnInfo = new PowerSpawn(transform.parent.GetComponent<BlackHoleRadius>().spawnInfo);
 		spawnInfo.type = PowerType.BH_INNER;
-		Destroy(gameObject, 8f);
+		Destroy(gameObject, 5f);
 	}
 	public override void PowerActionEnter (GameObject player, Controller2D controller)
 	{
