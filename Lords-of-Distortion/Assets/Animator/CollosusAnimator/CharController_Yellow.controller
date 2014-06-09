@@ -255,17 +255,6 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
-  - serializedVersion: 3
-    m_Name: Crouch
-    m_StateMachine: {fileID: 110750085}
-    m_Mask: {fileID: 0}
-    m_BlendingMode: 0
-    m_SyncedLayerIndex: -1
-    m_StateMachineMotionSetIndex: 0
-    m_DefaultWeight: 1
-    m_IKPass: 0
-    m_SyncedLayerAffectsTiming: 0
-    m_Controller: {fileID: 9100000}
 --- !u!206 &20600000
 BlendTree:
   m_ObjectHideFlags: 3
@@ -1211,7 +1200,7 @@ State:
   m_CycleOffset: 0
   m_Motions:
   - {fileID: 7400000, guid: 030e12afa38483f4d9f7614041a50f9e, type: 2}
-  m_ParentStateMachine: {fileID: 110750085}
+  m_ParentStateMachine: {fileID: 0}
   m_Position: {x: -72, y: -24, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
@@ -1631,7 +1620,7 @@ State:
   m_CycleOffset: 0
   m_Motions:
   - {fileID: 7400000, guid: 030e12afa38483f4d9f7614041a50f9e, type: 2}
-  m_ParentStateMachine: {fileID: 110750085}
+  m_ParentStateMachine: {fileID: 0}
   m_Position: {x: 192, y: -36, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
@@ -1676,7 +1665,7 @@ State:
   m_CycleOffset: 0
   m_Motions:
   - {fileID: 0}
-  m_ParentStateMachine: {fileID: 110750085}
+  m_ParentStateMachine: {fileID: 0}
   m_Position: {x: 48, y: 60, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
@@ -1745,14 +1734,6 @@ StateMachine:
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
     data:
-      first: {fileID: 110222820}
-      second:
-      - {fileID: 110164291}
-    data:
-      first: {fileID: 110208852}
-      second:
-      - {fileID: 110182065}
-    data:
       first: {fileID: 0}
       second:
       - {fileID: 110181685}
@@ -1775,6 +1756,14 @@ StateMachine:
     data:
       first: {fileID: 110252194}
       second: []
+    data:
+      first: {fileID: 110208852}
+      second:
+      - {fileID: 110182065}
+    data:
+      first: {fileID: 110222820}
+      second:
+      - {fileID: 110164291}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 0, y: -264, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -2003,39 +1992,6 @@ StateMachine:
   m_OrderedTransitions: {}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
---- !u!1107 &110750085
-StateMachine:
-  serializedVersion: 2
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Crouch
-  m_DefaultState: {fileID: 110292028}
-  m_States:
-  - {fileID: 110292028}
-  - {fileID: 110202227}
-  - {fileID: 110264616}
-  m_ChildStateMachine: []
-  m_ChildStateMachinePosition: []
-  m_OrderedTransitions:
-    data:
-      first: {fileID: 0}
-      second:
-      - {fileID: 110140409}
-    data:
-      first: {fileID: 110292028}
-      second: []
-    data:
-      first: {fileID: 110202227}
-      second:
-      - {fileID: 110130115}
-    data:
-      first: {fileID: 110264616}
-      second:
-      - {fileID: 110148876}
-  m_MotionSetCount: 1
-  m_AnyStatePosition: {x: 72, y: -96, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
 --- !u!1107 &110752397
 StateMachine:
