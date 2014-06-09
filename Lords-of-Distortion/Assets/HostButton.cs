@@ -7,13 +7,15 @@ public class HostButton : MonoBehaviour {
 	public GameObject transitioner;
 	Transitioner transition;
 	public AudioClip pageturn;
+	public AudioClip error;
 
     void OnPress()
     {
 
         if (playerscript.playerName == "" || playerscript.playerName == "Player Name")
         {
-            print("Nope");
+			audio.PlayOneShot(error, 0.2f);
+
         }
         else
         {
