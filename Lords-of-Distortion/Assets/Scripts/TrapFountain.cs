@@ -37,6 +37,7 @@ public class TrapFountain : MonoBehaviour {
 			placementUI = GameObject.Find( "OfflinePlacement(Clone)").GetComponent<PlacementUI>();
 
 			if(!used && placementUI.CanResupply()){
+				this.GetComponent<Animator>().enabled = true;
 				reSupplyPlayer();
 			}
 		}

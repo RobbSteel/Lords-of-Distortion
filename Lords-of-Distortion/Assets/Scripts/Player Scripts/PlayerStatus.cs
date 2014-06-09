@@ -443,9 +443,18 @@ public class PlayerStatus : MonoBehaviour {
 		if(power.spawnInfo != null){
 			if(power.spawnInfo.type.IsPsuedoPower() || !power.spawnInfo.createEvents)
 				return;
-			playerEvent = new PlayerEvent(power.spawnInfo.type, 
-			                              TimeManager.instance.time, power.spawnInfo.owner);
-			playerEvent.Attacker = power.spawnInfo.owner;
+			if(power.spawnInfo.owner == default(NetworkPlayer))
+			{
+				//no attacker.
+				playerEvent = new PlayerEvent(power.spawnInfo.type, TimeManager.instance.time);
+			}
+			else 
+			{
+				playerEvent = new PlayerEvent(power.spawnInfo.type, 
+				                              TimeManager.instance.time, power.spawnInfo.owner);
+				playerEvent.Attacker = power.spawnInfo.owner;
+			}
+
 		}
 		else{
 			//Gotta be spikes
