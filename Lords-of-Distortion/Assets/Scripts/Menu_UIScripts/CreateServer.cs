@@ -7,7 +7,7 @@ public class CreateServer : MonoBehaviour {
 	public MainGui playerscript;
     public GameObject playerName;
     public UILabel serverName;
-
+	public AudioClip error;
 	// Use this for initialization
 	void Start () 
     {
@@ -16,24 +16,25 @@ public class CreateServer : MonoBehaviour {
 
 	void OnPress(){
 
-        if (serverName.text != "" && serverName.text != "Server Name")
-        {
-            PlayerServerInfo.instance.servername = serverName.text;
-            PlayerServerInfo.instance.choice = "Host";
+        if (serverName.text != "" && serverName.text != "Server Name") {
+						PlayerServerInfo.instance.servername = serverName.text;
+						PlayerServerInfo.instance.choice = "Host";
 
-            var liveslabel = GameObject.Find("enterLives");
-            var lives = liveslabel.GetComponent<UILabel>().text;
-            var convert = float.Parse(lives);
-            if (convert == 0)
-            {
-                convert = 1;
-            }
+						var liveslabel = GameObject.Find ("enterLives");
+						var lives = liveslabel.GetComponent<UILabel> ().text;
+						var convert = float.Parse (lives);
+						if (convert == 0) {
+								convert = 1;
+						}
 
-            var numStages = GameObject.Find("enterRounds").GetComponent<UILabel>().text;
+						var numStages = GameObject.Find ("enterRounds").GetComponent<UILabel> ().text;
 
-            PlayerServerInfo.instance.livesPerRound = convert;
-            PlayerServerInfo.instance.numStages = int.Parse(numStages);
-            Application.LoadLevel("LobbyArena");
-        }
+						PlayerServerInfo.instance.livesPerRound = convert;
+						PlayerServerInfo.instance.numStages = int.Parse (numStages);
+						Application.LoadLevel ("LobbyArena");
+		} else {
+			audio.PlayOneShot(error, 0.2f);		
+		
+		}
 	}	
 }
