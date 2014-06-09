@@ -17,7 +17,7 @@ public class CharSelected : MonoBehaviour {
 	void OnPress(bool isDown)
 	{
 		if (isDown) {
-			audio.PlayOneShot(buttonclick);
+			audio.PlayOneShot(buttonclick,0.5f);
 			return;
 		}
 		infoscript.localOptions.character = (Character)characterNum;
@@ -25,6 +25,6 @@ public class CharSelected : MonoBehaviour {
 	}
 	void OnHover(bool isOver){
 		if (isOver)
-			audio.PlayOneShot(buttonhover, 0.35f);
+			audio.PlayOneShot(buttonhover, 0.25f);
 	}
 }
