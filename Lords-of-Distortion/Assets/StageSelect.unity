@@ -939,7 +939,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
-  difficultyrating: 'Difficulty: Easy'
+  difficultyrating: 'Difficulty: Moderate'
   stagename: N/A
   currentstage: 
   trackmaster: {fileID: 1211916012}
@@ -2078,9 +2078,9 @@ MonoBehaviour:
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
   difficultyrating: 'Difficulty: Hard'
-  stagename: Overgrowth
+  stagename: N\A
   currentstage: 
-  trackmaster: {fileID: 0}
+  trackmaster: {fileID: 1211916012}
 --- !u!61 &483222239
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2179,7 +2179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &630788022
 Transform:
   m_ObjectHideFlags: 0
@@ -2561,7 +2561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &862368437
 Transform:
   m_ObjectHideFlags: 0
@@ -3754,7 +3754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
-  difficultyrating: 'Difficulty: Moderate'
+  difficultyrating: 'Difficulty: Easy'
   stagename: N/A
   currentstage: 
   trackmaster: {fileID: 1211916012}
@@ -5343,9 +5343,9 @@ MonoBehaviour:
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
   difficultyrating: 'Difficulty: Hard'
-  stagename: Overgrowth
+  stagename: N\A
   currentstage: 
-  trackmaster: {fileID: 0}
+  trackmaster: {fileID: 1211916012}
 --- !u!61 &1396602859
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6606,7 +6606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
-  difficultyrating: 'Difficulty: Moderate'
+  difficultyrating: 'Difficulty: Easy'
   stagename: N/A
   currentstage: 
   trackmaster: {fileID: 1211916012}
@@ -6882,7 +6882,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100016, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 21200008, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
       propertyPath: m_Sprite
@@ -7008,6 +7008,38 @@ Prefab:
     - target: {fileID: 100018, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
       propertyPath: m_Name
       value: StageFour-One
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: trackmaster
+      value: 
+      objectReference: {fileID: 1211916012}
+    - target: {fileID: 11400008, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: trackmaster
+      value: 
+      objectReference: {fileID: 1211916012}
+    - target: {fileID: 11400008, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: stagename
+      value: N\A
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: stagename
+      value: N\A
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: difficultyrating
+      value: 'Difficulty: Moderate'
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: difficultyrating
+      value: 'Difficulty: Moderate'
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: difficultyrating
+      value: 'Difficulty: Easy'
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
+      propertyPath: difficultyrating
+      value: 'Difficulty: Easy'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9125d95c67e5bb444ac88f95d632e0ac, type: 2}
@@ -7482,7 +7514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   difficulty: {fileID: 100004, guid: 966958f9b00d4fa49ad327cf3ac29de7, type: 2}
   pick: {fileID: 100002, guid: 9c565bc61cdc0d5498f7b2646ae2652b, type: 2}
-  difficultyrating: 'Difficulty: Easy'
+  difficultyrating: 'Difficulty: Moderate'
   stagename: N/A
   currentstage: 
   trackmaster: {fileID: 1211916012}
