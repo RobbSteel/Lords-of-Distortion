@@ -557,8 +557,8 @@ public class ScoreDisplay : MonoBehaviour {
 				playertext.text = playername;
 
 				playericon.transform.parent = GameObject.Find ("UI Root").transform;
-				playericon.transform.localScale = new Vector3(200,200,1);
-				playericon.transform.localPosition = new Vector2(-400, 150+(-150 * gonethrough));
+				playericon.transform.localScale = new Vector3(100,100,1);
+				playericon.transform.localPosition = new Vector2(-500, 150+(-150 * gonethrough));
 				gonethrough++;
 				} else {
 
@@ -576,7 +576,7 @@ public class ScoreDisplay : MonoBehaviour {
 					playertext.text = playername;
 					
 					playericon.transform.parent = GameObject.Find ("UI Root").transform;
-					playericon.transform.localScale = new Vector3(200,200,1);
+					playericon.transform.localScale = new Vector3(100,100,1);
 					playericon.transform.localPosition = new Vector2(300, 150+(-150 * tiethrough));
 					tiethrough++;
 				}
