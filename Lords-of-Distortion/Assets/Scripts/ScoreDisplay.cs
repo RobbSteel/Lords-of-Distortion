@@ -247,12 +247,12 @@ public class ScoreDisplay : MonoBehaviour {
 
 			} else {
 				print ("Trophy Bug" + lastdeath);
-				label = (GameObject)Instantiate(alive, new Vector2(0,0), transform.rotation);
+				label = (GameObject)Instantiate(spikeicon, new Vector2(0,0), transform.rotation);
 			}
 
 			label.transform.parent = GameObject.Find("UI Root").transform;
 			label.transform.localScale = new Vector3(60,60,1);
-			label.transform.localPosition = new Vector2(600, 1200+(-600*playernumber));
+			label.transform.localPosition = new Vector2(550, 1200+(-500*playernumber));
 		}
 	
 
@@ -278,7 +278,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 		//Rescale them to fit properly
 		playerlabel.transform.localScale = new Vector3(1, 1, 1);
-		playerpose.transform.localScale = new Vector3(100,100,1);
+		playerpose.transform.localScale = new Vector3(80,80,1);
 		favorlabel.transform.localScale = new Vector3(1,1,1);
 		killlabel.transform.localScale = new Vector3(1,1,1);
 
