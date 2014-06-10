@@ -443,7 +443,7 @@ public class PlayerStatus : MonoBehaviour {
 		if(power.spawnInfo != null){
 			if(power.spawnInfo.type.IsPsuedoPower() || !power.spawnInfo.createEvents)
 				return;
-			if(power.spawnInfo.owner == default(NetworkPlayer))
+			if(power.spawnInfo.owner == null)
 			{
 				//no attacker.
 				playerEvent = new PlayerEvent(power.spawnInfo.type, TimeManager.instance.time);
