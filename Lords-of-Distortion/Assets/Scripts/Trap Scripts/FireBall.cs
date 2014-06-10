@@ -74,7 +74,7 @@ public class FireBall : Power
 
 	void OnTriggerEnter2D(Collider2D col){
 
-		if(col.GetComponent<GravityField>() != null){
+		if(col.GetComponent<GravityField>() != null || col.GetComponent<GravityFieldStage>() != null){
 			float angle = Random.Range(60f, 120f);
 			transform.rotation = Quaternion.AngleAxis (angle, new Vector3 (0, 0, 1));
 		}
