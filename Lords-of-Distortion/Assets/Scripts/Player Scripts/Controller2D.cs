@@ -82,6 +82,8 @@ public class Controller2D : MonoBehaviour {
 	
 	public void KnockBack(){
 		knockedBack = true;
+		circleCollider.sharedMaterial = playerMaterial;
+		boxCollider.sharedMaterial = playerMaterial;
 		snared = true;
         meleeStunned = true;
 		timeGrounded = 0f;
@@ -91,6 +93,7 @@ public class Controller2D : MonoBehaviour {
 		rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
 		anim.SetFloat("Speed", 0);
 		circleCollider.sharedMaterial = playerMaterial;
+		boxCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
 
