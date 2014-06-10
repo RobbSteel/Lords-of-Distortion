@@ -334,7 +334,7 @@ public class Controller2D : MonoBehaviour {
 		    }
 
 		    //Remove knockback when you compose yourself.
-		    if(timeGrounded >= .166f && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
+		    if(timeGrounded >= .166f && knockedBack){
 			    knockedBack = false;
 			    FreeFromSnare();
 		    }
