@@ -82,6 +82,8 @@ public class Controller2D : MonoBehaviour {
 	
 	public void KnockBack(){
 		knockedBack = true;
+		circleCollider.sharedMaterial = playerMaterial;
+		boxCollider.sharedMaterial = playerMaterial;
 		snared = true;
         meleeStunned = true;
 		timeGrounded = 0f;
@@ -91,6 +93,7 @@ public class Controller2D : MonoBehaviour {
 		rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
 		anim.SetFloat("Speed", 0);
 		circleCollider.sharedMaterial = playerMaterial;
+		boxCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
 
@@ -573,8 +576,9 @@ public class Controller2D : MonoBehaviour {
 	private bool wantRespawn = false;
 
 	public void Die(DeathType deathType = DeathType.CRUSH){
-		collider2D.enabled = false;
+
 		if(networkController.isOwner && !dead){
+			collider2D.enabled = false;
 			status.currentStunMeter = 0;
 			rigidbody2D.velocity = Vector2.zero;
 			circleCollider.sharedMaterial = playerMaterial;
@@ -606,7 +610,8 @@ public class Controller2D : MonoBehaviour {
 	public void DieSimple(DeathType deathType, bool respawn = false){
 		if(!networkController.isOwner && !dead){
 			dead = true;
-			collider2D.enabled = false;
+			boxCollider.enabled = false;
+			circleCollider.enabled = false;
 			wantRespawn = respawn;
 			myHook.DestroyHookPossible(Hook.Authority.SERVER);
 			DeathAnimation(deathType);
@@ -660,7 +665,8 @@ public class Controller2D : MonoBehaviour {
 			SetCrouchState(false);
 		hasbomb = false;
 		status.currentStunMeter = 0;
-		collider2D.enabled = true;
+		boxCollider.enabled = true;
+		circleCollider.enabled = true;
 		invulntime = 3;
 		recentspawn = true;
 		powerInvulnerable = true;
