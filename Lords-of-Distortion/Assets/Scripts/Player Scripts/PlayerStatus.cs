@@ -201,7 +201,7 @@ public class PlayerStatus : MonoBehaviour {
 			//networkView.RPC ("VisualHitIndicator", RPCMode.Others, 0);
             
             rigidbody2D.velocity = new Vector2(0f, 0f);
-            rigidbody2D.AddForce(velocityChange);
+			rigidbody2D.AddRelativeForce(velocityChange);
             //rigidbody2D.AddForce(sideForce);
 		}
 	}
@@ -209,7 +209,7 @@ public class PlayerStatus : MonoBehaviour {
 	Vector2 upForce = new Vector2(0f, 200f);
 	//Push the character up on this step
 	void BeginKnockBack(float flip){
-        rigidbody2D.AddForce(upForce);
+        rigidbody2D.AddRelativeForce(upForce);
         sideForce = new Vector2(7f * flip, 7f);
         velocityChange = (sideForce * rigidbody2D.mass / Time.fixedDeltaTime);
         knockBackPending = true;
