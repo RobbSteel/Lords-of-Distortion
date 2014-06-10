@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class HookHit : MonoBehaviour {
 	
@@ -23,13 +23,19 @@ public class HookHit : MonoBehaviour {
 	bool poweredUp = false;
 	public AudioClip flamehook;
 	private bool hitPlatform = false;
-	
+
+	[SerializeField]
+	private List<LineRenderer> lines = new List<LineRenderer>();
+
 	void Start()
 	{
 		returning = false;
-		lr = GetComponent<LineRenderer>();
-		lr.sortingLayerName = "Player";
-		lr.sortingOrder =-1;
+		foreach(LineRenderer line in lines)
+		{
+			line.sortingLayerName = "Player";
+			line.sortingOrder =-1;
+		}
+
 		animator = GetComponent<Animator>();
 	}
 
@@ -63,8 +69,12 @@ public class HookHit : MonoBehaviour {
 
 	void LateUpdate()
 	{
-		lr.SetPosition(0, transform.position);
-		lr.SetPosition(1, shooter.GetComponent<Hook>().shootFrom.position);
+		foreach(LineRenderer line in lines)
+		{
+
+			line.SetPosition(0, shooter.GetComponent<Hook>().shootFrom.position);
+			line.SetPosition(1, line.transform.position);
+		}
 	}
 
 	//On collision stops the hook from moving and tells the player to come to the hook
