@@ -77,7 +77,7 @@ public class FreezeTrap : Power {
         }
         else
         { 
-            player.rigidbody2D.drag = 90;
+            player.rigidbody2D.drag = 100f;
         }
 
 	
@@ -106,7 +106,7 @@ public class FreezeTrap : Power {
         }
         else
         {
-            player.rigidbody2D.drag = 90;
+            player.rigidbody2D.drag = 100f;
         }
 	}
 	
