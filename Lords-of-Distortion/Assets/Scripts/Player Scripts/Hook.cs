@@ -241,6 +241,7 @@ public class Hook : MonoBehaviour {
 		slowedTime = 0f;
 		transform.rigidbody2D.gravityScale = 1;
 		currentState = HookState.None;
+		controller2D.FreeFromSnare();
 		if(currentHook != null){
 			if(currentHook.affectedPlayerC2D != null){
 				currentHook.affectedPlayerC2D.UnHooked();
@@ -291,7 +292,7 @@ public class Hook : MonoBehaviour {
 		
 		float distance = Vector3.Distance(hookedPlayer.transform.position, transform.position);
 		
-		if(distance < PLAYER_RELEASE_DISTANCE && Network.isServer)
+		if(distance <= PLAYER_RELEASE_DISTANCE + .2f && Network.isServer)
 		{
 			DestroyHookPossible(Authority.SERVER);
 		}
@@ -333,7 +334,7 @@ public class Hook : MonoBehaviour {
 		currentHook.affectedPlayerC2D.Hooked(networkController.theOwner);
 		currentHook.targetPosition = playerLocation;
 		currentHook.playerhooked = true;
-		
+		controller2D.Snare();
 		hittimer = 2f;
 		hooktimer = 1.5f;
 	}
@@ -345,6 +346,7 @@ public class Hook : MonoBehaviour {
 		hooktimer = 1.5f;
 		hittimer = 2f;
 		currentState = HookState.PullingPlayer;
+		controller2D.Snare();
 		if(!OFFLINE)
 			networkView.RPC ("HitPlayer", RPCMode.Others, currentHook.transform.position.x, currentHook.transform.position.y, hitPlayer);
 	}

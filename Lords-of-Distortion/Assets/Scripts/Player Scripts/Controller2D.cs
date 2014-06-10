@@ -84,10 +84,12 @@ public class Controller2D : MonoBehaviour {
 		knockedBack = true;
 		snared = true;
         meleeStunned = true;
+		timeGrounded = 0f;
 	}
 
 	public void Snare(){
 		rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
+		anim.SetFloat("Speed", 0);
 		circleCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
@@ -193,32 +195,23 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
-			if(move != 0 && !snared && !crouching)
-			{
-				boxCollider.sharedMaterial = slipperyMaterial;
-				circleCollider.sharedMaterial = slipperyMaterial;
-			}
-			else 
-			{
-				boxCollider.sharedMaterial = playerMaterial;
-				circleCollider.sharedMaterial = playerMaterial;
-			}
 			CrouchInput();
 
             if(snared)
             { 
                 rigidbody2D.gravityScale = 1;
             }
-            if(meleeStunned)
-            {
-                knockbackTimer += Time.deltaTime;
-                if(knockbackTimer > 2)
-                {
-                    knockbackTimer = 0;
-                    FreeFromSnare();
-                }
-            }
-        }		
+        }	
+		if(move != 0 && !snared && !crouching)
+		{
+			boxCollider.sharedMaterial = slipperyMaterial;
+			circleCollider.sharedMaterial = slipperyMaterial;
+		}
+		else 
+		{
+			boxCollider.sharedMaterial = playerMaterial;
+			circleCollider.sharedMaterial = playerMaterial;
+		}
 	}
 
 	private void JumpInput(){
@@ -284,6 +277,25 @@ public class Controller2D : MonoBehaviour {
 	}
 	
 	float previousY = 0f;
+
+	Collider2D[] overlapColliders =  new Collider2D[1];
+	float timeGrounded = 0;
+	//Constantly checks if player is on the ground
+	void IsGrounded(){
+		grounded = Physics2D.OverlapCircleNonAlloc(groundCheck.position , groundRadius, overlapColliders, groundLayer ) > 0;
+		if(grounded)
+			timeGrounded += Time.fixedDeltaTime;
+		else timeGrounded = 0f;
+		anim.SetBool( "Ground", grounded );
+		if(inAir && grounded){
+			
+			inAir = false;
+			rigidbody2D.gravityScale = 1f;
+			boxCollider.sharedMaterial = playerMaterial;
+			circleCollider.sharedMaterial = playerMaterial;
+		}
+	}
+
 	void FixedUpdate(){
 
         if(rigidbody2D.gravityScale < 0)
@@ -319,7 +331,7 @@ public class Controller2D : MonoBehaviour {
 		    }
 
 		    //Remove knockback when you compose yourself.
-		    if(grounded && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
+		    if(timeGrounded >= .166f && knockedBack && rigidbody2D.velocity.magnitude <= maxSpeed / 4f){
 			    knockedBack = false;
 			    FreeFromSnare();
 		    }
@@ -405,19 +417,6 @@ public class Controller2D : MonoBehaviour {
 	}
 
 
-	//Constantly checks if player is on the ground
-	void IsGrounded(){
-		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
-
-            anim.SetBool( "Ground", grounded );
-		if(inAir && grounded){
-			
-			inAir = false;
-			rigidbody2D.gravityScale = 1f;
-            boxCollider.sharedMaterial = playerMaterial;
-            circleCollider.sharedMaterial = playerMaterial;
-		}
-	}
 
 	//Needs to go in fixedUpdate since we use physics to move player.
 	void MovePlayer(){
