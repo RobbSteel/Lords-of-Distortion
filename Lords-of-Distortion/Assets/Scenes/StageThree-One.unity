@@ -271,7 +271,7 @@ GameObject:
   - 198: {fileID: 243184210}
   - 199: {fileID: 243184209}
   - 114: {fileID: 243184208}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: cloudParticles
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -1338,7 +1338,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
 --- !u!1 &342508363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,7 +1454,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1001 &394698623
 Prefab:
   m_ObjectHideFlags: 0
@@ -1514,7 +1514,7 @@ GameObject:
   - 114: {fileID: 451674336}
   m_Layer: 17
   m_Name: CloudPlatformTwo
-  m_TagString: killplatform
+  m_TagString: movingPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1541,7 +1541,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 454370036}
   m_GameObject: {fileID: 451674334}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bb346f2469322846b85409ad902c1cd, type: 3}
   m_Name: 
@@ -1662,6 +1662,38 @@ Prefab:
     - target: {fileID: 400000, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
       propertyPath: m_LocalPosition.x
       value: .138139963
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_TagString
+      value: killplatform
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
+      propertyPath: m_TagString
+      value: movingPlatform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4dcd295fec7220940846a8364ed4b4a0, type: 2}
@@ -2214,7 +2246,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 689862034}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: CloudEndPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2705,7 +2737,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!1 &1145980937
 GameObject:
   m_ObjectHideFlags: 0
@@ -2744,7 +2776,7 @@ GameObject:
   - 198: {fileID: 1205282695}
   - 199: {fileID: 1205282694}
   - 114: {fileID: 1205282693}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: cloudParticles
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -3942,9 +3974,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1460384783}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: MovingCloudPlatformTwo
-  m_TagString: Untagged
+  m_TagString: killplatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4763,7 +4795,7 @@ GameObject:
   - 198: {fileID: 1978116429}
   - 199: {fileID: 1978116428}
   - 114: {fileID: 1978116427}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: cloudParticles
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
