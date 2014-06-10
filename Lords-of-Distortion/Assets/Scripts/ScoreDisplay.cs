@@ -168,9 +168,9 @@ public class ScoreDisplay : MonoBehaviour {
 			PlayerStats stats = infoscript.GetPlayerStats(listed[i]);
 
 			//only want last event if player died.
-
-				lastdeath = stats.LastEvent().PowerType;
-			
+			if(!stats.lived){
+			lastdeath = stats.LastEvent().PowerType;
+			}
 
 			var playername = infoscript.GetPlayerOptions(listed[i]).username;
 			var playermodel = infoscript.GetPlayerOptions(listed[i]).character;

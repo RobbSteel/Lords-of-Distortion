@@ -580,26 +580,31 @@ public class ArenaManager : MonoBehaviour {
 	
 	bool trapsEnabled = false;
 
-	void VictoryTaunt(){
 
+	void VictoryTaunt(){
+		
 		var victor = livePlayers[0];
 		var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
 		var victorycontroller = victoryplayer.GetComponent<Controller2D>();
+		var victorstats = PlayerServerInfo.instance.GetPlayerStats(victor);
+		victorstats.lived = true;
 		victorycontroller.anim.SetTrigger("Victory");
 		victorycontroller.locked = true;
 		victorycontroller.powerInvulnerable = true;
 		networkView.RPC("VictoryDance", RPCMode.Others, victor);
 	}
-
+	
 	[RPC]
 	void VictoryDance(NetworkPlayer victor){
-
-			var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
-			var victorycontroller = victoryplayer.GetComponent<Controller2D>();
-			victorycontroller.anim.SetTrigger("Victory");
-			victorycontroller.locked = true;
-			victorycontroller.powerInvulnerable = true;
-
+		
+		var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+		var victorycontroller = victoryplayer.GetComponent<Controller2D>();
+		var victorstats = PlayerServerInfo.instance.GetPlayerStats(victor);
+		victorstats.lived = true;
+		victorycontroller.anim.SetTrigger("Victory");
+		victorycontroller.locked = true;
+		victorycontroller.powerInvulnerable = true;
+		
 	}
 
 	void Update () {

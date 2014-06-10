@@ -5,7 +5,7 @@ public class PlayerStats {
 	public int deaths = 0;
 	public int kills = 0;
 	public float lives = 0;
-
+	public bool lived = false;
 	public float roundScore = 0f;
 	public float totalScore = 0f;
 	public PlayerEvent lastdeath;
@@ -27,6 +27,7 @@ public class PlayerStats {
 		timeOfDeath = float.PositiveInfinity;
 		playerEvents = new CircularBuffer<PlayerEvent>(2);
 		roundScore = 0f;
+		lived = false;
 		lives = liveCount;
 	}
 
