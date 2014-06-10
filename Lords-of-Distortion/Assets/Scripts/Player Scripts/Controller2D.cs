@@ -29,7 +29,7 @@ public class Controller2D : MonoBehaviour {
 	public float Lives_LOCAL = 0;
 	public bool grounded = false;
 	public Transform groundCheck;
-	private float groundRadius = 0.14f;
+	private float groundRadius = 0.11f;
 	public LayerMask groundLayer;
 	const float jumpVelocity = 12.5f;
 	public bool stunned;
@@ -87,6 +87,7 @@ public class Controller2D : MonoBehaviour {
 	}
 
 	public void Snare(){
+		rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
 		circleCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
@@ -312,7 +313,7 @@ public class Controller2D : MonoBehaviour {
 		        MovePlayer();
 
 		    //Increase gravity scale when jump is at its peak or when user lets go of jump button.
-		    if((rigidbody2D.velocity.y < 0f && previousY >= 0f || stoppedJump)){
+		    if(inAir && ((rigidbody2D.velocity.y < 0f && previousY >= 0f )|| stoppedJump)){
 			    //print ("started falling");
 			    rigidbody2D.gravityScale = 1.8f;
 		    }
@@ -410,10 +411,11 @@ public class Controller2D : MonoBehaviour {
 
             anim.SetBool( "Ground", grounded );
 		if(inAir && grounded){
+			
 			inAir = false;
 			rigidbody2D.gravityScale = 1f;
             boxCollider.sharedMaterial = playerMaterial;
-            circleCollider.sharedMaterial = null;
+            circleCollider.sharedMaterial = playerMaterial;
 		}
 	}
 

@@ -61,7 +61,7 @@ public class Melee : MonoBehaviour {
 
 		if(meleeing){
 			movementTime -= Time.deltaTime;
-			if(movementTime <= 0f){
+			if(movementTime <= 0f && !controller.snared){
 				controller.Snare();
 			}
 		}
