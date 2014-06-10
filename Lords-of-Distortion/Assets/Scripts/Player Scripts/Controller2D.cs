@@ -88,6 +88,7 @@ public class Controller2D : MonoBehaviour {
 
 	public void Snare(){
 		rigidbody2D.velocity = new Vector2(0f, rigidbody2D.velocity.y);
+		anim.SetFloat("Speed", 0);
 		circleCollider.sharedMaterial = playerMaterial;
 		snared = true;
 	}
@@ -193,16 +194,6 @@ public class Controller2D : MonoBehaviour {
 
 		    JumpInput();
 			move = GetHorizontalInput();
-			if(move != 0 && !snared && !crouching)
-			{
-				boxCollider.sharedMaterial = slipperyMaterial;
-				circleCollider.sharedMaterial = slipperyMaterial;
-			}
-			else 
-			{
-				boxCollider.sharedMaterial = playerMaterial;
-				circleCollider.sharedMaterial = playerMaterial;
-			}
 			CrouchInput();
 
             if(snared)
@@ -218,7 +209,17 @@ public class Controller2D : MonoBehaviour {
                     FreeFromSnare();
                 }
             }
-        }		
+        }	
+		if(move != 0 && !snared && !crouching)
+		{
+			boxCollider.sharedMaterial = slipperyMaterial;
+			circleCollider.sharedMaterial = slipperyMaterial;
+		}
+		else 
+		{
+			boxCollider.sharedMaterial = playerMaterial;
+			circleCollider.sharedMaterial = playerMaterial;
+		}
 	}
 
 	private void JumpInput(){
@@ -409,7 +410,7 @@ public class Controller2D : MonoBehaviour {
 	void IsGrounded(){
 		grounded = Physics2D.OverlapCircle(groundCheck.position , groundRadius, groundLayer );
 
-            anim.SetBool( "Ground", grounded );
+        anim.SetBool( "Ground", grounded );
 		if(inAir && grounded){
 			
 			inAir = false;
