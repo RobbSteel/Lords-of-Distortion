@@ -121,6 +121,9 @@ public class DefectionShield : Power {
 	}
 
 	void OnDestroy(){
+		if( playerController != null )
+			playerController.powerInvulnerable = false;
+
 		if (insideExplosionRange) {
             playerController.Die(DeathType.EXPLOSION);
 		} 
