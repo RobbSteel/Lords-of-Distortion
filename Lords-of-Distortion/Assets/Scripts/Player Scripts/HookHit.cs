@@ -70,7 +70,7 @@ public class HookHit : MonoBehaviour {
 		case CharacterStyle.YELLOW:
 			colors[0] = new Color(255f,  250f, 195f / 255f);
 			colors[1] = new Color(231f,  177f, 55f) / 255f;
-			colors[1] = new Color(231f,  177f, 55f) / 255f;
+			colors[2] = new Color(231f,  177f, 55f) / 255f;
 			colors[3] = new Color(255f,  250f, 195f / 255f);
 			break;
 		}
