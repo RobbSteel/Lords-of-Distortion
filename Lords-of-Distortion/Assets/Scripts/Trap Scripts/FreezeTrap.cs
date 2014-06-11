@@ -21,7 +21,8 @@ public class FreezeTrap : Power {
 
     void OnDestroy()
     {
-        currentplayer.rigidbody2D.drag = 0;
+        if(currentplayer != null)
+            currentplayer.rigidbody2D.drag = 0;
     }
 
 	void Update()
