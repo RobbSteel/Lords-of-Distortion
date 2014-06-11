@@ -137,6 +137,7 @@ public class Earthquake : Power {
 
 							playerstatus.TakeDamage(100.0f);
 							playerstatus.GenerateEvent(this);
+                            currplayer.rigidbody2D.velocity = new Vector2(0f, currplayer.rigidbody2D.velocity.y);
 							currplayer.rigidbody2D.AddForce(Vector3.up * 1500);
 						}
 					}
