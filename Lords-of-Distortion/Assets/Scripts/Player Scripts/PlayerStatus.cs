@@ -321,22 +321,23 @@ public class PlayerStatus : MonoBehaviour {
 	public void AddHit( bool fromLeftSide){
 			//Offline Melee
 		if (playerControl.OFFLINE) {
-			TakeHitOffline(fromLeftSide);
-		}else{
-			//Note, the following doesnt work(clients cant rpc each other directly)
-			//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
-			//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
-			NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController>().theOwner;
-			if(Network.isServer){
-				//RPC player we hit directly
-				networkView.RPC("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
-			}
-			else {
-				//tell server we hit player
-				networkView.RPC("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
-			}
+						TakeHitOffline (fromLeftSide);
+				} else {
+						//Note, the following doesnt work(clients cant rpc each other directly)
+						//networkView.RPC ("TakeHit", GetComponent<NetworkController>().theOwner, fromLeftSide); 
+						//networkView.RPC ("TakeHit", RPCMode.Others, fromLeftSide);
+						if (!playerControl.powerInvulnerable) {
+								NetworkPlayer ownerOfPlayerClone = GetComponent<NetworkController> ().theOwner;
+								if (Network.isServer) {
+										//RPC player we hit directly
+										networkView.RPC ("NotifyPlayerOfHit", ownerOfPlayerClone, fromLeftSide, Network.player);
+								} else {
+										//tell server we hit player
+										networkView.RPC ("NotifyServerOfHit", RPCMode.Server, fromLeftSide, ownerOfPlayerClone);
+								}
 
-		}
+						}
+				}
 	}
 	
 	//checks if player is stun and then applies stunRecover
