@@ -60,6 +60,12 @@ public class Hook : MonoBehaviour {
 		GameObject go  = (GameObject)Instantiate(hook, shootOrigin, transform.rotation);
 		currentState = HookState.GoingOut;
 		currentHook = go.GetComponent<HookHit>();
+		if(!OFFLINE)
+			currentHook.SetColor(PlayerServerInfo.instance.GetPlayerOptions(networkController.theOwner).style);
+		else 
+		{
+			currentHook.SetColor(CharacterStyle.BLUE);
+		}
 		currentHook.networkController = networkController;
 		currentHook.shooter = gameObject;
 		//hooktimer = 1.5f;
