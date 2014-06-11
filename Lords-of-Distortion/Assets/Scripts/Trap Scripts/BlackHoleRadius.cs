@@ -13,7 +13,7 @@ public class BlackHoleRadius : Power
 
 	void Start () 
 	{
-		Destroy(gameObject, 8f);
+		Destroy(gameObject, 5f);
 		BHForce = 0.16f;
 		audio.loop = true;
 	}

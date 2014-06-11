@@ -47,30 +47,30 @@ public class HookHit : MonoBehaviour {
 		switch(style)
 		{
 		case CharacterStyle.BLUE:
-			colors[0] = new Color(33f, 79f, 113f)/255f;
-			colors[1] = new Color(107f, 142f, 170f)/255f;
-			colors[2] = new Color(189f, 208f, 212f)/255f;
-			colors[3] = new Color(142f, 178f, 178f)/255f;
+			colors[0] = new Color(189f, 208f, 212f)/255f;
+			colors[1] = new Color(33f, 79f, 113f)/255f;
+			colors[2] = new Color(33f, 79f, 113f)/255f;
+			colors[3] = new Color(189f, 208f, 212f)/255f;
 			break;
 
 		case CharacterStyle.GREEN:
-			colors[0] = new Color(73f, 98f, 59f)/255f;
-			colors[1] = new Color(121f, 158f, 91f)/255f;
-			colors[2] = new Color(152f, 184f, 111f)/255f;
-			colors[3] = new Color(190f, 210f, 141f)/255f;
+			colors[0] = new Color(152f, 184f, 111f)/255f;
+			colors[1] = new Color(73f, 98f, 59f)/255f;
+			colors[2] = new Color(73f, 98f, 59f)/255f;
+			colors[3] = new Color(152f, 184f, 111f)/255f;
 			break;
 
 		case CharacterStyle.RED:
-			colors[0] = new Color(194f,  63f, 56f) / 255f;
-			colors[1] = new Color(237f,  67f, 55f) / 255f;
-			colors[2] = new Color(240f,  101f, 96f) / 255f;
+			colors[0] = new Color(245f,  142f, 157f) / 255f;
+			colors[1] = new Color(194f,  63f, 56f) / 255f;
+			colors[2] = new Color(194f,  63f, 56f) / 255f;
 			colors[3] = new Color(245f,  142f, 157f) / 255f;
 			break;
 
 		case CharacterStyle.YELLOW:
-			colors[0] = new Color(231f,  177f, 55f) / 255f;
-			colors[1] = new Color(219f,  182f, 102f) / 255f;
-			colors[2] = new Color(254f,  246f, 77f) / 255f;
+			colors[0] = new Color(255f,  250f, 195f / 255f);
+			colors[1] = new Color(231f,  177f, 55f) / 255f;
+			colors[1] = new Color(231f,  177f, 55f) / 255f;
 			colors[3] = new Color(255f,  250f, 195f / 255f);
 			break;
 		}
