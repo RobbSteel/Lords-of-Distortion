@@ -146,7 +146,7 @@ public class Hook : MonoBehaviour {
 					Vector3 targetPosition = shootFrom.position + (directionInput.normalized * 100f);
 					if(!OFFLINE)
 					{
-						networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  targetPosition.x, targetPosition.y);
+						networkView.RPC("ShootHookSimulate", RPCMode.Others, shootFrom.position.x, shootFrom.position.y,  targetPosition.x, targetPosition.y);
 					}
 					ShootHookLocal(shootFrom.position.x, shootFrom.position.y,  targetPosition.x, targetPosition.y);
 				}
@@ -175,9 +175,9 @@ public class Hook : MonoBehaviour {
 					if(Analytics.Enabled){
 						GA.API.Design.NewEvent("Hook Shot", mouseClick);
 					}
-					networkView.RPC("ShootHookSimulate", RPCMode.Others, transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
+					networkView.RPC("ShootHookSimulate", RPCMode.Others, shootFrom.position.x, shootFrom.position.y,  mouseClick.x, mouseClick.y);
 				}
-				ShootHookLocal(transform.position.x, transform.position.y,  mouseClick.x, mouseClick.y);
+				ShootHookLocal(shootFrom.position.x, shootFrom.position.y,  mouseClick.x, mouseClick.y);
 			}
 		}
 	}
