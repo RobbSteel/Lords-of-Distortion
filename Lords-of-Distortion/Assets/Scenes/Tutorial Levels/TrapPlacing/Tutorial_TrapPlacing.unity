@@ -124,7 +124,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 8
+  m_RootOrder: 0
 --- !u!1 &2744879
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +292,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 11
+  m_RootOrder: 3
 --- !u!1 &7765556
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 25
+  m_RootOrder: 17
 --- !u!61 &7765558
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -437,6 +437,7 @@ GameObject:
   - 82: {fileID: 31097068}
   - 61: {fileID: 31097067}
   - 114: {fileID: 31097066}
+  - 95: {fileID: 31097072}
   m_Layer: 9
   m_Name: TutorialTrapFountain
   m_TagString: PowerUp
@@ -544,7 +545,7 @@ MonoBehaviour:
   tutorialUse: 1
   specifiedPower: 2
   randomPowerSupply: 0
-  gemResupply: {fileID: 0}
+  gemResupply: {fileID: 8300000, guid: b4ebdc513b3229343a1f35af5a85c5ea, type: 3}
   placementUI: {fileID: 0}
 --- !u!212 &31097070
 SpriteRenderer:
@@ -567,7 +568,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 1448056335
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 01e030cec2c8c624e8e0e7f3556406f0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d9e28e72fc3c095438ac0d40e5016b0b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &31097071
 Transform:
@@ -582,6 +583,20 @@ Transform:
   - {fileID: 2744880}
   m_Father: {fileID: 549148173}
   m_RootOrder: 0
+--- !u!95 &31097072
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 31097065}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 973f895cbb6429f4ca60f5ebf27f7548, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
 --- !u!1 &43824505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1118,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 1
+  m_RootOrder: 20
 --- !u!1001 &215216187
 Prefab:
   m_ObjectHideFlags: 0
@@ -1319,7 +1334,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 23
+  m_RootOrder: 15
 --- !u!212 &237429680
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1430,7 +1445,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 24
+  m_RootOrder: 16
 --- !u!212 &264468940
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3280,7 +3295,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 5
+  m_RootOrder: 24
 --- !u!1 &549148172
 GameObject:
   m_ObjectHideFlags: 0
@@ -4474,7 +4489,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 17
+  m_RootOrder: 9
 --- !u!1 &570311542
 GameObject:
   m_ObjectHideFlags: 0
@@ -4502,7 +4517,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 13
+  m_RootOrder: 5
 --- !u!212 &570311546
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4702,7 +4717,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 6
+  m_RootOrder: 25
 --- !u!1 &652415003
 GameObject:
   m_ObjectHideFlags: 0
@@ -8093,7 +8108,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 9
+  m_RootOrder: 1
 --- !u!212 &771333452
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8442,7 +8457,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 14
+  m_RootOrder: 6
 --- !u!1 &818046940
 GameObject:
   m_ObjectHideFlags: 0
@@ -8470,7 +8485,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 16
+  m_RootOrder: 8
 --- !u!212 &818046944
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12170,7 +12185,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 19
+  m_RootOrder: 11
 --- !u!212 &901685867
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12221,7 +12236,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 18
+  m_RootOrder: 10
 --- !u!212 &904360255
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12711,14 +12726,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: .0261230469}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1196509092}
-  - {fileID: 205310406}
-  - {fileID: 1474248897}
-  - {fileID: 2131421827}
-  - {fileID: 1965413312}
-  - {fileID: 542849589}
-  - {fileID: 650199378}
-  - {fileID: 1452717601}
   - {fileID: 1881452}
   - {fileID: 771333449}
   - {fileID: 1444432288}
@@ -12738,6 +12745,14 @@ Transform:
   - {fileID: 264468937}
   - {fileID: 7765557}
   - {fileID: 1697385143}
+  - {fileID: 1196509092}
+  - {fileID: 205310406}
+  - {fileID: 1474248897}
+  - {fileID: 2131421827}
+  - {fileID: 1965413312}
+  - {fileID: 542849589}
+  - {fileID: 650199378}
+  - {fileID: 1452717601}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!1 &1050846806
@@ -12767,7 +12782,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 21
+  m_RootOrder: 13
 --- !u!212 &1050846810
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12933,7 +12948,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 15
+  m_RootOrder: 7
 --- !u!61 &1056820422
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13669,7 +13684,7 @@ Transform:
   m_LocalScale: {x: .822187722, y: 1.09624779, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 0
+  m_RootOrder: 19
 --- !u!1 &1199976465
 GameObject:
   m_ObjectHideFlags: 0
@@ -17392,7 +17407,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 10
+  m_RootOrder: 2
 --- !u!212 &1444432291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17479,7 +17494,7 @@ Transform:
   m_LocalScale: {x: .822187722, y: 1.09624779, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 7
+  m_RootOrder: 26
 --- !u!1 &1460198190
 GameObject:
   m_ObjectHideFlags: 0
@@ -17637,6 +17652,7 @@ GameObject:
   - 82: {fileID: 1467403430}
   - 61: {fileID: 1467403429}
   - 114: {fileID: 1467403434}
+  - 95: {fileID: 1467403435}
   m_Layer: 9
   m_Name: TutorialTrapFountain
   m_TagString: PowerUp
@@ -17732,7 +17748,7 @@ MonoBehaviour:
   tutorialUse: 1
   specifiedPower: 3
   randomPowerSupply: 0
-  gemResupply: {fileID: 0}
+  gemResupply: {fileID: 8300000, guid: b4ebdc513b3229343a1f35af5a85c5ea, type: 3}
   placementUI: {fileID: 0}
 --- !u!212 &1467403432
 SpriteRenderer:
@@ -17755,7 +17771,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 1448056335
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 01e030cec2c8c624e8e0e7f3556406f0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d9e28e72fc3c095438ac0d40e5016b0b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1467403433
 Transform:
@@ -17782,6 +17798,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31345244141e0a14d9765dc79d9514cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1467403435
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1467403428}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 973f895cbb6429f4ca60f5ebf27f7548, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
 --- !u!1 &1468492752
 GameObject:
   m_ObjectHideFlags: 0
@@ -17936,7 +17966,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 2
+  m_RootOrder: 21
 --- !u!1001 &1493823840
 Prefab:
   m_ObjectHideFlags: 0
@@ -18120,7 +18150,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 20
+  m_RootOrder: 12
 --- !u!61 &1509079176
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19673,6 +19703,15 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d9e28e72fc3c095438ac0d40e5016b0b,
+        type: 3}
+    - target: {fileID: 11400002, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
+      propertyPath: gemResupply
+      value: 
+      objectReference: {fileID: 8300000, guid: b4ebdc513b3229343a1f35af5a85c5ea, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
   m_RootGameObject: {fileID: 1467403428}
@@ -21342,7 +21381,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 26
+  m_RootOrder: 18
 --- !u!61 &1697385144
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -21510,7 +21549,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 22
+  m_RootOrder: 14
 --- !u!212 &1838462731
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21696,7 +21735,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 12
+  m_RootOrder: 4
 --- !u!1 &1954638034
 GameObject:
   m_ObjectHideFlags: 0
@@ -22832,7 +22871,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 4
+  m_RootOrder: 23
 --- !u!1 &1972064855
 GameObject:
   m_ObjectHideFlags: 0
@@ -24502,6 +24541,15 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d9e28e72fc3c095438ac0d40e5016b0b,
+        type: 3}
+    - target: {fileID: 11400002, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
+      propertyPath: gemResupply
+      value: 
+      objectReference: {fileID: 8300000, guid: b4ebdc513b3229343a1f35af5a85c5ea, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4f759a056f24e1942afb80912aab34eb, type: 2}
   m_RootGameObject: {fileID: 31097065}
@@ -24557,7 +24605,7 @@ Transform:
   m_LocalScale: {x: .75, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1043971064}
-  m_RootOrder: 3
+  m_RootOrder: 22
 --- !u!1 &2138298550
 GameObject:
   m_ObjectHideFlags: 0

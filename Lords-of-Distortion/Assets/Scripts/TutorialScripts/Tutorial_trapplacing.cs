@@ -9,7 +9,7 @@ public class Tutorial_trapplacing: MonoBehaviour {
 	public UILabel guiText;
 	public GameObject[] objectives;
 	public int currentObjective;
-	private string firstMessage = "Power gems supply you with traps";
+	private string firstMessage = "Touch the box to supply yourself with a trap";
 	private string secondMessage = "Click and place the trap anywhere";
 	private string thirdMessage = "Use number keys to activate traps";
     private string fourthMessage = "Traps can kill either directly or indirectly";
