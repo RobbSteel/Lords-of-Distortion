@@ -27,8 +27,58 @@ public class HookHit : MonoBehaviour {
 	[SerializeField]
 	private List<LineRenderer> lines = new List<LineRenderer>();
 
+	public CharacterStyle myColor = CharacterStyle.BLUE;
+	
+	void RecolorHook(Color[] colors)
+	{
+		int i = 0;
+		foreach(LineRenderer line in lines)
+		{
+			colors[i].a = 1f;
+			line.SetColors(colors[i], colors[i]);
+			i++;
+		}
+	}
+
+	public void SetColor(CharacterStyle style)
+	{
+		Color[] colors = new Color[4];
+
+		switch(style)
+		{
+		case CharacterStyle.BLUE:
+			colors[0] = new Color(189f, 208f, 212f)/255f;
+			colors[1] = new Color(33f, 79f, 113f)/255f;
+			colors[2] = new Color(33f, 79f, 113f)/255f;
+			colors[3] = new Color(189f, 208f, 212f)/255f;
+			break;
+
+		case CharacterStyle.GREEN:
+			colors[0] = new Color(152f, 184f, 111f)/255f;
+			colors[1] = new Color(73f, 98f, 59f)/255f;
+			colors[2] = new Color(73f, 98f, 59f)/255f;
+			colors[3] = new Color(152f, 184f, 111f)/255f;
+			break;
+
+		case CharacterStyle.RED:
+			colors[0] = new Color(245f,  142f, 157f) / 255f;
+			colors[1] = new Color(194f,  63f, 56f) / 255f;
+			colors[2] = new Color(194f,  63f, 56f) / 255f;
+			colors[3] = new Color(245f,  142f, 157f) / 255f;
+			break;
+
+		case CharacterStyle.YELLOW:
+			colors[0] = new Color(255f,  250f, 195f / 255f);
+			colors[1] = new Color(231f,  177f, 55f) / 255f;
+			colors[1] = new Color(231f,  177f, 55f) / 255f;
+			colors[3] = new Color(255f,  250f, 195f / 255f);
+			break;
+		}
+		RecolorHook(colors);
+	}
 	void Start()
 	{
+
 		returning = false;
 		foreach(LineRenderer line in lines)
 		{

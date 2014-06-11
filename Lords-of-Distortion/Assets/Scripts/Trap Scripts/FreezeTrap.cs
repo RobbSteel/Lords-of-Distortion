@@ -12,12 +12,18 @@ public class FreezeTrap : Power {
     private bool freezeExplosionActivated = false;
 
 	public GameObject frozenEffectPrefab;
-	const float slowDuration = 1f;
+	const float slowDuration = .5f;
 	void Start()
     {
         GetComponent<ParticleSystem>().loop = false;
 		Destroy(gameObject, 3f);
 	}
+
+    void OnDestroy()
+    {
+        if(currentplayer != null)
+            currentplayer.rigidbody2D.drag = 0;
+    }
 
 	void Update()
     {

@@ -227,7 +227,7 @@ public class SessionManager : MonoBehaviour {
 		}
 	}
 
-	CharacterStyle[] stylesTemp = new CharacterStyle[4]{CharacterStyle.GREEN, CharacterStyle.YELLOW, CharacterStyle.BLUE, CharacterStyle.RED}; 
+	CharacterStyle[] stylesTemp = new CharacterStyle[4]{CharacterStyle.GREEN, CharacterStyle.BLUE, CharacterStyle.RED, CharacterStyle.YELLOW}; 
 	/*This is the entry point for when the server begins hosting.*/
 	void OnServerInitialized()
 	{
