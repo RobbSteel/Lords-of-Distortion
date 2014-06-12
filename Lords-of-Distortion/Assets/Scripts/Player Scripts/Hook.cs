@@ -105,13 +105,20 @@ public class Hook : MonoBehaviour {
 	public void ReturnHook(){
 		if(currentHook == null)
 			return;
-		
+
+		if(currentState == HookState.PullingPlayer)
+		{
+			currentHook.affectedPlayerC2D.UnHooked();
+			controller2D.FreeFromSnare();
+		}
+
 		currentState = HookState.GoingBack;
 		/* Physics.
 		Vector3 difference = transform.position - currentHook.gameObject.transform.position;
 		Vector2 direction = new Vector2(difference.x, difference.y).normalized;
 		Vector2 velocity = direction * speedRatio;
 		*/
+		currentHook.collider2D.enabled = false;
 		currentHook.rigidbody2D.isKinematic = true;
 		currentHook.rigidbody2D.velocity = Vector2.zero;
 		currentHook.returning = true;
@@ -321,14 +328,14 @@ public class Hook : MonoBehaviour {
 	[RPC]
 	void HitPlayer(float playerLocationX, float playerLocationY, NetworkPlayer hitPlayer, NetworkMessageInfo info){
 		
-		if(currentHook == null){
+		if(currentHook == null || currentState == HookState.GoingBack){ //ignore hooking if were retracting.
 			print ("too late");
 			return;
 		}
 		if(currentState == HookState.Hidden)
 		{
 			currentHook.renderer.enabled = false;
-			currentHook.lr.enabled = false;
+			currentHook.HideLines();
 		}
 		
 		currentState = HookState.PullingPlayer;
