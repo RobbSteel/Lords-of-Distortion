@@ -39,6 +39,13 @@ public class HookHit : MonoBehaviour {
 			i++;
 		}
 	}
+	public void HideLines()
+	{
+		foreach(LineRenderer line in lines)
+		{
+			line.enabled = false;
+		}
+	}
 
 	public void SetColor(CharacterStyle style)
 	{

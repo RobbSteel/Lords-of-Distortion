@@ -239,7 +239,7 @@ public class Hook : MonoBehaviour {
 		slowedTime = 0f;
 		transform.rigidbody2D.gravityScale = 1;
 		currentHook.renderer.enabled = false;
-		currentHook.lr.enabled = false;
+		currentHook.HideLines();
 		currentState = HookState.Hidden;
 	}
 	
