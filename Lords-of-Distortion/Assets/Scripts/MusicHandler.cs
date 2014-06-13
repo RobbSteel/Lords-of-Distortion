@@ -20,7 +20,9 @@ public class MusicHandler : MonoBehaviour {
         else
         {
             instance = this;
+			GetComponent<AudioSource>().enabled = true;
         }
         DontDestroyOnLoad(this.gameObject);
     }
+	
 }
