@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerServerInfo : MonoBehaviour {
+public class PlayerServerInfo {
 	
 	public string servername;
 	public string choice;
@@ -22,22 +22,36 @@ public class PlayerServerInfo : MonoBehaviour {
 	public Dictionary<NetworkPlayer, NetworkViewID> playerViewIDs = new Dictionary<NetworkPlayer, NetworkViewID>();
 	public Dictionary<NetworkPlayer, GameObject> playerObjects;
 
-	public static PlayerServerInfo instance = null;
-	
-	void Awake () {
+	private static readonly PlayerServerInfo instance = new PlayerServerInfo();
 
-		if(instance != null){
-			Destroy(gameObject);
-			return;
+	public static PlayerServerInfo Instance
+	{
+		get
+		{
+			return instance;
 		}
+	}
 
-		instance = this;
-		DontDestroyOnLoad(this);
+	private PlayerServerInfo()
+	{
 		localOptions = new PlayerOptions();
 		playerOptions = new Dictionary<NetworkPlayer, PlayerOptions>();
 		playerStats = new Dictionary<NetworkPlayer, PlayerStats>();
 		players= new List<NetworkPlayer>();
 		playerObjects = new Dictionary<NetworkPlayer, GameObject>();
+	}
+
+	//clear everything but localoptions
+	public void ClearInfo()
+	{
+		choice = "";
+		livesPerRound = 0;
+		numStages = 0;
+		playerOptions.Clear();
+		playerStats.Clear();
+		players.Clear();
+		playerObjects.Clear();
+		playerViewIDs.Clear();
 	}
 
 	public void LevelReset(){

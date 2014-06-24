@@ -10,7 +10,7 @@ public class IconCooldowns : MonoBehaviour {
 
     void Start()
     {
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+		infoscript = PlayerServerInfo.Instance;
     }	
     
 	// Update is called once per frame

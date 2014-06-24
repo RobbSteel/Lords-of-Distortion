@@ -30,9 +30,9 @@ public class JoinServer : MonoBehaviour {
 		}
 		else{
 			askedForConnection = true;
-			PlayerServerInfo.instance.choice = "Find";
-			PlayerServerInfo.instance.chosenHost = hostData;
-			PlayerServerInfo.instance.servername = hostData.gameName;
+			PlayerServerInfo.Instance.choice = "Find";
+			PlayerServerInfo.Instance.chosenHost = hostData;
+			PlayerServerInfo.Instance.servername = hostData.gameName;
 			var error = Network.Connect(hostData); //Attempt connecting, even though we might not have latest hostdata
 		}
 	}

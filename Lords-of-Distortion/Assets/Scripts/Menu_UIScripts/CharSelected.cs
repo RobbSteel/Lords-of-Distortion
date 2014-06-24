@@ -10,7 +10,7 @@ public class CharSelected : MonoBehaviour {
 	public AudioClip buttonclick;
 	void Awake(){
         charscript = GameObject.Find("CharSelect").GetComponent<CharSelectScript>();
-        infoscript = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+		infoscript = PlayerServerInfo.Instance;
 		buttcolor = GetComponent<UIButtonColor>();
 	}
 

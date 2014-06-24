@@ -11,14 +11,14 @@ public class CreateServer : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-		playerName.GetComponent<UILabel>().text = PlayerServerInfo.instance.localOptions.username;
+		playerName.GetComponent<UILabel>().text = PlayerServerInfo.Instance.localOptions.username;
 	}
 
 	void OnPress(){
 
         if (serverName.text != "" && serverName.text != "Server Name") {
-						PlayerServerInfo.instance.servername = serverName.text;
-						PlayerServerInfo.instance.choice = "Host";
+						PlayerServerInfo.Instance.servername = serverName.text;
+						PlayerServerInfo.Instance.choice = "Host";
 
 						var liveslabel = GameObject.Find ("enterLives");
 						var lives = liveslabel.GetComponent<UILabel> ().text;
@@ -29,8 +29,8 @@ public class CreateServer : MonoBehaviour {
 
 						var numStages = GameObject.Find ("enterRounds").GetComponent<UILabel> ().text;
 
-						PlayerServerInfo.instance.livesPerRound = convert;
-						PlayerServerInfo.instance.numStages = int.Parse (numStages);
+						PlayerServerInfo.Instance.livesPerRound = convert;
+						PlayerServerInfo.Instance.numStages = int.Parse (numStages);
 						Application.LoadLevel ("LobbyArena");
 		} else {
 			audio.PlayOneShot(error, 0.2f);		

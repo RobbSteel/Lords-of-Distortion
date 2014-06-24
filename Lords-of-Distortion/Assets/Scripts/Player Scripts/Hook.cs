@@ -61,7 +61,7 @@ public class Hook : MonoBehaviour {
 		currentState = HookState.GoingOut;
 		currentHook = go.GetComponent<HookHit>();
 		if(!OFFLINE)
-			currentHook.SetColor(PlayerServerInfo.instance.GetPlayerOptions(networkController.theOwner).style);
+			currentHook.SetColor(PlayerServerInfo.Instance.GetPlayerOptions(networkController.theOwner).style);
 		else 
 		{
 			currentHook.SetColor(CharacterStyle.BLUE);

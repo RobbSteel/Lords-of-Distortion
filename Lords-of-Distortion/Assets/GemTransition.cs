@@ -31,7 +31,7 @@ public class GemTransition : MonoBehaviour {
 
     void Awake()
     {
-        psinfo = GameObject.Find("PSInfo").GetComponent<PlayerServerInfo>();
+		psinfo = PlayerServerInfo.Instance;
         Part2.SetActive(false);
     }
 

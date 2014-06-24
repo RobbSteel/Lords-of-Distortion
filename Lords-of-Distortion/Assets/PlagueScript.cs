@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Priority_Queue;
@@ -84,7 +84,7 @@ public class PlagueScript : Power
 	[RPC]
 	void RelayTarget(NetworkPlayer playertarget){
 	
-		targetplayer = PlayerServerInfo.instance.GetPlayerGameObject(playertarget);
+		targetplayer = PlayerServerInfo.Instance.GetPlayerGameObject(playertarget);
 		print (targetplayer);
 	}
 

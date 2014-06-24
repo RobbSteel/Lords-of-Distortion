@@ -244,7 +244,6 @@ public class ArenaManager : MonoBehaviour {
 	//Synch event with other players, just for the score screen.
 	[RPC]
 	void SynchEvent(int type, float timeOfContact, NetworkPlayer attacker, NetworkPlayer affected){
-		print ("Fireball happened at " + timeOfContact);
 		PlayerStats stats = SessionManager.Instance.psInfo.GetPlayerStats(affected);
 		PlayerEvent playerEvent = new PlayerEvent((PowerType)type, timeOfContact, attacker);
 		stats.AddEvent(playerEvent);
@@ -584,9 +583,9 @@ public class ArenaManager : MonoBehaviour {
 	void VictoryTaunt(){
 		
 		var victor = livePlayers[0];
-		var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+		var victoryplayer = PlayerServerInfo.Instance.GetPlayerGameObject(victor);
 		var victorycontroller = victoryplayer.GetComponent<Controller2D>();
-		var victorstats = PlayerServerInfo.instance.GetPlayerStats(victor);
+		var victorstats = PlayerServerInfo.Instance.GetPlayerStats(victor);
 		victorstats.lived = true;
 		victorycontroller.anim.SetTrigger("Victory");
 		victorycontroller.locked = true;
@@ -597,9 +596,9 @@ public class ArenaManager : MonoBehaviour {
 	[RPC]
 	void VictoryDance(NetworkPlayer victor){
 		
-		var victoryplayer = PlayerServerInfo.instance.GetPlayerGameObject(victor);
+		var victoryplayer = PlayerServerInfo.Instance.GetPlayerGameObject(victor);
 		var victorycontroller = victoryplayer.GetComponent<Controller2D>();
-		var victorstats = PlayerServerInfo.instance.GetPlayerStats(victor);
+		var victorstats = PlayerServerInfo.Instance.GetPlayerStats(victor);
 		victorstats.lived = true;
 		victorycontroller.anim.SetTrigger("Victory");
 		victorycontroller.locked = true;

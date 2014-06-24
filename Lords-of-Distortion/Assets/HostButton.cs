@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class HostButton : MonoBehaviour {
@@ -20,8 +20,8 @@ public class HostButton : MonoBehaviour {
         else
         {
 			transition = transitioner.GetComponent<Transitioner>();
-			PlayerServerInfo.instance.localOptions.username = playerscript.playerName;
-			PlayerServerInfo.instance.choice = "Host";
+			PlayerServerInfo.Instance.localOptions.username = playerscript.playerName;
+			PlayerServerInfo.Instance.choice = "Host";
 			audio.PlayOneShot(pageturn);
 			transition.Flip("HostMenu", false);
         }

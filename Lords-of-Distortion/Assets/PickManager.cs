@@ -5,7 +5,6 @@ public class PickManager : MonoBehaviour {
 
 	public int numberofpicks = 0;
 	SessionManager manager;
-    GameObject psinfo;
     PlayerServerInfo psinfoscript;
 	public string[] picks;
     public UIGrid LevelGrid;
@@ -17,16 +16,12 @@ public class PickManager : MonoBehaviour {
 	//On load instantiate the picking UI
 	void OnNetworkLoadedLevel () {
 		manager = SessionManager.Instance;
-        psinfo = GameObject.Find("PSInfo");
-        if (psinfo != null)
-        { 
-            psinfoscript = psinfo.GetComponent<PlayerServerInfo>();
-            numberOfStages = psinfoscript.numStages;
-            picks = new string[numberOfStages];
-            for(int i = 0; i < picks.Length; i++)
-            {
-                picks[i] = "empty";
-            }
+		psinfoscript = PlayerServerInfo.Instance;
+        numberOfStages = psinfoscript.numStages;
+        picks = new string[numberOfStages];
+        for(int i = 0; i < picks.Length; i++)
+        {
+            picks[i] = "empty";
         }
 		if(Network.isServer){
 		   // GameObject picklabel = (GameObject)Network.Instantiate(allUI, new Vector3(0, 0, 0), transform.rotation, 0);

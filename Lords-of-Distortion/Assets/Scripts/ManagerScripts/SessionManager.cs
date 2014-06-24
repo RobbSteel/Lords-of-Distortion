@@ -37,7 +37,7 @@ public class SessionManager : MonoBehaviour {
 
 		Instance = this;
 		DontDestroyOnLoad(this);
-		psInfo = PlayerServerInfo.instance;
+		psInfo = PlayerServerInfo.Instance;
 		networkView.group = SETUP;
 		playerCounter = -1;
 		levelPrefix = 0;
@@ -61,7 +61,7 @@ public class SessionManager : MonoBehaviour {
 	//Called on the server when player sends his info. We can now synchronize this info with all other players.
 	//Note this must be called first.
 	[RPC]
-	void SendOptions(string username, int character, NetworkMessageInfo info){
+	void SendPlayerOptions(string username, int character, NetworkMessageInfo info){
 		//call on server first.
 		int playerCount = psInfo.players.Count;
 		playerCounter++; //TEMPORARY
@@ -245,11 +245,10 @@ public class SessionManager : MonoBehaviour {
 	
 	void OnConnectedToServer()
 	{
-		//Instantiate(timeManagerPrefab, transform.position, Quaternion.identity);
-		//timeManager = instance.GetComponent<TimeManager>();
 		PlayerOptions localOptions = psInfo.localOptions;
 		NetworkViewID viewID = Network.AllocateViewID(); //view ids created by clients means they have authority over the network view
-		networkView.RPC ("SendOptions", RPCMode.Server, localOptions.username, (int)localOptions.character);
+
+		networkView.RPC ("SendPlayerOptions", RPCMode.Server, localOptions.username, (int)localOptions.character);
 		networkView.RPC("SendViewID", RPCMode.Server, viewID);
 		TimeManager.instance.SynchToServer();
 	}
@@ -262,7 +261,7 @@ public class SessionManager : MonoBehaviour {
 	void OnDisconnectedFromServer(){
 		Destroy (TimeManager.instance.gameObject);
 		Destroy (gameObject);
-		Destroy (psInfo.gameObject);
+		PlayerServerInfo.Instance.ClearInfo();
 		Application.LoadLevel(offlineLevel);
 	}
 
