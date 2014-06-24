@@ -242,12 +242,28 @@ public class SessionManager : MonoBehaviour {
 		psInfo.AddPlayerViewID(Network.player, viewID); 
 		InstantiatePlayer(transform.position, (int)localOptions.character,  Network.player, viewID, GAMEPLAY);
 	}
-	
+
+	[RPC]
+	void SendGameOptions(int stageCount, float livesPerRound)
+	{
+		psInfo.numStages = stageCount;
+		psInfo.livesPerRound = livesPerRound;
+	}
+
+	[RPC]
+	void RequestGameOptions(NetworkMessageInfo info)
+	{
+		if(Network.isServer)
+		{
+			networkView.RPC("SendGameOptions", info.sender, psInfo.numStages, psInfo.livesPerRound);
+		}
+	}
+
 	void OnConnectedToServer()
 	{
 		PlayerOptions localOptions = psInfo.localOptions;
 		NetworkViewID viewID = Network.AllocateViewID(); //view ids created by clients means they have authority over the network view
-
+		networkView.RPC("RequestGameOptions", RPCMode.Server);
 		networkView.RPC ("SendPlayerOptions", RPCMode.Server, localOptions.username, (int)localOptions.character);
 		networkView.RPC("SendViewID", RPCMode.Server, viewID);
 		TimeManager.instance.SynchToServer();

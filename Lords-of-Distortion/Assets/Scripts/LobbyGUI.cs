@@ -77,18 +77,8 @@ public class LobbyGUI : MonoBehaviour {
         timer -= Time.deltaTime;
     }
 
-   [RPC]
-   void synclives(float lives){
-
-		PlayerServerInfo.instance.livesPerRound = lives;
-
-	}
-
-
 	public void PlayButton(GameObject go)
     {
-		var lives = PlayerServerInfo.instance.livesPerRound;
-		networkView.RPC("synclives", RPCMode.Others, lives);
 
 		Network.RemoveRPCsInGroup(0);
         Network.RemoveRPCsInGroup(1);
@@ -161,7 +151,7 @@ public class LobbyGUI : MonoBehaviour {
 
 	void Start()
     {
-		infoscript = PlayerServerInfo.instance;
+		infoscript = PlayerServerInfo.Instance;
 		if(Network.peerType == NetworkPeerType.Disconnected)
         {
 			//Check if a player is hosting or joining and execute the appropriate action
